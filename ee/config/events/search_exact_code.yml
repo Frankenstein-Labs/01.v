@@ -1,0 +1,15 @@
+---
+description: Unique users to perform exact code searches
+internal_events: true
+status: active
+action: search_exact_code
+identifiers:
+- user
+product_group: global_search
+product_categories:
+- global_search
+milestone: '18.5'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/205836
+tiers:
+- premium
+- ultimate

@@ -1,0 +1,132 @@
+{
+  "query": {
+    "and": {
+      "children": [
+        {
+          "query_string": {
+            "query": "case:no test"
+          }
+        },
+        {
+          "meta": {
+            "key": "archived",
+            "value": "f"
+          }
+        },
+        {
+          "_context": {
+            "name": "access_branches"
+          },
+          "or": {
+            "children": [
+              {
+                "_context": {
+                  "name": "public_and_internal_branch"
+                },
+                "and": {
+                  "children": [
+                    {
+                      "meta": {
+                        "key": "visibility_level",
+                        "value": "20|10"
+                      }
+                    },
+                    {
+                      "meta": {
+                        "key": "repository_access_level",
+                        "value": "20"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "_context": {
+                  "name": "public_and_internal_authorized_branch"
+                },
+                "and": {
+                  "children": [
+                    {
+                      "meta": {
+                        "key": "visibility_level",
+                        "value": "20|10"
+                      }
+                    },
+                    {
+                      "meta": {
+                        "key": "repository_access_level",
+                        "value": "10"
+                      }
+                    },
+                    {
+                      "_context": {
+                        "name": "user_authorizations"
+                      },
+                      "or": {
+                        "children": [
+                          {
+                            "meta": {
+                              "key": "traversal_ids",
+                              "value": "^2270-"
+                            }
+                          },
+                          {
+                            "repo_ids": [
+                              1
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "_context": {
+                  "name": "private_authorized_branch"
+                },
+                "and": {
+                  "children": [
+                    {
+                      "meta": {
+                        "key": "repository_access_level",
+                        "value": "20|10"
+                      }
+                    },
+                    {
+                      "_context": {
+                        "name": "user_authorizations"
+                      },
+                      "or": {
+                        "children": [
+                          {
+                            "meta": {
+                              "key": "traversal_ids",
+                              "value": "^9970-457-"
+                            }
+                          },
+                          {
+                            "meta": {
+                              "key": "traversal_ids",
+                              "value": "^9970-123-"
+                            }
+                          },
+                          {
+                            "repo_ids": [
+                              56,
+                              99
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

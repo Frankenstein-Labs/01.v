@@ -1,0 +1,9 @@
+# @feature_category: secrets_management
+
+query namespaceGsmEnrollment($fullPath: ID!) {
+  namespaceSecretsManagerEnrollment(namespacePath: $fullPath) {
+    namespace {
+      id
+    }
+  }
+}

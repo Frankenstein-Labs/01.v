@@ -1,0 +1,53 @@
+mutation editBrachRuleEE($input: BranchRuleUpdateInput!) {
+  branchRuleUpdate(input: $input) {
+    errors
+    branchRule {
+      id
+      name
+      branchProtection {
+        isGroupLevel
+        allowForcePush
+        codeOwnerApprovalRequired
+        modificationBlockedByPolicy
+        protectedFromPushBySecurityPolicy
+        warnModificationBlockedByPolicy @gl_introduced(version: "18.8.0")
+        warnProtectedFromPushBySecurityPolicy @gl_introduced(version: "18.8.0")
+        mergeAccessLevels {
+          nodes {
+            accessLevel
+            accessLevelDescription
+            memberRole {
+              id
+              name
+            }
+            user {
+              id
+            }
+            group {
+              id
+            }
+          }
+        }
+        pushAccessLevels {
+          nodes {
+            accessLevel
+            accessLevelDescription
+            memberRole {
+              id
+              name
+            }
+            user {
+              id
+            }
+            group {
+              id
+            }
+            deployKey {
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+}

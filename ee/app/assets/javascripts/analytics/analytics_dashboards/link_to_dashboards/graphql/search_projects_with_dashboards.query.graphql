@@ -1,0 +1,16 @@
+query searchProjectsWithDashboards($search: String!) {
+  projects(search: $search, membership: true, first: 20) {
+    nodes {
+      id
+      name
+      nameWithNamespace
+      avatarUrl
+      fullPath
+      customizableDashboards {
+        nodes {
+          slug
+        }
+      }
+    }
+  }
+}

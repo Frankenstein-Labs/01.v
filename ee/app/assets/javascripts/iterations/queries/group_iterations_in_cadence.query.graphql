@@ -1,0 +1,34 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "./iteration_list_item.fragment.graphql"
+
+# @feature_category: team_planning
+query groupIterations(
+  $fullPath: ID!
+  $iterationCadenceId: IterationsCadenceID!
+  $state: IterationState!
+  $sort: IterationSort
+  $beforeCursor: String
+  $afterCursor: String
+  $firstPageSize: Int
+  $lastPageSize: Int
+) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    iterations(
+      iterationCadenceIds: [$iterationCadenceId]
+      state: $state
+      sort: $sort
+      before: $beforeCursor
+      after: $afterCursor
+      first: $firstPageSize
+      last: $lastPageSize
+    ) {
+      nodes {
+        ...IterationListItem
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

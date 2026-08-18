@@ -1,0 +1,19 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+
+RSpec.describe GitlabSchema.types['VulnerableKubernetesResource'], feature_category: :vulnerability_management do
+  it { expect(described_class).to have_graphql_fields(:namespace, :kind, :name, :container_name, :agent, :cluster_id) }
+
+  describe '.authorization_scopes' do
+    it 'includes :ai_workflows' do
+      expect(described_class.authorization_scopes).to include(:ai_workflows)
+    end
+  end
+
+  describe 'field scopes' do
+    it 'includes the correct scopes for the agent field' do
+      expect(described_class.fields['agent'].instance_variable_get(:@scopes)).to include(:api, :read_api, :ai_workflows)
+    end
+  end
+end

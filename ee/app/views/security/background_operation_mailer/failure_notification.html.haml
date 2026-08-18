@@ -1,0 +1,20 @@
+%tr
+  %td.text-content
+    = email_default_heading(say_hi(@user))
+
+    %p
+      = format(_('Your bulk %{operation_type} operation completed with errors.'), operation_type: @humanized_operation_type.downcase)
+
+    %p
+      %strong= _('Summary:')
+    %p{ style: 'margin: 0;' }= format(_('Total items: %{total}'), total: @operation[:total_items])
+    %p{ style: 'margin: 0; color: #108548;' }= format(_('Successful: %{successful}'), successful: @operation[:successful_items])
+    %p{ style: 'margin: 0; color: #dd2b0e;' }= format(_('Failed: %{failed}'), failed: @operation[:failed_items])
+
+    %p{ style: 'margin-top: 16px;' }
+      - entity_label = @failed_items.first&.dig('entity_type') == 'Group' ? _('Failed Groups:') : _('Failed Projects:')
+      %strong= entity_label
+    - @failed_items.each do |item|
+      %p{ style: 'margin: 8px 0 8px 0;' }
+        %strong= entity_link_for(item)
+        = render_error_messages(item['error_message'])

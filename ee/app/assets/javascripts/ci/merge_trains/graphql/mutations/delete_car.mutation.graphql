@@ -1,0 +1,5 @@
+mutation deleteCar($input: MergeTrainsDeleteCarInput!) {
+  mergeTrainsDeleteCar(input: $input) {
+    errors
+  }
+}

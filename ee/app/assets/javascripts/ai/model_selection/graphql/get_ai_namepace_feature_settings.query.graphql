@@ -1,0 +1,40 @@
+query getAiNamespaceFeatureSettings($groupId: GroupID!) {
+  aiModelSelectionNamespaceSettings(groupId: $groupId) {
+    nodes {
+      feature
+      title
+      mainFeature
+      selectedModel {
+        ref
+        name
+        modelProvider @gl_introduced(version: "18.6.0")
+      }
+      defaultModel {
+        ref
+        name
+        modelProvider @gl_introduced(version: "18.6.0")
+        modelDescription @gl_introduced(version: "18.7.0")
+        costIndicator @gl_introduced(version: "18.7.0")
+      }
+      selectableModels {
+        ref
+        name
+        modelProvider @gl_introduced(version: "18.6.0")
+        modelDescription @gl_introduced(version: "18.7.0")
+        costIndicator @gl_introduced(version: "18.7.0")
+      }
+      allowList @gl_introduced(version: "19.1.0") {
+        enabled
+        models {
+          nodes {
+            ref
+            name
+            modelDescription
+            costIndicator
+            allowed
+          }
+        }
+      }
+    }
+  }
+}

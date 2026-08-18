@@ -1,0 +1,519 @@
+---
+stage: none
+group: unassigned
+info: Any user with at least the Maintainer role can merge updates to this content. For details, see <https://docs.gitlab.com/development/development_processes/#development-guidelines-review>.
+title: Migration to Vue 3
+---
+
+The migration from Vue 2 to 3 is tracked in epic [&6252](https://gitlab.com/groups/gitlab-org/-/work_items/6252).
+
+To ease migration to Vue 3.x, we have added [ESLint rules](https://gitlab.com/gitlab-org/frontend/eslint-plugin/-/merge_requests/50)
+that prevent us from using the following deprecated features in the codebase.
+
+## GitLab can use Vue 3 (@vue/compat)
+
+The GitLab frontend team has enabled Vue 3 (@vue/compat) for development environments like GDK. While not yet production-ready, you can opt-in locally to verify your client code is forward-compatible with Vue 3.
+
+**How does it work?** When the build tool (Vite or Webpack) detects the VUE_VERSION=3 environment variable,
+it uses module aliasing to swap out certain dependencies, including Vue itself, for their Vue 3-compatible counterparts.
+
+Some of these replacement libraries are maintained by the team. They act as thin wrappers around existing
+libraries, making them Vue 3-compatible without requiring any changes in consumer code.
+
+## Set up GDK to use Vue 3 (@vue/compat)
+
+This guide walks you through configuring the GitLab Development Kit (GDK) to use Vite as the build tool with Vue 3.
+
+### Prerequisites
+
+- GDK installed and configured
+- Basic familiarity with Vue.js and Vite
+- Vite configured in your GDK environment (see [GDK Vite Settings](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/configuration.md?ref_type=heads#vite-settings))
+
+### Initial Setup
+
+### Switching Between Vue Versions
+
+To switch between Vue 2 and Vue 3, follow these steps:
+
+1. **Set the desired Vue version:**
+
+   ```shell
+   gdk config set vite.vue_version 3  # or 2
+   ```
+
+1. **Reconfigure GDK:**
+
+   ```shell
+   gdk reconfigure
+   ```
+
+1. **Restart GDK:**
+
+   ```shell
+   gdk restart # or `gdk start` if running for the first time
+   ```
+
+> **Important:** You can clear caches with `yarn clean` or `gdk kill vite` if you face issues switching Vue versions.
+
+### Verifying Your Setup
+
+You can verify your Vite configuration by checking your `gdk.yml` file:
+
+```shell
+gdk config get vite
+```
+
+This should display your current Vite settings, including the enabled status and Vue version. Your GDK
+should also be up and running.
+
+```shell
+---
+enabled: true
+hot_module_reloading: true
+https:
+  enabled: true
+port: 3038
+vue_version: 3
+```
+
+### Troubleshooting
+
+#### General Debugging
+
+When encountering issues, start by checking the Vite logs:
+
+```shell
+gdk tail vite
+```
+
+This shows real-time Vite output and error messages that can help identify the problem.
+
+#### Build Errors After Switching Versions
+
+If you encounter build errors after switching Vue versions:
+
+1. Ensure you've cleared the Vite cache with `yarn clean`
+1. Try clearing `node_modules` and reinstalling dependencies:
+
+   ```shell
+   rm -rf node_modules
+   yarn install
+   ```
+
+#### Vite Not Starting
+
+If Vite fails to start:
+
+- Check that `vite.enabled` is set to `true`
+- Verify your Node.js version meets Vite's requirements
+- Review GDK logs for specific error messages
+
+### Additional Resources
+
+- [Vite Documentation](https://vitejs.dev/)
+- [Vue 3 Documentation](https://vuejs.org/)
+- [GDK Documentation](https://gitlab.com/gitlab-org/gitlab-development-kit)
+
+## Compatibility changes
+
+### Vue filters
+
+**Why**
+
+Filters [are removed](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0015-remove-filters.md) from the Vue 3 API completely.
+
+**What to use instead**
+
+Component's computed properties / methods or external helpers.
+
+### Event hub
+
+**Why**
+
+`$on`, `$once`, and `$off` methods [are removed](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0020-events-api-change.md) from the Vue instance, so in Vue 3 it can't be used to create an event hub.
+
+**When to use**
+
+If you are in a Vue app that doesn't use any event hub, try to avoid adding a new one unless absolutely necessary. For example, if you need a child component to react to its parent's event, it's preferred to pass a prop down. Then, use the watch property on that prop in the child component to create the desired side effect.
+
+If you need cross-component communication (between different Vue apps), then perhaps introducing a hub is the right decision.
+
+**What to use instead**
+
+We have created a factory that you can use to instantiate a new [mitt](https://github.com/developit/mitt)-like event hub.
+
+This makes it easier to migrate existing event hubs to the new recommended approach, or
+to create new ones.
+
+```javascript
+import createEventHub from '~/helpers/event_hub_factory';
+
+export default createEventHub();
+```
+
+Event hubs created with the factory expose the same methods as Vue 2 event hubs (`$on`, `$once`, `$off` and
+`$emit`), making them backward compatible with our previous approach.
+
+### \<template functional>
+
+**Why**
+
+In Vue 3, `{ functional: true }` option [is removed](https://github.com/vuejs/rfcs/blob/functional-async-api-change/active-rfcs/0007-functional-async-api-change.md) and `<template functional>` is no longer supported.
+
+**What to use instead**
+
+Functional components must be written as plain functions:
+
+```javascript
+import { h } from 'vue'
+
+const FunctionalComp = (props, slots) => {
+  return h('div', `Hello! ${props.name}`)
+}
+```
+
+It is not recommended to replace stateful components with functional components unless you absolutely need a performance improvement right now. In Vue 3, performance gains for functional components are negligible.
+
+### Old slots syntax with `slot` attribute
+
+**Why**
+
+In Vue 2.6 `slot` attribute was already deprecated in favor of `v-slot` directive. The `slot` attribute usage is still allowed and sometimes we prefer using it because it simplifies unit tests (with old syntax, slots are rendered on `shallowMount`). However, in Vue 3 we can't use old syntax anymore.
+
+**What to use instead**
+
+The syntax with `v-slot` directive. To fix rendering slots in `shallowMount`, we need to stub a child component with slots explicitly.
+
+```html
+<!-- MyAwesomeComponent.vue -->
+<script>
+import SomeChildComponent from './some_child_component.vue'
+
+export default {
+  components: {
+    SomeChildComponent
+  }
+}
+
+</script>
+
+<template>
+  <div>
+    <h1>Hello GitLab!</h1>
+    <some-child-component>
+      <template #header>
+        Header content
+      </template>
+    </some-child-component>
+  </div>
+</template>
+```
+
+```javascript
+// MyAwesomeComponent.spec.js
+
+import SomeChildComponent from '~/some_child_component.vue'
+
+shallowMount(MyAwesomeComponent, {
+  stubs: {
+    SomeChildComponent
+  }
+})
+```
+
+### Props default function `this` access
+
+**Why**
+
+In Vue 3, props default value factory functions no longer have access to `this`
+(the component instance).
+
+**What to use instead**
+
+Write a computed prop that resolves the desired value from other props. This
+works in both Vue 2 and 3.
+
+```html
+<script>
+export default {
+  props: {
+    metric: {
+      type: String,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: false,
+      default: null,
+    },
+  },
+  computed: {
+    actualTitle() {
+      return this.title ?? this.metric;
+    },
+  },
+}
+
+</script>
+
+<template>
+  <div>{{ actualTitle }}</div>
+</template>
+```
+
+[In Vue 3](https://v3-migration.vuejs.org/breaking-changes/props-default-this.html),
+the props default value factory is passed the raw props as an argument, and can
+also access injections.
+
+### `Vue.observable`
+
+**Why?**
+
+`Vue.observable` creates reactive state that is tied to the Vue version that created it.
+In the hybrid Vue 2/Vue 3 infection system, modules can be duplicated - one copy for
+each Vue version. When these modules use `Vue.observable()`, each copy creates its own
+separate reactive object, so state changes in one are invisible to the other.
+
+**What to use instead**
+
+Use `observable()` from `~/lib/utils/observable`:
+
+```javascript
+import { observable } from '~/lib/utils/observable';
+
+// Before
+export const state = Vue.observable({ count: 0 });
+
+// After
+export const state = observable('unique_key', { count: 0 });
+```
+
+The `observable(key, defaults)` function:
+
+- Stores a single canonical state in a global registry keyed by `key`
+- Creates a per-Vue-context reactive mirror via `Vue.observable()` internally
+- Returns a Proxy that syncs writes to all mirrors across Vue versions
+- Supports flat objects, getters, and methods
+
+The `key` must be a unique string identifier (for example, `'super_sidebar_state'`). It ensures
+both module copies share the same underlying state.
+
+An ESLint rule (`no-restricted-properties`) enforces this - direct `Vue.observable` usage
+produces a lint error.
+
+**Limitations**
+
+- **Flat objects only**: Nested mutations like `state.nested.prop = value` or `state.array.push(item)` do not sync across Vue versions. Refactor to top-level property replacement instead:
+
+  ```javascript
+  // Instead of: state.items.push(newItem)
+  state.items = [...state.items, newItem];
+
+  // Instead of: state.config[key] = value
+  state.config = { ...state.config, [key]: value };
+  ```
+
+### Handling libraries that do not work with `@vue/compat`
+
+**Problem**
+
+Some libraries rely on Vue.js 2 internals. They might not work with `@vue/compat`, so we have added an adapter or replacements as a compatibility layer.
+
+**Goals**
+
+- We should add as few changes as possible to existing code to support new libraries. Instead, we should **add** new code, which acts as **a facade**, making the new version compatible with the old one
+- Switching between new and old versions should be hidden inside tooling (webpack / jest) and should not be exposed to the code
+- All facades specific to migration should live in the same directory to simplify future migration steps
+
+## Migrate to Vue 3
+
+For general Vue 3 migration information, see the
+[Vue 3 official migration guide](https://v3-migration.vuejs.org/).
+
+### Option 1 (recommended): Migrate your page entrypoint using a feature flag and `vue3_migration.yml`
+
+GitLab declares the migration state of every page entry under `app/assets/javascripts/pages` (and
+the EE and JH equivalents) in a `vue3_migration.yml` file co-located with the page's entrypoint,
+called `index.js`.
+
+```plaintext
+└── pages/
+    └── [area]/
+        └── [page]/
+            ├── index.js              # Entrypoint: imports and calls the initializer
+            └── vue3_migration.yml    # Declares the page's migration status
+```
+
+The bundler reads these files to decide whether to emit a Vue 3 chunk, and Rails decides at
+request time which chunk to render depending on the feature flag.
+
+```yaml
+status: rollout
+feature_flag: vue3_migrate_jobs # we recommend naming the flag `vue3_migrate_<page>`
+group: group::pipeline authoring # optional
+migration_issue: https://gitlab.com/gitlab-org/gitlab/-/work_items/... # optional
+```
+
+When the file exists, it must declare a `status` field with one of two values:
+
+- `rollout`: both Vue 2 and Vue 3 chunks are built (the Vue 3 chunk as a `.vue3` sibling
+  entrypoint). Rails serves the Vue 3 chunk when the declared feature flag is enabled, and the
+  Vue 2 chunk otherwise. A `feature_flag` field is required.
+- `migrated`: only the Vue 3 chunk is built, under the original entrypoint name, so Rails serves
+  it with no lookup at all. Use this after the feature flag has been fully rolled out and removed.
+
+Optional fields `group` and `migration_issue` are accepted for documentation. The schema is
+defined in `config/helpers/vue3_migration_file_validation.js`.
+
+#### How the metadata reaches production
+
+Rails does not read the `vue3_migration.yml` files at runtime in production: packaged builds
+(for example, Omnibus) strip `app/assets` from the Rails application, so the files do not exist
+there. Instead, the webpack build compiles the `rollout` entries into a single
+`public/assets/webpack/vue3_migration.json` manifest
+(see `config/plugins/vue3_migration_manifest_plugin.js`), which ships with the compiled assets in
+every distribution.
+
+To verify which apps run under Vue 3 on any environment, query the DOM marker set by the Vue 3
+runtime: `document.querySelectorAll('[data-gitlab-vue3-app]')`.
+
+#### Migration steps
+
+1. Identify your page's entrypoint under `app/assets/javascripts/pages` (or `ee/...`).
+   For example, `app/assets/javascripts/pages/projects/jobs/show/index.js`.
+1. Create or update the feature flag in `config/feature_flags/`. The migration mechanism uses
+   the current user as the actor.
+1. Create a `vue3_migration.yml` file next to the page's `index.js`, declaring `status: rollout`
+   with the feature flag name:
+
+   ```yaml
+   # app/assets/javascripts/pages/projects/jobs/show/vue3_migration.yml
+   status: rollout
+   feature_flag: vue3_migrate_jobs
+   ```
+
+   If the page is shadowed across CE and EE, add the file to whichever directory currently owns
+   the `index.js`, or to both if both directories contain an `index.js`. CE and EE YAMLs for the
+   same page must agree on `status` and `feature_flag`.
+1. Restart Vite with `gdk restart vite`. Vite builds its page entry map at startup, so it does not
+   serve an entrypoint added while it was running.
+1. Enable the feature flag and load the page locally.
+1. Verify that the console shows
+   `[gitlab] [V] Using Vue.js 3 (with @vue/compat) for <your app name>`.
+1. Verify that `document.querySelectorAll('[data-gitlab-vue3-app]')` returns your app.
+1. **Verify the app works correctly locally**.
+1. Open an MR with your changes and get them merged!
+1. Proceed with the feature flag rollout with the `user` actor.
+1. Upon removing the feature flag, change the YAML to `status: migrated` and
+   remove the `feature_flag` line. You are done!
+
+### Option 2: Migrate your page partially using `?vue3`
+
+A `vue3_migration.yml` file applies to the entire page entry, so it moves every app that the
+entrypoint initializes. Some entrypoints mount many independent apps owned by different teams.
+Settings pages are a common case, where a single `index.js` initializes a dozen unrelated apps.
+
+If you own one app on such a page, `Option 1` is too wide: enabling your feature flag would also
+move apps you do not own.
+
+Instead, add `?vue3` to the import of your own app. Every module below that import is built for
+Vue 3, and the rest of the page stays on Vue 2. Use this option when Option 1 does not fit,
+because it costs more code: a feature flag wired through your controller, and a conditional in the
+page entrypoint.
+
+#### Migration steps
+
+1. Create or update the feature flag in `config/feature_flags/`.
+1. Push the flag to the frontend from the controller that renders the page:
+
+   ```ruby
+   # app/controllers/projects/settings/ci_cd_controller.rb
+   before_action do
+     push_frontend_feature_flag(:vue3_migrate_my_app, current_user)
+   end
+   ```
+
+1. In the page entrypoint, import the Vue 3 build of your app dynamically when the flag is
+   enabled, and fall back to the Vue 2 build if that import fails:
+
+   ```javascript
+   // app/assets/javascripts/pages/projects/settings/ci_cd/show/index.js
+   import { initMyApp } from '~/my_app';
+   import { initOtherApp } from '~/other_app';
+   import * as Sentry from '~/sentry/sentry_browser_wrapper';
+
+   // Other apps on this page stay on Vue 2.
+   initOtherApp();
+
+   if (gon.features?.vue3MigrateMyApp) {
+     (async () => {
+       try {
+         // eslint-disable-next-line no-shadow -- Override with Vue 3 app
+         const { initMyApp } = await import('~/my_app?vue3');
+         initMyApp();
+         return;
+       } catch (e) {
+         Sentry.captureException(e);
+       }
+
+       initMyApp();
+     })();
+   } else {
+     initMyApp();
+   }
+   ```
+
+   Keep the `?vue3` path a string literal, because the bundler cannot see a path built at runtime.
+   Point the `?vue3` import at the module that creates the Vue instance: infection propagates downward, so an
+   import higher in the tree also moves every other app below it. Declare the import inside the
+   `try` block so the outer Vue 2 import stays in scope for the fallback.
+
+1. Enable the feature flag and load the page locally.
+1. Verify that the console shows
+   `[gitlab] [V] Using Vue.js 3 (with @vue/compat) for <your app name>`.
+1. Verify that `document.querySelectorAll('[data-gitlab-vue3-app]')` returns your app.
+1. **Verify the app works correctly locally**.
+1. Open an MR with your changes and get them merged.
+1. Proceed with the feature flag rollout with the `user` actor.
+1. Upon removing the feature flag, import `~/my_app?vue3` directly and delete both the conditional
+   and the Vue 2 import.
+
+## Common migration issues
+
+### Vue Router props reactivity
+
+Router props passed with the `props` function are not reactive in Vue 3. Use computed properties
+that read from `this.$route` instead.
+
+```javascript
+// Component - use computed property instead of props
+computed: {
+  currentPath() {
+    return this.$route?.params.path || '';
+  }
+}
+```
+
+### Watch expressions
+
+Watch specific route properties using string paths, not the entire `$route` object. You can still
+use `deep: true` with `$route`, but it adds performance overhead. Watching specific properties is
+more efficient and explicit about your component's dependencies.
+
+```javascript
+watch: {
+  '$route.params.path'() {
+    this.fetchData();
+  }
+}
+```
+
+## Testing
+
+For more information about implementing or fixing tests that fail while using Vue 3, read the
+[Vue 3 testing guide](../testing_guide/testing_vue3.md).
+
+## Updating `@vue/compat` patches
+
+See [this document](https://gitlab.com/gitlab-org/frontend/vuejs-core/-/blob/v3.5.30-gitlab-hybrid/README.md) for information about how to update our `@vue/compat` patches, as it can be tricky.

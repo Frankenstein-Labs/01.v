@@ -1,0 +1,10 @@
+---
+name: lock_workflows_for_web_only
+description:
+feature_issue_url: https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp/-/work_items/2018
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/224852
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/591407
+milestone: '18.10'
+group: group::agent foundations
+type: gitlab_com_derisk
+default_enabled: false

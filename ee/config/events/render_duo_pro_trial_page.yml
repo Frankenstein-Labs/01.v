@@ -1,0 +1,13 @@
+---
+description: Render Duo Pro trial page
+internal_events: true
+action: render_duo_pro_trial_page
+identifiers:
+  - namespace
+  - user
+product_group: acquisition
+milestone: '16.10'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/146059
+tiers:
+  - premium
+  - ultimate

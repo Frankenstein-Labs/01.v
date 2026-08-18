@@ -1,0 +1,84 @@
+#import "../fragments/scan_policy_source.fragment.graphql"
+#import "../fragments/policy_scope_list.fragment.graphql"
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query groupSecurityPolicies(
+  $fullPath: ID!
+  $relationship: SecurityPolicyRelationType = INHERITED
+  $last: Int
+  $after: String = ""
+  $before: String = ""
+  $first: Int = 50
+  $type: PolicyType
+  $includeAttributeScopes: Boolean = false
+) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    securityPolicies(
+      type: $type
+      relationship: $relationship
+      last: $last
+      first: $first
+      after: $after
+      before: $before
+    ) {
+      nodes {
+        id @gl_introduced(version: "18.11.0")
+        policyConfigurationId @gl_introduced(version: "18.11.0")
+        csp
+        name
+        yaml
+        type
+        editPath
+        enabled
+        policyScope {
+          ...PolicyScopeList
+        }
+        updatedAt
+        testRuns @gl_introduced(version: "18.11.0") {
+          nodes {
+            id
+            state
+          }
+        }
+        policyAttributes {
+          ... on ScanExecutionPolicyAttributesType {
+            deprecatedProperties
+            source {
+              ...SecurityPolicySource
+            }
+          }
+          ... on ApprovalPolicyAttributesType {
+            source {
+              ...SecurityPolicySource
+            }
+            deprecatedProperties
+          }
+          ... on PipelineExecutionPolicyAttributesType {
+            source {
+              ...SecurityPolicySource
+            }
+          }
+          ... on PipelineExecutionScheduledPolicyAttributesType {
+            source {
+              ...SecurityPolicySource
+            }
+          }
+          ... on VulnerabilityManagementPolicyAttributesType {
+            source {
+              ...SecurityPolicySource
+            }
+          }
+          ... on DependencyFirewallPolicyAttributesType @gl_introduced(version: "19.0.0") {
+            source {
+              ...SecurityPolicySource
+            }
+          }
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

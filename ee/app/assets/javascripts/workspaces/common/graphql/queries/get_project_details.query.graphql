@@ -1,0 +1,13 @@
+query getProjectDetails($projectFullPath: ID!) {
+  project(fullPath: $projectFullPath) {
+    id
+    nameWithNamespace
+    group {
+      id
+      fullPath
+    }
+    repository {
+      rootRef
+    }
+  }
+}

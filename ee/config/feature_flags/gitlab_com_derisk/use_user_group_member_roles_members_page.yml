@@ -1,0 +1,10 @@
+---
+name: use_user_group_member_roles_members_page
+description: Use user_group_member_roles table when showing member roles in members page
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/556334
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/208398
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/576194
+milestone: '18.5'
+group: group::authorization
+type: gitlab_com_derisk
+default_enabled: false

@@ -1,0 +1,10 @@
+---
+name: duo_ui_next
+description: Enable the Duo UI Next for Duo applications
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/568101
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/203868
+rollout_issue_url:
+milestone: '18.5'
+group: group::ai framework
+type: wip
+default_enabled: false

@@ -1,0 +1,27 @@
+mutation userAddOnAssignmentBulkCreate(
+  $userIds: [UserID!]!
+  $addOnPurchaseId: GitlabSubscriptionsAddOnPurchaseID!
+) {
+  userAddOnAssignmentBulkCreate(input: { userIds: $userIds, addOnPurchaseId: $addOnPurchaseId }) {
+    errors
+    users {
+      nodes {
+        id
+        addOnAssignments(addOnPurchaseIds: [$addOnPurchaseId]) {
+          nodes {
+            # eslint-disable-next-line @graphql-eslint/require-selections
+            addOnPurchase {
+              name
+            }
+          }
+        }
+      }
+    }
+    addOnPurchase {
+      id
+      name
+      purchasedQuantity
+      assignedQuantity
+    }
+  }
+}

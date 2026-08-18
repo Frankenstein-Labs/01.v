@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EE - CorpusManagement - EmptyState should render correct content 1`] = `
+<section
+  class="gl-empty-state gl-flex gl-flex-col gl-text-center"
+>
+  <div
+    class="gl-max-w-full"
+  >
+    <img
+      alt=""
+      class="gl-dark-invert-keep-hue gl-max-w-full"
+      height="144"
+      src="/illustrations/empty-state/empty-commit-md.svg"
+    />
+  </div>
+  <div
+    class="gl-empty-state-content gl-m-auto gl-mx-auto gl-my-0 gl-p-5"
+    data-testid="gl-empty-state-content"
+  >
+    <h2
+      class="gl-leading-36 gl-mb-0 gl-mt-0 gl-text-size-h-display h4"
+    >
+      Manage your fuzz testing corpus files
+    </h2>
+    <p
+      class="gl-mb-0 gl-mt-4 gl-text-subtle"
+    >
+      <gl-sprintf-stub
+        message="A corpus is used by fuzz testing to improve coverage. Corpus files can be manually created or auto-generated. %{linkStart}Learn more%{linkEnd}"
+      />
+    </p>
+    <div
+      class="gl-flex gl-flex-wrap gl-justify-center gl-mt-5"
+    >
+      <button>
+        Perform action
+      </button>
+    </div>
+  </div>
+</section>
+`;

@@ -1,0 +1,20 @@
+query getBillableMembersQuery($namespaceId: ID!, $page: ID, $search: String, $sort: String) {
+  billableMembers(namespaceId: $namespaceId, page: $page, search: $search, sort: $sort) @client {
+    total
+    page
+    perPage
+    members {
+      id
+      username
+      name
+      avatar_url
+      web_url
+      email
+      last_activity_on
+      membership_type
+      removable
+      last_login_at
+      is_last_owner
+    }
+  }
+}

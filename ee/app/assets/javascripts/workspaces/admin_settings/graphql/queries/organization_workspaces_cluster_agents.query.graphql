@@ -1,0 +1,44 @@
+query organizationWorkspacesClusterAgents(
+  $organizationId: OrganizationsOrganizationID!
+  $before: String
+  $after: String
+) {
+  organization(id: $organizationId) {
+    id
+    organizationWorkspacesClusterAgents: workspacesClusterAgents(
+      filter: ALL
+      first: 5
+      before: $before
+      after: $after
+    ) {
+      nodes {
+        id
+        name
+        webPath
+        project {
+          id
+          name
+          group {
+            id
+            name
+          }
+        }
+        workspacesAgentConfig {
+          id
+          enabled
+        }
+        connections {
+          nodes {
+            connectedAt
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+}

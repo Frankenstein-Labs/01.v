@@ -1,0 +1,30 @@
+# @feature_category: vulnerability_management
+query projectVulnerabilitiesByAge(
+  $fullPath: ID!
+  $reportType: [VulnerabilityReportType!]
+  $includeBySeverity: Boolean!
+  $includeByReportType: Boolean!
+  $severity: [VulnerabilitySeverity!]
+  $trackedRefIds: [SecurityProjectTrackedContextID!]
+) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    securityMetrics(reportType: $reportType, trackedRefIds: $trackedRefIds) {
+      vulnerabilitiesByAge(severity: $severity) {
+        name
+        ... @include(if: $includeBySeverity) {
+          bySeverity {
+            count
+            severity
+          }
+        }
+        ... @include(if: $includeByReportType) {
+          byReportType {
+            count
+            reportType
+          }
+        }
+      }
+    }
+  }
+}

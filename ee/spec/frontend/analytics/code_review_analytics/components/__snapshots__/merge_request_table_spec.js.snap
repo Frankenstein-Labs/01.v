@@ -1,0 +1,247 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MergeRequestTable component template matches the snapshot 1`] = `
+<table
+  aria-busy=""
+  aria-colcount="7"
+  class="!gl-my-5 b-table b-table-stacked-sm gl-table table"
+  id="reference-0"
+  role="table"
+>
+  <thead
+    role="rowgroup"
+  >
+    <tr
+      role="row"
+    >
+      <th
+        aria-colindex="1"
+        class="w-30p"
+        role="columnheader"
+        scope="col"
+      >
+        <div>
+          Merge Request
+        </div>
+      </th>
+      <th
+        aria-colindex="2"
+        class="!gl-text-right"
+        role="columnheader"
+        scope="col"
+      >
+        <div>
+          Review time
+        </div>
+      </th>
+      <th
+        aria-colindex="3"
+        role="columnheader"
+        scope="col"
+      >
+        <div>
+          Author
+        </div>
+      </th>
+      <th
+        aria-colindex="4"
+        role="columnheader"
+        scope="col"
+      >
+        <div>
+          Approvers
+        </div>
+      </th>
+      <th
+        aria-colindex="5"
+        class="!gl-text-right"
+        role="columnheader"
+        scope="col"
+      >
+        <div>
+          Comments
+        </div>
+      </th>
+      <th
+        aria-colindex="6"
+        class="!gl-text-right"
+        role="columnheader"
+        scope="col"
+      >
+        <div>
+          Commits
+        </div>
+      </th>
+      <th
+        aria-colindex="7"
+        class="!gl-text-right"
+        role="columnheader"
+        scope="col"
+      >
+        <div>
+          Line changes
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody
+    role="rowgroup"
+  >
+    <tr
+      role="row"
+    >
+      <td
+        aria-colindex="1"
+        class="@sm/panel:gl-table-cell gl-flex gl-items-center table-col"
+        data-label="Merge Request"
+        role="cell"
+      >
+        <div>
+          <div
+            class="!gl-flex-col !gl-items-end @sm/panel:!gl-items-start gl-flex gl-grow"
+          >
+            <div
+              class="!gl-my-3 gl-max-w-34 str-truncated"
+            >
+              <a
+                class="gl-font-bold gl-link gl-text-default hover:gl-text-default"
+                href="https://gitlab.com/gitlab-org/gitlab/merge_requests/38062"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                This is just a super long merge request title that does not fit into one line so it needs to be truncated
+              </a>
+            </div>
+            <ul
+              class="!gl-mb-0 gl-text-subtle horizontal-list list-items-separated"
+            >
+              <li>
+                !12345
+              </li>
+              <li>
+                created 5 months ago
+              </li>
+              <li>
+                <span
+                  class="gl-flex gl-items-center"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="gl-fill-current gl-icon gl-mr-2 s16"
+                    data-testid="milestone-icon"
+                    role="img"
+                  >
+                    <use
+                      href="file-mock-icons.svg#milestone"
+                    />
+                  </svg>
+                  11.1
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </td>
+      <td
+        aria-colindex="2"
+        class="!gl-text-right @sm/panel:gl-table-cell gl-flex gl-items-center table-col"
+        data-label="Review time"
+        role="cell"
+      >
+        <div>
+          <span>
+            2 days
+          </span>
+        </div>
+      </td>
+      <td
+        aria-colindex="3"
+        class="@sm/panel:gl-table-cell gl-flex gl-items-center table-col"
+        data-label="Author"
+        role="cell"
+      >
+        <div>
+          <a
+            class="gl-avatar-link gl-link gl-link-meta"
+            href="https://gitlab.com/foo"
+            rel="noopener noreferrer"
+            target="_blank"
+            title="foo"
+          >
+            <div
+              aria-hidden="true"
+              class="gl-avatar gl-avatar-circle gl-avatar-identicon gl-avatar-identicon-bg1 gl-avatar-s24"
+            >
+              F
+            </div>
+          </a>
+        </div>
+      </td>
+      <td
+        aria-colindex="4"
+        class="@sm/panel:gl-table-cell gl-flex gl-items-center table-col"
+        data-label="Approvers"
+        role="cell"
+      >
+        <div>
+          <div>
+            <a
+              class="gl-avatar-link gl-link gl-link-meta"
+              href="https://gitlab.com/bar"
+              rel="noopener noreferrer"
+              target="_blank"
+              title="bar"
+            >
+              <div
+                aria-hidden="true"
+                class="gl-avatar gl-avatar-circle gl-avatar-identicon gl-avatar-identicon-bg1 gl-avatar-s24"
+              />
+            </a>
+          </div>
+        </div>
+      </td>
+      <td
+        aria-colindex="5"
+        class="!gl-text-right @sm/panel:gl-table-cell gl-flex gl-items-center table-col"
+        data-label="Comments"
+        role="cell"
+      >
+        <div>
+          21
+        </div>
+      </td>
+      <td
+        aria-colindex="6"
+        class="!gl-text-right @sm/panel:gl-table-cell gl-flex gl-items-center table-col"
+        data-label="Commits"
+        role="cell"
+      >
+        <div>
+          <span>
+            7
+          </span>
+        </div>
+      </td>
+      <td
+        aria-colindex="7"
+        class="!gl-text-right @sm/panel:gl-table-cell gl-flex gl-items-center table-col"
+        data-label="Line changes"
+        role="cell"
+      >
+        <div>
+          <span
+            class="!gl-font-bold gl-text-success"
+          >
+            +504
+          </span>
+          <span
+            class="!gl-font-bold gl-text-danger"
+          >
+            -10
+          </span>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;

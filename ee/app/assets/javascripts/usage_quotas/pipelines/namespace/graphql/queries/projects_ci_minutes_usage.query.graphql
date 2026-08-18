@@ -1,0 +1,34 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getProjectsCiMinutesUsage(
+  $namespaceId: NamespaceID
+  $date: Date
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+) {
+  ciMinutesProjectMonthlyUsage(
+    namespaceId: $namespaceId
+    date: $date
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+  ) {
+    nodes {
+      minutes
+      sharedRunnersDuration
+      project {
+        id
+        name
+        nameWithNamespace
+        avatarUrl
+        webUrl
+      }
+    }
+    pageInfo {
+      ...PageInfo
+    }
+  }
+}

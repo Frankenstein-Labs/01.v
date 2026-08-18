@@ -1,0 +1,487 @@
+scan_execution_policy:
+  - name: Run DAST in every pipeline
+    description: This policy enforces to run DAST for every pipeline within the project
+    enabled: true
+    rules:
+    - type: pipeline
+      branches:
+      - "production"
+    policy_scope: {}
+    metadata: {}
+    actions:
+    - scan: dast
+      site_profile: Site Profile
+      scanner_profile: Scanner Profile
+  - name: Run DAST in every pipeline_v1
+    description: This policy enforces to run DAST for every pipeline within the project
+    enabled: true
+    rules:
+    - type: pipeline
+      branches:
+      - "master"
+    policy_scope: {}
+    metadata: {}
+    actions:
+    - scan: dast
+      site_profile: Site Profile
+      scanner_profile: Scanner Profile
+  - name: Disabled policy
+    description: This policy is disabled
+    enabled: false
+    rules: []
+    policy_scope: {}
+    metadata: {}
+    actions: []
+  - name: Disabled policy_v2
+    description: This policy is disabled v2
+    enabled: false
+    rules: []
+    policy_scope: {}
+    metadata: {}
+    actions: []
+  - name: Run DAST in every pipeline_v3
+    description: This policy enforces to run DAST for every pipeline within the project
+    enabled: true
+    rules:
+    - type: pipeline
+      branches:
+      - "master"
+    policy_scope: {}
+    metadata: {}
+    actions:
+    - scan: dast
+      site_profile: Site Profile
+      scanner_profile: Scanner Profile
+  - name: Run DAST in every pipeline_v4
+    description: This policy enforces to run DAST for every pipeline within the project
+    enabled: true
+    rules:
+    - type: pipeline
+      branches:
+      - "master"
+    policy_scope: {}
+    metadata: {}
+    actions:
+    - scan: dast
+      site_profile: Site Profile
+      scanner_profile: Scanner Profile
+  - name: Run DAST in every pipeline_v5
+    description: This policy enforces to run DAST for every pipeline within the project
+    enabled: true
+    rules:
+    - type: pipeline
+      branches:
+      - "master"
+    policy_scope: {}
+    metadata: {}
+    actions:
+    - scan: dast
+      site_profile: Site Profile
+      scanner_profile: Scanner Profile
+  - name: Run DAST in every pipeline_v6
+    description: This policy enforces to run DAST for every pipeline within the project
+    enabled: true
+    rules:
+    - type: pipeline
+      branches:
+      - "master"
+    policy_scope: {}
+    metadata: {}
+    actions:
+    - scan: dast
+      site_profile: Site Profile
+      scanner_profile: Scanner Profile
+approval_policy:
+- name: critical vulnerability CS approvals
+  description: critical severity level only for container scanning
+  enabled: true
+  rules:
+  - type: scan_finding
+    branches:
+    - master
+    scanners:
+    - container_scanning
+    vulnerabilities_allowed: 0
+    severity_levels:
+    - critical
+  - type: scan_finding
+    branches:
+    - master
+    scanners:
+    - dast
+    vulnerabilities_allowed: 1
+    severity_levels:
+    - info
+  - type: scan_finding
+    branches:
+    - master
+    scanners:
+    - container_scanning
+    vulnerabilities_allowed: 10
+    severity_levels:
+    - info
+  policy_scope: {}
+  metadata: {}
+  actions:
+  - type: require_approval
+    approvals_required: 1
+    approvers:
+    - admin
+- name: Enabled DAST policy
+  description: enabled police with low and medium severity levels only for DAST
+  enabled: true
+  rules:
+  - type: scan_finding
+    branches:
+    - master
+    scanners:
+    - dast
+    vulnerabilities_allowed: 1
+    severity_levels:
+    - medium
+    - low
+  policy_scope: {}
+  metadata: {}
+  actions:
+  - type: require_approval
+    approvals_required: 2
+    approvers:
+    - admin
+    - developer.local
+- name: Disabled DAST policy
+  description: disabled police with low and medium severity levels only for DAST
+  enabled: false
+  rules:
+  - type: scan_finding
+    branches:
+    - master
+    scanners:
+    - dast
+    vulnerabilities_allowed: 1
+    severity_levels:
+    - medium
+    - low
+  policy_scope: {}
+  metadata: {}
+  actions:
+  - type: require_approval
+    approvals_required: 2
+    approvers:
+    - admin
+    - developer.local
+- name: Enabled SAST policy
+  description: enabled police with low and medium severity levels only for SAST
+  enabled: true
+  rules:
+  - type: scan_finding
+    branches:
+    - master
+    scanners:
+    - sast
+    vulnerabilities_allowed: 1
+    severity_levels:
+    - medium
+  policy_scope: {}
+  metadata: {}
+  actions:
+  - type: require_approval
+    approvals_required: 2
+    approvers:
+    - admin
+- name: Enabled CS policy
+  description: enabled police with low severity levels only for CS
+  enabled: true
+  rules:
+  - type: scan_finding
+    branches:
+    - master
+    scanners:
+    - container_scanning
+    vulnerabilities_allowed: 1
+    severity_levels:
+    - low
+  policy_scope: {}
+  metadata: {}
+  actions:
+  - type: require_approval
+    approvals_required: 2
+    approvers:
+    - developer.local
+- name: Enabled DAST and SAST policy
+  description: disabled police with unknown severity levels only for DAST and SAST
+  enabled: true
+  rules:
+  - type: scan_finding
+    branches:
+    - master
+    scanners:
+    - dast
+    - sast
+    vulnerabilities_allowed: 1
+    severity_levels:
+    - unknown
+  policy_scope: {}
+  metadata: {}
+  actions:
+  - type: require_approval
+    approvals_required: 2
+    approvers:
+    - admin
+    - developer.local
+- name: Enabled dependency scanning policy
+  description: disabled police with unknown severity levels only for dependency scanning
+  enabled: true
+  rules:
+  - type: scan_finding
+    branches:
+    - master
+    scanners:
+    - dependency_scanning
+    vulnerabilities_allowed: 1
+    severity_levels:
+    - unknown
+  policy_scope: {}
+  metadata: {}
+  actions:
+  - type: require_approval
+    approvals_required: 2
+    approvers:
+    - admin
+    - developer.local
+- name: Enabled secret detection policy
+  description: disabled police with unknown severity levels only for secret detection
+  enabled: true
+  rules:
+  - type: scan_finding
+    branches:
+    - master
+    scanners:
+    - secret_detection
+    vulnerabilities_allowed: 1
+    severity_levels:
+    - unknown
+  policy_scope: {}
+  metadata: {}
+  actions:
+  - type: require_approval
+    approvals_required: 2
+    approvers:
+    - admin
+    - developer.local
+pipeline_execution_policy:
+  - name: Run custom pipeline configuration
+    description: This policy enforces to run custom pipeline configuration
+    enabled: true
+    content:
+      include:
+        - project: 'main'
+          file: 'pipeline_execution_policy.yml'
+    policy_scope: {}
+    metadata: {}
+  - name: Disabled pipeline execution policy
+    description: This policy would run custom pipeline configuration but is disabled
+    enabled: false
+    content:
+      include:
+        - project: 'main'
+          file: 'pipeline_execution_policy.yml'
+    policy_scope: {}
+    metadata: {}
+  - name: Second pipeline execution policy
+    description: Second enabled pipeline execution policy
+    enabled: true
+    content:
+      include:
+        - project: 'main'
+          file: 'pipeline_execution_policy.yml'
+    policy_scope: {}
+    metadata: {}
+  - name: Third pipeline execution policy
+    description: Third enabled pipeline execution policy
+    enabled: true
+    content:
+      include:
+        - project: 'main'
+          file: 'pipeline_execution_policy.yml'
+    policy_scope: {}
+    metadata: {}
+  - name: Fourth pipeline execution policy
+    description: Fourth enabled pipeline execution policy
+    enabled: true
+    content:
+      include:
+        - project: 'main'
+          file: 'pipeline_execution_policy.yml'
+    policy_scope: {}
+    metadata: {}
+  - name: Fifth pipeline execution policy
+    description: Fifth enabled pipeline execution policy
+    enabled: true
+    content:
+      include:
+        - project: 'main'
+          file: 'pipeline_execution_policy.yml'
+    policy_scope: {}
+    metadata: {}
+  - name: Sixth pipeline execution policy
+    description: Sixth enabled pipeline execution policy
+    enabled: true
+    content:
+      include:
+        - project: 'main'
+          file: 'pipeline_execution_policy.yml'
+    policy_scope: {}
+    metadata: {}
+pipeline_execution_schedule_policy:
+  - name: Run scheduled pipeline
+    description: This policy runs a scheduled pipeline
+    enabled: true
+    content:
+      include:
+        - project: 'main'
+          file: 'pipeline_execution_policy.yml'
+    policy_scope: {}
+    metadata: {}
+    schedule:
+      cadence: 0 0 * * *
+  - name: Second scheduled pipeline policy
+    description: This policy runs a scheduled pipeline
+    enabled: true
+    content:
+      include:
+        - project: 'main'
+          file: 'pipeline_execution_policy.yml'
+    policy_scope: {}
+    metadata: {}
+    schedule:
+      cadence: 0 0 * * *
+  - name: Disabled scheduled pipeline policy
+    description: This policy runs a scheduled pipeline
+    enabled: true
+    content:
+      include:
+        - project: 'main'
+          file: 'pipeline_execution_policy.yml'
+    policy_scope: {}
+    metadata: {}
+    schedule:
+      cadence: 0 0 * * *
+vulnerability_management_policy:
+  - name: Resolve no longer detected low SAST
+    description: This policy resolves low severity SAST vulnerabilities that are no longer detected
+    enabled: true
+    rules:
+    - type: no_longer_detected
+      scanners:
+      - sast
+      severity_levels:
+      - low
+    actions:
+    - type: auto_resolve
+    policy_scope: {}
+  - name: Resolve no longer detected medium DAST
+    description: This policy resolves mediun severity DAST vulnerabilities that are no longer detected
+    enabled: true
+    rules:
+    - type: no_longer_detected
+      scanners:
+      - dast
+      severity_levels:
+      - medium
+    actions:
+    - type: auto_resolve
+    policy_scope: {}
+  - name: Resolve no longer detected container scanning
+    description: This policy resolves all severity container scanning vulnerabilities that are no longer detected
+    enabled: true
+    rules:
+    - type: no_longer_detected
+      scanners:
+      - container_scanning
+      severity_levels: []
+    actions:
+    - type: auto_resolve
+    policy_scope: {}
+  - name: Resolve no longer detected critical
+    description: This policy resolves all critical severity vulnerabilities that are no longer detected
+    enabled: true
+    rules:
+    - type: no_longer_detected
+      scanners: []
+      severity_levels:
+      - critical
+    actions:
+    - type: auto_resolve
+    policy_scope: {}
+  - name: Resolve no longer detected medium sast and low dast
+    description: This policy resolves medium severity sast and low severity dast vulnerabilities that are no longer detected
+    enabled: true
+    rules:
+    - type: no_longer_detected
+      scanners:
+      - sast
+      severity_levels:
+      - medium
+    - type: no_longer_detected
+      scanners:
+      - dast
+      severity_levels:
+      - low
+    actions:
+      - type: auto_resolve
+    policy_scope: {}
+  - name: Resolve no longer detected high dependency scanning
+    description: This policy resolves high severity dependency scanning vulnerabilities that are no longer detected
+    enabled: false
+    rules:
+    - type: no_longer_detected
+      scanners:
+      - dependency_scanning
+      severity_levels:
+      - high
+    actions:
+      - type: auto_resolve
+    policy_scope: {}
+dependency_firewall_policy:
+  - name: "Block dependencies"
+    description: "Block certain dependencies"
+    enabled: true
+    enforcement_type: enforced   # blocks the download when a rule matches
+    rules:
+      - type: license
+        denied:
+          - name: NIST Software License
+          - name: NTP License
+        exceptions:
+          - purl: "pkg:npm/my-internal-lib"
+      - type: vulnerability
+        allowed:
+          - severity: 'high'
+        exceptions:
+          - purl: "pkg:npm/my-internal-lib"
+          - id: 'CVE-2026-0202'
+    bypass_settings:
+      access_tokens:
+        - id: 333
+    policy_scope: {}
+  - name: "Approved licenses only"
+    description: "Warn on any package whose license is not on the allowed list"
+    enabled: true
+    enforcement_type: warn       # allows the download but records a warning
+    rules:
+      - type: license
+        allowed:
+          - name: MIT License
+          - name: Apache License 2.0
+        exceptions:
+          - purl: "pkg:npm/my-internal-lib"
+      - type: vulnerability
+        denied:
+          - severity: 'low'
+        exceptions:
+          - purl: "pkg:npm/my-internal-lib-2"
+          - id: 'CVE-2025-1212'
+    bypass_settings:
+      users:
+        - id: 123
+    policy_scope: {}

@@ -1,0 +1,11 @@
+query getSubscriptionPermissionsData($namespaceId: ID, $subscriptionName: String) {
+  subscription(namespaceId: $namespaceId, subscriptionName: $subscriptionName) {
+    canAddSeats
+    canAddDuoProSeats
+    canRenew
+    communityPlan
+  }
+  userActionAccess(namespaceId: $namespaceId, subscriptionName: $subscriptionName) {
+    limitedAccessReason
+  }
+}

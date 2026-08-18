@@ -1,0 +1,22 @@
+#import "./ai_catalog_item_version.fragment.graphql"
+
+fragment BaseAiCatalogAgentVersion on AiCatalogAgentVersion {
+  ...BaseAiCatalogItemVersion
+  systemPrompt
+  tools {
+    nodes {
+      id
+      title
+      name
+      description
+    }
+  }
+  mcpTools @gl_introduced(version: "18.11.0")
+  mcpServers @gl_introduced(version: "18.9.0") {
+    nodes {
+      id
+      name
+      description
+    }
+  }
+}

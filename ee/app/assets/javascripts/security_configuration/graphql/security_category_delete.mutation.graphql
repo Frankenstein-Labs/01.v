@@ -1,0 +1,7 @@
+mutation deleteSecurityCategory($id: SecurityCategoryID!) {
+  securityCategoryDestroy(input: { id: $id }) {
+    deletedCategoryGid
+    deletedAttributesGid
+    errors
+  }
+}

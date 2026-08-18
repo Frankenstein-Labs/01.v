@@ -1,0 +1,77 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "term": {
+            "confidential": {
+              "_name": "filters:confidentiality:groups:user_filter",
+              "value": true
+            }
+          }
+        },
+        {
+          "bool": {
+            "minimum_should_match": 1,
+            "should": [
+              {
+                "term": {
+                  "assignee_id": {
+                    "_name": "filters:confidentiality:groups:confidential:as_assignee",
+                    "value": __USER_ID__
+                  }
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "author_id": {
+                          "_name": "filters:confidentiality:groups:confidential:as_author",
+                          "value": __USER_ID__
+                        }
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1,
+                  "should": [
+                    {
+                      "bool": {
+                        "must_not": [
+                          {
+                            "term": {
+                              "namespace_visibility_level": 0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "minimum_should_match": 1,
+                  "should": [
+                    {
+                      "prefix": {
+                        "traversal_ids": {
+                          "_name": "filters:confidentiality:groups:private:ancestry_filter:descendants",
+                          "value": "__NAMESPACE_ANCESTRY__"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

@@ -1,0 +1,19 @@
+mutation createMemberRole(
+  $name: String!
+  $description: String!
+  $baseAccessLevel: MemberRolesAccessLevel!
+  $groupPath: ID
+  $permissions: [MemberRolePermission!]!
+) {
+  memberRoleCreate(
+    input: {
+      name: $name
+      description: $description
+      baseAccessLevel: $baseAccessLevel
+      groupPath: $groupPath
+      permissions: $permissions
+    }
+  ) {
+    errors
+  }
+}

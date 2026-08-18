@@ -1,0 +1,13 @@
+#import "./project_security_exclusion.fragment.graphql"
+
+query ProjectSecurityExclusions($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    exclusions: securityExclusions {
+      nodes {
+        ...ProjectSecurityExclusionFragment
+        __typename
+      }
+    }
+  }
+}

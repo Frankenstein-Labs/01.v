@@ -1,0 +1,10 @@
+# @feature_category: virtual_registry
+
+mutation updateContainerRegistryUpstream(
+  $id: VirtualRegistriesContainerRegistryUpstreamID!
+  $position: Int!
+) {
+  update: containerVirtualRegistryUpstreamUpdate(input: { id: $id, position: $position }) {
+    errors
+  }
+}

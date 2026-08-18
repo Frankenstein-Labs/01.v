@@ -1,0 +1,5 @@
+query getReconciliationStatus($namespaceId: ID!) {
+  reconciliation(namespaceId: $namespaceId) {
+    eligibleForSeatReconciliation
+  }
+}

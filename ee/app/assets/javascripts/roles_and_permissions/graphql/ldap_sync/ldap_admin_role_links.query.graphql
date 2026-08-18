@@ -1,0 +1,23 @@
+query ldapAdminRoleLinks {
+  ldapAdminRoleLinks {
+    nodes {
+      id
+      createdAt
+      lastSuccessfulSyncAt
+      syncStartedAt
+      syncEndedAt
+      syncError
+      syncStatus
+      provider {
+        id
+        label
+      }
+      filter
+      cn
+      adminMemberRole {
+        id
+        name
+      }
+    }
+  }
+}

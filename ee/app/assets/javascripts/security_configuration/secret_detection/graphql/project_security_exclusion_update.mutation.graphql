@@ -1,0 +1,10 @@
+#import "./project_security_exclusion.fragment.graphql"
+
+mutation projectSecurityExclusionUpdate($input: ProjectSecurityExclusionUpdateInput!) {
+  projectSecurityExclusionUpdate(input: $input) {
+    securityExclusion {
+      ...ProjectSecurityExclusionFragment
+    }
+    errors
+  }
+}

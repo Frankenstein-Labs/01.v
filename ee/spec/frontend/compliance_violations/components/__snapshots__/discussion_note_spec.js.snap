@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DiscussionNote rendering renders with correct timeline structure 1`] = `
+<timeline-entry-item-stub
+  class="note note-comment note-wrapper"
+  id="reference-0"
+>
+  <div
+    class="gl-float-left timeline-avatar"
+  >
+    <gl-avatar-link-stub
+      class="js-user-link"
+      data-user-id="456"
+      data-username="johndoe"
+      href="https://example.com/johndoe"
+    >
+      <gl-avatar-stub
+        alt="John Doe"
+        entityid="0"
+        entityname="johndoe"
+        shape="circle"
+        size="32"
+        src="https://example.com/avatar.jpg"
+      />
+    </gl-avatar-link-stub>
+  </div>
+  <div
+    class="timeline-content"
+  >
+    <div
+      data-testid="note-wrapper"
+    >
+      <div
+        class="note-header"
+      >
+        <note-header-stub
+          actiontext=""
+          author="[object Object]"
+          createdat="2023-01-01T00:00:00Z"
+          emailparticipant=""
+          noteid="123"
+          noteurl="#note_123"
+          showspinner="true"
+        />
+        <div
+          class="note-actions"
+        >
+          <emoji-picker-stub
+            customemojipath=""
+            data-testid="note-emoji-button"
+            dropdownclass=""
+            right="true"
+            toggleclass="add-reaction-button btn-default-tertiary"
+          />
+          <gl-button-stub
+            accessibledisabled="true"
+            aria-label="Edit comment"
+            buttontextclasses=""
+            category="tertiary"
+            data-testid="edit-note-button"
+            icon="pencil"
+            size="medium"
+            tag="button"
+            title="Edit comment"
+            type="button"
+            variant="default"
+          />
+          <gl-disclosure-dropdown-stub
+            autoclose="true"
+            category="tertiary"
+            data-testid="note-actions-dropdown"
+            icon="ellipsis_v"
+            items=""
+            nocaret="true"
+            placement="bottom-end"
+            positioningstrategy="absolute"
+            size="medium"
+            textsronly="true"
+            title="More actions"
+            toggleid="dropdown-toggle-btn-1"
+            toggletext="More actions"
+            variant="default"
+          >
+            <gl-disclosure-dropdown-item-stub
+              data-testid="copy-link-action"
+            >
+              Copy link
+            </gl-disclosure-dropdown-item-stub>
+            <gl-disclosure-dropdown-group-stub
+              bordered="true"
+              borderposition="top"
+            >
+              <gl-disclosure-dropdown-item-stub
+                data-testid="delete-note-action"
+                variant="danger"
+              >
+                Delete comment
+              </gl-disclosure-dropdown-item-stub>
+            </gl-disclosure-dropdown-group-stub>
+          </gl-disclosure-dropdown-stub>
+        </div>
+      </div>
+      <div
+        class="note-body"
+        data-testid="discussion-note-body"
+      >
+        <div
+          class="timeline-discussion-body"
+        >
+          <div
+            class="md note-text"
+            data-testid="discussion-note-text"
+          >
+            <p>
+              This is a discussion note
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <gl-modal-stub
+    arialabel=""
+    dismisslabel="Close"
+    footertag="div"
+    headertag="div"
+    modalclass=""
+    modalid="delete-note-modal"
+    ok-title="Delete comment"
+    ok-variant="danger"
+    size="sm"
+    title="Delete comment?"
+    titletag="h4"
+  >
+    Are you sure you want to delete this comment?
+  </gl-modal-stub>
+</timeline-entry-item-stub>
+`;

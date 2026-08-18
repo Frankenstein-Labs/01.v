@@ -1,0 +1,5 @@
+mutation deleteComplianceRequirement($input: DestroyComplianceRequirementInput!) {
+  destroyComplianceRequirement(input: $input) {
+    errors
+  }
+}

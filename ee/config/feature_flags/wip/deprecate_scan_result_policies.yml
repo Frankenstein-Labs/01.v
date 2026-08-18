@@ -1,0 +1,10 @@
+---
+name: deprecate_scan_result_policies
+description: Deprecates scan_result_policies table reads in favor of approval_policy_rules
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/510281
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/231013
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/510282
+milestone: '19.0'
+group: group::security policies
+type: wip
+default_enabled: false

@@ -1,0 +1,35 @@
+# @feature_category: virtual_registry
+
+mutation mavenUpstreamCreate(
+  $id: VirtualRegistriesPackagesMavenRegistryID!
+  $name: String!
+  $url: String!
+  $description: String
+  $username: String
+  $password: String
+  $cacheValidityHours: Int
+  $metadataCacheValidityHours: Int
+) {
+  createUpstream: mavenUpstreamCreate(
+    input: {
+      id: $id
+      name: $name
+      url: $url
+      description: $description
+      username: $username
+      password: $password
+      cacheValidityHours: $cacheValidityHours
+      metadataCacheValidityHours: $metadataCacheValidityHours
+    }
+  ) {
+    upstream {
+      id
+      name
+      url
+      description
+      cacheValidityHours
+      metadataCacheValidityHours
+    }
+    errors
+  }
+}

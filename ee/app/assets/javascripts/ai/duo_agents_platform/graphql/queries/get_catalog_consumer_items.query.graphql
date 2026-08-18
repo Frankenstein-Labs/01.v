@@ -1,0 +1,14 @@
+# @feature_category: duo_agent_platform
+
+query getCatalogConsumerItems($projectId: ProjectID!, $itemTypes: [AiCatalogItemType!]) {
+  aiCatalogConfiguredItems(projectId: $projectId, itemTypes: $itemTypes) {
+    nodes {
+      id
+      item {
+        id
+        name
+        foundationalFlowReference
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+# @feature_category: team_planning
+
+mutation workItemSettingsUpdate($input: WorkItemSettingsUpdateInput!) {
+  workItemSettingsUpdate(input: $input) {
+    workItemSettings {
+      customizableTypeVisibility
+    }
+    errors
+  }
+}

@@ -1,0 +1,7 @@
+# @feature_category: continuous_delivery
+
+mutation cdApplicationLinkCreate($input: CdApplicationLinkCreateInput!) {
+  cdApplicationLinkCreate(input: $input) {
+    errors
+  }
+}

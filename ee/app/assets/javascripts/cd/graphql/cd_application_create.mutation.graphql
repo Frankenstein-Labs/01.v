@@ -1,0 +1,13 @@
+# @feature_category: continuous_delivery
+
+mutation cdApplicationCreate($input: CdApplicationCreateInput!) {
+  cdApplicationCreate(input: $input) {
+    application {
+      id
+      description
+      name
+      updatedAt
+    }
+    errors
+  }
+}

@@ -1,0 +1,7 @@
+# @feature_category: duo_agent_platform
+query duoChatAvailable {
+  currentUser {
+    id
+    duoChatAvailable
+  }
+}

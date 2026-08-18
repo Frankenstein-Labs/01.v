@@ -1,0 +1,9 @@
+fragment StreamingDestinationFragment on AuditEventStreamingDestinationInterface {
+  id
+  name
+  category
+  config
+  secretToken
+  eventTypeFilters
+  active
+}

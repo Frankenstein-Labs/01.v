@@ -1,0 +1,24 @@
+# @feature_category: value_stream_management
+#import "../fragments/duo_feature_retention.fragment.graphql"
+
+query getDuoFeatureRetentionMetrics(
+  $fullPath: ID!
+  $startDate: Time!
+  $endDate: Time!
+  $feature: [String!]
+  $granularity: String! = "weekly"
+  $after: String
+) {
+  group(fullPath: $fullPath) {
+    id
+    analytics {
+      ...FeatureRetention
+    }
+  }
+  project(fullPath: $fullPath) {
+    id
+    analytics {
+      ...FeatureRetention
+    }
+  }
+}

@@ -1,0 +1,19 @@
+query searchGroupsWithDashboards($search: String!) {
+  currentUser {
+    id
+    groups(search: $search, first: 20) {
+      nodes {
+        id
+        name
+        fullName
+        avatarUrl
+        fullPath
+        customizableDashboards {
+          nodes {
+            slug
+          }
+        }
+      }
+    }
+  }
+}

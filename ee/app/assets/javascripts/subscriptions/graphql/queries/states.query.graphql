@@ -1,0 +1,6 @@
+query States($countryId: ID!) {
+  states(countryId: $countryId) @client {
+    id
+    name
+  }
+}

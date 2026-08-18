@@ -1,0 +1,10 @@
+query failedControls($groupPath: ID!) {
+  group(fullPath: $groupPath) {
+    id
+    complianceRequirementControlCoverage {
+      passed
+      failed
+      pending
+    }
+  }
+}

@@ -1,0 +1,7 @@
+mutation UpdateProjectAttributesMutation($input: SecurityAttributeProjectUpdateInput!) {
+  securityAttributeProjectUpdate(input: $input) {
+    addedCount
+    removedCount
+    errors
+  }
+}

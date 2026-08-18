@@ -1,0 +1,9 @@
+---
+name: preload_member_roles
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/508616
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/177717
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/512871
+milestone: '17.9'
+group: group::authorization
+type: gitlab_com_derisk
+default_enabled: false

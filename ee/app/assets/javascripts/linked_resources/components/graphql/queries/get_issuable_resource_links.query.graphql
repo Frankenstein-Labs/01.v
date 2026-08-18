@@ -1,0 +1,12 @@
+#import "../fragments/resource_link_fields.fragment.graphql"
+
+query GetIssuableResourceLinks($incidentId: IssueID!) {
+  issue(id: $incidentId) {
+    id
+    issuableResourceLinks(incidentId: $incidentId) {
+      nodes {
+        ...ResourceLinkFields
+      }
+    }
+  }
+}

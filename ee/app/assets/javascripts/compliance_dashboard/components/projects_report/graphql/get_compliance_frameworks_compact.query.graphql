@@ -1,0 +1,15 @@
+query getComplianceFrameworksCompactQuery($fullPath: ID!) {
+  namespace(fullPath: $fullPath) {
+    id
+    name
+    complianceFrameworks {
+      nodes {
+        id
+        name
+        default
+        description
+        color
+      }
+    }
+  }
+}

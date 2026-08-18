@@ -1,0 +1,20 @@
+- index = local_assigns.fetch(:index, nil)
+- epic = local_assigns.fetch(:result, nil)
+- position = index + 1
+
+.search-result-row.gl-mt-5{ class: '!gl-pb-3 !gl-mb-0 !gl-pb-5' }
+  %span.gl-flex.gl-items-center
+    - if epic.closed?
+      = gl_badge_tag _('Closed'), variant: :info
+    - else
+      = gl_badge_tag _('Open'), variant: :success
+    = sprite_icon('eye-slash', css_class: 'gl-fill-icon-subtle gl-ml-2') if epic.confidential?
+    = link_to group_epic_path(epic.group, epic), data: { event_tracking: 'click_search_result', event_label: @scope, event_value: position }, class: 'gl-w-full' do
+      %span.term.str-truncated.gl-font-bold.gl-ml-2= epic.title
+  .gl-text-subtle.gl-mb-3.gl-text-sm
+    = sprintf(_('%{group_name}&%{epic_iid} &middot; created %{epic_created} by %{author}'), { group_name: epic.group.full_name, epic_iid: epic.iid, epic_created: time_ago_with_tooltip(epic.created_at, placement: 'bottom'), author: link_to_member(epic.author, avatar: false) }).html_safe
+    &middot;
+    = _('updated %{time_ago}').html_safe % { time_ago: time_ago_with_tooltip(epic.updated_at, placement: 'bottom') }
+  - if epic.description.present?
+    .description.term.gl-col-sm-10.gl-px-0.gl-text-sm
+      = truncate(epic.description, length: 200)

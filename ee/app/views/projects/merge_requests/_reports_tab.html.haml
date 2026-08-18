@@ -1,0 +1,6 @@
+- return unless @project.licensed_feature_available?(:security_dashboard)
+
+= render "projects/merge_requests/tabs/tab", name: "reports", class: "reports-tab" do
+  = tab_link_for @merge_request, :reports do
+    = _("Reports")
+    = gl_badge_tag "3"

@@ -1,0 +1,22 @@
+query groupCustomRoles($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    memberRoles {
+      nodes {
+        id
+        name
+        baseAccessLevel {
+          stringValue
+        }
+        enabledPermissions {
+          edges {
+            node {
+              value
+            }
+          }
+        }
+      }
+    }
+    __typename
+  }
+}

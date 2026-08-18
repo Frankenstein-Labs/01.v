@@ -1,0 +1,11 @@
+#import "~/clusters_list/graphql/fragments/cluster_agent.fragment.graphql"
+
+mutation createClusterAgentEE($input: CreateClusterAgentInput!) {
+  createClusterAgent(input: $input) {
+    clusterAgent {
+      ...ClusterAgentFragment
+      isReceptive
+    }
+    errors
+  }
+}

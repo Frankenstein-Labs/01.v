@@ -1,0 +1,5 @@
+# @feature_category: duo_agent_platform
+query GetPanelTitle {
+  panelTitle @client
+  panelSubtitle @client
+}

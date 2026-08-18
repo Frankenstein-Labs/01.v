@@ -1,0 +1,8 @@
+# @feature_category: workflow_catalog
+#import "../fragments/ai_catalog_mcp_server.fragment.graphql"
+
+query aiCatalogMcpServer($id: AiCatalogMcpServerID!) {
+  aiCatalogMcpServer(id: $id) {
+    ...BaseAiCatalogMcpServer
+  }
+}

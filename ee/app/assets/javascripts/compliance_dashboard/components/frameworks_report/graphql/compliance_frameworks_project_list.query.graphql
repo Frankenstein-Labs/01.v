@@ -1,0 +1,18 @@
+#import "./fragments/compliance_frameworks_connection_details.fragment.graphql"
+
+query complianceFrameworksProjectList(
+  $fullPath: ID!
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $sort: ComplianceFrameworkSort
+) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    name
+    complianceFrameworks(before: $before, after: $after, first: $first, last: $last, sort: $sort) {
+      ...ComplianceFrameworkConnectionDetails
+    }
+  }
+}

@@ -1,0 +1,6 @@
+mutation devfileValidate($input: DevfileValidateInput!) {
+  devfileValidate(input: $input) {
+    errors
+    valid
+  }
+}

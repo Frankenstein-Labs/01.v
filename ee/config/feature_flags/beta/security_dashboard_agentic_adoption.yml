@@ -1,0 +1,10 @@
+---
+name: security_dashboard_agentic_adoption
+description: Enables the Agentic Vulnerability Management Adoption funnel panel on the group and project security dashboards.
+feature_issue_url: https://gitlab.com/groups/gitlab-org/-/epics/22114
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/239423
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/602172
+milestone: '19.1'
+group: group::security insights
+type: beta
+default_enabled: true

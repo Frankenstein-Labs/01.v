@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StreamItem Group StreamItem when an item has event filters renders a popover 1`] = `
+<div
+  class="gl-popover"
+  data-testid="filter-popover"
+>
+  Destination has filters applied.
+  <a
+    class="gl-link"
+    href="/help/user/compliance/audit_event_streaming#update-event-filters"
+    rel="noopener noreferrer"
+    target="_blank"
+  >
+    What are filters?
+  </a>
+</div>
+`;

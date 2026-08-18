@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Alert integration settings form should match the default snapshot 1`] = `
+<gl-tab-stub
+  active=""
+  title="Incident settings"
+  titlelinkclass=""
+>
+  <gl-form-stub
+    class="gl-pt-3"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      Introduce a countdown timer in incident issues to better track Service Level Agreements (SLAs). The timer starts automatically when the incident is created, and sets a time limit for resolving the incident. When activated, the time to SLA countdown appears on all new incidents.
+    </p>
+    <gl-form-checkbox-stub
+      checked="true"
+      class="gl-my-4"
+      value="true"
+    >
+      <span>
+        Activate "time to SLA" countdown timer
+      </span>
+    </gl-form-checkbox-stub>
+    <gl-form-group-stub
+      invalid-feedback=""
+      label="Time limit"
+      label-for="sla-duration"
+      labeldescription=""
+      optionaltext="(optional)"
+      state="true"
+    >
+      <div
+        class="gl-flex gl-flex-row"
+      >
+        <gl-form-input-stub
+          id="reference-0"
+          number="true"
+          step="15"
+          type="number"
+          value="15"
+          width="xs"
+        />
+        <gl-form-select-stub
+          class="gl-border-gray-400 gl-leading-normal gl-ml-3 gl-w-auto"
+          options="[object Object],[object Object]"
+          selectclass=""
+          value="minutes"
+        />
+      </div>
+    </gl-form-group-stub>
+    <gl-button-stub
+      accessibledisabled="true"
+      buttontextclasses=""
+      category="primary"
+      icon=""
+      size="medium"
+      tag="button"
+      type="submit"
+      variant="confirm"
+    >
+      Save changes
+    </gl-button-stub>
+  </gl-form-stub>
+</gl-tab-stub>
+`;

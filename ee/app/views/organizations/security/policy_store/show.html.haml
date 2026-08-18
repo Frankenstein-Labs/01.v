@@ -1,0 +1,6 @@
+- page_title _('Policy details')
+
+#js-policy-store-detail{ data: { organization_id: @organization.id,
+  policy_id: @policy_id,
+  list_path: security_policy_store_organization_path(@organization),
+  edit_path: edit_security_policy_store_organization_path(@organization, @policy_id) } }

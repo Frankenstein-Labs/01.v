@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Project compliance framework empty state matches the snapshot when "addFrameworkPath" is a string path 1`] = `
+<section
+  class="gl-flex gl-flex-row"
+>
+  <div
+    class="@sm:gl-block gl-hidden gl-px-4"
+  >
+    <img
+      alt=""
+      class="gl-dark-invert-keep-hue gl-max-w-full"
+      height="100"
+      src="/image.svg"
+    />
+  </div>
+  <div
+    class="gl-basis-0 gl-empty-state-content gl-grow gl-mx-auto gl-my-0 gl-px-4"
+    data-testid="gl-empty-state-content"
+  >
+    <h5
+      class="gl-mt-0"
+    >
+      No compliance frameworks are set up yet
+    </h5>
+    <p
+      class="gl-mb-0 gl-mt-4 gl-text-subtle"
+    >
+      Add a framework to
+      <gl-link-stub
+        href="/group-path"
+      >
+        group-name
+      </gl-link-stub>
+      and it will appear here.
+    </p>
+    <div
+      class="gl-flex gl-flex-wrap gl-mt-5"
+    >
+      <gl-button-stub
+        accessibledisabled="true"
+        buttontextclasses=""
+        category="primary"
+        class="gl-mb-3 gl-mr-3"
+        href="/edit-group"
+        icon=""
+        size="medium"
+        tag="button"
+        type="button"
+        variant="confirm"
+      >
+        Add framework in group-name
+      </gl-button-stub>
+    </div>
+  </div>
+</section>
+`;
+
+exports[`Project compliance framework empty state matches the snapshot when "addFrameworkPath" is undefined 1`] = `
+<section
+  class="gl-flex gl-flex-row"
+>
+  <div
+    class="@sm:gl-block gl-hidden gl-px-4"
+  >
+    <img
+      alt=""
+      class="gl-dark-invert-keep-hue gl-max-w-full"
+      height="100"
+      src="/image.svg"
+    />
+  </div>
+  <div
+    class="gl-basis-0 gl-empty-state-content gl-grow gl-mx-auto gl-my-0 gl-px-4"
+    data-testid="gl-empty-state-content"
+  >
+    <h5
+      class="gl-mt-0"
+    >
+      No compliance frameworks are set up yet
+    </h5>
+    <p
+      class="gl-mb-0 gl-mt-4 gl-text-subtle"
+    >
+      After a framework is added to
+      <gl-link-stub
+        href="/group-path"
+      >
+        group-name
+      </gl-link-stub>
+      , it will appear here.
+    </p>
+    <div
+      class="gl-flex gl-flex-wrap gl-mt-5"
+    />
+  </div>
+</section>
+`;

@@ -1,0 +1,8 @@
+---
+name: deleting_account_disabled_for_enterprise_users
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/241926
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/605183
+milestone: '19.3'
+type: gitlab_com_derisk
+group: group::authentication
+default_enabled: false

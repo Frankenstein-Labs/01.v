@@ -1,0 +1,23 @@
+mutation addExternalDestinationNamespaceFilters(
+  $destinationId: AuditEventsExternalAuditEventDestinationID!
+  $groupPath: ID
+  $projectPath: ID
+) {
+  auditEventsStreamingHttpNamespaceFiltersAdd(
+    input: { destinationId: $destinationId, groupPath: $groupPath, projectPath: $projectPath }
+  ) {
+    errors
+    namespaceFilter {
+      id
+      namespace {
+        id
+        name
+        fullName
+        fullPath
+      }
+      externalAuditEventDestination {
+        id
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+fragment ScanProfileStatusesFields on ScanProfileProjectStatus {
+  status
+  consecutiveFailureCount
+  consecutiveSuccessCount
+  lastScanAt
+  buildId
+  scanProfile {
+    id
+    scanType
+  }
+}

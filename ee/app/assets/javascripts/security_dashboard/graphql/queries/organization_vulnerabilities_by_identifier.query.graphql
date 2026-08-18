@@ -1,0 +1,20 @@
+# @feature_category: vulnerability_management
+query organizationVulnerabilitiesByIdentifier(
+  $projectId: [ID!]
+  $reportType: [VulnerabilityReportType!]
+  $severity: [VulnerabilitySeverity!]
+) {
+  namespace: organization {
+    id
+    securityMetrics(projectId: $projectId, reportType: $reportType) {
+      vulnerabilitiesByIdentifier(severity: $severity) {
+        name
+        url
+        bySeverity {
+          count
+          severity
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+---
+description: User clicks an entity or relationship in the Orbit schema diagram
+internal_events: true
+action: click_orbit_schema_item
+identifiers:
+- user
+- namespace
+- project
+additional_properties:
+  label:
+    description: The schema item type clicked. One of "entity" or "relationship".
+product_group: knowledge_graph
+product_categories:
+- knowledge_graph
+milestone: '19.1'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/237283
+tiers:
+- premium
+- ultimate

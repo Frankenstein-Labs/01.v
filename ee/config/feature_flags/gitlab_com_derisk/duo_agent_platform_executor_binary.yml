@@ -1,0 +1,14 @@
+---
+name: duo_agent_platform_executor_binary
+description: >-
+  Controls whether duo-cli is installed via binary download from the GitLab
+  Package Registry (enabled) or via npm (disabled). When enabled, the runner
+  downloads a pre-compiled binary directly, eliminating the Node.js/npm
+  dependency. When disabled, falls back to the legacy npm-based installation.
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/600436
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/239056
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/602106
+milestone: '19.1'
+group: group::agent foundations
+type: gitlab_com_derisk
+default_enabled: false

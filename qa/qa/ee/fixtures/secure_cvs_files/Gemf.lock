@@ -1,0 +1,13 @@
+GEM
+  specs:
+    RedCloth (2.0.0)
+
+PLATFORMS
+  arm64-darwin-23
+  ruby
+
+DEPENDENCIES
+  RedCloth (= 2.0.0)
+
+BUNDLED WITH
+   2.5.14

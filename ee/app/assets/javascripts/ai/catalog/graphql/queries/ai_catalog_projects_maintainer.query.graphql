@@ -1,0 +1,13 @@
+# @feature_category: workflow_catalog
+query aiCatalogProjectsMaintainer($duoLicensedFeature: DuoLicensedFeature) {
+  projects(
+    membership: true
+    minAccessLevel: MAINTAINER
+    first: 1
+    duoLicensedFeature: $duoLicensedFeature
+  ) {
+    nodes {
+      id
+    }
+  }
+}

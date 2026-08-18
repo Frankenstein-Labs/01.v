@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResourceLinkItem template matches the snapshot 1`] = `
+<div
+  class="-gl-mx-2 gl-flex gl-items-center gl-pr-2 gl-px-3 item-body"
+>
+  <div
+    class="@xl/panel:!gl-flex-nowrap gl-flex gl-flex-wrap gl-grow gl-items-center gl-min-h-7 item-contents"
+  >
+    <div
+      class="@sm/panel:gl-flex @xl/panel:!gl-items-center @xl/panel:!gl-mb-0 gl-min-w-0 item-title"
+    >
+      <svg
+        aria-hidden="true"
+        class="gl-fill-icon-subtle gl-icon gl-mr-3 ic-zoom s16"
+        data-testid="brand-zoom-icon"
+        role="img"
+      >
+        <use
+          href="file-mock-icons.svg#brand-zoom"
+        />
+      </svg>
+      <a
+        class="gl-font-normal gl-link sortable-link"
+        href="https://docs.gitlab.com/incident-info"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Doclink for incident
+      </a>
+    </div>
+  </div>
+  <button
+    aria-label="Remove"
+    class="btn btn-default btn-default-tertiary btn-icon btn-sm gl-button gl-ml-5 js-issue-item-remove-button"
+    title="Remove"
+    type="button"
+  >
+    <svg
+      aria-hidden="true"
+      class="gl-button-icon gl-fill-current gl-icon s16"
+      data-testid="close-icon"
+      role="img"
+    >
+      <use
+        href="file-mock-icons.svg#close"
+      />
+    </svg>
+  </button>
+</div>
+`;

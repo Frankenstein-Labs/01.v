@@ -1,0 +1,11 @@
+query getConfiguredFlows($projectId: ProjectID, $foundationalFlowReference: String) {
+  aiCatalogConfiguredItems(
+    projectId: $projectId
+    itemTypes: [FLOW]
+    foundationalFlowReference: $foundationalFlowReference
+  ) {
+    nodes {
+      id
+    }
+  }
+}

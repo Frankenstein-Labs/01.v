@@ -1,0 +1,12 @@
+query getCloudConnectorHealthStatus {
+  cloudConnectorStatus {
+    success
+    probeResults {
+      name
+      success
+      message
+      errors
+      details
+    }
+  }
+}

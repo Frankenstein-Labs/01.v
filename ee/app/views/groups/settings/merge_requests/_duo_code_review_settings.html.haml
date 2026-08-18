@@ -1,0 +1,14 @@
+- available = local_assigns.fetch(:available)
+%fieldset.form-group.gl-form-group
+  %h5= s_('DuoCodeReview|GitLab Duo Code Review')
+  %p.gl-text-subtle= s_('DuoCodeReview|Control whether GitLab Duo automatically reviews merge requests. This setting cascades to subgroups and projects but can be overridden.')
+  .form-group.gl-mb-3
+    = form.gitlab_ui_checkbox_component :auto_duo_code_review_enabled,
+      s_('DuoCodeReview|Enable automatic reviews by GitLab Duo'),
+      checkbox_options: { disabled: !available } do |c|
+      - c.with_help_text do
+        - if available
+          = s_('DuoCodeReview|When enabled, GitLab Duo will automatically review new merge requests. Draft merge requests and merge requests without changes are skipped.')
+        - else
+          - docs_link = link_to('', help_page_path('user/duo_agent_platform/flows/foundational_flows/code_review.md'), target: '_blank', rel: 'noopener noreferrer')
+          = safe_format(s_('DuoCodeReview|Requires the Code Review foundational flow to be enabled. %{link_start}Learn how to enable foundational flows%{link_end}.'), tag_pair(docs_link, :link_start, :link_end))

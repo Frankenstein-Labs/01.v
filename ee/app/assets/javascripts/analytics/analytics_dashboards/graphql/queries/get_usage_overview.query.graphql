@@ -1,0 +1,82 @@
+#import "../fragments/usage_overview.fragment.graphql"
+
+query getUsageOverview(
+  $fullPath: ID!
+  $startDate: Date!
+  $endDate: Date!
+  $includeGroups: Boolean = true
+  $includeProjects: Boolean = true
+  $includeUsers: Boolean = true
+  $includeIssues: Boolean = true
+  $includeMergeRequests: Boolean = true
+  $includePipelines: Boolean = true
+) {
+  group(fullPath: $fullPath) {
+    id
+    avatarUrl
+    name
+    fullName
+    visibility
+    groups: valueStreamDashboardUsageOverview(
+      identifier: GROUPS
+      timeframe: { start: $startDate, end: $endDate }
+    ) @include(if: $includeGroups) {
+      ...UsageOverviewFragment
+    }
+    projects: valueStreamDashboardUsageOverview(
+      identifier: PROJECTS
+      timeframe: { start: $startDate, end: $endDate }
+    ) @include(if: $includeProjects) {
+      ...UsageOverviewFragment
+    }
+    users: valueStreamDashboardUsageOverview(
+      identifier: USERS
+      timeframe: { start: $startDate, end: $endDate }
+    ) @include(if: $includeUsers) {
+      ...UsageOverviewFragment
+    }
+    issues: valueStreamDashboardUsageOverview(
+      identifier: ISSUES
+      timeframe: { start: $startDate, end: $endDate }
+    ) @include(if: $includeIssues) {
+      ...UsageOverviewFragment
+    }
+    pipelines: valueStreamDashboardUsageOverview(
+      identifier: PIPELINES
+      timeframe: { start: $startDate, end: $endDate }
+    ) @include(if: $includePipelines) {
+      ...UsageOverviewFragment
+    }
+    merge_requests: valueStreamDashboardUsageOverview(
+      identifier: MERGE_REQUESTS
+      timeframe: { start: $startDate, end: $endDate }
+    ) @include(if: $includeMergeRequests) {
+      ...UsageOverviewFragment
+    }
+  }
+  project(fullPath: $fullPath) {
+    id
+    avatarUrl
+    name
+    nameWithNamespace
+    visibility
+    issues: valueStreamDashboardUsageOverview(
+      identifier: ISSUES
+      timeframe: { start: $startDate, end: $endDate }
+    ) @include(if: $includeIssues) {
+      ...UsageOverviewFragment
+    }
+    pipelines: valueStreamDashboardUsageOverview(
+      identifier: PIPELINES
+      timeframe: { start: $startDate, end: $endDate }
+    ) @include(if: $includePipelines) {
+      ...UsageOverviewFragment
+    }
+    merge_requests: valueStreamDashboardUsageOverview(
+      identifier: MERGE_REQUESTS
+      timeframe: { start: $startDate, end: $endDate }
+    ) @include(if: $includeMergeRequests) {
+      ...UsageOverviewFragment
+    }
+  }
+}

@@ -1,0 +1,12 @@
+fragment CustomizableDashboardsFragment on CustomizableDashboardConnection {
+  nodes {
+    slug
+    title
+    description
+    userDefined
+    status
+    gridHeight @gl_introduced(version: "18.9.0")
+    errors
+    filters
+  }
+}

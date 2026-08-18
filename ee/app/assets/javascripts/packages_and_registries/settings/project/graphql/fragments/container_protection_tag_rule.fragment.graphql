@@ -1,0 +1,4 @@
+fragment ContainerProtectionTagRuleFragment on ContainerProtectionTagRule {
+  id
+  immutable
+}

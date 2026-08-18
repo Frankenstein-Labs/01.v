@@ -1,0 +1,31 @@
+mutation updateInstanceAmazonS3Destination(
+  $id: AuditEventsInstanceAmazonS3ConfigurationID!
+  $name: String!
+  $accessKeyXid: String!
+  $secretAccessKey: String
+  $awsRegion: String!
+  $bucketName: String!
+  $active: Boolean = true
+) {
+  auditEventsInstanceAmazonS3ConfigurationUpdate(
+    input: {
+      id: $id
+      name: $name
+      accessKeyXid: $accessKeyXid
+      secretAccessKey: $secretAccessKey
+      awsRegion: $awsRegion
+      bucketName: $bucketName
+      active: $active
+    }
+  ) {
+    errors
+    instanceAmazonS3Configuration {
+      id
+      name
+      accessKeyXid
+      awsRegion
+      bucketName
+      active
+    }
+  }
+}

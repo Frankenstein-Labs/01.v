@@ -1,0 +1,5 @@
+mutation updateAiNamespaceFeatureSettings($input: AiModelSelectionNamespaceUpdateInput!) {
+  aiModelSelectionNamespaceUpdate(input: $input) {
+    errors
+  }
+}

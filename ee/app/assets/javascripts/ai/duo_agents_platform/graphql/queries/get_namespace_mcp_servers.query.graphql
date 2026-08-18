@@ -1,0 +1,47 @@
+# @feature_category: workflow_catalog
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query namespaceMcpServers(
+  $groupId: GroupID!
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+) {
+  aiCatalogConfiguredItems(
+    groupId: $groupId
+    itemTypes: [AGENT]
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+  ) {
+    nodes {
+      id
+      item {
+        id
+        name
+        latestVersion {
+          id
+          ... on AiCatalogAgentVersion {
+            mcpServers {
+              nodes {
+                id
+                name
+                description
+                url
+                homepageUrl
+                transport
+                authType
+                currentUserConnected
+              }
+            }
+          }
+        }
+      }
+    }
+    pageInfo {
+      ...PageInfo
+    }
+  }
+}

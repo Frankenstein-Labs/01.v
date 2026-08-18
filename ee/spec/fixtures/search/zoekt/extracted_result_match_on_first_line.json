@@ -1,0 +1,33 @@
+{
+  "0": [
+    {
+      "path": "test/test-main.js",
+      "project_id": 7,
+      "chunks": [
+        {
+          "match_count_in_chunk": 1,
+          "lines": [
+            {
+              "line_number": 1,
+              "text": "var tests = Object.keys(window.__karma__.files).filter(function (file) {\n",
+              "highlights": [
+                [
+                  23,
+                  44
+                ]
+              ]
+            },
+            {
+              "line_number": 2,
+              "text": "  return (/_spec\\.js$/.test(file));",
+              "highlights": null
+            }
+          ]
+        }
+      ],
+      "match_count_total": 1,
+      "match_count": 1,
+      "language": "JavaScript"
+    }
+  ]
+}

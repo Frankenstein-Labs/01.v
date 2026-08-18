@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DuoExtensions component renders correctly 1`] = `
+<div>
+  <header>
+    <h2
+      class="gl-text-size-h2"
+    >
+      Use GitLab Duo locally
+    </h2>
+    <p
+      class="gl-mb-0 gl-text-subtle"
+    >
+      Download the extension to access GitLab features and GitLab Duo AI capabilities to handle everyday tasks.
+    </p>
+  </header>
+  <gl-button-stub
+    accessibledisabled="true"
+    buttontextclasses=""
+    category="secondary"
+    class="gl-mr-3 gl-mt-3"
+    data-testid="vs_code-extension-link"
+    href="/help/editor_extensions/visual_studio_code/setup.md"
+    icon=""
+    size="medium"
+    tag="button"
+    type="button"
+    variant="default"
+  >
+    VS Code
+  </gl-button-stub>
+  <gl-button-stub
+    accessibledisabled="true"
+    buttontextclasses=""
+    category="secondary"
+    class="gl-mr-3 gl-mt-3"
+    data-testid="jetbrains-extension-link"
+    href="/help/editor_extensions/jetbrains_ide/setup.md"
+    icon=""
+    size="medium"
+    tag="button"
+    type="button"
+    variant="default"
+  >
+    Jetbrains
+  </gl-button-stub>
+  <gl-button-stub
+    accessibledisabled="true"
+    buttontextclasses=""
+    category="secondary"
+    class="gl-mr-3 gl-mt-3"
+    data-testid="visual_studio-extension-link"
+    href="/help/editor_extensions/visual_studio/setup.md"
+    icon=""
+    size="medium"
+    tag="button"
+    type="button"
+    variant="default"
+  >
+    Visual Studio
+  </gl-button-stub>
+  <gl-button-stub
+    accessibledisabled="true"
+    buttontextclasses=""
+    category="secondary"
+    class="gl-mr-3 gl-mt-3"
+    data-testid="eclipse-extension-link"
+    href="/help/editor_extensions/eclipse/setup.md"
+    icon=""
+    size="medium"
+    tag="button"
+    type="button"
+    variant="default"
+  >
+    Eclipse
+  </gl-button-stub>
+  <gl-button-stub
+    accessibledisabled="true"
+    buttontextclasses=""
+    category="secondary"
+    class="gl-mr-3 gl-mt-3"
+    data-testid="neovim-extension-link"
+    href="/help/editor_extensions/neovim/setup.md"
+    icon=""
+    size="medium"
+    tag="button"
+    type="button"
+    variant="default"
+  >
+    Neovim
+  </gl-button-stub>
+  <gl-button-stub
+    accessibledisabled="true"
+    buttontextclasses=""
+    category="secondary"
+    class="gl-mr-3 gl-mt-3"
+    data-testid="gitlab_cli-extension-link"
+    href="/help/editor_extensions/gitlab_cli/_index.md"
+    icon=""
+    size="medium"
+    tag="button"
+    type="button"
+    variant="default"
+  >
+    GitLab CLI
+  </gl-button-stub>
+</div>
+`;

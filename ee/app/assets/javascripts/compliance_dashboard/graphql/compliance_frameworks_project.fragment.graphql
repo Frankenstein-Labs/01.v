@@ -1,0 +1,25 @@
+fragment ComplianceFrameworksProjectFragment on Project {
+  id
+  name
+  fullPath
+  webPath
+  visibility
+  description
+  namespace {
+    id
+    name
+    webUrl
+    fullName
+  }
+  archived
+  complianceFrameworks {
+    nodes {
+      id
+      name
+      default
+      description
+      color
+      namespaceId
+    }
+  }
+}

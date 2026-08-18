@@ -1,0 +1,15 @@
+query getAiConversationThreads {
+  aiConversationThreads(conversationType: DUO_CHAT) {
+    nodes {
+      id
+      lastUpdatedAt
+      createdAt
+      conversationType
+      title
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

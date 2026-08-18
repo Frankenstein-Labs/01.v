@@ -1,0 +1,15 @@
+# @feature_category: duo_agent_platform
+
+query getWorkflowPermissions($workflowId: AiDuoWorkflowsWorkflowID!) {
+  duoWorkflowWorkflows(workflowId: $workflowId) {
+    edges {
+      node {
+        id
+        userPermissions {
+          updateDuoWorkflow
+          resumeDuoWorkflow
+        }
+      }
+    }
+  }
+}

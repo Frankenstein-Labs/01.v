@@ -1,0 +1,10 @@
+mutation updateVirtualRegistriesSetting($input: UpdateVirtualRegistriesSettingInput!) {
+  updateVirtualRegistriesSetting(input: $input) {
+    virtualRegistriesSetting {
+      enabled
+      __typename
+    }
+    errors
+    __typename
+  }
+}

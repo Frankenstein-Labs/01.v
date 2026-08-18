@@ -1,0 +1,54 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "../fragments/workspace_item.fragment.graphql"
+
+# @feature_category: workspaces
+query userWorkspacesTabList(
+  $first: Int
+  $activeBefore: String
+  $activeAfter: String
+  $terminatedBefore: String
+  $terminatedAfter: String
+  $projectIds: [ProjectID!]
+) {
+  currentUser {
+    id
+    activeWorkspaces: workspaces(
+      first: $first
+      before: $activeBefore
+      after: $activeAfter
+      actualStates: [
+        "CreationRequested"
+        "Starting"
+        "Running"
+        "Stopping"
+        "Stopped"
+        "Terminating"
+        "Failed"
+        "Error"
+        "Unknown"
+      ]
+      projectIds: $projectIds
+    ) @connection(key: "activeWorkspaces") {
+      nodes {
+        ...WorkspaceItem
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+    terminatedWorkspaces: workspaces(
+      first: $first
+      before: $terminatedBefore
+      after: $terminatedAfter
+      actualStates: ["Terminated"]
+      projectIds: $projectIds
+    ) {
+      nodes {
+        ...WorkspaceItem
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

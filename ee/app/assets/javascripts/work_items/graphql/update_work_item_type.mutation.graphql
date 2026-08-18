@@ -1,0 +1,12 @@
+# @feature_category: team_planning
+mutation updateWorkItemType($input: WorkItemTypeUpdateInput!) {
+  workItemTypeUpdate(input: $input) {
+    workItemType {
+      id
+      name
+      iconName
+      archived
+    }
+    errors
+  }
+}

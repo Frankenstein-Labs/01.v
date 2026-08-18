@@ -1,0 +1,10 @@
+---
+name: gitlab_duo_governance_settings
+description: Gates the Governance card and page on the GitLab Duo settings page
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/597747
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/232891
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/602485
+milestone: '19.0'
+group: group::compliance
+type: beta
+default_enabled: true

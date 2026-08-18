@@ -1,0 +1,17 @@
+# @feature_category: continuous_delivery
+
+subscription cdRolloutStepUpdated($rolloutId: CdRolloutID!) {
+  cdRolloutStepUpdated(rolloutId: $rolloutId) {
+    id
+    path
+    stepType
+    name
+    params
+    state
+    error
+    environment {
+      id
+      name
+    }
+  }
+}

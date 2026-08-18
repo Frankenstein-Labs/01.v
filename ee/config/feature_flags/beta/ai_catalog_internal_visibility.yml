@@ -1,0 +1,10 @@
+---
+name: ai_catalog_internal_visibility
+description: Enables internal visibility for AI Catalog items, allowing items to be set internal visibility so that item can enable within the same top-level group hierarchy
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/602935
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/242272
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/603961
+milestone: '19.2'
+group: group::ai catalog
+type: beta
+default_enabled: true

@@ -1,0 +1,9 @@
+---
+name: duo_workplan_async_flow
+description: Generate a work item workplan through an async server-side Duo Agent Platform flow instead of interactive Duo Chat
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/605157
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/248543
+milestone: '19.3'
+group: group::spec-driven development
+type: wip
+default_enabled: false

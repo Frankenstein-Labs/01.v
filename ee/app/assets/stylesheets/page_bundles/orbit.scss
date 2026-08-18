@@ -1,0 +1,240 @@
+@import 'page_bundles/mixins_and_variables_and_functions';
+
+// --- Main page graph viewport ---
+.orbit-main-page-content {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Content area offset: breadcrumb bar + content-body padding + borders/gaps.
+$orbit-content-offset: 73px;
+// Orbit-app's own static chrome: gl-pt-7 (28px) + header row (~46px) + gap (8px) + tab bar (~52px)
+$orbit-static-chrome: 8.5rem;
+
+// orbit-app uses a definite height so flex children (schema page) can fill it.
+// overflow: visible lets the explore page's connect block cause scrollable overflow
+// in the page-level scroll container when it is expanded.
+.orbit-app {
+  height: calc(100vh - #{$top-bar-height} - var(--header-height, 48px) - #{$orbit-content-offset});
+  min-height: 36rem;
+  overflow: visible;
+}
+
+// The map canvas always fills the viewport minus ALL static chrome.
+// Using an explicit height (not flex-fill) means the canvas size is constant
+// regardless of whether the connect block is open. When connect is open the
+// total content exceeds the viewport and the page scrolls rather than
+// squishing the map.
+.orbit-main-graph {
+  height: calc(
+    100vh - #{$top-bar-height} - var(--header-height, 48px) - #{$orbit-content-offset} - #{$orbit-static-chrome}
+  );
+  min-height: 32rem;
+  flex-shrink: 0;
+}
+
+// Schema panels: full width when stacked, fixed width at lg breakpoint
+.orbit-nav-panel,
+.orbit-detail-panel {
+  @media (max-width: 991px) {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+  }
+}
+
+.orbit-nav-panel {
+  @media (min-width: 992px) {
+    width: var(--nav-panel-width);
+  }
+}
+
+.orbit-detail-panel {
+  @media (min-width: 992px) {
+    padding-left: 1.25rem;
+  }
+}
+
+// --- Schema resize handle ---
+
+.orbit-resize-handle {
+  width: 16px;
+
+  .orbit-resize-line {
+    border-left: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  &:hover .orbit-resize-line {
+    border-color: var(--blue-500);
+  }
+}
+
+// --- Frosted glass panels ---
+// Translucent backgrounds with backdrop-filter blur used by overlays and
+// sidebars. These have no Tailwind equivalents (rgba alpha + backdrop-filter).
+
+.orbit-frosted-panel {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(12px);
+
+  // stylelint-disable-next-line gitlab/no-gl-class
+  .gl-dark & {
+    background: rgba(10, 10, 18, 0.92);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: $gl-color-neutral-50;
+  }
+}
+
+// --- Graph viewport ---
+
+.orbit-graph-viewport {
+  height: 100%;
+  min-height: 25rem;
+}
+
+// --- Node detail overlay type label ---
+
+.node-detail-type-label {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+// --- Advanced panel ---
+
+.orbit-advanced-toggle {
+  z-index: 5;
+}
+
+// --- Connect section ---
+
+.orbit-connect-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.orbit-backdrop {
+  z-index: 9;
+}
+
+// --- Dot-grid background ---
+// Container-query sized so it scales with the panel it sits inside.
+// The radial mask fades the grid out toward the edges.
+
+.orbit-dot-grid-host {
+  container-type: inline-size;
+}
+
+.orbit-dot-grid {
+  --orbit-dot-grid-size: clamp(480px, 120cqmin, 798px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--orbit-dot-grid-size);
+  height: var(--orbit-dot-grid-size);
+  transform: translate(-50%, -50%);
+  background-image: radial-gradient(circle, currentColor 0.5px, transparent 0.5px);
+  background-size: 7px 7px;
+  opacity: 0.4;
+  mask-image: radial-gradient(
+    ellipse at 50% 50%,
+    black 0%,
+    rgba(0, 0, 0, 0.7) 30%,
+    rgba(0, 0, 0, 0.2) 50%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+// --- Node sidebar ---
+
+.explorer-node-sidebar {
+  max-height: 420px;
+}
+
+// --- Legend ---
+
+.orbit-hint-center {
+  transform: translateX(-50%);
+}
+
+.orbit-edge-label-bg {
+  fill: var(--gl-background-color-default, #fff);
+  fill-opacity: 0.85;
+  stroke: currentcolor;
+  stroke-opacity: 0.15;
+  stroke-width: 0.5;
+
+  // stylelint-disable-next-line gitlab/no-gl-class
+  .gl-dark & {
+    fill: #1e1d2a;
+    fill-opacity: 0.9;
+  }
+}
+
+
+.orbit-legend-panel {
+  min-width: 160px;
+}
+
+.orbit-legend-dot-sm {
+  width: 6px;
+  height: 6px;
+}
+
+.orbit-legend-dot-md {
+  width: 10px;
+  height: 10px;
+}
+
+.orbit-legend-dot-lg {
+  width: 14px;
+  height: 14px;
+}
+
+// --- Query panel: Monaco editor overrides ---
+// SourceEditor defaults to 500px height via framework/source_editor.scss.
+// Orbit sets use-dynamic-height=false and needs the editor to fill its
+// flex container instead. The card body matches the editor background so
+// the gl-p-3 padding around the editor blends in seamlessly. Dark-mode
+// overrides nest under .gl-dark so they react automatically when the
+// system color mode toggles (per fe_guide/dark_mode.md).
+
+.orbit-editor-body {
+  background: #fffffe;
+
+  // stylelint-disable-next-line gitlab/no-gl-class
+  .gl-dark & {
+    background: #1e1e1e;
+  }
+}
+
+.orbit-editor-wrapper {
+  position: relative;
+  overflow: hidden;
+
+  [id^='source-editor-'],
+  .monaco-editor,
+  .monaco-editor .overflow-guard {
+    height: 100% !important;
+  }
+
+  .monaco-editor .line-numbers {
+    padding-right: 8px !important;
+  }
+
+  // stylelint-disable-next-line gitlab/no-gl-class
+  .gl-dark & {
+    .monaco-editor,
+    .monaco-scrollable-element,
+    .monaco-editor .overflow-guard,
+    .monaco-editor .margin {
+      background: #1e1e1e !important;
+    }
+
+    .monaco-editor .line-numbers {
+      color: $gl-color-neutral-400 !important;
+    }
+  }
+}

@@ -1,0 +1,27 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getSppLinkedProjectsGroups($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    securityPolicyProjectLinkedProjects {
+      nodes {
+        id
+        name
+        fullPath
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+    securityPolicyProjectLinkedGroups {
+      nodes {
+        id
+        name
+        fullPath
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

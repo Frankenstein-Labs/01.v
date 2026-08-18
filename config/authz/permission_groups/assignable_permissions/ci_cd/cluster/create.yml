@@ -1,0 +1,11 @@
+---
+name: create_cluster
+description: Grants the ability to create clusters
+boundaries:
+  - group
+  - project
+  - instance
+available_for:
+  - granular_access_token
+permissions:
+  - create_cluster

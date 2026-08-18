@@ -1,0 +1,13 @@
+query getDependencyVulnerabilities($occurrenceId: SbomOccurrenceID!) {
+  dependency(id: $occurrenceId) {
+    id
+    vulnerabilities(first: 100) {
+      nodes {
+        id
+        name: title
+        severity
+        url: webUrl
+      }
+    }
+  }
+}

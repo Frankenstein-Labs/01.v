@@ -1,0 +1,67 @@
+{
+  "version": "15.0.6",
+  "vulnerabilities": [
+    {
+      "id": "df6969bdb23ce636df334f8f6d5fe631e58f75c4dc33ec0a4466d4af8e58c9d6",
+      "description": "An SSE2-optimized memmove implementation for i386 in sysdeps/i386/i686/multiarch/memcpy-sse2-unaligned.S in the GNU C Library (aka glibc or libc6) 2.21 through 2.27 does not correctly perform the overlapping memory check if the source memory range spans the middle of the address space, resulting in corrupt data being produced by the copy operation. This may disclose information to context-dependent attackers, or result in a denial of service, or, possibly, code execution.",
+      "severity": "High",
+      "solution": "Upgrade glibc from 2.24-11+deb9u3 to 2.24-11+deb9u4",
+      "location": {
+        "dependency": {
+          "package": {
+            "name": "glibc"
+          },
+          "version": "2.24-11+deb9u3"
+        },
+        "operating_system": "debian:9",
+        "image": "registry.gitlab.com/gitlab-org/security-products/dast/webgoat-8.0@sha256:bc09fe2e0721dfaeee79364115aeedf2174cce0947b9ae5fe7c33312ee019a4e"
+      },
+      "identifiers": [
+        {
+          "type": "cve",
+          "name": "CVE-2017-18269",
+          "value": "CVE-2017-18269",
+          "url": "https://security-tracker.debian.org/tracker/CVE-2017-18269"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2017-18269"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "name": "Vulnerable Package",
+          "type": "text",
+          "value": "glibc:2.24-11+deb9u3"
+        }
+      }
+    }
+  ],
+  "remediations": [
+
+  ],
+  "scan": {
+    "scanner": {
+      "id": "trivy",
+      "name": "Trivy",
+      "url": "https://github.com/aquasecurity/trivy",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "2.1.4"
+    },
+    "analyzer": {
+      "id": "gcs",
+      "name": "GitLab Container Scanning",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "5.2.8"
+    },
+    "type": "container_scanning",
+    "status": "success",
+    "start_time": "2022-08-10T22:37:00",
+    "end_time": "2022-08-10T22:37:00"
+  }
+}

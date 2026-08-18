@@ -1,0 +1,21 @@
+export default () => ({
+  endpoint: '',
+  exportEndpoint: '',
+  vulnerabilityInfo: {},
+  vulnerabilityItemsLoading: [],
+  fetchingInProgress: false,
+  initialized: false,
+  isLoading: false,
+  errorLoading: false,
+  dependencies: [],
+  namespaceType: '',
+  fullPath: '',
+  pageInfo: {
+    total: 0,
+  },
+  searchFilterParameters: {},
+  sortField: null,
+  sortOrder: null,
+  licenses: [],
+  fetchingLicensesInProgress: false,
+});

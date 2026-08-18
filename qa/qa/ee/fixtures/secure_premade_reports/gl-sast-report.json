@@ -1,0 +1,327 @@
+{
+  "version": "15.1.4",
+  "vulnerabilities": [
+    {
+      "id": "756a4302f62d4b44d8d64e1a925d7a076fcc80918b7319e62bb28d4d4baa2bc8",
+      "category": "sast",
+      "name": "Probable insecure usage of temp file/directory.",
+      "severity": "Medium",
+      "confidence": "Medium",
+      "scanner": {
+        "id": "bandit",
+        "name": "Bandit"
+      },
+      "location": {
+        "file": "python/hardcoded/hardcoded-tmp.py",
+        "start_line": 1,
+        "end_line": 1
+      },
+      "identifiers": [
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B108",
+          "value": "B108",
+          "url": "https://docs.openstack.org/bandit/latest/plugins/b108_hardcoded_tmp_directory.html"
+        }
+      ],
+      "priority": "Medium",
+      "file": "python/hardcoded/hardcoded-tmp.py",
+      "line": 1,
+      "url": "https://docs.openstack.org/bandit/latest/plugins/b108_hardcoded_tmp_directory.html",
+      "tool": "bandit"
+    },
+    {
+      "id": "8f8edf0c175df9eb63bb4da361c7770910acb1cbd3737f213a5c6929fd56048d",
+      "category": "sast",
+      "name": "Predictable pseudorandom number generator",
+      "severity": "Medium",
+      "confidence": "Medium",
+      "scanner": {
+        "id": "find_sec_bugs",
+        "name": "Find Security Bugs"
+      },
+      "location": {
+        "file": "groovy/src/main/java/com/gitlab/security_products/tests/App.groovy",
+        "start_line": 47,
+        "end_line": 47,
+        "class": "com.gitlab.security_products.tests.App",
+        "method": "generateSecretToken2"
+      },
+      "identifiers": [
+        {
+          "type": "find_sec_bugs_type",
+          "name": "Find Security Bugs-PREDICTABLE_RANDOM",
+          "value": "PREDICTABLE_RANDOM",
+          "url": "https://find-sec-bugs.github.io/bugs.htm#PREDICTABLE_RANDOM"
+        }
+      ],
+      "priority": "Medium",
+      "file": "groovy/src/main/java/com/gitlab/security_products/tests/App.groovy",
+      "line": 47,
+      "url": "https://find-sec-bugs.github.io/bugs.htm#PREDICTABLE_RANDOM",
+      "tool": "find_sec_bugs"
+    },
+    {
+      "id": "6a7375f272b607870327ea03814ea7ef0e913b1edcbe7eed70e7a2ce64455e6f",
+      "category": "sast",
+      "name": "Use of insecure MD2, MD4, or MD5 hash function.",
+      "severity": "Medium",
+      "confidence": "High",
+      "scanner": {
+        "id": "bandit",
+        "name": "Bandit"
+      },
+      "location": {
+        "file": "python/imports/imports-aliases.py",
+        "start_line": 13,
+        "end_line": 13
+      },
+      "identifiers": [
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B303",
+          "value": "B303"
+        }
+      ],
+      "priority": "Medium",
+      "file": "python/imports/imports-aliases.py",
+      "line": 13,
+      "tool": "bandit"
+    },
+    {
+      "id": "47f7fccbb39495c68dac599833fa631a5c043025e8a50fc036f86bafde7ff349",
+      "category": "sast",
+      "name": "Pickle library appears to be in use, possible security issue.",
+      "severity": "Medium",
+      "confidence": "High",
+      "scanner": {
+        "id": "bandit",
+        "name": "Bandit"
+      },
+      "location": {
+        "file": "python/imports/imports-aliases.py",
+        "start_line": 15,
+        "end_line": 15
+      },
+      "identifiers": [
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B301",
+          "value": "B301"
+        }
+      ],
+      "priority": "Medium",
+      "file": "python/imports/imports-aliases.py",
+      "line": 15,
+      "tool": "bandit"
+    },
+    {
+      "id": "47f7fccbb39495c68dac599833fa631a5c043025e8a50fc036f86bafde7fd987",
+      "category": "sast",
+      "name": "Possible unprotected redirect",
+      "description": "Possible unprotected redirect near line 46",
+      "severity": "Low",
+      "confidence": "Low",
+      "scanner": {
+        "id": "brakeman",
+        "name": "Brakeman"
+      },
+      "location": {
+        "file": "app/controllers/groups_controller.rb",
+        "start_line": 6,
+        "class": "GroupsController",
+        "method": "new_group"
+      },
+      "flags": [
+        {
+          "type": "flagged-as-likely-false-positive",
+          "origin": "vet",
+          "description": "This vulnerability has been identified as a potential false positive by the VET post-analyzer"
+        }
+      ],
+      "identifiers": [
+        {
+          "type": "brakeman_warning_code",
+          "name": "Brakeman Warning Code 18",
+          "value": "18",
+          "url": "https://brakemanscanner.org/docs/warning_types/redirect/"
+        }
+      ]
+    },
+    {
+      "id": "7e126e060d3d0b5f0b11506528c82fa40f5d144d85b2460ab01c44c7c9043be7",
+      "category": "sast",
+      "name": "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
+      "description": "Detected possible formatted SQL query. Use parameterized queries instead.\n",
+      "cve": "semgrep_id:bandit.B608:304:304",
+      "severity": "Medium",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "django/contrib/gis/db/backends/postgis/operations.py",
+        "start_line": 304
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B608",
+          "value": "bandit.B608",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B608"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-89",
+          "value": "89",
+          "url": "https://cwe.mitre.org/data/definitions/89.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A1:2017 - Injection",
+          "value": "A1:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B608",
+          "value": "B608"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "django/contrib/gis/db/backends/postgis/operations.py",
+            "line_start": 304,
+            "line_end": 304,
+            "signatures": [
+              {
+                "algorithm": "scope_offset",
+                "value": "django/contrib/gis/db/backends/postgis/operations.py|PostGISOperations[0]|_get_postgis_func[0]:6"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "d3b2641a795cbd8f4428dff4db7b5f9822785f563a644e834666205b6d868b61",
+      "category": "sast",
+      "name": "Relative Path Traversal",
+      "description": "Detected user input controlling a file path. An attacker could control\nthe location of this file, to include going backwards in the directory\nwith '../'. \n\nTo address this, ensure that user-controlled variables in file\npaths are sanitized. You may also consider using a utility method such as\norg.apache.commons.io.FilenameUtils.getName(...) to only retrieve the file\nname from the path.\n\nExample of using `org.apache.commons.io.FilenameUtils.getName(...)` to \nonly retrieve the file name from the path\n```\nString fileName = org.apache.commons.io.FilenameUtils.getName(userControlledInput);\nFile file = new File(\"/path/to/directory/\" + fileName);\n```\n",
+      "cve": "semgrep_id:java_traversal_rule-RelativePathTraversal:60:60",
+      "severity": "Critical",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "java-groovy-cmdi-groovyshell-taint.java",
+        "start_line": 60
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "java_traversal_rule-RelativePathTraversal",
+          "value": "java_traversal_rule-RelativePathTraversal"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-23",
+          "value": "23",
+          "url": "https://cwe.mitre.org/data/definitions/23.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A01:2021 - Broken Access Control",
+          "value": "A01:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A5:2017 - Broken Access Control",
+          "value": "A5:2017"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "gitlab/taint-templates/java/sinks/groovy/cmdi/java-groovy-cmdi-groovyshell-taint.java",
+            "line_start": 60,
+            "line_end": 60,
+            "signatures": [
+              {
+                "algorithm": "scope_offset_compressed",
+                "value": "gitlab/taint-templates/java/sinks/groovy/cmdi/java-groovy-cmdi-groovyshell-taint.java|GroovyShellUsage[0]|test2[0]:3"
+              },
+              {
+                "algorithm": "scope_offset",
+                "value": "gitlab/taint-templates/java/sinks/groovy/cmdi/java-groovy-cmdi-groovyshell-taint.java|GroovyShellUsage[0]|test2[0]:6"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "47f7fccbb39495c68dac599833fa631a5c043025e8a50fc036f86bafde7kl090",
+      "category": "sast",
+      "name": "Cipher with no integrity",
+      "severity": "Medium",
+      "confidence": "High",
+      "scanner": {
+        "id": "find_sec_bugs",
+        "name": "Find Security Bugs"
+      },
+      "location": {
+        "file": "groovy/src/main/java/com/gitlab/security_products/tests/App.groovy",
+        "start_line": 29,
+        "end_line": 29,
+        "class": "com.gitlab.security_products.tests.App",
+        "method": "insecureCypher"
+      },
+      "identifiers": [
+        {
+          "type": "find_sec_bugs_type",
+          "name": "Find Security Bugs-CIPHER_INTEGRITY",
+          "value": "CIPHER_INTEGRITY",
+          "url": "https://find-sec-bugs.github.io/bugs.htm#CIPHER_INTEGRITY"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-353",
+          "value": "353",
+          "url": "https://cwe.mitre.org/data/definitions/353.html"
+        }
+      ],
+      "priority": "Medium",
+      "file": "groovy/src/main/java/com/gitlab/security_products/tests/App.groovy",
+      "line": 29,
+      "url": "https://find-sec-bugs.github.io/bugs.htm#CIPHER_INTEGRITY",
+      "tool": "find_sec_bugs"
+    }
+  ],
+  "scan": {
+    "analyzer": {
+      "id": "brakeman",
+      "name": "Brakeman",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "3.1.3"
+    },
+    "scanner": {
+      "id": "brakeman",
+      "name": "Brakeman",
+      "url": "https://brakemanscanner.org",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "5.2.2"
+    },
+    "type": "sast",
+    "start_time": "2022-11-20T04:06:05",
+    "end_time": "2022-11-20T04:06:06",
+    "status": "success"
+  }
+}

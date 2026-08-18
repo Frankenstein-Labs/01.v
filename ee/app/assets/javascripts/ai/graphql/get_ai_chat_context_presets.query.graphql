@@ -1,0 +1,15 @@
+query getAiChatContextPresets(
+  $resourceId: AiModelID
+  $projectId: ProjectID
+  $url: String
+  $questionCount: Int
+) {
+  aiChatContextPresets(
+    resourceId: $resourceId
+    projectId: $projectId
+    url: $url
+    questionCount: $questionCount
+  ) {
+    questions
+  }
+}

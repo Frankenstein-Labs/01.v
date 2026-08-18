@@ -1,0 +1,38 @@
+#import "ee/environments/graphql/fragments/deployment_approval_data.fragment.graphql"
+#import "~/graphql_shared/fragments/user.fragment.graphql"
+
+# @graphql-eslint/eslint-plugin@4.0.0 reports missing IDs in `FragmentDefinition`. For now, we are
+# ignoring the newly uncovered error on this fragment. Please consider addressing the violation
+# if you are modifying this file and it turns out selecting the ID makes sense here.
+# eslint-disable-next-line @graphql-eslint/require-selections
+fragment ApprovalSummary on Deployment {
+  iid
+  approvalSummary {
+    status
+    totalPendingApprovalCount
+    totalRequiredApprovals
+    rules {
+      group {
+        id
+        name
+        webUrl
+      }
+      user {
+        ...User
+      }
+      accessLevel {
+        stringValue
+      }
+      approvedCount
+      requiredApprovals
+      pendingApprovalCount
+      approvals {
+        ...DeploymentApprovalData
+      }
+      canApprove
+    }
+  }
+  userPermissions {
+    approveDeployment
+  }
+}

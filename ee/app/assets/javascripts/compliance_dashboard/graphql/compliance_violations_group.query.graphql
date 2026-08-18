@@ -1,0 +1,25 @@
+#import "./fragments/merge_request_violations.fragment.graphql"
+
+query getComplianceViolationsGroup(
+  $fullPath: ID!
+  $filters: ComplianceViolationInput
+  $sort: ComplianceViolationSort
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  container: group(fullPath: $fullPath) {
+    id
+    mergeRequestViolations(
+      filters: $filters
+      sort: $sort
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
+      ...MergeRequestViolations
+    }
+  }
+}

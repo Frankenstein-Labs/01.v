@@ -1,0 +1,10 @@
+# @feature_category: duo_agent_platform
+
+mutation UpdateOrbitUserPreference($input: UserPreferencesUpdateInput!) {
+  userPreferencesUpdate(input: $input) {
+    userPreferences {
+      orbitSettings
+    }
+    errors
+  }
+}

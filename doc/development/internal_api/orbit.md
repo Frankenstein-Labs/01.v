@@ -1,0 +1,304 @@
+---
+stage: Orbit
+group: Context Systems
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see <https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments>
+title: GitLab Orbit Internal API
+---
+
+The GitLab Orbit internal API is used by the knowledge graph service.
+The API cannot be used by other consumers. This documentation is intended for people
+working on the GitLab codebase.
+
+## Add new endpoints
+
+API endpoints should be externally accessible by default, with proper authentication and authorization.
+Before adding a new internal endpoint, consider if the API would benefit the wider GitLab community and
+can be made externally accessible.
+
+The GitLab Orbit API uses internal endpoints because requests are authenticated with a service-level
+JWT token rather than a user token, and should only be accessible through an internal load balancer.
+
+## Authentication
+
+These endpoints are all authenticated using JWT authentication from the knowledge graph.
+
+To authenticate using the JWT, clients:
+
+1. Read the knowledge graph JWT signing secret.
+1. Use the signing key to generate a JSON Web Token (`JWT`) with the `gkg-indexer:` subject prefix.
+1. Pass the JWT in the `Gitlab-Orbit-Api-Request` header.
+
+All endpoints require the `knowledge_graph_infra` feature flag to be enabled.
+
+> [!note]
+> When the knowledge graph service calls these endpoints, the request executes
+> in an authenticated user context. As a result, project [audit events](../../user/compliance/audit_events.md)
+> can show an authenticated user performing repository operations (for example,
+> `repository_download_operation`) that were triggered by indexer activity rather
+> than by a direct user action.
+
+## Internal Endpoints
+
+### Project
+
+#### Fetch project info
+
+Use a GET command to get the default branch for a project.
+
+```plaintext
+GET /internal/orbit/project/:project_id/info
+```
+
+Example request:
+
+```shell
+curl --header "Gitlab-Orbit-Api-Request: <json-web-token>" "https://gitlab.example.com/api/v4/internal/orbit/project/1/info"
+```
+
+Example response:
+
+```json
+{
+  "project_id": 1,
+  "default_branch": "main"
+}
+```
+
+### Repository
+
+#### Download repository archive
+
+Use a GET command to download a tar.gz archive of the project repository at a given ref.
+
+```plaintext
+GET /internal/orbit/project/:project_id/repository/archive
+```
+
+| Attribute    | Type    | Required | Description                                                               |
+|:-------------|:--------|:---------|:--------------------------------------------------------------------------|
+| `project_id` | integer | yes      | ID of the project                                                         |
+| `ref`        | string  | no       | Git ref to archive (branch, tag, or SHA). Defaults to the default branch. |
+
+Example request:
+
+```shell
+curl --header "Gitlab-Orbit-Api-Request: <json-web-token>" "https://gitlab.example.com/api/v4/internal/orbit/project/1/repository/archive?ref=main"
+```
+
+Example response:
+
+```plaintext
+200
+```
+
+The response body is a binary tar.gz archive streamed via Workhorse.
+
+> [!note]
+> Calls to this endpoint trigger a `repository_download_operation`
+> [audit event](../../user/compliance/audit_events.md) attributed to the
+> authenticated user the indexer is acting as, not to a direct user action.
+
+#### Stream changed file paths
+
+Use a GET command to stream changed file paths between two tree revisions as newline-delimited JSON via Workhorse.
+Proxies to the Gitaly `FindChangedPaths` RPC.
+Returns 400 if `left_tree_revision` is not an ancestor of `right_tree_revision` (force push detected).
+
+```plaintext
+GET /internal/orbit/project/:project_id/repository/changed_paths
+```
+
+| Attribute              | Type    | Required | Description                                                                          |
+|:-----------------------|:--------|:---------|:-------------------------------------------------------------------------------------|
+| `project_id`           | integer | yes      | ID of the project                                                                    |
+| `left_tree_revision`   | string  | yes      | Base tree revision (commit SHA). Use the blank SHA (`0000...0000`) for initial indexing. |
+| `right_tree_revision`  | string  | yes      | Target tree revision (commit SHA)                                                    |
+
+Example request:
+
+```shell
+curl --header "Gitlab-Orbit-Api-Request: <json-web-token>" "https://gitlab.example.com/api/v4/internal/orbit/project/1/repository/changed_paths?left_tree_revision=abc123&right_tree_revision=def456"
+```
+
+Example response (newline-delimited JSON streamed via Workhorse):
+
+```json
+{"path":"app/models/user.rb","status":"MODIFIED","old_path":"","new_mode":33188,"old_blob_id":"aaa111","new_blob_id":"bbb222"}
+{"path":"README.md","status":"ADDED","old_path":"","new_mode":33188,"old_blob_id":"","new_blob_id":"ccc333"}
+{"path":"old_file.rb","status":"DELETED","old_path":"","new_mode":0,"old_blob_id":"ddd444","new_blob_id":""}
+```
+
+#### List blobs
+
+Use a POST command to stream blob contents for given revisions as length-prefixed protobuf frames via Workhorse.
+Proxies to the Gitaly `ListBlobs` RPC. Blobs larger than `bytes_limit` are truncated.
+
+```plaintext
+POST /internal/orbit/project/:project_id/repository/list_blobs
+```
+
+| Attribute     | Type     | Required | Description                                                                          |
+|:--------------|:---------|:---------|:-------------------------------------------------------------------------------------|
+| `project_id`  | integer  | yes      | ID of the project                                                                    |
+| `revisions`   | string[] | yes      | Git revisions to list blobs for (e.g., a SHA, `--not`, a range exclusion). Must not be empty. |
+| `bytes_limit` | integer  | no       | Maximum blob size in bytes (1 to 1,048,576). Defaults to 1 MB.                       |
+
+Example request:
+
+```shell
+curl --request POST --header "Gitlab-Orbit-Api-Request: <json-web-token>" \
+  --header "Content-Type: application/json" \
+  --data '{"revisions": ["def456", "--not", "abc123"]}' \
+  "https://gitlab.example.com/api/v4/internal/orbit/project/1/repository/list_blobs"
+```
+
+The response body is a binary stream of `ListBlobsResponse` protobuf frames. Each frame is preceded
+by a 4-byte big-endian length prefix indicating the size of the following protobuf message.
+
+#### List repository commits
+
+Use a GET command to get a paginated list of commits for a given ref.
+
+```plaintext
+GET /internal/orbit/project/:project_id/repository/commits
+```
+
+| Attribute    | Type     | Required | Description                                            |
+|:-------------|:---------|:---------|:-------------------------------------------------------|
+| `project_id` | integer  | yes      | ID of the project                                      |
+| `ref`        | string   | no       | Branch, tag, or SHA. Defaults to the default branch.   |
+| `since`      | datetime | no       | Only commits after or on this date (ISO 8601)          |
+| `until`      | datetime | no       | Only commits before or on this date (ISO 8601)         |
+| `order`      | string   | no       | Sort order: `default` or `topo`. Defaults to `default` |
+| `page`       | integer  | no       | Page number (defaults to 1)                            |
+| `per_page`   | integer  | no       | Number of items per page (defaults to 20)              |
+
+Example request:
+
+```shell
+curl --header "Gitlab-Orbit-Api-Request: <json-web-token>" "https://gitlab.example.com/api/v4/internal/orbit/project/1/repository/commits?ref=main&per_page=2"
+```
+
+Example response:
+
+```json
+[
+  {
+    "id": "abc123def456",
+    "short_id": "abc123d",
+    "title": "Update README",
+    "message": "Update README with new instructions",
+    "author_name": "Jane Smith",
+    "author_email": "jane@example.com",
+    "authored_date": "2025-01-15T10:30:00.000Z",
+    "committed_date": "2025-01-15T10:30:00.000Z"
+  }
+]
+```
+
+### Merge requests
+
+The diff endpoints come in two formats:
+
+- Per-file JSON diffs (`merge_request_diffs/:diff_id`) return each changed file with its
+  diff content and metadata (path, mode, rename/delete status). These read from
+  `MergeRequestDiffFile` records. Use the `paths` parameter to request only specific files.
+- Raw unified patch (`merge_requests/:iid/raw_diffs` or `merge_request_diffs/:diff_id/raw_diffs`)
+  returns the full diff as `text/plain`, computed by Gitaly and streamed through Workhorse.
+
+#### Get raw diffs for the latest version of a merge request
+
+Use a GET command to get the full unified patch for the latest diff version of a merge request.
+The response is streamed as `text/plain` through Workhorse.
+
+```plaintext
+GET /internal/orbit/project/:project_id/merge_requests/:merge_request_iid/raw_diffs
+```
+
+| Attribute            | Type    | Required | Description                            |
+|:---------------------|:--------|:---------|:---------------------------------------|
+| `project_id`         | integer | yes      | ID of the project.                     |
+| `merge_request_iid`  | integer | yes      | IID of the merge request (project-scoped). |
+
+Example request:
+
+```shell
+curl --header "Gitlab-Orbit-Api-Request: <json-web-token>" \
+  "https://gitlab.example.com/api/v4/internal/orbit/project/1/merge_requests/42/raw_diffs"
+```
+
+The response is a `text/plain` unified patch streamed through Workhorse.
+
+### Merge request diffs
+
+These endpoints address a specific `MergeRequestDiff` version by its database ID.
+
+#### Get per-file diffs for a merge request diff
+
+Use a GET command to get per-file diffs for a `MergeRequestDiff` record.
+
+```plaintext
+GET /internal/orbit/project/:project_id/merge_request_diffs/:diff_id
+```
+
+| Attribute    | Type     | Required | Description                                                            |
+|:-------------|:---------|:---------|:-----------------------------------------------------------------------|
+| `project_id` | integer  | yes      | ID of the project.                                                     |
+| `diff_id`    | integer  | yes      | ID of the `MergeRequestDiff` record.                                   |
+| `paths`      | string[] | no       | Filter to these file paths (`new_path` or `old_path`). Maximum of 100. |
+
+Example request:
+
+```shell
+curl --header "Gitlab-Orbit-Api-Request: <json-web-token>" \
+  "https://gitlab.example.com/api/v4/internal/orbit/project/1/merge_request_diffs/42"
+```
+
+Example response:
+
+```json
+{
+  "id": 42,
+  "head_commit_sha": "abc123def456",
+  "base_commit_sha": "789fed012cba",
+  "start_commit_sha": "456abc789def",
+  "diffs": [
+    {
+      "diff": "@@ -1,3 +1,4 @@\n...",
+      "collapsed": false,
+      "too_large": false,
+      "new_path": "app/models/user.rb",
+      "old_path": "app/models/user.rb",
+      "a_mode": "100644",
+      "b_mode": "100644",
+      "new_file": false,
+      "renamed_file": false,
+      "deleted_file": false,
+      "generated_file": false
+    }
+  ]
+}
+```
+
+#### Get raw unified patch for a merge request diff
+
+Use a GET command to get the full unified patch for a `MergeRequestDiff` record as `text/plain`,
+streamed through Workhorse.
+
+```plaintext
+GET /internal/orbit/project/:project_id/merge_request_diffs/:diff_id/raw_diffs
+```
+
+| Attribute    | Type    | Required | Description                          |
+|:-------------|:--------|:---------|:-------------------------------------|
+| `project_id` | integer | yes      | ID of the project.                   |
+| `diff_id`    | integer | yes      | ID of the `MergeRequestDiff` record. |
+
+Example request:
+
+```shell
+curl --header "Gitlab-Orbit-Api-Request: <json-web-token>" \
+  "https://gitlab.example.com/api/v4/internal/orbit/project/1/merge_request_diffs/42/raw_diffs"
+```
+
+The response is a `text/plain` unified patch streamed through Workhorse.

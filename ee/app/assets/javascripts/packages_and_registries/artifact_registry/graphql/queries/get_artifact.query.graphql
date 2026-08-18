@@ -1,0 +1,33 @@
+# @feature_category: artifact_registry
+
+query getArtifactRegistryRepositoryArtifact(
+  $organizationId: OrganizationsOrganizationID!
+  $name: String!
+  $artifactId: ID!
+) {
+  organization(id: $organizationId) {
+    id
+    artifactRegistryRepository(name: $name) {
+      name
+      format
+      # Asking the server for the repository puts `format` under the schema's control, and
+      # `format` decides which of these two answers and which shape the artifact renders under.
+      image(id: $artifactId) @client {
+        id
+        name
+      }
+      package(id: $artifactId) @client {
+        ... on ArtifactRegistryMavenPackage {
+          id
+          groupId
+          artifactId
+        }
+        ... on ArtifactRegistryNpmPackage {
+          id
+          name
+          scope
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+query getComparisonPipeline($projectPath: ID!, $id: CiPipelineID!) {
+  project(fullPath: $projectPath) {
+    id
+    pipeline(id: $id) {
+      id
+      iid
+      path
+    }
+  }
+}

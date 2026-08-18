@@ -1,0 +1,23 @@
+---
+version: '2'
+title: Invalid DataTable fields
+description: This DataTable has invalid fields
+panels:
+  - title: Invalid DataTable
+    gridAttributes:
+      yPos: 0
+      xPos: 0
+      width: 12
+      height: 2
+    visualization:
+      slug: invalid_data_table
+      type: DataTable
+      data:
+        type: value_stream
+        query: {}
+      options:
+        fields:
+          - key: 'good'
+            thAttr: 'bad'
+            tdAttr: 'BAD'
+          - key: '_unsupported.key'

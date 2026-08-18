@@ -1,0 +1,30 @@
+---
+page_view_events:
+  - /-/trial_registrations/new
+  - /users/identity_verification
+  - /users/identity_verification/success
+  - /users/sign_up/welcome
+  - /users/sign_up/company
+  - /users/sign_up/company/new
+  - /users/sign_up/groups/new
+  - /-/learn_gitlab/onboarding
+  - /-/learn_gitlab
+structured_events:
+  - category: 'trial_registrations:new'
+    action: 'register'
+    label: 'trial_registration'
+  - category: 'users:identity_verification:show'
+    action: 'render'
+    label: 'trial_registration'
+  - category: 'users:identity_verification:success'
+    action: 'render'
+    label: 'trial_registration'
+  - category: 'registrations:welcome:show'
+    action: 'render'
+    label: 'trial_registration'
+  - category: 'Registrations::CompanyController'
+    action: 'render'
+    label: 'trial_registration'
+  - category: 'Registrations::GroupsController'
+    action: 'view_new_group_action'
+    label: 'trial_registration'

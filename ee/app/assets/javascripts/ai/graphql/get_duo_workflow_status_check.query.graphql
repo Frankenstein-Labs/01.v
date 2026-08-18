@@ -1,0 +1,12 @@
+# @feature_category: duo_agent_platform
+query getDuoWorkflowStatusCheck($projectPath: ID!) {
+  project(fullPath: $projectPath) {
+    id
+    duoWorkflowStatusCheck {
+      enabled
+      remoteFlowsEnabled
+      foundationalFlowsEnabled
+      createDuoWorkflowForCiAllowed @gl_introduced(version: "18.9.0")
+    }
+  }
+}

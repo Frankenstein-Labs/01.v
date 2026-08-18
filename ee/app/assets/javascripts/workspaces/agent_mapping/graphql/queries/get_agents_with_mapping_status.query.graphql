@@ -1,0 +1,35 @@
+query getAgentsWithMappingStatus($namespace: ID!) {
+  namespace(fullPath: $namespace) {
+    id
+    mappedAgents: workspacesClusterAgents(filter: DIRECTLY_MAPPED) {
+      nodes {
+        id
+        name
+        project {
+          id
+          name
+        }
+        connections {
+          nodes {
+            connectedAt
+          }
+        }
+      }
+    }
+    unmappedAgents: workspacesClusterAgents(filter: UNMAPPED) {
+      nodes {
+        id
+        name
+        project {
+          id
+          name
+        }
+        connections {
+          nodes {
+            connectedAt
+          }
+        }
+      }
+    }
+  }
+}

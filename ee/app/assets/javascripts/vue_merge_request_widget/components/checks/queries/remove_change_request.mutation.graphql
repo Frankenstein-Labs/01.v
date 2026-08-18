@@ -1,0 +1,8 @@
+mutation removeChangeRequestMutation($projectPath: ID!, $iid: String!) {
+  mergeRequestDestroyRequestedChanges(input: { projectPath: $projectPath, iid: $iid }) {
+    errors
+    mergeRequest {
+      id
+    }
+  }
+}

@@ -1,0 +1,197 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "bool": {
+            "minimum_should_match": 1,
+            "should": [
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "bool": {
+                        "_name": "filters:confidentiality:notes:not_on_issue_or_not_confidential",
+                        "should": [
+                          {
+                            "bool": {
+                              "_name": "filters:confidentiality:notes:not_on_issue",
+                              "must_not": [
+                                {
+                                  "exists": {
+                                    "field": "issue"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "term": {
+                              "issue.confidential": {
+                                "_name": "filters:confidentiality:notes:non_confidential_issue",
+                                "value": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "bool": {
+                        "_name": "filters:confidentiality:notes:not_confidential",
+                        "should": [
+                          {
+                            "bool": {
+                              "must_not": [
+                                {
+                                  "exists": {
+                                    "field": "confidential"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "term": {
+                              "confidential": false
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "issue.confidential": {
+                          "_name": "filters:confidentiality:notes:issue:confidential",
+                          "value": true
+                        }
+                      }
+                    },
+                    {
+                      "bool": {
+                        "_name": "filters:confidentiality:notes:not_confidential",
+                        "should": [
+                          {
+                            "bool": {
+                              "must_not": [
+                                {
+                                  "exists": {
+                                    "field": "confidential"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "term": {
+                              "confidential": false
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "bool": {
+                        "minimum_should_match": 1,
+                        "should": [
+                          {
+                            "term": {
+                              "issue.author_id": {
+                                "_name": "filters:confidentiality:notes:confidential:as_author",
+                                "value": __USER_ID__
+                              }
+                            }
+                          },
+                          {
+                            "term": {
+                              "issue.assignee_id": {
+                                "_name": "filters:confidentiality:notes:confidential:as_assignee",
+                                "value": __USER_ID__
+                              }
+                            }
+                          },
+                          {
+                            "terms": {
+                              "_name": "filters:confidentiality:notes:private:project:member",
+                              "project_id": [
+                                __PROJECT_ID__
+                              ]
+                            }
+                          },
+                          {
+                            "bool": {
+                              "minimum_should_match": 1,
+                              "should": [
+                                {
+                                  "prefix": {
+                                    "traversal_ids": {
+                                      "_name": "filters:confidentiality:notes:private:ancestry_filter:descendants",
+                                      "value": "__NAMESPACE_ANCESTRY__"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "confidential": {
+                          "_name": "filters:confidentiality:notes:confidential",
+                          "value": true
+                        }
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1,
+                  "should": [
+                    {
+                      "terms": {
+                        "_name": "filters:confidentiality:notes:private:project:member",
+                        "project_id": [
+                          __PROJECT_ID__
+                        ]
+                      }
+                    },
+                    {
+                      "bool": {
+                        "minimum_should_match": 1,
+                        "should": [
+                          {
+                            "prefix": {
+                              "traversal_ids": {
+                                "_name": "filters:confidentiality:notes:private:ancestry_filter:descendants",
+                                "value": "__NAMESPACE_ANCESTRY__"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "must": [],
+      "must_not": [],
+      "should": []
+    }
+  }
+}

@@ -1,0 +1,24 @@
+- if personal_access_token.granular?
+  - if ::Feature.disabled?(:granular_personal_access_tokens, personal_access_token.user)
+    .gl-text-warning.gl-mb-4
+      = sprite_icon('status_warning')
+      = s_('AccessTokens|Inactive: Requires the granular_personal_access_tokens feature flag.')
+  - if personal_access_token.granular_scopes.present?
+    .gl-space-y-4
+      - personal_access_token.granular_scopes.each do |item|
+        %div
+          %div
+            %span.gl-font-bold= s_('AccessTokens|Permissions:')
+            = item.permissions.join(', ')
+          %div
+            %span.gl-font-bold= s_('AccessTokens|Access:')
+            - if item.namespace.present?
+              = item.namespace.name
+            - else
+              %span.gl-capitalize= item.access
+  - else
+    = _('No Scopes')
+- elsif personal_access_token.scopes.present?
+  = personal_access_token.scopes.join(', ')
+- else
+  = _('No Scopes')

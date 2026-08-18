@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RotationsListSectionComponent when the timeframe includes today renders component layout 1`] = `
+<div
+  class="list-section"
+>
+  <div>
+    <div
+      class="gl-border-t gl-clearfix"
+    >
+      <span
+        class="details-cell gl-flex gl-float-left gl-items-center gl-justify-between gl-left-0 gl-sticky"
+      >
+        <span
+          aria-label="Rotation 242"
+          class="gl-text-subtle gl-truncate"
+          data-testid="rotation-name-gid://gitlab/IncidentManagement::OncallRotation/2"
+        >
+          Rotation 242
+        </span>
+        <div
+          class="gl-px-2"
+          data-testid="rotation-edit-button-group"
+        >
+          <gl-button-stub
+            accessibledisabled="true"
+            aria-label="Edit rotation"
+            buttontextclasses=""
+            category="tertiary"
+            icon="pencil"
+            role="button"
+            size="medium"
+            tabindex="0"
+            tag="button"
+            title="Edit rotation"
+            type="button"
+            variant="default"
+          />
+          <gl-button-stub
+            accessibledisabled="true"
+            aria-label="Delete rotation"
+            buttontextclasses=""
+            category="tertiary"
+            icon="remove"
+            role="button"
+            size="medium"
+            tabindex="0"
+            tag="button"
+            title="Delete rotation"
+            type="button"
+            variant="default"
+          />
+        </div>
+      </span>
+      <span
+        class="gl-float-left gl-overflow-hidden gl-relative timeline-cell"
+        data-testid="timeline-cell"
+        style="width: calc(100% - 180px);"
+      >
+        <current-day-indicator-stub
+          data-testid="current-day-indicator-with-rotations"
+          presettype="WEEKS"
+          timeframeitem="Tue Jan 12 2021 00:00:00 GMT+0000 (Greenwich Mean Time)"
+          timelinewidth="2"
+        />
+        <schedule-shift-wrapper-stub
+          presettype="WEEKS"
+          rotation="[object Object]"
+          timeframe="Tue Jan 12 2021 00:00:00 GMT+0000 (Greenwich Mean Time),Tue Jan 19 2021 00:00:00 GMT+0000 (Greenwich Mean Time)"
+        />
+      </span>
+    </div>
+  </div>
+</div>
+`;

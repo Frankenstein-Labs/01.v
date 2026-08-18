@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExclusionDetails matches the snapshot 1`] = `
+<div
+  class="gl-flex gl-flex-col gl-gap-5"
+>
+  <detail-stub
+    label="Type"
+    value="Path"
+  />
+  <detail-stub
+    label="Value"
+    value="tmp"
+  />
+  <detail-stub
+    label="Description"
+    value="test1"
+  />
+  <detail-stub
+    label="Enforcement"
+  >
+    <gl-icon-stub
+      name="check"
+      size="16"
+      variant="success"
+    />
+    Secret push protection
+  </detail-stub>
+  <detail-stub
+    label="Status"
+  >
+    <span
+      class="gl-text-success"
+    >
+      <gl-icon-stub
+        name="check-circle-filled"
+        size="16"
+        variant="current"
+      />
+      Enabled
+    </span>
+  </detail-stub>
+  <detail-stub
+    label="Created"
+    value="Sep 19, 2024"
+  />
+  <detail-stub
+    label="Updated"
+    value="Sep 19, 2024"
+  />
+</div>
+`;

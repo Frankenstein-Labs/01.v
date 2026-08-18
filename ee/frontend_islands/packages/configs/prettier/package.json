@@ -1,0 +1,26 @@
+{
+  "name": "@frontend-islands/prettier-config",
+  "version": "0.1.0",
+  "description": "Shared Prettier configuration for Vue 3 + TypeScript + Tailwind 4 projects",
+  "main": "index.json",
+  "scripts": {
+    "build:prod": "echo skip",
+    "build": "echo skip"
+  },
+  "files": [
+    "index.json",
+    "README.md"
+  ],
+  "keywords": [
+    "prettier",
+    "prettier-config",
+    "vue3",
+    "typescript",
+    "tailwind",
+    "frontend-islands",
+    "shared-config"
+  ],
+  "peerDependencies": {
+    "prettier": "^3.0.0"
+  }
+}

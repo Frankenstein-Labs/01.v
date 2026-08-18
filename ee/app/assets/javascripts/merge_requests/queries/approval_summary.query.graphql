@@ -1,0 +1,25 @@
+query approvalSummary($projectPath: ID!, $iid: String!) {
+  project(fullPath: $projectPath) {
+    id
+    mergeRequest(iid: $iid) {
+      id
+      approved
+      approvalsLeft
+      approvalsRequired
+      approvedBy {
+        nodes {
+          id
+        }
+      }
+      approvalState {
+        rules {
+          id
+          approved
+          approvalsRequired
+          name
+          type
+        }
+      }
+    }
+  }
+}

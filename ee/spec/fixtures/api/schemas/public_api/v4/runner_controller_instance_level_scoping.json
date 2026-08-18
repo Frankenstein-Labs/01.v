@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "required": [
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

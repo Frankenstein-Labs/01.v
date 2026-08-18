@@ -1,0 +1,17 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getProjectsInGroup($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    projects {
+      nodes {
+        id
+        name
+        fullPath
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

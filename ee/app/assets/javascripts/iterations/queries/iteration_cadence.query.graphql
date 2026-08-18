@@ -1,0 +1,13 @@
+#import "./iteration_cadence.fragment.graphql"
+
+# @feature_category: team_planning
+query IterationCadence($fullPath: ID!, $id: IterationsCadenceID) {
+  group(fullPath: $fullPath) {
+    id
+    iterationCadences(id: $id, includeAncestorGroups: true) {
+      nodes {
+        ...IterationCadence
+      }
+    }
+  }
+}

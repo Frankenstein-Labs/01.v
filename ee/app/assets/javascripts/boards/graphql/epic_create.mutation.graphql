@@ -1,0 +1,12 @@
+#import "./epic_detailed.fragment.graphql"
+
+# @feature_category: portfolio_management
+mutation CreateEpic($input: CreateEpicInput!) {
+  createIssuable: createEpic(input: $input) {
+    issuable: epic {
+      ...EpicDetailed
+      color
+    }
+    errors
+  }
+}

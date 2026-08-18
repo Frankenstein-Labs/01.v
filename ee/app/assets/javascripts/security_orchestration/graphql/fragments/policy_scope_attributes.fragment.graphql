@@ -1,0 +1,98 @@
+fragment PolicyScopeAttributes on PolicyScope {
+  includingBusinessImpactAttributes(first: 2) {
+    count
+    nodes {
+      id
+      name
+      securityCategory {
+        id
+        name
+        templateType
+      }
+    }
+  }
+  excludingBusinessImpactAttributes(first: 2) {
+    count
+    nodes {
+      id
+      name
+      securityCategory {
+        id
+        name
+        templateType
+      }
+    }
+  }
+  includingApplicationAttributes(first: 2) {
+    count
+    nodes {
+      id
+      name
+      securityCategory {
+        id
+        name
+        templateType
+      }
+    }
+  }
+  excludingApplicationAttributes(first: 2) {
+    count
+    nodes {
+      id
+      name
+      securityCategory {
+        id
+        name
+        templateType
+      }
+    }
+  }
+  includingBusinessUnitAttributes(first: 2) {
+    count
+    nodes {
+      id
+      name
+      securityCategory {
+        id
+        name
+        templateType
+      }
+    }
+  }
+  excludingBusinessUnitAttributes(first: 2) {
+    count
+    nodes {
+      id
+      name
+      securityCategory {
+        id
+        name
+        templateType
+      }
+    }
+  }
+  includingExposureAttributes(first: 2) {
+    count
+    nodes {
+      id
+      name
+      securityCategory {
+        id
+        name
+        templateType
+      }
+    }
+  }
+  excludingExposureAttributes(first: 2) {
+    count
+    nodes {
+      id
+      name
+      securityCategory {
+        id
+        name
+        templateType
+      }
+    }
+  }
+}

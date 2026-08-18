@@ -1,0 +1,7 @@
+# @feature_category: security_testing_configuration
+mutation SecurityScanProfileAttach($input: SecurityScanProfileAttachInput!) {
+  securityScanProfileAttach(input: $input) {
+    clientMutationId
+    errors
+  }
+}

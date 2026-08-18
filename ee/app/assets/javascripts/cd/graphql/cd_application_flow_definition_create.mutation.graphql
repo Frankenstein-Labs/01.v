@@ -1,0 +1,12 @@
+# @feature_category: continuous_delivery
+
+mutation cdApplicationFlowDefinitionCreate($input: CdApplicationFlowDefinitionCreateInput!) {
+  cdApplicationFlowDefinitionCreate(input: $input) {
+    applicationFlowDefinition {
+      id
+      version
+      definition
+    }
+    errors
+  }
+}

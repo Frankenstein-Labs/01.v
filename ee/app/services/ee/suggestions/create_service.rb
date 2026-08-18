@@ -1,0 +1,39 @@
+# frozen_string_literal: true
+
+module EE
+  module Suggestions # rubocop:disable Gitlab/BoundedContexts -- EE override of CE Suggestions::CreateService
+    module CreateService
+      extend ActiveSupport::Concern
+      extend ::Gitlab::Utils::Override
+
+      override :execute
+      def execute
+        super.tap do
+          track_fix_pipeline_suggestions_posted
+        end
+      end
+
+      private
+
+      def track_fix_pipeline_suggestions_posted
+        return unless note.author&.ai_service_account?
+
+        consumer = ::Ai::Catalog::ItemConsumer.for_service_account(note.author_id).first
+        return unless consumer&.item&.foundational_flow_reference == "fix_pipeline/v1"
+
+        note.suggestions.reset.each do |suggestion|
+          ::Gitlab::InternalEvents.track_event(
+            'fix_pipeline_suggestion_posted',
+            user: note.author,
+            project: note.noteable.target_project,
+            additional_properties: {
+              label: note.noteable_id.to_s,
+              property: suggestion.id.to_s,
+              value: note.id
+            }
+          )
+        end
+      end
+    end
+  end
+end

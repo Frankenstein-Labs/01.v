@@ -1,0 +1,23 @@
+# @feature_category: team_planning
+mutation createCustomField(
+  $groupPath: ID!
+  $fieldType: CustomFieldType!
+  $name: String!
+  $selectOptions: [CustomFieldSelectOptionInput!]
+  $workItemTypeIds: [WorkItemsTypeID!]
+) {
+  customFieldCreate(
+    input: {
+      groupPath: $groupPath
+      fieldType: $fieldType
+      name: $name
+      selectOptions: $selectOptions
+      workItemTypeIds: $workItemTypeIds
+    }
+  ) {
+    customField {
+      id
+    }
+    errors
+  }
+}

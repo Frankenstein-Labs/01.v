@@ -1,0 +1,11 @@
+# @feature_category: workflow_catalog
+#import "../fragments/ai_catalog_mcp_server.fragment.graphql"
+
+mutation aiCatalogMcpServerCreate($input: AiCatalogMcpServerCreateInput!) {
+  aiCatalogMcpServerCreate(input: $input) {
+    errors
+    mcpServer {
+      ...BaseAiCatalogMcpServer
+    }
+  }
+}

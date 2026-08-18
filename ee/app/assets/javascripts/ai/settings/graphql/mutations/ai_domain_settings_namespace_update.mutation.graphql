@@ -1,0 +1,8 @@
+# @feature_category: ai_abstraction_layer
+mutation aiDomainSettingsNamespaceUpdate($input: AiDomainSettingsNamespaceUpdateInput!) {
+  aiDomainSettingsNamespaceUpdate(input: $input) {
+    addedDomains
+    removedDomains
+    errors
+  }
+}

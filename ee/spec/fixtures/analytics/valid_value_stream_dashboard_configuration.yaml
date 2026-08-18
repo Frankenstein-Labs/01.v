@@ -1,0 +1,12 @@
+title: 'Custom VSD'
+description: 'VSD from fixture'
+panels:
+  - title: 'Custom Panel 1'
+    visualization: 'usage_overview'
+    gridAttributes:
+      yPos: 1
+      xPos: 0
+      width: 12 # Uses max width otherwise some elements can be hidden and fail the spec.
+      height: 12
+    data:
+      namespace: vsd-test-group/vsd-project

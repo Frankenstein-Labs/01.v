@@ -1,0 +1,10 @@
+---
+name: security_remediation_profiles
+description:
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/603218
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/241188
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/605050
+milestone: '19.2'
+group: group::security platform management
+type: beta
+default_enabled: true

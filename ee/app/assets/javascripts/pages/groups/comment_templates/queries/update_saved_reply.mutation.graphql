@@ -1,0 +1,10 @@
+mutation groupSavedReplyUpdate($id: GroupsSavedReplyID!, $name: String!, $content: String!) {
+  savedReplyMutation: groupSavedReplyUpdate(input: { id: $id, name: $name, content: $content }) {
+    errors
+    savedReply {
+      id
+      name
+      content
+    }
+  }
+}

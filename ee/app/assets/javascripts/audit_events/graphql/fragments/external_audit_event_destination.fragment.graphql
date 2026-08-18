@@ -1,0 +1,24 @@
+#import "./audit_event_streaming_header.fragment.graphql"
+
+fragment ExternalAuditEventDestinationFragment on ExternalAuditEventDestination {
+  id
+  name
+  destinationUrl
+  verificationToken
+  eventTypeFilters
+  active
+  headers {
+    nodes {
+      ...AuditEventStreamingHeaderFragment
+    }
+  }
+  namespaceFilter {
+    id
+    namespace {
+      id
+      name
+      fullName
+      fullPath
+    }
+  }
+}

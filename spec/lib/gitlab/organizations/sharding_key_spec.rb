@@ -1,0 +1,588 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+
+RSpec.describe 'new tables missing sharding_key', feature_category: :organization do
+  include ShardingKeySpecHelpers
+
+  # Existing tables can be temporarily exempt from this requirement.
+  # You must add an issue link as sharding_key_issue_url in the db/docs
+  let(:allowed_to_be_missing_sharding_key) do
+    %w[
+      audit_events
+      merge_request_diff_commits
+      merge_request_diff_files
+      merge_request_diff_files_99208b8fac
+    ]
+  end
+
+  # Specific tables can be temporarily exempt from this requirement. You must add an issue link in a comment next to
+  # the table name to remove this once a decision has been made.
+  let(:allowed_to_be_missing_not_null) do
+    # web_hook_logs_daily's check_19dc80d658 is left NOT VALID by
+    # https://gitlab.com/gitlab-org/gitlab/-/work_items/603303 and re-validated (these entries removed)
+    # in https://gitlab.com/gitlab-org/gitlab/-/merge_requests/244171
+    #
+    # push_rules' check_1d23f0a102 is validated on GitLab.com only
+    # (https://gitlab.com/gitlab-org/gitlab/-/work_items/607950) and remains NOT VALID for self-managed
+    # until https://gitlab.com/gitlab-org/gitlab/-/work_items/607955 (19.6, after required stop 19.5)
+    %w[
+      web_hook_logs_daily.organization_id
+      web_hook_logs_daily.group_id
+      web_hook_logs_daily.project_id
+      push_rules.project_id
+    ]
+  end
+
+  let(:permanently_excluded_from_org_fk) { %w[loose_foreign_keys_organization_deleted_records] }
+
+  # Tables with a multi-column `sharding_key` must enforce that exactly one of the sharding key columns is
+  # non-null per row, via a `num_nonnulls(...) = 1` (or equivalent `<>`) check constraint. Tables that still
+  # rely on a looser `>= 1` / `> 0` / `OR`-style constraint, or have a NOT VALID strict constraint, are
+  # grandfathered in here. No new entries are allowed: any new (or modified) multi-column sharding key must
+  # use the strict, validated form.
+  let(:allowed_to_have_loose_multi_column_sharding_constraint) do
+    [
+      'events', # has `(group_id IS NOT NULL) OR (project_id IS NOT NULL) OR (personal_namespace_id IS NOT NULL)`
+      'notes', # has `num_nonnulls(namespace_id, organization_id, project_id) >= 1`
+      'scan_result_policies', # has `num_nonnulls(namespace_id, project_id) >= 1`
+      # has `num_nonnulls(...) = 1` but left NOT VALID by
+      # https://gitlab.com/gitlab-org/gitlab/-/work_items/603303, re-validated (this entry removed)
+      # in https://gitlab.com/gitlab-org/gitlab/-/merge_requests/244171
+      'web_hook_logs_daily'
+    ]
+  end
+
+  # Some reasons to exempt a table:
+  #   1. It has no foreign key for performance reasons
+  #   2. It does not yet have a foreign key as the index is still being backfilled
+  let(:allowed_to_be_missing_foreign_key) do
+    [
+      'web_hook_logs_daily.organization_id', # No LFK needed: daily partitions are dropped after 7 days
+      'web_hook_logs_daily.group_id', # No LFK needed: daily partitions are dropped after 7 days
+      'web_hook_logs_daily.project_id', # No LFK needed: daily partitions are dropped after 7 days
+      'ci_deleted_objects.project_id', # LFK already present on p_ci_builds and cascade delete all ci resources
+      'ci_namespace_monthly_usages.namespace_id', # https://gitlab.com/gitlab-org/gitlab/-/issues/321400
+      'ci_pipeline_chat_data.project_id',
+      'p_ci_pipeline_variables.project_id',
+      'ci_pipeline_messages.project_id',
+      'security_findings.project_id', # No LFK needed: sliding_list partitions are detached once stale and purged
+      # LFK already present on ci_pipeline_schedules and cascade delete all ci resources.
+      'ci_pipeline_schedule_variables.project_id',
+      'p_ci_build_trace_metadata.project_id', # LFK already present on p_ci_builds and cascade delete all ci resources
+      'ci_build_trace_chunks.project_id', # LFK already present on p_ci_builds and cascade delete all ci resources
+      'ci_secure_file_states.project_id', # LFK already present on ci_secure_files and cascade delete all ci resources
+      'p_ci_job_annotations.project_id', # LFK already present on p_ci_builds and cascade delete all ci resources
+      'ci_build_pending_states.project_id', # LFK already present on p_ci_builds and cascade delete all ci resources
+      'ci_builds_runner_session.project_id', # LFK already present on p_ci_builds and cascade delete all ci resources
+      'ci_resources.project_id', # LFK already present on ci_resource_groups and cascade delete all ci resources
+      'ci_unit_test_failures.project_id', # LFK already present on ci_unit_tests and cascade delete all ci resources
+      'ci_job_artifact_states.project_id',
+      # LFK already present on p_ci_job_artifacts and cascade delete all ci resources
+      'dast_profiles_pipelines.project_id', # LFK already present on dast_profiles and will cascade delete
+      'dast_scanner_profiles_builds.project_id', # LFK already present on dast_scanner_profiles and will cascade delete
+      'vulnerability_finding_links.project_id', # LFK already present on vulnerability_occurrence with cascade delete
+      'vulnerability_occurrence_identifiers.project_id', # LFK present on vulnerability_occurrence with cascade delete
+      'secret_detection_token_statuses.project_id',
+      # LFK already present on vulnerability_occurrence with cascade delete.
+      'ldap_group_links.group_id',
+      'namespace_descendants.namespace_id',
+      'p_batched_git_ref_updates_deletions.project_id',
+      'p_catalog_resource_sync_events.project_id',
+      'project_data_transfers.project_id', # https://gitlab.com/gitlab-org/gitlab/-/issues/439201
+      'value_stream_dashboard_counts.namespace_id', # https://gitlab.com/gitlab-org/gitlab/-/issues/439555
+      'project_audit_events.project_id',
+      'group_audit_events.group_id',
+      'user_audit_events.user_id',
+      # aggregated table, a worker ensures eventual consistency
+      'analytics_cycle_analytics_issue_stage_events.group_id',
+      # aggregated table, a worker ensures eventual consistency
+      'analytics_cycle_analytics_merge_request_stage_events.group_id',
+      # This is event log table for gitlab_subscriptions and should not be deleted.
+      # See more: https://gitlab.com/gitlab-org/gitlab/-/issues/462598#note_1949768698
+      'gitlab_subscription_histories.namespace_id',
+      # allowed as it points to itself
+      'organizations.id',
+      # contains an object storage reference. Group_id is the sharding key but we can't use the usual cascade delete FK.
+      'virtual_registries_packages_maven_cache_entries.group_id',
+      # The table contains references in the object storage and thus can't have cascading delete
+      # nor being NULL by the definition of a sharding key.
+      'packages_nuget_symbols.project_id',
+      'packages_package_files.project_id',
+      # The sharding key is copied from the parents above, which are allowed to reference a
+      # deleted project. A hard FK here would reject those values and abort the backfill.
+      # Rows are removed by the loose foreign keys on the parents.
+      # https://gitlab.com/gitlab-org/gitlab/-/work_items/606941
+      'packages_nuget_symbol_states.project_id',
+      'packages_package_file_states.project_id',
+      'merge_request_commits_metadata.project_id',
+      'sbom_vulnerability_scans.project_id',
+      'sbom_vulnerability_scan_results.project_id',
+      'p_duo_workflows_checkpoints.project_id',
+      'p_duo_workflows_checkpoints.namespace_id',
+      # No LFK needed: daily partitions are dropped after 30 days via retain_for
+      'p_duo_workflows_checkpoint_blobs.project_id',
+      'p_duo_workflows_checkpoint_blobs.namespace_id',
+      'p_duo_workflows_checkpoint_headers.project_id',
+      'p_duo_workflows_checkpoint_headers.namespace_id',
+      # No LFK needed: daily partitions are dropped after 1 day via retain_for
+      # https://gitlab.com/gitlab-org/gitlab/-/blob/ccc2459924e2805e43ad8f97eec15a6932d84f68/ee/app/models/analytics/knowledge_graph/code_indexing_task.rb#L13
+      'p_knowledge_graph_code_indexing_tasks.project_id',
+      # No need for FK, rows will be deleted by the LFK to merge_request_diffs
+      'merge_request_diff_commits_b5377a7a34.project_id',
+      # Sharding key columns (organization_id, namespace_id, project_id, user_id) for LFK deleted records intentionally
+      # have no foreign key constraints. These tables track record deletions for async LFK cleanup.
+      # The referenced parent record may already be deleted by the time the LFK record is inserted or processed.
+      'loose_foreign_keys_organization_deleted_records.organization_id',
+      'loose_foreign_keys_namespace_deleted_records.namespace_id',
+      'loose_foreign_keys_project_deleted_records.project_id',
+      'loose_foreign_keys_user_deleted_records.user_id'
+    ]
+  end
+
+  # Specific tables can be temporarily exempt from organization_id column requirements
+  # (not nullable, no default, has foreign key). Each entry must link to a tracking issue.
+  let(:allowed_organization_id_violations) do
+    {
+      "abuse_report_assignees" => "https://gitlab.com/gitlab-org/gitlab/-/issues/553428",
+      "abuse_report_labels" => "https://gitlab.com/gitlab-org/gitlab/-/issues/553427",
+      "achievement_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "ai_catalog_item_consumers" => "https://gitlab.com/gitlab-org/gitlab/-/work_items/596012",
+      "ai_vectorizable_file_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "alert_management_alert_metric_image_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "appearance_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "bulk_import_export_upload_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      # organization_id backfill in progress; NOT NULL + validated FK land after the BBM completes on prod.
+      "bulk_import_exports" => "https://gitlab.com/gitlab-org/gitlab/-/issues/600457",
+      "ci_runner_machines" => "https://gitlab.com/gitlab-org/gitlab/-/issues/525293",
+      "ci_runner_taggings" => "https://gitlab.com/gitlab-org/gitlab/-/issues/525293",
+      "ci_runner_taggings_instance_type" => "https://gitlab.com/gitlab-org/gitlab/-/issues/525293",
+      "ci_runners" => "https://gitlab.com/gitlab-org/gitlab/-/issues/525293",
+      "customer_relations_contacts" => "https://gitlab.com/gitlab-org/gitlab/-/issues/549029",
+      "design_management_action_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      # Cell-local table; organization_id is a plain ID column for namespace path resolution, not a sharding key.
+      # No FK or LFK is intended - orphaned tasks are handled by the task service.
+      "group_secrets_manager_maintenance_tasks" => "https://gitlab.com/gitlab-org/gitlab/-/work_items/597219",
+      "group_secrets_managers" => "https://gitlab.com/gitlab-org/gitlab/-/issues/583654",
+      "import_export_upload_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "instance_type_ci_runner_machines" => "https://gitlab.com/gitlab-org/gitlab/-/issues/525293",
+      "instance_type_ci_runners" => "https://gitlab.com/gitlab-org/gitlab/-/issues/525293",
+      "issuable_metric_image_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "namespace_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "note_diff_files" => "https://gitlab.com/gitlab-org/gitlab/-/issues/550694",
+      "project_import_export_relation_export_upload_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "project_secrets_managers" => "https://gitlab.com/gitlab-org/gitlab/-/issues/583654",
+      "project_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "push_rules" => "https://gitlab.com/gitlab-org/gitlab/-/issues/476212",
+      "slack_integrations_scopes_archived" => "https://gitlab.com/gitlab-org/gitlab/-/issues/584705",
+      "snippet_user_mentions" => "https://gitlab.com/gitlab-org/gitlab/-/issues/517825",
+      "uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "user_permission_export_upload_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "vulnerability_archive_export_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "vulnerability_remediation_uploads" => "https://gitlab.com/gitlab-org/gitlab/-/issues/398199",
+      "web_hook_logs_daily" => "https://gitlab.com/gitlab-org/gitlab/-/work_items/524820"
+    }
+  end
+
+  it 'requires a sharding_key for all org tables', :aggregate_failures do
+    tables_missing_sharding_key.each do |table_name|
+      expect(allowed_to_be_missing_sharding_key).to include(table_name), error_message(table_name)
+    end
+  end
+
+  it 'does not allow a sharding key for cell-local tables', :aggregate_failures do
+    Gitlab::Database::Dictionary.entries.each do |entry|
+      next if Gitlab::Database::GitlabSchema.require_sharding_key?(entry.gitlab_schema)
+
+      expect(entry.sharding_key).to be_nil,
+        "This table #{entry.table_name} must not have a `sharding_key` in the `db/docs` YML file. " \
+          "Remove this attribute, or update the `gitlab_schema` to be an organization based schema. " \
+          "Please refer to https://docs.gitlab.com/development/organization/sharding/#sharding-principles."
+    end
+  end
+
+  it 'requires a sharding_key, sharding_key_issue_url, or desired_sharding_key for all org tables',
+    :aggregate_failures do
+    tables_missing_sharding_key_or_sharding_in_progress.each do |table_name|
+      expect(allowed_to_be_missing_sharding_key).to include(table_name),
+        "This table #{table_name} is missing `sharding_key` in the `db/docs` YML file. " \
+          "Alternatively, set either a `sharding_key_issue_url`, or desired_sharding_key` attribute. " \
+          "Please refer to https://docs.gitlab.com/development/organization/#defining-a-sharding-key-for-all-organizational-tables."
+    end
+  end
+
+  it 'ensures all sharding_key columns exist and reference projects, namespaces or organizations',
+    :aggregate_failures do
+    all_tables_to_sharding_key.each do |table_name, sharding_key, gitlab_schema|
+      allowed_sharding_key_referenced_tables = ::Gitlab::Database::GitlabSchema.sharding_root_tables(gitlab_schema)
+
+      sharding_key.each do |column_name, referenced_table_name|
+        expect(column_exists?(table_name, column_name)).to eq(true),
+          "Could not find sharding key column #{table_name}.#{column_name}"
+        expect(referenced_table_name).to be_in(allowed_sharding_key_referenced_tables),
+          "#{table_name} uses an incorrect sharding_key (#{referenced_table_name}). " \
+            "Allowed values: #{allowed_sharding_key_referenced_tables.to_sentence}"
+
+        if allowed_to_be_missing_foreign_key.include?("#{table_name}.#{column_name}")
+          expect(has_foreign_key?(table_name, column_name)).to eq(false),
+            "The column `#{table_name}.#{column_name}` has a foreign key so cannot be " \
+              "allowed_to_be_missing_foreign_key. " \
+              "If this is a foreign key referencing the specified table #{referenced_table_name} " \
+              "then you must remove it from allowed_to_be_missing_foreign_key"
+        else
+          next if Gitlab::Database::PostgresPartition.partition_exists?(table_name)
+
+          expect(has_foreign_key?(table_name, column_name, to_table_name: referenced_table_name)).to eq(true),
+            "Missing a foreign key constraint for `#{table_name}.#{column_name}` " \
+              "referencing #{referenced_table_name}. " \
+              "All sharding keys must have a foreign key constraint"
+        end
+      end
+    end
+  end
+
+  it 'ensures all sharding_key columns are not nullable or have a not null check constraint',
+    :aggregate_failures do
+    all_tables_to_sharding_key.each do |table_name, sharding_key, _gitlab_schema|
+      sharding_key_columns = sharding_key.keys
+
+      if sharding_key_columns.one?
+        column_name = sharding_key_columns.first
+        not_nullable = not_nullable?(table_name, column_name)
+        has_null_check_constraint = has_null_check_constraint?(table_name, column_name)
+
+        if allowed_to_be_missing_not_null.include?("#{table_name}.#{column_name}")
+          expect(not_nullable || has_null_check_constraint).to eq(false),
+            "You must remove `#{table_name}.#{column_name}` from allowed_to_be_missing_not_null " \
+              "since it now has a valid constraint."
+        else
+          expect(not_nullable || has_null_check_constraint).to eq(true),
+            "Missing a not null constraint for `#{table_name}.#{column_name}`. " \
+              "All sharding keys must be not nullable or have a NOT NULL check constraint"
+        end
+      else
+        allowed_columns = allowed_to_be_missing_not_null & sharding_key_columns.map { |c| "#{table_name}.#{c}" }
+        has_null_check_constraint = has_multi_column_null_check_constraint?(table_name, sharding_key_columns)
+
+        if allowed_columns.present?
+          if allowed_columns.length != sharding_key_columns.length
+            expect(allowed_columns.length).to eq(sharding_key_columns.length),
+              "`#{table_name}` has sharding keys #{sharding_key_columns.to_sentence} but " \
+                "allowed_to_be_missing_not_null contains only #{allowed_columns.to_sentence}. " \
+                "allowed_to_be_missing_not_null must contain all sharding key columns, or none"
+          else
+            expect(has_null_check_constraint).to eq(false),
+              "You must remove #{allowed_columns.to_sentence} from allowed_to_be_missing_not_null " \
+                "since there is now a valid constraint"
+          end
+        else
+          expect(has_null_check_constraint).to eq(true),
+            "Missing a not null constraint for #{sharding_key_columns.to_sentence} on `#{table_name}`. " \
+              "All sharding keys must have a NOT NULL check constraint. For more information on constraints for " \
+              "multiple columns, see https://docs.gitlab.com/ee/development/database/not_null_constraints.html#not-null-constraints-for-multiple-columns"
+        end
+      end
+    end
+  end
+
+  it 'ensures all organization_id columns are not nullable, have no default, and have a foreign key' do
+    loose_foreign_keys = Gitlab::Database::LooseForeignKeys.definitions.group_by(&:from_table)
+
+    # Step 1: Get all tables with organization_id columns
+    tables_sql = <<~SQL
+      SELECT table_name
+      FROM information_schema.columns
+      WHERE column_name = 'organization_id'
+        AND table_schema = 'public'
+      ORDER BY table_name;
+    SQL
+
+    table_names = ApplicationRecord.connection.select_values(tables_sql)
+
+    # Step 2: Check each table individually to avoid complex joins
+    organization_id_columns = []
+
+    # Process in batches of 50 to avoid statement timeout issues with large queries
+    table_names.each_slice(50) do |table_batch|
+      batch_conditions = table_batch.map do |table|
+        table_name = ApplicationRecord.connection.quote(table)
+        "c.table_name = #{table_name}"
+      end.join(' OR ')
+
+      batch_sql = <<~SQL
+        SELECT c.table_name,
+          CASE WHEN c.column_default IS NOT NULL THEN 'has default' ELSE NULL END,
+          CASE WHEN c.is_nullable::boolean THEN 'nullable / not null constraint missing' ELSE NULL END
+        FROM information_schema.columns c
+        WHERE c.column_name = 'organization_id'
+          AND c.table_schema = 'public'
+          AND (#{batch_conditions})
+        ORDER BY c.table_name;
+      SQL
+
+      batch_results = ApplicationRecord.connection.select_rows(batch_sql)
+      organization_id_columns.concat(batch_results)
+    end
+
+    # Step 3: Check foreign keys using Rails schema introspection
+    columns_to_check = organization_id_columns
+                         .reject { |column| allowed_organization_id_violations[column[0]] }
+                         .reject { |column| permanently_excluded_from_org_fk.include?(column[0]) }
+    messages = columns_to_check.filter_map do |column|
+      table_name = column[0]
+      violations = column[1..].compact
+
+      # Check foreign keys using Rails
+      begin
+        foreign_keys = ApplicationRecord.connection.foreign_keys(table_name)
+        org_fk = foreign_keys.find { |fk| fk.column == 'organization_id' && fk.to_table == 'organizations' }
+
+        unless org_fk || table_or_routing_table_has_org_id_lfk(table_name, loose_foreign_keys)
+          violations << 'no foreign key'
+        end
+      rescue ActiveRecord::StatementInvalid
+        # Table might not exist or be accessible
+        violations << 'no foreign key'
+      end
+
+      violations.delete_if do |v|
+        (v == 'nullable / not null constraint missing' && has_null_check_constraint?(table_name, 'organization_id')) ||
+          (v == 'no foreign key' && table_or_routing_table_has_org_id_lfk(table_name, loose_foreign_keys))
+      end
+
+      "  #{table_name} - #{violations.join(', ')}" if violations.any?
+    end
+
+    expect(messages).to be_empty, "Expected all organization_id columns to be not nullable, have no default, " \
+      "and have a validated foreign key, but the following tables do not meet this criteria:" \
+      "\n#{messages.join("\n")}\n\n" \
+      "If this is a work in progress, please create an issue under " \
+      "https://gitlab.com/groups/gitlab-org/-/epics/11670, " \
+      "and add the table to the `allowed_organization_id_violations` list in this test."
+  end
+
+  it 'only allows `allowed_organization_id_violations` to include tables that still have violations',
+    :aggregate_failures do
+    loose_foreign_keys = Gitlab::Database::LooseForeignKeys.definitions.group_by(&:from_table)
+
+    allowed_organization_id_violations.each_key do |table_name|
+      column_sql = <<~SQL
+        SELECT
+          CASE WHEN c.column_default IS NOT NULL THEN 'has default' ELSE NULL END,
+          CASE WHEN c.is_nullable::boolean THEN 'nullable / not null constraint missing' ELSE NULL END
+        FROM information_schema.columns c
+        WHERE c.column_name = 'organization_id'
+          AND c.table_schema = 'public'
+          AND c.table_name = #{ApplicationRecord.connection.quote(table_name)}
+      SQL
+
+      row = ApplicationRecord.connection.select_rows(column_sql).first
+      next unless row
+
+      violations = row.compact
+
+      begin
+        foreign_keys = ApplicationRecord.connection.foreign_keys(table_name)
+        org_fk = foreign_keys.find { |fk| fk.column == 'organization_id' && fk.to_table == 'organizations' }
+
+        unless org_fk || table_or_routing_table_has_org_id_lfk(table_name, loose_foreign_keys)
+          violations << 'no foreign key'
+        end
+      rescue ActiveRecord::StatementInvalid
+        violations << 'no foreign key'
+      end
+
+      violations.delete_if do |v|
+        (v == 'nullable / not null constraint missing' && has_null_check_constraint?(table_name, 'organization_id')) ||
+          (v == 'no foreign key' && table_or_routing_table_has_org_id_lfk(table_name, loose_foreign_keys))
+      end
+
+      expect(violations).not_to be_empty,
+        "`#{table_name}` no longer has any organization_id violations. " \
+          "You must remove this table from the `allowed_organization_id_violations` list."
+    end
+  end
+
+  it 'only allows `allowed_to_be_missing_sharding_key` to include tables that are missing a sharding_key',
+    :aggregate_failures do
+    allowed_to_be_missing_sharding_key.each do |exempted_table|
+      expect(tables_missing_sharding_key).to include(exempted_table),
+        "`#{exempted_table}` is not missing a `sharding_key`. " \
+          "You must remove this table from the `allowed_to_be_missing_sharding_key` list."
+    end
+  end
+
+  it 'requires `allowed_to_be_missing_sharding_key` must have sharding_key_issue_url',
+    :aggregate_failures do
+    allowed_to_be_missing_sharding_key.each do |exempted_table|
+      entry = ::Gitlab::Database::Dictionary.entry(exempted_table)
+
+      expect(entry&.sharding_key_issue_url).to be_present,
+        "`#{exempted_table}` is missing a `sharding_key_issue_url`."
+    end
+  end
+
+  it 'ensures multi-column sharding keys enforce that exactly one column is non-null', :aggregate_failures do
+    all_tables_to_sharding_key.each do |table_name, sharding_key, _gitlab_schema|
+      sharding_key_columns = sharding_key.keys
+      next if sharding_key_columns.one?
+
+      has_strict_constraint = has_exactly_one_not_null_check_constraint?(table_name, sharding_key_columns)
+
+      if allowed_to_have_loose_multi_column_sharding_constraint.include?(table_name)
+        expect(has_strict_constraint).to eq(false),
+          "`#{table_name}` now has a strict `num_nonnulls(...) = 1` check constraint on its sharding key. " \
+            "You must remove this table from the `allowed_to_have_loose_multi_column_sharding_constraint` list."
+      else
+        expect(has_strict_constraint).to eq(true),
+          "`#{table_name}` declares a multi-column `sharding_key` (#{sharding_key_columns.to_sentence}) " \
+            "but does not have a check constraint enforcing that exactly one of those columns is non-null. " \
+            "Add a `num_nonnulls(#{sharding_key_columns.sort.join(', ')}) = 1` check constraint (or for " \
+            "two-column keys, the equivalent `(a IS NULL) <> (b IS NULL)` form). New tables must enforce " \
+            "this strict form; the loose `>= 1` / `OR`-style constraint is no longer permitted. See " \
+            "https://docs.gitlab.com/ee/development/database/not_null_constraints.html#not-null-constraints-for-multiple-columns."
+      end
+    end
+  end
+
+  it 'only allows `allowed_to_have_loose_multi_column_sharding_constraint` to include tables with multi-column ' \
+    'sharding keys', :aggregate_failures do
+    tables_with_multi_column_sharding_key = all_tables_to_sharding_key.filter_map do |table_name, sharding_key, _|
+      table_name if sharding_key.keys.length > 1
+    end
+
+    allowed_to_have_loose_multi_column_sharding_constraint.each do |exempted_table|
+      expect(tables_with_multi_column_sharding_key).to include(exempted_table),
+        "`#{exempted_table}` no longer has a multi-column `sharding_key`. " \
+          "You must remove this table from the `allowed_to_have_loose_multi_column_sharding_constraint` list."
+    end
+  end
+
+  it 'only allows `allowed_to_be_missing_not_null` to include sharding keys',
+    :aggregate_failures do
+    allowed_to_be_missing_not_null.each do |exemption|
+      table, column = exemption.split('.')
+      entry = ::Gitlab::Database::Dictionary.entry(table)
+
+      expect(entry&.sharding_key&.keys).to include(column),
+        "`#{exemption}` is not a `sharding_key`. " \
+          "You must remove this entry from the `allowed_to_be_missing_not_null` list."
+    end
+  end
+
+  it 'only allows `allowed_to_be_missing_foreign_key` to include sharding keys',
+    :aggregate_failures do
+    allowed_to_be_missing_foreign_key.each do |exemption|
+      table, column = exemption.split('.')
+      entry = ::Gitlab::Database::Dictionary.entry(table)
+
+      expect(entry&.sharding_key&.keys).to include(column),
+        "`#{exemption}` is not a `sharding_key`. " \
+          "You must remove this entry from the `allowed_to_be_missing_foreign_key` list."
+    end
+  end
+
+  it 'allows tables that have a sharding key to only have a sharding-key-required schema' do
+    expect(tables_with_sharding_keys_not_in_sharding_key_required_schema).to be_empty, <<~ERROR.squish
+      Tables: #{tables_with_sharding_keys_not_in_sharding_key_required_schema.join(',')}
+      have a sharding key defined, but does not have a sharding-key-required schema assigned.
+      Tables with sharding keys should have a schema where `require_sharding_key` is enabled
+      like `gitlab_main_org` or `gitlab_ci`.
+      Please change the `gitlab_schema` of these tables accordingly.
+    ERROR
+  end
+
+  it 'does not allow invalid follow-up issue URLs', :aggregate_failures do
+    issue_url_regex = %r{\Ahttps://gitlab\.com/(gitlab-org/gitlab|groups/gitlab-org)/-/(issues|work_items)/\d+\z}
+
+    ::Gitlab::Database::Dictionary.entries.each do |entry|
+      if entry.sharding_key.present?
+        expect(entry.sharding_key_issue_url).not_to be_present,
+          "You must remove `sharding_key_issue_url` from #{entry.table_name} now that it " \
+            "has a valid sharding key."
+      elsif entry.desired_sharding_key.present?
+        expect(entry.sharding_key_issue_url).to match(issue_url_regex),
+          "The table #{entry.table_name} has a `desired_sharding_key` which indicates work is in progress. " \
+            "Please add a valid `sharding_key_issue_url` (https://gitlab.com/gitlab-org/gitlab/-/issues/XXX)."
+      elsif entry.sharding_key_issue_url.present?
+        expect(entry.sharding_key_issue_url).to match(issue_url_regex),
+          "Invalid `sharding_key_issue_url` url for #{entry.table_name}. Please use the following format: " \
+            "https://gitlab.com/gitlab-org/gitlab/-/issues/XXX"
+      end
+    end
+  end
+
+  private
+
+  def error_message(table_name)
+    <<~HEREDOC
+      The table `#{table_name}` is missing a `sharding_key` in the `db/docs` YML file.
+      Starting from GitLab 16.6, we expect all new tables to define a `sharding_key`.
+
+      To choose an appropriate sharding_key for this table please refer
+      to our guidelines at https://docs.gitlab.com/development/organization/sharding/, or consult with the Tenant Scale group.
+    HEREDOC
+  end
+
+  def tables_missing_sharding_key
+    ::Gitlab::Database::Dictionary.entries.filter_map do |entry|
+      entry.table_name if entry.sharding_key.blank? &&
+        ::Gitlab::Database::GitlabSchema.require_sharding_key?(entry.gitlab_schema)
+    end
+  end
+
+  def tables_missing_sharding_key_or_sharding_in_progress
+    ::Gitlab::Database::Dictionary.entries.filter_map do |entry|
+      entry.table_name if entry.sharding_key.blank? &&
+        entry.sharding_key_issue_url.blank? &&
+        entry.desired_sharding_key.blank? &&
+        ::Gitlab::Database::GitlabSchema.require_sharding_key?(entry.gitlab_schema)
+    end
+  end
+
+  def entries_with_issue_link
+    ::Gitlab::Database::Dictionary.entries.select do |entry|
+      entry.sharding_key_issue_url.present?
+    end
+  end
+
+  def all_tables_to_sharding_key
+    entries_with_sharding_key = ::Gitlab::Database::Dictionary.entries.select do |entry|
+      entry.sharding_key.present?
+    end
+
+    entries_with_sharding_key.map do |entry|
+      [entry.table_name, entry.sharding_key, entry.gitlab_schema]
+    end
+  end
+
+  def tables_with_sharding_keys_not_in_sharding_key_required_schema
+    ::Gitlab::Database::Dictionary.entries.filter_map do |entry|
+      entry.table_name if entry.sharding_key.present? &&
+        !::Gitlab::Database::GitlabSchema.require_sharding_key?(entry.gitlab_schema)
+    end
+  end
+
+  def has_organization_id_lfk(lfks)
+    lfks.any? { |k| k.options[:column] == 'organization_id' && k.to_table == 'organizations' }
+  end
+
+  def table_or_routing_table_has_org_id_lfk(table_name, loose_foreign_keys)
+    table_lfks = loose_foreign_keys.fetch(table_name, {})
+
+    # Check if the table itself has a loose foreign key
+    return true if has_organization_id_lfk(table_lfks)
+
+    # For partitioned tables, also check if the parent/routing table has a loose foreign key
+    return false unless Gitlab::Database::PostgresPartition.partition_exists?(table_name)
+
+    partition = Gitlab::Database::PostgresPartition.find_by(
+      "identifier = concat(current_schema(), '.', ?)", table_name
+    )
+    return false unless partition&.parent_identifier
+
+    parent_table_name = partition.parent_identifier.split('.').last
+    parent_table_lfks = loose_foreign_keys.fetch(parent_table_name, {})
+    has_organization_id_lfk(parent_table_lfks)
+  end
+end

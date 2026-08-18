@@ -1,0 +1,10 @@
+---
+name: ai_catalog_public_explore
+description: Allow all users (including logged-out) to view the AI Catalog at explore level
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/595123
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/230916
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/596348
+milestone: '19.0'
+group: group::workflow catalog
+type: beta
+default_enabled: true

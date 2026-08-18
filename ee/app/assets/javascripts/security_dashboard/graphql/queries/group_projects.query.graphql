@@ -1,0 +1,24 @@
+query groupProjects($fullPath: ID!, $ids: [ID!], $search: String, $pageSize: Int, $after: String) {
+  group(fullPath: $fullPath) {
+    id
+    projects(
+      includeSubgroups: true
+      includeArchived: false
+      ids: $ids
+      search: $search
+      first: $pageSize
+      after: $after
+    ) {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+# @feature_category: duo_agent_platform
+query GetAgentSessionState {
+  agentSessionStatus @client
+  agentSessionProject @client
+  agentSessionFlowDefinition @client
+}

@@ -1,0 +1,9 @@
+# @feature_category: source_code_management
+mutation updateProjectWebBasedCommitSigning($input: ProjectSettingsUpdateInput!) {
+  projectSettingsUpdate(input: $input) {
+    projectSettings {
+      webBasedCommitSigningEnabled
+    }
+    errors
+  }
+}

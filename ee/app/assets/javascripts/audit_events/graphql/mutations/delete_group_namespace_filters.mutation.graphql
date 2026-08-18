@@ -1,0 +1,9 @@
+mutation deleteGroupNamespaceFiltersFromDestination(
+  $namespaceFilterId: AuditEventsGroupNamespaceFilterID!
+) {
+  auditEventsGroupDestinationNamespaceFilterDelete(
+    input: { namespaceFilterId: $namespaceFilterId }
+  ) {
+    errors
+  }
+}

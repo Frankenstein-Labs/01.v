@@ -1,0 +1,30 @@
+# @feature_category: subscription_management
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getTrialUsersUsage(
+  $namespacePath: ID
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+) {
+  trialUsage(namespacePath: $namespacePath) {
+    usersUsage {
+      users(first: $first, last: $last, after: $after, before: $before) {
+        nodes {
+          id
+          name
+          username
+          avatarUrl
+          usage {
+            totalCredits
+            creditsUsed
+          }
+        }
+        pageInfo {
+          ...PageInfo
+        }
+      }
+    }
+  }
+}

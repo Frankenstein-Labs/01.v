@@ -1,0 +1,10 @@
+#import "../../../common/graphql/fragments/workspace_item.fragment.graphql"
+
+mutation workspaceCreate($input: WorkspaceCreateInput!) {
+  workspaceCreate(input: $input) {
+    workspace {
+      ...WorkspaceItem
+    }
+    errors
+  }
+}

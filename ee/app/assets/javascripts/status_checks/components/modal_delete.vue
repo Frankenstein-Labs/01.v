@@ -1,0 +1,93 @@
+<script>
+import { GlModal, GlModalDirective, GlSprintf } from '@gitlab/ui';
+// eslint-disable-next-line no-restricted-imports
+import { mapActions } from 'vuex';
+import { createAlert } from '~/alert';
+import { __, s__, sprintf } from '~/locale';
+
+const i18n = {
+  cancelButton: __('Cancel'),
+  deleteError: s__('StatusCheck|An error occurred deleting the %{name} status check.'),
+  primaryButton: s__('StatusCheck|Delete status check'),
+  title: s__('StatusCheck|Delete status check?'),
+  warningText: s__('StatusCheck|You are about to delete the %{name} status check.'),
+};
+
+export default {
+  name: 'ModalDelete',
+  components: {
+    GlModal,
+    GlSprintf,
+  },
+  directives: {
+    GlModal: GlModalDirective,
+  },
+  props: {
+    statusCheck: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      submitting: false,
+    };
+  },
+  computed: {
+    primaryActionProps() {
+      return {
+        text: i18n.primaryButton,
+        attributes: { variant: 'danger', loading: this.submitting },
+      };
+    },
+  },
+  methods: {
+    ...mapActions(['deleteStatusCheck']),
+    async submit() {
+      const { id, name } = this.statusCheck;
+
+      this.submitting = true;
+
+      try {
+        await this.deleteStatusCheck(id);
+      } catch (error) {
+        createAlert({
+          message: sprintf(i18n.deleteError, { name }),
+          captureError: true,
+          error,
+        });
+      }
+
+      this.submitting = false;
+      this.$refs.modal.hide();
+    },
+    // eslint-disable-next-line vue/no-unused-properties -- show() is part of the component's public API.
+    show() {
+      this.$refs.modal.show();
+    },
+  },
+  modalId: 'status-checks-delete-modal',
+  cancelActionProps: {
+    text: i18n.cancelButton,
+  },
+  i18n,
+};
+</script>
+
+<template>
+  <gl-modal
+    ref="modal"
+    :modal-id="$options.modalId"
+    :title="$options.i18n.title"
+    :action-primary="primaryActionProps"
+    :action-cancel="$options.cancelActionProps"
+    size="sm"
+    @ok.prevent="submit"
+  >
+    <gl-sprintf :message="$options.i18n.warningText">
+      <template #name>
+        <strong>{{ statusCheck.name }}</strong>
+      </template>
+    </gl-sprintf>
+  </gl-modal>
+</template>

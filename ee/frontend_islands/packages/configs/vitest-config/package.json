@@ -1,0 +1,25 @@
+{
+  "name": "@frontend-islands/vitest-config",
+  "version": "0.1.0",
+  "description": "Shared Vitest configuration for Vue 3 + TypeScript + Tailwind 4 projects",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "build:prod": "echo skip",
+    "build": "echo skip"
+  },
+  "keywords": [
+    "vitest",
+    "vitest-config",
+    "vue3",
+    "testing",
+    "frontend-islands",
+    "shared-config"
+  ],
+  "peerDependencies": {
+    "vitest": "^4.0.8",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "jsdom": "^25.0.0"
+  }
+}

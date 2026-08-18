@@ -1,0 +1,14 @@
+query adminMemberRoles {
+  adminMemberRoles {
+    nodes {
+      id
+      name
+      description
+      enabledPermissions {
+        nodes {
+          name
+        }
+      }
+    }
+  }
+}

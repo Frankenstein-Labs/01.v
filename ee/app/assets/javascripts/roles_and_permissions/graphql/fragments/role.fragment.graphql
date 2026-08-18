@@ -1,0 +1,30 @@
+fragment Role on RoleInterface {
+  id
+  name
+  description
+  detailsPath
+
+  ... on StandardRole {
+    accessLevel
+  }
+
+  ... on MemberRole {
+    editPath
+    usersCount
+    dependentSecurityPolicies {
+      id @gl_introduced(version: "18.11.0")
+      name
+      editPath
+    }
+  }
+
+  ... on AdminMemberRole {
+    editPath
+    usersCount
+    ldapAdminRoleLinks {
+      nodes {
+        id
+      }
+    }
+  }
+}

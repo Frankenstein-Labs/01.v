@@ -1,0 +1,28 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getUsersQueuedForLicenseSeat($first: Int, $last: Int, $after: String, $before: String) {
+  selfManagedUsersQueuedForRolePromotion(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+  ) {
+    nodes {
+      user {
+        id
+        name
+        username
+        avatarUrl
+        webUrl
+        email: publicEmail
+        lastActivityOn
+      }
+      newAccessLevel {
+        stringValue
+      }
+    }
+    pageInfo {
+      ...PageInfo
+    }
+  }
+}

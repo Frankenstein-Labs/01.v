@@ -1,0 +1,23 @@
+#import "./fragments/project_compliance_standards_adherence.fragment.graphql"
+
+query projectComplianceProjectStandardsAdherence(
+  $fullPath: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $filters: ComplianceStandardsProjectAdherenceInput
+) {
+  container: project(fullPath: $fullPath) {
+    id
+    projectComplianceStandardsAdherence: complianceStandardsAdherence(
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      filters: $filters
+    ) {
+      ...ProjectComplianceStandardsAdherence
+    }
+  }
+}

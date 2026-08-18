@@ -1,0 +1,21 @@
+mutation createComplianceRequirement($input: CreateComplianceRequirementInput!) {
+  createComplianceRequirement(input: $input) {
+    requirement {
+      id
+      name
+      description
+      complianceRequirementsControls {
+        nodes {
+          id
+          name
+          controlType
+          externalControlName
+          externalUrl
+          expression
+          pingEnabled
+        }
+      }
+    }
+    errors
+  }
+}

@@ -1,0 +1,30 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getGroupProjects(
+  $fullPath: ID!
+  $search: String
+  $after: String
+  $projectIds: [ID!] = null
+  $withCount: Boolean = false
+) {
+  group(fullPath: $fullPath) {
+    id
+    projects(search: $search, after: $after, first: 100, includeSubgroups: true, ids: $projectIds) {
+      count @include(if: $withCount)
+      nodes {
+        id
+        name
+        fullPath
+        repository {
+          rootRef
+        }
+        group {
+          id
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

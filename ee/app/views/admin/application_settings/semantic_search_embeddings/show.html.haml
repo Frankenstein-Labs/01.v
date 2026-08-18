@@ -1,0 +1,37 @@
+- collection_heading = s_('SemanticSearch|Semantic search %{collection} embeddings').html_safe % { collection: collection_name(@collection_key) }
+
+- page_title collection_heading
+- breadcrumb_title collection_heading
+- add_to_breadcrumbs _('Search'), search_admin_application_settings_path(anchor: 'js-semantic-search-settings')
+- add_page_specific_style 'page_bundles/settings'
+
+= render ::Layouts::SettingsBlockComponent.new(collection_heading, testid: 'semantic-search-embeddings', expanded: true) do |c|
+  - c.with_description do
+    = s_('SemanticSearch|Set or update the embedding model and dimensions for the collection')
+  - c.with_body do
+    = render Pajamas::CardComponent.new do |card|
+      - card.with_body do
+        .gl-py-2
+          = render 'current_config_text_display', presenter: @presenter
+        - if @presenter.user_can_update_model?
+          .gl-py-2
+            = gitlab_ui_form_with method: :put,
+              url: admin_application_settings_semantic_search_embedding_path(@collection_key),
+              data: { testid: 'semantic-search-embeddings-form' } do |f|
+              = f.hidden_field :tested_model_metadata, value: @presenter.tested_model_metadata_json,
+                id: 'semantic-search-embeddings-tested-model'
+              = render 'embedding_model_inputs', f: f, presenter: @presenter, self_hosted_embedding_models: @self_hosted_embedding_models
+              = render 'chunking_strategy_inputs', f: f, presenter: @presenter
+              .gl-flex.gl-gap-2.gl-justify-end
+                = render Pajamas::ButtonComponent.new(type: :button,
+                    disabled: @presenter.disable_inputs?,
+                    button_options: { id: 'test-model-configuration-button', formaction: test_model_configuration_admin_application_settings_semantic_search_embedding_path(@collection_key) }) do
+                  = s_('SemanticSearch|Test model configuration')
+                = render Pajamas::ButtonComponent.new(type: :submit,
+                    variant: :confirm,
+                    disabled: @presenter.disable_inputs?,
+                    button_options: { data: { testid: 'semantic-search-embeddings-submit-button' } }) do
+                  - if @presenter.current_model.present?
+                    = s_('SemanticSearch|Update embeddings and start backfill process')
+                  - else
+                    = s_('SemanticSearch|Set embeddings')

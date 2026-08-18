@@ -1,0 +1,7 @@
+# @feature_category: virtual_registry
+
+mutation containerUpstreamCacheDelete($id: VirtualRegistriesContainerUpstreamID!) {
+  cacheDelete: containerUpstreamCacheDelete(input: { id: $id }) {
+    errors
+  }
+}

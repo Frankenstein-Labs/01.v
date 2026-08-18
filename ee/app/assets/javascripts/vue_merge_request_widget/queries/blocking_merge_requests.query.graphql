@@ -1,0 +1,47 @@
+query getBlockingMergeRequests($projectPath: ID!, $iid: String!) {
+  project(fullPath: $projectPath) {
+    id
+    mergeRequest(iid: $iid) {
+      id
+      blockingMergeRequests {
+        hiddenCount
+        totalCount
+        visibleMergeRequests {
+          id
+          iid
+          reference
+          milestone {
+            id
+            title
+            dueDate
+            startDate
+          }
+          assignees {
+            nodes {
+              id
+              name
+              username
+              webUrl
+              avatarUrl
+            }
+          }
+          headPipeline {
+            id
+            detailedStatus {
+              id
+              label
+              hasDetails
+              detailsPath
+              icon
+            }
+          }
+          createdAt
+          mergedAt
+          webUrl
+          state
+          title
+        }
+      }
+    }
+  }
+}

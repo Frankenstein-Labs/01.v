@@ -1,0 +1,42 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "term": {
+            "confidential": {
+              "_name": "filters:confidentiality:groups:user_filter",
+              "value": true
+            }
+          }
+        },
+        {
+          "bool": {
+            "should": [
+              {
+                "term": {
+                  "author_id": {
+                    "_name": "filters:confidentiality:groups:confidential:as_author",
+                    "value": __USER_ID__
+                  }
+                }
+              },
+              {
+                "term": {
+                  "assignee_id": {
+                    "_name": "filters:confidentiality:groups:confidential:as_assignee",
+                    "value": __USER_ID__
+                  }
+                }
+              }
+            ],
+            "minimum_should_match": 1
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

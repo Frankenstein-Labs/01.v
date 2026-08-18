@@ -1,0 +1,14 @@
+#import "./work_item_base.fragment.graphql"
+#import "./work_item_widgets.fragment.graphql"
+#import "ee_else_ce/work_items/graphql/work_item_features.fragment.graphql"
+
+# See the CE fragment for why `widgets` is skipped when the features field is enabled.
+fragment WorkItemMutationResult on WorkItem {
+  ...WorkItemBaseEE
+  widgets @skip(if: $useWorkItemFeatures) {
+    ...WorkItemWidgets
+  }
+  features @include(if: $useWorkItemFeatures) {
+    ...WorkItemFeatures
+  }
+}

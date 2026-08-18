@@ -1,0 +1,43 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "bool": {
+            "_name": "filters:level:group",
+            "minimum_should_match": 1,
+            "should": [
+              {
+                "prefix": {
+                  "traversal_ids": {
+                    "_name": "filters:level:group:ancestry_filter:descendants",
+                    "value": "SEARCHED_GROUP"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "bool": {
+            "should": [
+              {
+                "terms": {
+                  "_name": "filters:permissions:group:repository_access_level:enabled_or_private",
+                  "repository_access_level": [
+                    20,
+                    10
+                  ]
+                }
+              }
+            ],
+            "minimum_should_match": 1
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

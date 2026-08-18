@@ -1,0 +1,17 @@
+import os
+
+# Run a command using os.system
+command = "echo Hello, World!"
+os.system(command)
+
+# Capture the output of the command using subprocess
+result = os.popen(command).read()
+
+# Print the result
+print("Output from command:", result)
+
+class Foo:
+    def bar(self):
+        response = requests.post(self._share_function_endpoint,
+                                 json={"member": self._target_email,
+                                       "authentication": self._authentication_token}).json()

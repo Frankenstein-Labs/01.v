@@ -1,0 +1,16 @@
+---
+description: User executes a query in the Orbit explorer query panel
+internal_events: true
+action: click_orbit_execute_query
+identifiers:
+- user
+- namespace
+- project
+product_group: knowledge_graph
+product_categories:
+- knowledge_graph
+milestone: '19.1'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/237283
+tiers:
+- premium
+- ultimate

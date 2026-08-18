@@ -1,0 +1,52 @@
+{
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../../../../../spec/fixtures/api/schemas/pipeline_schedule.json"
+    },
+    {
+      "properties": {
+        "owner": {
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "public_email": {
+              "type": ["string", "null"]
+            },
+            "id": {
+              "type": "integer"
+            },
+            "state": {
+              "type": "string"
+            },
+            "locked": {
+              "type": "boolean"
+            },
+            "avatar_url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "web_url": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "username",
+            "state",
+            "locked",
+            "avatar_url",
+            "web_url"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+# @feature_category: team_planning
+mutation destroyIterationCadence($id: IterationsCadenceID!) {
+  iterationCadenceDestroy(input: { id: $id }) {
+    errors
+  }
+}

@@ -1,0 +1,12 @@
+# @feature_category: knowledge_graph
+mutation orbitUpdate($input: OrbitUpdateInput!) {
+  orbitUpdate(input: $input) {
+    group {
+      id
+      name
+      fullPath
+      knowledgeGraphEnabled
+    }
+    errors
+  }
+}

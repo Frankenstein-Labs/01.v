@@ -1,0 +1,10 @@
+- role = @user.user_member_role
+
+#js-user-type{ data: {
+  user_type: @user.access_level,
+  admin_role: role && { id: role.member_role.id, name: role.member_role.name, ldap: role.ldap }.to_json,
+  is_current_user: is_current_user.to_s,
+  license_allows_auditor_user: license_allows_auditor_user?.to_s,
+  manage_roles_path: admin_application_settings_roles_and_permissions_path
+} }
+  = gl_loading_icon(size: 'md', css_class: 'gl-mb-6 gl-inline-block')

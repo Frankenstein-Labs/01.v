@@ -1,0 +1,54 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getSppLinkedGroups(
+  $ids: [ID!]
+  $fullPath: ID!
+  $search: String = ""
+  $descendantSearch: String = ""
+  $after: String = ""
+  $afterDescendants: String = ""
+  $includeParentDescendants: Boolean = false
+  $topLevelOnly: Boolean = false
+  $withCount: Boolean = false
+) {
+  project(fullPath: $fullPath) {
+    id
+    securityPolicyProjectLinkedGroups(
+      ids: $ids
+      topLevelOnly: $topLevelOnly
+      search: $search
+      first: 100
+      after: $after
+    ) {
+      count @include(if: $withCount)
+      nodes {
+        id
+        name
+        fullPath
+        fullName
+        avatarUrl
+        descendantGroups(
+          includeParentDescendants: $includeParentDescendants
+          search: $descendantSearch
+          first: 100
+          after: $afterDescendants
+        ) {
+          count @include(if: $withCount)
+          nodes {
+            id
+            name
+            fullPath
+            fullName
+            avatarUrl
+          }
+          pageInfo {
+            ...PageInfo
+          }
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

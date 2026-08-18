@@ -1,0 +1,36 @@
+#import "~/work_items/graphql/work_item_metadata.fragment.graphql"
+
+# @feature_category: team_planning
+query workItemMetadataEE($fullPath: ID!) {
+  namespace(fullPath: $fullPath) {
+    id
+    name
+    availableFeatures {
+      ...WorkItemAvailableFeatures
+      hasWorkItemStatusFeature
+    }
+    linkPaths {
+      ...WorkItemLinkPaths
+      epicsList
+      labelsFetch
+      issuesSettings
+      epicsListPath
+    }
+    userPermissions {
+      createWorkItem
+      adminLabel
+      createProjects
+      bulkAdminEpic
+      adminIssue
+      adminProject
+      importWorkItems
+      readCrmContact
+      readCrmOrganization
+      createSavedView
+    }
+    metadata {
+      ...WorkItemMetadata
+    }
+    subscribedSavedViewLimit
+  }
+}

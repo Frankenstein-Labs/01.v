@@ -1,0 +1,6 @@
+mutation updateExistingComplianceFramework($input: UpdateComplianceFrameworkInput!) {
+  updateComplianceFramework(input: $input) {
+    clientMutationId
+    errors
+  }
+}

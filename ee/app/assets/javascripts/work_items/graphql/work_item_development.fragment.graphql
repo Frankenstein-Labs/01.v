@@ -1,0 +1,36 @@
+#import "~/work_items/graphql/merge_request.fragment.graphql"
+
+fragment WorkItemDevelopmentFragment on WorkItemWidgetDevelopment {
+  type
+  willAutoCloseByMergeRequest
+  featureFlags {
+    nodes {
+      id
+      active
+      name
+      path
+      reference
+    }
+  }
+  relatedBranches {
+    nodes {
+      name
+      comparePath
+    }
+  }
+  relatedMergeRequests {
+    nodes {
+      ...MergeRequestFragment
+    }
+  }
+  closingMergeRequests {
+    count
+    nodes {
+      id
+      fromMrDescription
+      mergeRequest {
+        ...MergeRequestFragment
+      }
+    }
+  }
+}

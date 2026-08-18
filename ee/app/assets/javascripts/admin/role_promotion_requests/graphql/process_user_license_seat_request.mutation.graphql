@@ -1,0 +1,6 @@
+mutation processUserBillablePromotionRequest($userId: UserID!, $status: MemberApprovalStatusType!) {
+  processUserBillablePromotionRequest(input: { userId: $userId, status: $status }) {
+    errors
+    result
+  }
+}

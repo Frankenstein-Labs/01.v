@@ -1,0 +1,36 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+# @feature_category: security_testing_configuration
+query ProjectsByScannerStatus(
+  $namespaceId: NamespaceID!
+  $hasScanners: Boolean
+  $hasFailedOrWarning: Boolean
+  $hasStale: Boolean
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+) {
+  namespaceSecurityProjects(
+    namespaceId: $namespaceId
+    includeSubgroups: true
+    hasScanners: $hasScanners
+    hasFailedOrWarning: $hasFailedOrWarning
+    hasStale: $hasStale
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+  ) {
+    pageInfo {
+      ...PageInfo
+    }
+    nodes {
+      id
+      name
+      fullPath
+      avatarUrl
+      webPath
+    }
+  }
+}

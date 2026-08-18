@@ -1,0 +1,15 @@
+query projectComplianceFrameworks($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    complianceFrameworks {
+      nodes {
+        id
+        name
+        description
+        color
+        default
+        namespaceId
+      }
+    }
+  }
+}

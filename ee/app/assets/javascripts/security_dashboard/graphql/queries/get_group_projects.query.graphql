@@ -1,0 +1,16 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query vulnerabilityGetGroupProjects($fullPath: ID!, $search: String, $after: String) {
+  group(fullPath: $fullPath) {
+    id
+    projects(search: $search, after: $after, first: 100, includeSubgroups: true) {
+      nodes {
+        name
+        id
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+#import "~/graphql_shared/fragments/user.fragment.graphql"
+
+fragment RelatedIssue on Issue {
+  id
+  title
+  state
+  description
+  confidential
+  createdAt
+  closedAt
+  webUrl
+  dueDate
+  reference
+  weight
+  assignees {
+    nodes {
+      ...User
+    }
+  }
+  milestone {
+    expired
+    id
+    title
+    state
+    startDate
+    dueDate
+  }
+}

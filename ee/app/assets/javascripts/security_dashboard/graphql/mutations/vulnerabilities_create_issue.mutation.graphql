@@ -1,0 +1,8 @@
+mutation vulnerabilitiesCreateIssue($project: ProjectID!, $vulnerabilityIds: [VulnerabilityID!]!) {
+  vulnerabilitiesCreateIssue(input: { project: $project, vulnerabilityIds: $vulnerabilityIds }) {
+    issue {
+      id
+      webUrl
+    }
+  }
+}

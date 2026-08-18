@@ -1,0 +1,10 @@
+# @feature_category: team_planning
+mutation LifecycleRemove($input: LifecycleDeleteInput!) {
+  lifecycleDelete(input: $input) {
+    errors
+    lifecycle {
+      id
+      name
+    }
+  }
+}

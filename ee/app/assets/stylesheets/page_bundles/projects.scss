@@ -1,0 +1,72 @@
+@import '../../../../../app/assets/stylesheets/page_bundles/projects';
+
+.project-mirror-settings {
+  .known-hosts {
+    font-family: $monospace-font;
+  }
+
+  .fingerprints-list {
+    code {
+      display: block;
+      padding: 8px;
+      margin-bottom: 5px;
+    }
+
+    &.invalidate {
+      text-decoration: line-through;
+    }
+  }
+}
+
+.git-clone-holder {
+  .btn-geo {
+    border-left: 0;
+  }
+}
+
+.project-template {
+  .template-header,
+  .template-option {
+    padding: $gl-padding $gl-padding-8;
+  }
+
+  .template-header {
+    cursor: pointer;
+
+    .template-options-icon-container {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .template-group-options {
+    &.expanded {
+      .template-option {
+        display: flex;
+      }
+
+      .options-expanded-icon {
+        display: block;
+      }
+    }
+
+    .options-expanded-icon,
+    &.expanded .options-collapsed-icon {
+      display: none;
+    }
+  }
+
+  .template-option {
+    display: none;
+  }
+
+  .template-input-group {
+    .avatar {
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      font-size: $gl-font-size;
+      margin-right: 0;
+    }
+  }
+}

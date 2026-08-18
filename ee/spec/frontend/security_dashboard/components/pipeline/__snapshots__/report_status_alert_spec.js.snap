@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ee/security_dashboard/components/pipeline/report_status_alert.vue renders the component correctly 1`] = `
+<gl-alert-stub
+  dismisslabel="Dismiss"
+  headerlevel="2"
+  politeness="polite"
+  primarybuttonlink=""
+  primarybuttontext=""
+  secondarybuttonlink=""
+  secondarybuttontext=""
+  title=""
+  variant="info"
+>
+  <strong
+    role="heading"
+  >
+    Report has expired
+  </strong>
+  <p
+    class="gl-mt-3"
+  >
+    The security report for this pipeline has
+    <gl-link-stub
+      href="/help/user/application_security/detect/security_scanning_results"
+      target="_blank"
+    >
+      expired
+    </gl-link-stub>
+    . Re-run the pipeline to generate a new security report.
+  </p>
+</gl-alert-stub>
+`;

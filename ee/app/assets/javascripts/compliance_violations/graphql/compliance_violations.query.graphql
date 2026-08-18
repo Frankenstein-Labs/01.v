@@ -1,0 +1,66 @@
+query groupComplianceViolations(
+  $fullPath: ID!
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+  $filters: ProjectComplianceViolationFilterInput
+) {
+  group(fullPath: $fullPath) {
+    id
+    name
+    projectComplianceViolations(
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+      filters: $filters
+    ) {
+      nodes {
+        id
+        createdAt
+        project {
+          id
+          name
+          fullPath
+        }
+        complianceControl {
+          id
+          name
+          complianceRequirement {
+            id
+            name
+            framework {
+              id
+              name
+              color
+              default
+              description
+            }
+          }
+        }
+        status
+        auditEvent {
+          id
+          createdAt
+          details
+          eventName
+          entityType
+          targetDetails
+          targetType
+          author {
+            id
+            name
+            username
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+}

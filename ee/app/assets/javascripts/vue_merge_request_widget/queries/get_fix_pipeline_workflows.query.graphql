@@ -1,0 +1,14 @@
+# @feature_category: continuous_integration
+
+query getFixPipelineWorkflows($projectPath: ID!, $search: String!) {
+  project(fullPath: $projectPath) {
+    id
+    duoWorkflowWorkflows(search: $search, type: "fix_pipeline/v1", first: 1) {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+  }
+}

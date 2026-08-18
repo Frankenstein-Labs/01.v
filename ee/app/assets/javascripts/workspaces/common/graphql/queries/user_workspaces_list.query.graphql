@@ -1,0 +1,29 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "../fragments/workspace_item.fragment.graphql"
+
+# @feature_category: workspaces
+query userWorkspacesList(
+  $first: Int
+  $before: String
+  $after: String
+  $includeActualStates: [String!]
+  $projectIds: [ProjectID!]
+) {
+  currentUser {
+    id
+    workspaces(
+      first: $first
+      before: $before
+      after: $after
+      includeActualStates: $includeActualStates
+      projectIds: $projectIds
+    ) {
+      nodes {
+        ...WorkspaceItem
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

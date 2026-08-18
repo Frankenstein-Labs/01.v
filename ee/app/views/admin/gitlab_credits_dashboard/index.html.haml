@@ -1,0 +1,11 @@
+- title_text = s_('UsageBilling|GitLab Credits dashboard')
+- page_title title_text
+- breadcrumb_title title_text
+
+#js-instance-usage-billing-dashboard{ data: {
+  user_usage_path: admin_gitlab_credits_dashboard_user_path('__USERNAME__'),
+  is_saas: ::Gitlab::Saas.feature_available?(:gitlab_com_subscriptions).to_s,
+  is_free: (!License.billable_license).to_s,
+  upgrade_button_path: promo_pricing_url(query: { deployment: 'self-managed-deployment' }),
+  purchase_credits_path: subscription_portal_self_managed_purchase_credits_url
+} }

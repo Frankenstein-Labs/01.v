@@ -1,0 +1,11 @@
+#import "ee_else_ce/boards/graphql/issue.fragment.graphql"
+#import "../epic_detailed.fragment.graphql"
+
+# @feature_category: portfolio_management
+query activeBoardItemEE($isIssue: Boolean = true) {
+  activeBoardItem @client {
+    ...Issue @include(if: $isIssue)
+    ...EpicDetailed @skip(if: $isIssue)
+    listId
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "packages": [
+    {
+      "name": "composer/ca-bundle",
+      "version": "v1.5.1",
+      "source": {
+        "type": "git"
+      },
+      "dist": {
+        "type": "zip"
+      },
+      "require": {
+        "ext-openssl": "*",
+        "ext-pcre": "*"
+      },
+      "require-dev": {
+        "phpstan/phpstan": "^1.10",
+        "psr/log": "^1.0 || ^2.0 || ^3.0"
+      }
+    },
+    {
+      "name": "composer/metadata-minifier",
+      "version": "1.0.0",
+      "source": {
+        "type": "git"
+      },
+      "dist": {
+        "type": "zip"
+      },
+      "require": {
+        "ext-openssl": "*",
+        "ext-pcre": "*"
+      },
+      "require-dev": {
+        "phpstan/phpstan": "^1.10",
+        "psr/log": "^1.0 || ^2.0 || ^3.0"
+      }
+    },
+    {
+      "name": "lib/with-integer-version",
+      "version": 20240308,
+      "source": {
+        "type": "git"
+      }
+    }
+  ]
+}

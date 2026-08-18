@@ -1,0 +1,11 @@
+#import "./iteration_cadence.fragment.graphql"
+
+# @feature_category: team_planning
+mutation createIterationCadence($input: IterationCadenceCreateInput!) {
+  result: iterationCadenceCreate(input: $input) {
+    iterationCadence {
+      ...IterationCadence
+    }
+    errors
+  }
+}

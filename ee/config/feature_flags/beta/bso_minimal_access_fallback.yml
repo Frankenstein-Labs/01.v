@@ -1,0 +1,10 @@
+---
+name: bso_minimal_access_fallback
+description: 'Fallback users to minimal access when block seat overages is enabled and no seats available'
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/513219
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/201940
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/592790
+milestone: '18.4'
+type: beta
+group: group::seat management
+default_enabled: true

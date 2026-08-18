@@ -1,0 +1,284 @@
+{
+  "queryType": "regularQuery",
+  "results": [
+    {
+      "query": {
+        "limit": 100,
+        "measures": [
+          "Sessions.count",
+          "Sessions.repeatPercent"
+        ],
+        "timeDimensions": [
+          {
+            "dimension": "Sessions.startAt",
+            "granularity": "day"
+          }
+        ],
+        "filters": [
+          {
+            "member": "Sessions.startAt",
+            "operator": "inDateRange",
+            "values": [
+              "2023-01-01",
+              "2023-07-01"
+            ]
+          }
+        ],
+        "timezone": "UTC",
+        "order": [
+
+        ],
+        "dimensions": [
+
+        ],
+        "rowLimit": 100,
+        "queryType": "regularQuery"
+      },
+      "data": [
+        {
+          "Sessions.startAt.day": "2023-05-30T00:00:00.000",
+          "Sessions.startAt": "2023-05-30T00:00:00.000",
+          "Sessions.count": "1",
+          "Sessions.repeatPercent": "0"
+        },
+        {
+          "Sessions.startAt.day": "2023-06-05T00:00:00.000",
+          "Sessions.startAt": "2023-06-05T00:00:00.000",
+          "Sessions.count": "1",
+          "Sessions.repeatPercent": "100"
+        },
+        {
+          "Sessions.startAt.day": "2023-06-06T00:00:00.000",
+          "Sessions.startAt": "2023-06-06T00:00:00.000",
+          "Sessions.count": "1",
+          "Sessions.repeatPercent": "100"
+        }
+      ],
+      "lastRefreshTime": "2023-07-05T13:46:59.074Z",
+      "refreshKeyValues": [
+        [
+          {
+            "refresh_key": "168856100"
+          }
+        ]
+      ],
+      "usedPreAggregations": {
+      },
+      "transformedQuery": {
+        "sortedDimensions": [
+          "Sessions.startAt"
+        ],
+        "sortedTimeDimensions": [
+          [
+            "Sessions.startAt",
+            "day"
+          ]
+        ],
+        "timeDimensions": [
+          [
+            "Sessions.startAt",
+            "day"
+          ]
+        ],
+        "measures": [
+          "Sessions.count",
+          "Sessions.repeatPercent"
+        ],
+        "leafMeasureAdditive": true,
+        "leafMeasures": [
+          "Sessions.count",
+          "Sessions.repeatCount"
+        ],
+        "measureToLeafMeasures": {
+          "Sessions.count": [
+            {
+              "measure": "Sessions.count",
+              "additive": true,
+              "type": "count"
+            }
+          ],
+          "Sessions.repeatPercent": [
+            {
+              "measure": "Sessions.repeatCount",
+              "additive": true,
+              "type": "count"
+            },
+            {
+              "measure": "Sessions.count",
+              "additive": true,
+              "type": "count"
+            }
+          ]
+        },
+        "hasNoTimeDimensionsWithoutGranularity": true,
+        "allFiltersWithinSelectedDimensions": false,
+        "isAdditive": false,
+        "granularityHierarchies": {
+          "year": [
+            "year",
+            "quarter",
+            "month",
+            "month",
+            "day",
+            "hour",
+            "minute",
+            "second"
+          ],
+          "quarter": [
+            "quarter",
+            "month",
+            "day",
+            "hour",
+            "minute",
+            "second"
+          ],
+          "month": [
+            "month",
+            "day",
+            "hour",
+            "minute",
+            "second"
+          ],
+          "week": [
+            "week",
+            "day",
+            "hour",
+            "minute",
+            "second"
+          ],
+          "day": [
+            "day",
+            "hour",
+            "minute",
+            "second"
+          ],
+          "hour": [
+            "hour",
+            "minute",
+            "second"
+          ],
+          "minute": [
+            "minute",
+            "second"
+          ],
+          "second": [
+            "second"
+          ]
+        },
+        "hasMultipliedMeasures": false,
+        "hasCumulativeMeasures": false,
+        "windowGranularity": null,
+        "filterDimensionsSingleValueEqual": null,
+        "ownedDimensions": [
+          "Sessions.startAt"
+        ],
+        "ownedTimeDimensionsWithRollupGranularity": [
+          [
+            "Sessions.startAt",
+            "day"
+          ]
+        ],
+        "ownedTimeDimensionsAsIs": [
+          [
+            "Sessions.startAt",
+            "day"
+          ]
+        ]
+      },
+      "requestId": "54a673d5-93a8-4f17-85ed-9626f22aa6bc-span-1",
+      "annotation": {
+        "measures": {
+          "Sessions.count": {
+            "title": "Sessions Count",
+            "shortTitle": "Count",
+            "type": "number",
+            "drillMembers": [
+
+            ],
+            "drillMembersGrouped": {
+              "measures": [
+
+              ],
+              "dimensions": [
+
+              ]
+            }
+          },
+          "Sessions.repeatPercent": {
+            "title": "Sessions Repeat Percent",
+            "shortTitle": "Repeat Percent",
+            "description": "Percent of Repeat Sessions",
+            "type": "number",
+            "format": "percent",
+            "drillMembers": [
+
+            ],
+            "drillMembersGrouped": {
+              "measures": [
+
+              ],
+              "dimensions": [
+
+              ]
+            }
+          }
+        },
+        "dimensions": {
+        },
+        "segments": {
+        },
+        "timeDimensions": {
+          "Sessions.startAt.day": {
+            "title": "Sessions Start at",
+            "shortTitle": "Start at",
+            "type": "time"
+          },
+          "Sessions.startAt": {
+            "title": "Sessions Start at",
+            "shortTitle": "Start at",
+            "type": "time"
+          }
+        }
+      },
+      "dataSource": "default",
+      "dbType": "clickhouse",
+      "extDbType": "cubestore",
+      "external": false,
+      "slowQuery": false,
+      "total": null
+    }
+  ],
+  "pivotQuery": {
+    "limit": 100,
+    "measures": [
+      "Sessions.count",
+      "Sessions.repeatPercent"
+    ],
+    "timeDimensions": [
+      {
+        "dimension": "Sessions.startAt",
+        "granularity": "day"
+      }
+    ],
+    "filters": [
+      {
+        "member": "Sessions.startAt",
+        "operator": "inDateRange",
+        "values": [
+          "2023-01-01",
+          "2023-07-01"
+        ]
+      }
+    ],
+    "timezone": "UTC",
+    "order": [
+
+    ],
+    "dimensions": [
+
+    ],
+    "rowLimit": 100,
+    "queryType": "regularQuery"
+  },
+  "slowQuery": false
+}

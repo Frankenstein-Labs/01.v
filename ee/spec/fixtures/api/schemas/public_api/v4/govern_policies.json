@@ -1,0 +1,6 @@
+{
+  "type": "array",
+  "items": {
+    "$ref": "govern_policy.json"
+  }
+}

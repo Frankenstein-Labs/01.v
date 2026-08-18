@@ -1,0 +1,10 @@
+---
+name: security_inventory_filtering
+description:
+feature_issue_url: https://gitlab.com/groups/gitlab-org/-/epics/16484
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/196057
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/552224
+milestone: '18.5'
+group: group::security platform management
+type: beta
+default_enabled: true

@@ -1,0 +1,47 @@
+#import "ee/graphql_shared/fragments/vulnerability_detail.fragment.graphql"
+
+# @feature_category: code_review_workflow
+query getMrSastReport($fullPath: ID!, $iid: String!) {
+  project(fullPath: $fullPath) {
+    id
+    mergeRequest(iid: $iid) {
+      id
+      sastReport: findingReportsComparer(reportType: SAST) {
+        report {
+          added {
+            identifiers {
+              externalId
+              externalType
+              name
+              url
+            }
+            uuid
+            title
+            unverified
+            description
+            state
+            severity
+            foundByPipelineIid
+            location {
+              ... on VulnerabilityLocationSast {
+                file
+                startLine
+                endLine
+                vulnerableClass
+                vulnerableMethod
+                blobPath
+              }
+            }
+            details {
+              ...NonNestedReportTypes
+              ...List
+              ...Table
+              ...NamedList
+              ...CodeFlows
+            }
+          }
+        }
+      }
+    }
+  }
+}

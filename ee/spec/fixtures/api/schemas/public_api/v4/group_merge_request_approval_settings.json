@@ -1,0 +1,118 @@
+{
+  "type": "object",
+  "properties": {
+    "allow_author_approval": {
+      "value": {
+        "type": "boolean"
+      },
+      "locked": {
+        "type": "boolean"
+      },
+      "inherited_from": {
+        "type": "string"
+      },
+      "enforced_by_policy": {
+        "type": "boolean"
+      }
+    },
+    "allow_committer_approval": {
+      "value": {
+        "type": "boolean"
+      },
+      "locked": {
+        "type": "boolean"
+      },
+      "inherited_from": {
+        "type": "string"
+      },
+      "enforced_by_policy": {
+        "type": "boolean"
+      }
+    },
+    "allow_overrides_to_approver_list_per_merge_request": {
+      "value": {
+        "type": "boolean"
+      },
+      "locked": {
+        "type": "boolean"
+      },
+      "inherited_from": {
+        "type": "string"
+      },
+      "enforced_by_policy": {
+        "type": "boolean"
+      }
+    },
+    "retain_approvals_on_push": {
+      "value": {
+        "type": "boolean"
+      },
+      "locked": {
+        "type": "boolean"
+      },
+      "inherited_from": {
+        "type": "string"
+      },
+      "enforced_by_policy": {
+        "type": "boolean"
+      }
+    },
+    "selective_code_owner_removals": {
+      "value": {
+        "type": "boolean"
+      },
+      "locked": {
+        "type": "boolean"
+      },
+      "inherited_from": {
+        "type": "string"
+      },
+      "enforced_by_policy": {
+        "type": "boolean"
+      }
+    },
+    "require_password_to_approve": {
+      "value": {
+        "type": "boolean"
+      },
+      "locked": {
+        "type": "boolean"
+      },
+      "inherited_from": {
+        "type": "string"
+      },
+      "enforced_by_policy": {
+        "type": "boolean"
+      }
+    },
+    "require_saml_auth_to_approve": {
+      "value": {
+        "type": "boolean"
+      },
+      "locked": {
+        "type": "boolean"
+      },
+      "inherited_from": {
+        "type": "string"
+      },
+      "enforced_by_policy": {
+        "type": "boolean"
+      }
+    },
+    "require_reauthentication_to_approve": {
+      "value": {
+        "type": "boolean"
+      },
+      "locked": {
+        "type": "boolean"
+      },
+      "inherited_from": {
+        "type": "string"
+      },
+      "enforced_by_policy": {
+        "type": "boolean"
+      }
+    }
+  },
+  "additionalProperties": false
+}

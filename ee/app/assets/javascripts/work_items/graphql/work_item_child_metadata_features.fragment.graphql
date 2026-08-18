@@ -1,0 +1,37 @@
+#import "~/work_items/graphql/base_work_item_child_metadata_features.fragment.graphql"
+#import "ee/work_items/list/graphql/work_item_feature_status.fragment.graphql"
+
+fragment WorkItemChildMetadataFeatures on WorkItemFeatures {
+  ...BaseWorkItemChildMetadataFeatures
+  weight {
+    weight
+    rolledUpWeight
+  }
+  healthStatus {
+    healthStatus
+    rolledUpHealthStatus {
+      count
+      healthStatus
+    }
+  }
+  progress {
+    progress
+    updatedAt
+  }
+  iteration {
+    iteration {
+      id
+      title
+      startDate
+      dueDate
+      webUrl
+      iterationCadence {
+        id
+        title
+      }
+    }
+  }
+  status {
+    ...WorkItemFeatureStatus
+  }
+}

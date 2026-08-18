@@ -1,0 +1,22 @@
+mutation createSecurityAttributes(
+  $categoryId: SecurityCategoryID!
+  $namespaceId: NamespaceID!
+  $attributes: [SecurityAttributeInput!]!
+) {
+  securityAttributeCreate(
+    input: { categoryId: $categoryId, namespaceId: $namespaceId, attributes: $attributes }
+  ) {
+    securityAttributes {
+      id
+      name
+      description
+      color
+      editableState
+      securityCategory {
+        id
+        name
+      }
+    }
+    errors
+  }
+}

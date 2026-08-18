@@ -1,0 +1,24 @@
+#import "../fragments/spep_test_run.fragment.graphql"
+# @feature_category: security_policy_management
+query projectPolicyTestRuns($fullPath: ID!, $first: Int = 10) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    securityPolicies(type: PIPELINE_EXECUTION_SCHEDULE_POLICY, relationship: INHERITED) {
+      nodes {
+        id
+        name
+        linkedProjectsCount @gl_introduced(version: "19.1.0")
+        policyAttributes {
+          ... on PipelineExecutionScheduledPolicyAttributesType {
+            scheduleTimeWindowSeconds @gl_introduced(version: "19.1.0")
+          }
+        }
+        testRuns(first: $first) {
+          nodes {
+            ...SpepTestRun
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+query getInstanceGoogleCloudLoggingDestinations {
+  instanceGoogleCloudLoggingConfigurations {
+    nodes {
+      id
+      name
+      logIdName
+      googleProjectIdName
+      clientEmail
+      active
+    }
+  }
+}

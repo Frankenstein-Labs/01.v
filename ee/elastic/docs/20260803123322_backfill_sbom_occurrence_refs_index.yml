@@ -1,0 +1,10 @@
+---
+name: BackfillSbomOccurrenceRefsIndex
+version: '20260803123322'
+description: Runs the first backfill for sbom_occurrence_refs index
+group: group::security foundations
+milestone: '19.3'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/248303
+obsolete: false
+marked_obsolete_by_url:
+marked_obsolete_in_milestone:

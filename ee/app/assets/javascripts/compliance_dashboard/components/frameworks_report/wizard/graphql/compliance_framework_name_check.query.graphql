@@ -1,0 +1,12 @@
+# @feature_category: compliance_management
+query complianceFrameworkNameCheck($fullPath: ID!, $search: String) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    complianceFrameworks(search: $search, first: 50) {
+      nodes {
+        id
+        name
+      }
+    }
+  }
+}

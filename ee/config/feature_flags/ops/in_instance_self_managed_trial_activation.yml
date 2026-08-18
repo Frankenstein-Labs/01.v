@@ -1,0 +1,9 @@
+---
+name: in_instance_self_managed_trial_activation
+feature_issue_url: https://gitlab.com/gitlab-org/customers-gitlab-com/-/work_items/16943
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/232188
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/597450
+milestone: '19.0'
+group: group::acquisition
+type: ops
+default_enabled: false

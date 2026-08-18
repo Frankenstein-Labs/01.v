@@ -1,0 +1,10 @@
+---
+name: optimized_codeowners_pattern_matching
+description:
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/594073
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/238371
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/601529
+milestone: '19.1'
+group: group::source code
+type: gitlab_com_derisk
+default_enabled: false

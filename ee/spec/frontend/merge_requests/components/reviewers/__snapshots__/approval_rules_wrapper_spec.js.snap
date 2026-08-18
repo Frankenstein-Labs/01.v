@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Reviewer drawer approval rules wrapper component renders loading skeleton 1`] = `
+<div>
+  <div
+    class="!gl-max-w-30 gl-animate-skeleton-loader gl-h-4 gl-mb-3 gl-rounded-base"
+  />
+  <div
+    class="!gl-max-w-30 gl-animate-skeleton-loader gl-h-4 gl-mb-3 gl-rounded-base"
+  />
+  <div
+    class="!gl-max-w-30 gl-animate-skeleton-loader gl-h-4 gl-mb-3 gl-rounded-base"
+  />
+  <div
+    class="!gl-max-w-30 gl-animate-skeleton-loader gl-h-4 gl-mb-3 gl-rounded-base"
+  />
+</div>
+`;

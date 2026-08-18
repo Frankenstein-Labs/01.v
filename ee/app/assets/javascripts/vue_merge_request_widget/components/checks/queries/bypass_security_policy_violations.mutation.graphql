@@ -1,0 +1,19 @@
+mutation bypassSecurityPolicyViolations(
+  $comment: String!
+  $dismissalTypes: [DismissalType!]!
+  $iid: String!
+  $projectPath: ID!
+  $securityPolicyIds: [ID!]!
+) {
+  dismissPolicyViolations(
+    input: {
+      comment: $comment
+      dismissalTypes: $dismissalTypes
+      iid: $iid
+      projectPath: $projectPath
+      securityPolicyIds: $securityPolicyIds
+    }
+  ) {
+    errors
+  }
+}

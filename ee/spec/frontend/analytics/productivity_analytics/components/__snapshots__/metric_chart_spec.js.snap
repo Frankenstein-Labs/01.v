@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MetricChart component template when isLoading is false and chart data is empty matches the snapshot 1`] = `
+<div>
+  <gl-alert-stub
+    dismisslabel="Dismiss"
+    headerlevel="2"
+    politeness="polite"
+    primarybuttonlink=""
+    primarybuttontext=""
+    secondarybuttonlink=""
+    secondarybuttontext=""
+    title=""
+    variant="info"
+  >
+    There is no data available. Please change your selection.
+  </gl-alert-stub>
+</div>
+`;
+
+exports[`MetricChart component template when isLoading is false and chartData is not empty and metricTypes exist matches the snapshot 1`] = `
+<div>
+  <gl-collapsible-listbox-stub
+    category="primary"
+    class="@sm/panel:gl-w-auto gl-mb-4 gl-w-full metric-dropdown"
+    fluidwidth="true"
+    headertext=""
+    icon=""
+    ischeckcentered="true"
+    items="[object Object],[object Object]"
+    noresultstext="No results found"
+    placement="bottom-start"
+    positioningstrategy="absolute"
+    resetbuttonlabel=""
+    searchplaceholder="Search"
+    selected=""
+    showselectallbuttonlabel=""
+    size="medium"
+    sronlyresultslabel="[Function]"
+    toggleclass="dropdown-menu-toggle !gl-w-full"
+    toggletext="Please select a metric"
+    variant="default"
+  />
+  <div>
+    mockChart
+  </div>
+</div>
+`;
+
+exports[`MetricChart component template when isLoading is true matches the snapshot 1`] = `
+<div>
+  <gl-loading-icon-stub
+    class="!gl-my-6 !gl-py-6"
+    color="dark"
+    label="Loading"
+    size="lg"
+    variant="spinner"
+  />
+</div>
+`;

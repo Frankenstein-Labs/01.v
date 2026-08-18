@@ -1,0 +1,22 @@
+#import "../fragments/note.fragment.graphql"
+
+mutation securityDashboardCreateNote(
+  $noteableId: NoteableID!
+  $discussionId: DiscussionID
+  $internal: Boolean
+  $body: String!
+) {
+  createNote(
+    input: {
+      noteableId: $noteableId
+      body: $body
+      internal: $internal
+      discussionId: $discussionId
+    }
+  ) {
+    errors
+    note {
+      ...SecurityDashboardNote
+    }
+  }
+}

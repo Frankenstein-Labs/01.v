@@ -1,0 +1,680 @@
+import { s__ } from '~/locale';
+import { idAsOption } from './helpers';
+
+export const ANY_REPORT_TYPE = 'any';
+
+export const TRIGGER_TYPES = [
+  {
+    id: 'merge_request',
+    category: s__('SecurityOrchestration|Code'),
+    label: s__('SecurityOrchestration|Merge Request'),
+    description: s__(
+      'SecurityOrchestration|When a merge request is opened, updated, or ready for review',
+    ),
+    icon: 'git-merge',
+    fields: [
+      {
+        key: 'events',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Events'),
+        options: [
+          idAsOption('opened'),
+          idAsOption('updated'),
+          { id: 'ready_for_review', label: s__('SecurityOrchestration|ready for review') },
+          idAsOption('merged'),
+          idAsOption('closed'),
+        ],
+      },
+      {
+        key: 'targetBranch',
+        type: 'text',
+        label: s__('SecurityOrchestration|Target Branch'),
+        placeholder: s__('SecurityOrchestration|e.g. main, release/** (leave empty for all)'),
+      },
+    ],
+  },
+  {
+    id: 'pipeline_triggered',
+    category: s__('SecurityOrchestration|CI/CD'),
+    label: s__('SecurityOrchestration|Pipeline Triggered'),
+    description: s__('SecurityOrchestration|When a CI/CD pipeline is triggered'),
+    icon: 'pipeline',
+    fields: [
+      {
+        key: 'sources',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Pipeline Source'),
+        options: [
+          idAsOption('push'),
+          idAsOption('merge_request_event'),
+          idAsOption('schedule'),
+          idAsOption('web'),
+          idAsOption('api'),
+          idAsOption('trigger'),
+        ],
+      },
+      {
+        key: 'branchPattern',
+        type: 'text',
+        label: s__('SecurityOrchestration|Branch/Tag Pattern'),
+        placeholder: s__('SecurityOrchestration|e.g., main, v*'),
+      },
+    ],
+  },
+  {
+    id: 'scheduled',
+    category: s__('SecurityOrchestration|CI/CD'),
+    label: s__('SecurityOrchestration|Scheduled'),
+    description: s__('SecurityOrchestration|Run policy checks on a schedule'),
+    icon: 'clock',
+    fields: [
+      {
+        key: 'cron',
+        type: 'text',
+        label: s__('SecurityOrchestration|Cron Expression'),
+        placeholder: '0 0 * * *',
+      },
+      {
+        key: 'timezone',
+        type: 'text',
+        label: s__('SecurityOrchestration|Timezone'),
+        placeholder: 'UTC',
+      },
+    ],
+  },
+  {
+    id: 'secret_variable_change',
+    category: s__('SecurityOrchestration|CI/CD'),
+    label: s__('SecurityOrchestration|Secret/Variable Change'),
+    description: s__('SecurityOrchestration|When CI/CD variables or secrets are modified'),
+    icon: 'lock',
+    fields: [
+      {
+        key: 'scope',
+        type: 'select',
+        label: s__('SecurityOrchestration|Scope'),
+        options: [idAsOption('project'), idAsOption('group'), idAsOption('instance')],
+      },
+      {
+        key: 'action',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Action'),
+        options: [idAsOption('created'), idAsOption('updated'), idAsOption('deleted')],
+      },
+    ],
+  },
+  {
+    id: 'dependency_update',
+    category: s__('SecurityOrchestration|CI/CD'),
+    label: s__('SecurityOrchestration|Dependency Update'),
+    description: s__('SecurityOrchestration|When a dependency is added, updated, or removed'),
+    icon: 'package',
+    fields: [
+      {
+        key: 'action',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Action'),
+        options: [idAsOption('added'), idAsOption('updated'), idAsOption('removed')],
+      },
+      {
+        key: 'packageManagers',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Package Manager'),
+        options: [
+          idAsOption('npm'),
+          idAsOption('pip'),
+          idAsOption('maven'),
+          idAsOption('bundler'),
+          idAsOption('go'),
+          idAsOption('nuget'),
+          idAsOption('composer'),
+        ],
+      },
+      {
+        key: 'scope',
+        type: 'select',
+        label: s__('SecurityOrchestration|Dependency Scope'),
+        options: [idAsOption('direct'), idAsOption('transitive'), idAsOption('all')],
+      },
+    ],
+  },
+  {
+    id: 'code_push',
+    category: s__('SecurityOrchestration|Code'),
+    label: s__('SecurityOrchestration|Code Push'),
+    description: s__('SecurityOrchestration|When code is pushed to a repository'),
+    icon: 'commit',
+    fields: [
+      {
+        key: 'branchPattern',
+        type: 'text',
+        label: s__('SecurityOrchestration|Branch Pattern'),
+        placeholder: s__('SecurityOrchestration|e.g., main, feature/*'),
+      },
+      {
+        key: 'filePatterns',
+        type: 'text',
+        label: s__('SecurityOrchestration|File Patterns'),
+        placeholder: s__('SecurityOrchestration|e.g., *.tf, Dockerfile, .gitlab-ci.yml'),
+      },
+    ],
+  },
+  {
+    id: 'branch_event',
+    category: s__('SecurityOrchestration|Code'),
+    label: s__('SecurityOrchestration|Branch Event'),
+    description: s__('SecurityOrchestration|When a branch is created, deleted, or protected'),
+    icon: 'branch',
+    fields: [
+      {
+        key: 'event',
+        type: 'select',
+        label: s__('SecurityOrchestration|Event'),
+        options: [idAsOption('created'), idAsOption('deleted'), idAsOption('protection_changed')],
+      },
+      {
+        key: 'branchPattern',
+        type: 'text',
+        label: s__('SecurityOrchestration|Branch Pattern'),
+        placeholder: s__('SecurityOrchestration|e.g., main, release/*'),
+      },
+    ],
+  },
+  {
+    id: 'release_created',
+    category: s__('SecurityOrchestration|Code'),
+    label: s__('SecurityOrchestration|Release Created'),
+    description: s__('SecurityOrchestration|When a new release or tag is created'),
+    icon: 'tag',
+    fields: [
+      {
+        key: 'tagPattern',
+        type: 'text',
+        label: s__('SecurityOrchestration|Tag Pattern'),
+        placeholder: s__('SecurityOrchestration|e.g., v*, release-*'),
+      },
+    ],
+  },
+  {
+    id: 'project_settings_change',
+    category: s__('SecurityOrchestration|Compliance'),
+    label: s__('SecurityOrchestration|Project Settings Change'),
+    description: s__('SecurityOrchestration|When project settings are modified'),
+    icon: 'settings',
+    fields: [
+      {
+        key: 'categories',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Setting Category'),
+        options: [
+          idAsOption('visibility'),
+          idAsOption('merge_requests'),
+          idAsOption('ci_cd'),
+          idAsOption('repository'),
+          idAsOption('security'),
+          idAsOption('access_tokens'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'project_created',
+    category: s__('SecurityOrchestration|Compliance'),
+    label: s__('SecurityOrchestration|Project Created'),
+    description: s__('SecurityOrchestration|When a new project is created in a group or instance'),
+    icon: 'project',
+    fields: [
+      {
+        key: 'namespacePattern',
+        type: 'text',
+        label: s__('SecurityOrchestration|Namespace Pattern'),
+        placeholder: s__('SecurityOrchestration|e.g., my-org/*, my-org/production/*'),
+      },
+      {
+        key: 'visibility',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Project Visibility'),
+        options: [idAsOption('private'), idAsOption('internal'), idAsOption('public')],
+      },
+      {
+        key: 'requireTemplate',
+        type: 'toggle',
+        label: s__('SecurityOrchestration|Require Project Template'),
+      },
+    ],
+  },
+  {
+    id: 'push_rule_violation',
+    category: s__('SecurityOrchestration|Security'),
+    label: s__('SecurityOrchestration|Push Rule Violation'),
+    description: s__(
+      'SecurityOrchestration|When a push rule is triggered (commit signing, message format, author restrictions)',
+    ),
+    icon: 'shield',
+    fields: [
+      {
+        key: 'ruleTypes',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Push Rule Type'),
+        options: [
+          idAsOption('commit_message'),
+          idAsOption('branch_name'),
+          idAsOption('author_email'),
+          idAsOption('file_name'),
+          idAsOption('file_size'),
+          idAsOption('signed_commits'),
+          idAsOption('reject_unsigned'),
+        ],
+      },
+      {
+        key: 'branchPattern',
+        type: 'text',
+        label: s__('SecurityOrchestration|Branch Pattern'),
+        placeholder: s__('SecurityOrchestration|e.g., main, release/*'),
+      },
+    ],
+  },
+  {
+    id: 'report_published',
+    category: s__('SecurityOrchestration|Security'),
+    label: s__('SecurityOrchestration|Security Report Published'),
+    description: s__(
+      'SecurityOrchestration|When a security scan report is published by a pipeline — triggers validation against Rego rules',
+    ),
+    icon: 'chart',
+    fields: [
+      {
+        key: 'reportTypes',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Report Types'),
+        options: [
+          idAsOption('sast'),
+          idAsOption('dast'),
+          idAsOption('dependency_scanning'),
+          idAsOption('container_scanning'),
+          idAsOption('secret_detection'),
+          idAsOption('coverage_fuzzing'),
+          idAsOption('api_fuzzing'),
+          { id: ANY_REPORT_TYPE, label: s__('SecurityOrchestration|Any') },
+        ],
+      },
+      {
+        key: 'branchPattern',
+        type: 'text',
+        label: s__('SecurityOrchestration|Branch Pattern'),
+        placeholder: s__('SecurityOrchestration|e.g., main, release/*'),
+      },
+    ],
+  },
+  {
+    id: 'vulnerability_detected',
+    category: s__('SecurityOrchestration|Security'),
+    label: s__('SecurityOrchestration|Vulnerability Detected'),
+    description: s__('SecurityOrchestration|When a new vulnerability is detected or state changes'),
+    icon: 'warning-solid',
+    fields: [
+      {
+        key: 'states',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|State Change'),
+        options: [
+          idAsOption('detected'),
+          idAsOption('confirmed'),
+          idAsOption('resolved'),
+          idAsOption('dismissed'),
+        ],
+      },
+      {
+        key: 'severities',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Severity'),
+        options: [
+          idAsOption('critical'),
+          idAsOption('high'),
+          idAsOption('medium'),
+          idAsOption('low'),
+          idAsOption('info'),
+        ],
+      },
+      {
+        key: 'scanners',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Scanner Type'),
+        options: [
+          idAsOption('sast'),
+          idAsOption('dast'),
+          idAsOption('dependency_scanning'),
+          idAsOption('container_scanning'),
+          idAsOption('secret_detection'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'compliance_violation',
+    category: s__('SecurityOrchestration|Compliance'),
+    label: s__('SecurityOrchestration|Compliance Violation'),
+    description: s__(
+      'SecurityOrchestration|When a compliance framework violation is detected (settings drift, missing controls)',
+    ),
+    icon: 'check-circle',
+    fields: [
+      {
+        key: 'frameworks',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Framework'),
+        options: [
+          { id: 'pci_dss', label: s__('SecurityOrchestration|PCI-DSS') },
+          { id: 'soc2', label: s__('SecurityOrchestration|SOC2') },
+          { id: 'hipaa', label: s__('SecurityOrchestration|HIPAA') },
+          { id: 'gdpr', label: s__('SecurityOrchestration|GDPR') },
+          { id: 'fedramp', label: s__('SecurityOrchestration|FedRAMP') },
+          { id: 'cis', label: s__('SecurityOrchestration|CIS') },
+          { id: 'iso27001', label: s__('SecurityOrchestration|ISO27001') },
+        ],
+      },
+      {
+        key: 'violationTypes',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Violation Type'),
+        options: [
+          idAsOption('settings_drift'),
+          idAsOption('missing_control'),
+          idAsOption('expired_certification'),
+          idAsOption('failed_audit'),
+        ],
+      },
+      {
+        key: 'severity',
+        type: 'select',
+        label: s__('SecurityOrchestration|Severity'),
+        options: [
+          idAsOption('critical'),
+          idAsOption('high'),
+          idAsOption('medium'),
+          idAsOption('low'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'deployment_requested',
+    category: s__('SecurityOrchestration|CI/CD'),
+    label: s__('SecurityOrchestration|Deployment Requested'),
+    description: s__('SecurityOrchestration|When a deployment to an environment is requested'),
+    icon: 'deployments',
+    fields: [
+      {
+        key: 'targetEnvironment',
+        type: 'select',
+        label: s__('SecurityOrchestration|Target Environment'),
+        options: [
+          idAsOption('development'),
+          idAsOption('staging'),
+          idAsOption('production'),
+          idAsOption('any'),
+        ],
+      },
+      {
+        key: 'deploymentTier',
+        type: 'select',
+        label: s__('SecurityOrchestration|Deployment Tier'),
+        options: [
+          idAsOption('development'),
+          idAsOption('testing'),
+          idAsOption('staging'),
+          idAsOption('production'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'external_event_webhook',
+    category: s__('SecurityOrchestration|Integrations'),
+    label: s__('SecurityOrchestration|External Event (Webhook)'),
+    description: s__(
+      'SecurityOrchestration|When an external system sends an event (ServiceNow, Jira, CNAPP)',
+    ),
+    icon: 'hook',
+    fields: [
+      {
+        key: 'sourceSystem',
+        type: 'select',
+        label: s__('SecurityOrchestration|Source System'),
+        options: [
+          idAsOption('servicenow'),
+          idAsOption('jira'),
+          idAsOption('cnapp'),
+          idAsOption('cspm'),
+          idAsOption('custom_webhook'),
+        ],
+      },
+      {
+        key: 'eventType',
+        type: 'text',
+        label: s__('SecurityOrchestration|Event Type'),
+        placeholder: s__('SecurityOrchestration|Event type identifier'),
+      },
+      {
+        key: 'payloadFilter',
+        type: 'text',
+        label: s__('SecurityOrchestration|Payload Filter'),
+        placeholder: '',
+      },
+    ],
+  },
+  {
+    id: 'access_permission_change',
+    category: s__('SecurityOrchestration|Access'),
+    label: s__('SecurityOrchestration|Access/Permission Change'),
+    description: s__(
+      'SecurityOrchestration|When project/group membership, roles, or access tokens change',
+    ),
+    icon: 'user',
+    fields: [
+      {
+        key: 'changeTypes',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Change Type'),
+        options: [
+          idAsOption('member_added'),
+          idAsOption('member_removed'),
+          idAsOption('role_changed'),
+          idAsOption('token_created'),
+          idAsOption('token_expired'),
+          idAsOption('deploy_key_added'),
+        ],
+      },
+      {
+        key: 'roleLevels',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Role Level'),
+        options: [
+          idAsOption('guest'),
+          idAsOption('reporter'),
+          idAsOption('developer'),
+          idAsOption('maintainer'),
+          idAsOption('owner'),
+        ],
+      },
+      {
+        key: 'scope',
+        type: 'select',
+        label: s__('SecurityOrchestration|Scope'),
+        options: [idAsOption('project'), idAsOption('group')],
+      },
+    ],
+  },
+  {
+    id: 'ai_prompt_submitted',
+    category: s__('SecurityOrchestration|AI'),
+    label: s__('SecurityOrchestration|AI Prompt Submitted'),
+    description: s__(
+      'SecurityOrchestration|When a user submits a prompt to an AI assistant (Duo Chat, code suggestions, agent)',
+    ),
+    icon: 'comment',
+    fields: [
+      {
+        key: 'assistantTypes',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Assistant Type'),
+        options: [
+          idAsOption('chat'),
+          idAsOption('code_suggestions'),
+          idAsOption('agent'),
+          idAsOption('code_review'),
+        ],
+      },
+      {
+        key: 'models',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Model'),
+        options: [
+          idAsOption('claude'),
+          idAsOption('gpt'),
+          idAsOption('mistral'),
+          idAsOption('codestral'),
+          idAsOption('custom'),
+        ],
+      },
+      {
+        key: 'userRoles',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|User Role'),
+        options: [
+          idAsOption('developer'),
+          idAsOption('maintainer'),
+          idAsOption('owner'),
+          idAsOption('guest'),
+          idAsOption('external'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ai_agent_action',
+    category: s__('SecurityOrchestration|AI'),
+    label: s__('SecurityOrchestration|AI Agent Action'),
+    description: s__(
+      'SecurityOrchestration|When an AI agent attempts to perform an action (tool call, file access, API call, code execution)',
+    ),
+    icon: 'tanuki-ai',
+    fields: [
+      {
+        key: 'agentTypes',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Agent Type'),
+        options: [
+          idAsOption('security_analyst'),
+          idAsOption('planner'),
+          idAsOption('code_review'),
+          idAsOption('remediation'),
+          idAsOption('custom'),
+        ],
+      },
+      {
+        key: 'actionCategories',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Action Category'),
+        options: [
+          idAsOption('file_read'),
+          idAsOption('file_write'),
+          idAsOption('tool_call'),
+          idAsOption('api_call'),
+          idAsOption('code_execution'),
+          idAsOption('git_operation'),
+        ],
+      },
+      {
+        key: 'minRiskLevel',
+        type: 'select',
+        label: s__('SecurityOrchestration|Minimum Risk Level'),
+        options: [
+          idAsOption('any'),
+          idAsOption('low'),
+          idAsOption('medium'),
+          idAsOption('high'),
+          idAsOption('critical'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ai_model_inference',
+    category: s__('SecurityOrchestration|AI'),
+    label: s__('SecurityOrchestration|AI Model Inference Request'),
+    description: s__(
+      'SecurityOrchestration|When an AI model inference request is made (for BYOM/gateway governance)',
+    ),
+    icon: 'chart',
+    fields: [
+      {
+        key: 'providers',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Model Provider'),
+        options: [
+          idAsOption('gitlab'),
+          idAsOption('anthropic'),
+          idAsOption('openai'),
+          idAsOption('google'),
+          idAsOption('mistral'),
+          idAsOption('self_hosted'),
+          idAsOption('custom'),
+        ],
+      },
+      {
+        key: 'requestTypes',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Request Type'),
+        options: [
+          idAsOption('completion'),
+          idAsOption('chat'),
+          idAsOption('embedding'),
+          idAsOption('agent_action'),
+        ],
+      },
+      {
+        key: 'dataClassification',
+        type: 'select',
+        label: s__('SecurityOrchestration|Data Classification'),
+        options: [
+          idAsOption('any'),
+          idAsOption('public'),
+          idAsOption('internal'),
+          idAsOption('confidential'),
+          idAsOption('restricted'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'custom_agent_lifecycle_event',
+    category: s__('SecurityOrchestration|AI'),
+    label: s__('SecurityOrchestration|Custom Agent Lifecycle Event'),
+    description: s__(
+      'SecurityOrchestration|When a custom AI agent is created, published, enabled, or executed',
+    ),
+    icon: 'tanuki-ai',
+    fields: [
+      {
+        key: 'events',
+        type: 'multi_badge',
+        label: s__('SecurityOrchestration|Events'),
+        options: [
+          idAsOption('created'),
+          idAsOption('published'),
+          idAsOption('enabled'),
+          idAsOption('executed'),
+          idAsOption('disabled'),
+          idAsOption('deleted'),
+        ],
+      },
+      {
+        key: 'agentNamePattern',
+        type: 'text',
+        label: s__('SecurityOrchestration|Agent Name Pattern'),
+        placeholder: s__('SecurityOrchestration|e.g., security-*, compliance-*'),
+      },
+    ],
+  },
+];

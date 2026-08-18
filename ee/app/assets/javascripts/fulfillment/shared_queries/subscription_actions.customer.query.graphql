@@ -1,0 +1,7 @@
+query getSubscriptionData($namespaceId: ID!) {
+  subscription(namespaceId: $namespaceId) {
+    canAddSeats
+    canRenew
+    nextTermStartDate
+  }
+}

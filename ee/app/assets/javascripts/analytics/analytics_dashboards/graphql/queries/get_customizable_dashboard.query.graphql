@@ -1,0 +1,16 @@
+#import "../fragments/customizable_dashboard.fragment.graphql"
+
+query getCustomizableDashboard($fullPath: ID!, $slug: String) {
+  project(fullPath: $fullPath) {
+    id
+    customizableDashboards(slug: $slug, category: ANALYTICS) {
+      ...CustomizableDashboardFragment
+    }
+  }
+  group(fullPath: $fullPath) {
+    id
+    customizableDashboards(slug: $slug, category: ANALYTICS) {
+      ...CustomizableDashboardFragment
+    }
+  }
+}

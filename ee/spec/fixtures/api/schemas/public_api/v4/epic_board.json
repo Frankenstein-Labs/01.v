@@ -1,0 +1,83 @@
+{
+  "type": "object",
+  "required": [
+    "id",
+    "group",
+    "lists",
+    "labels"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "group": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "id",
+        "web_url",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "web_url": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "lists": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "position",
+          "list_type"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "../../../../../../../spec/fixtures/api/schemas/public_api/v4/label_basic.json"
+              }
+            ]
+          },
+          "position": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "list_type": {
+            "type": [
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "labels": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../../../../../spec/fixtures/api/schemas/public_api/v4/label_basic.json"
+      }
+    }
+  },
+  "additionalProperties": true
+}

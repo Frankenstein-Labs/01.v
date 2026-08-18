@@ -1,0 +1,60 @@
+# @feature_category: continuous_delivery
+
+query cdVersionSet($id: CdVersionSetID!) {
+  organization {
+    id
+    cdVersionSet(id: $id) {
+      id
+      name
+      description
+      createdAt
+      author {
+        id
+        username
+      }
+      rollouts(first: 20) {
+        nodes {
+          id
+          iid
+        }
+      }
+      latestRollout: rollouts(first: 1) {
+        nodes {
+          id
+          state
+          rolloutEnvironments {
+            nodes {
+              id
+              environment {
+                id
+                serviceEnvironmentHealths {
+                  nodes {
+                    id
+                    health
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      versionSetEntries {
+        nodes {
+          id
+          service {
+            id
+            name
+          }
+          version {
+            id
+            name
+          }
+          artifactSource {
+            id
+            sourceRef
+          }
+        }
+      }
+    }
+  }
+}

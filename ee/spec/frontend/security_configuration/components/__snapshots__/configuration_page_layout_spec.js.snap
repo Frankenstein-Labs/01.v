@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Security Configuration Page Layout component matches the snapshot 1`] = `
+<article>
+  Page alert
+  <page-heading-stub>
+    Page titleScanner descriptionAction
+  </page-heading-stub>
+  <div>
+    form
+  </div>
+</article>
+`;

@@ -1,0 +1,54 @@
+query getSubscriptionUsage($namespacePath: ID) {
+  subscriptionUsage(namespacePath: $namespacePath) {
+    enabled
+    isOutdatedClient
+    lastEventTransactionAt
+
+    canAcceptOverageTerms
+    subscriptionPortalUsageDashboardUrl
+
+    startDate
+    endDate
+
+    paidTierTrial {
+      isActive
+      dailyUsage @gl_introduced(version: "18.9.0") {
+        creditsUsed
+        date
+      }
+    }
+
+    purchaseCreditsPath
+    monthlyCommitment {
+      totalCredits
+      creditsUsed
+      dailyUsage {
+        creditsUsed
+        date
+      }
+    }
+    monthlyWaiver {
+      totalCredits
+      creditsUsed
+      dailyUsage {
+        creditsUsed
+        date
+      }
+    }
+    overage {
+      isAllowed
+      creditsUsed
+      dailyUsage {
+        creditsUsed
+        date
+      }
+    }
+
+    usersUsage {
+      dailyUsage {
+        creditsUsed
+        date
+      }
+    }
+  }
+}

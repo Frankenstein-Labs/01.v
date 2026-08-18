@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Duo agent platform settings",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "duo_custom_agents_enabled": {
+      "type": "boolean",
+      "description": "Allow custom agents for this instance",
+      "default": true
+    },
+    "lock_duo_custom_agents_enabled": {
+      "type": "boolean",
+      "description": "Lock custom agents enabled setting for all groups",
+      "default": false
+    },
+    "duo_custom_flows_enabled": {
+      "type": "boolean",
+      "description": "Allow custom flows for this instance",
+      "default": true
+    },
+    "lock_duo_custom_flows_enabled": {
+      "type": "boolean",
+      "description": "Lock custom flows enabled setting for all groups",
+      "default": false
+    },
+    "duo_external_agents_enabled": {
+      "type": "boolean",
+      "description": "Allow external agents for this instance",
+      "default": true
+    },
+    "lock_duo_external_agents_enabled": {
+      "type": "boolean",
+      "description": "Lock external agents enabled setting for all groups",
+      "default": false
+    }
+  }
+}

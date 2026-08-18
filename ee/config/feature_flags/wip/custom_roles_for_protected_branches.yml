@@ -1,0 +1,10 @@
+---
+name: custom_roles_for_protected_branches
+description: Allow specifying custom roles in Protected Branch allowed to push, allowed to merge, and allowed to unprotect configs.
+feature_issue_url: https://gitlab.com/groups/gitlab-org/-/work_items/21399
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/235051
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/594891
+milestone: '19.0'
+group: group::source code
+type: wip
+default_enabled: false

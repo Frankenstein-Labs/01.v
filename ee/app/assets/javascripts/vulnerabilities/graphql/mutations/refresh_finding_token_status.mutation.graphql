@@ -1,0 +1,10 @@
+mutation refreshFindingTokenStatus($vulnerabilityId: VulnerabilityID!) {
+  refreshFindingTokenStatus(input: { vulnerabilityId: $vulnerabilityId }) {
+    errors
+    findingTokenStatus {
+      id
+      status
+      lastVerifiedAt
+    }
+  }
+}

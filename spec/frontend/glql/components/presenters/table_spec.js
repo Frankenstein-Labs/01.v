@@ -1,0 +1,307 @@
+import { nextTick } from 'vue';
+import { GlIcon, GlSkeletonLoader } from '@gitlab/ui';
+import { mountExtended, shallowMountExtended } from 'helpers/vue_test_utils_helper';
+import ThResizable from '~/glql/components/common/th_resizable.vue';
+import FieldPresenter from '~/glql/components/presenters/field.vue';
+import IssuablePresenter from '~/glql/components/presenters/issuable.vue';
+import ProjectPresenter from '~/glql/components/presenters/project.vue';
+import StatePresenter from '~/glql/components/presenters/state.vue';
+import TablePresenter from '~/glql/components/presenters/table.vue';
+import HtmlPresenter from '~/glql/components/presenters/html.vue';
+import UserPresenter from '~/glql/components/presenters/user.vue';
+import { useMockLocationHelper } from 'helpers/mock_window_location_helper';
+import { MOCK_FIELDS, MOCK_ISSUES, MOCK_PROJECT } from '../../mock_data';
+
+describe('TablePresenter', () => {
+  let wrapper;
+
+  useMockLocationHelper();
+
+  beforeEach(() => {
+    window.location.href = 'https://gitlab.com/gitlab-org/gitlab-shell/-/issues/1';
+    window.location.origin = 'https://gitlab.com';
+  });
+
+  const createWrapper = async ({ data, fields, ...moreProps }, mountFn = shallowMountExtended) => {
+    wrapper = mountFn(TablePresenter, {
+      propsData: { data, fields, ...moreProps },
+    });
+
+    await nextTick();
+  };
+
+  const getCells = (row) => row.findAll('td').wrappers.map((td) => td.text());
+
+  it('renders header rows with sentence cased field names', async () => {
+    await createWrapper({ data: MOCK_ISSUES, fields: MOCK_FIELDS });
+
+    const headerCells = wrapper.findAllComponents(ThResizable).wrappers.map((th) => th.text());
+
+    expect(headerCells).toEqual(['Title', 'Author', 'State', 'Description']);
+  });
+
+  it('renders header rows with granularity when fields have parameters', async () => {
+    const fieldsWithGranularity = [
+      {
+        key: 'finished',
+        label: 'Finished',
+        name: 'finishedAt',
+        type: 'dimension',
+        parameters: { granularity: 'weekly' },
+      },
+      { key: 'totalCount', label: 'Total count', name: 'totalCount', type: 'metric' },
+    ];
+
+    await createWrapper({ data: { nodes: [] }, fields: fieldsWithGranularity });
+
+    const headerCells = wrapper.findAllComponents(ThResizable).wrappers.map((th) => th.text());
+
+    expect(headerCells).toEqual(['Finished (weekly)', 'Total count']);
+  });
+
+  it('renders the alias label without the granularity suffix for aliased fields', async () => {
+    const aliasedTimeDimension = {
+      key: 'foo',
+      field: 'created',
+      label: 'foo',
+      name: 'createdAt',
+      type: 'dimension',
+      parameters: { granularity: 'weekly' },
+    };
+
+    await createWrapper({ data: { nodes: [] }, fields: [aliasedTimeDimension] });
+
+    const headerCells = wrapper.findAllComponents(ThResizable).wrappers.map((th) => th.text());
+
+    expect(headerCells).toEqual(['foo']);
+  });
+
+  it('passes field key for data access and presenter key for dispatch on aliased fields', async () => {
+    const aliasedField = {
+      key: 'p50',
+      field: 'durationQuantile',
+      label: 'Duration P50',
+      type: 'metric',
+      parameters: { quantile: 0.5 },
+    };
+
+    await createWrapper({
+      data: { nodes: [{ p50: 3661 }] },
+      fields: [aliasedField],
+    });
+
+    const fieldPresenter = wrapper.findComponent(FieldPresenter);
+    expect(fieldPresenter.props('fieldKey')).toBe('p50');
+    expect(fieldPresenter.props('presenterKey')).toBe('durationQuantile');
+  });
+
+  it('renders formatted values, not "None", for aliased parameterised fields', async () => {
+    const fields = [
+      {
+        key: 'Monthly',
+        field: 'timestamp',
+        label: 'Monthly',
+        name: 'timestamp',
+        type: 'dimension',
+        parameters: { granularity: 'monthly' },
+      },
+      {
+        key: 'p50',
+        field: 'durationQuantile',
+        label: 'Duration P50',
+        name: 'durationQuantile',
+        type: 'metric',
+        parameters: { quantile: 0.5 },
+      },
+    ];
+
+    await createWrapper(
+      { data: { nodes: [{ id: '1', Monthly: '2026-06-01', p50: 3661 }] }, fields },
+      mountExtended,
+    );
+
+    const cells = getCells(wrapper.findByTestId('table-row-0'));
+
+    expect(cells).toEqual(['Jun 1, 2026', '1h 1m 1s']);
+  });
+
+  it('renders skeleton loader if loading is true', () => {
+    createWrapper({ data: { nodes: [] }, fields: MOCK_FIELDS, loading: true }, mountExtended);
+
+    // 5 rows of 4 columns each
+    expect(wrapper.findAllComponents(GlSkeletonLoader)).toHaveLength(20);
+  });
+
+  it('renders a row of items presented by appropriate presenters', async () => {
+    await createWrapper({ data: MOCK_ISSUES, fields: MOCK_FIELDS }, mountExtended);
+
+    const tableRow1 = wrapper.findByTestId('table-row-0');
+    const tableRow2 = wrapper.findByTestId('table-row-1');
+
+    const issuePresenter1 = tableRow1.findComponent(IssuablePresenter);
+    const issuePresenter2 = tableRow2.findComponent(IssuablePresenter);
+    const userPresenter1 = tableRow1.findComponent(UserPresenter);
+    const userPresenter2 = tableRow2.findComponent(UserPresenter);
+    const statePresenter1 = tableRow1.findComponent(StatePresenter);
+    const statePresenter2 = tableRow2.findComponent(StatePresenter);
+    const htmlPresenter1 = tableRow1.findComponent(HtmlPresenter);
+    const htmlPresenter2 = tableRow2.findComponent(HtmlPresenter);
+
+    expect(issuePresenter1.props('data')).toBe(MOCK_ISSUES.nodes[0]);
+    expect(issuePresenter2.props('data')).toBe(MOCK_ISSUES.nodes[1]);
+    expect(userPresenter1.props('data')).toBe(MOCK_ISSUES.nodes[0].author);
+    expect(userPresenter2.props('data')).toBe(MOCK_ISSUES.nodes[1].author);
+    expect(statePresenter1.props('data')).toBe(MOCK_ISSUES.nodes[0].state);
+    expect(statePresenter2.props('data')).toBe(MOCK_ISSUES.nodes[1].state);
+    expect(htmlPresenter1.props('data')).toBe(MOCK_ISSUES.nodes[0].description);
+    expect(htmlPresenter2.props('data')).toBe(MOCK_ISSUES.nodes[1].description);
+
+    expect(getCells(tableRow1)).toEqual([
+      'Issue 1 (gitlab-test#1)',
+      '@foobar',
+      'Open',
+      'This is a description',
+    ]);
+    expect(getCells(tableRow2)).toEqual([
+      'Issue 2 (gitlab-test#2 - closed)',
+      '@janedoe',
+      'Closed',
+      'This is another description',
+    ]);
+  });
+
+  it('routes the title-aliased field of a Project row through ProjectPresenter', async () => {
+    await createWrapper(
+      {
+        data: { nodes: [{ ...MOCK_PROJECT, id: 'gid://gitlab/Project/1', name: 'Wget2' }] },
+        fields: [{ key: 'name', label: 'Name', name: 'name' }],
+      },
+      mountExtended,
+    );
+
+    const row = wrapper.findByTestId('table-row-0');
+    expect(row.findComponent(ProjectPresenter).exists()).toBe(true);
+  });
+
+  const order0 = [
+    ['Issue 1 (gitlab-test#1)', '@foobar', 'Open', 'This is a description'],
+    ['Issue 2 (gitlab-test#2 - closed)', '@janedoe', 'Closed', 'This is another description'],
+  ];
+
+  const order1 = [
+    ['Issue 2 (gitlab-test#2 - closed)', '@janedoe', 'Closed', 'This is another description'],
+    ['Issue 1 (gitlab-test#1)', '@foobar', 'Open', 'This is a description'],
+  ];
+
+  describe.each`
+    cellIndex | headerTitle      | orderAsc  | orderDesc
+    ${0}      | ${'title'}       | ${order0} | ${order1}
+    ${1}      | ${'author'}      | ${order0} | ${order1}
+    ${2}      | ${'state'}       | ${order0} | ${order1}
+    ${3}      | ${'description'} | ${order0} | ${order1}
+  `('when clicking on header cell at index $cellIndex', ({ cellIndex, orderAsc, orderDesc }) => {
+    let actualOrder;
+
+    const triggerClick = async () => {
+      await nextTick();
+      await wrapper.findByTestId(`column-${cellIndex}`).trigger('click');
+
+      actualOrder = wrapper.findAll('tbody tr').wrappers.map(getCells);
+    };
+
+    beforeEach(async () => {
+      await createWrapper({ data: MOCK_ISSUES, fields: MOCK_FIELDS }, mountExtended);
+
+      await triggerClick();
+    });
+
+    describe('once', () => {
+      it('sorts the table by the field in ascending order', () => {
+        expect(actualOrder).toEqual(orderAsc);
+      });
+
+      it('shows an arrow-up icon on the sorted column', () => {
+        const icon = wrapper.findByTestId(`column-${cellIndex}`).findComponent(GlIcon);
+
+        expect(icon.props('name')).toBe('arrow-up');
+      });
+
+      it('does not show a sort icon on other columns', () => {
+        const otherColumns = MOCK_FIELDS.filter((_, i) => i !== cellIndex);
+
+        otherColumns.forEach((_, i) => {
+          const colIndex = i >= cellIndex ? i + 1 : i;
+          const icon = wrapper.findByTestId(`column-${colIndex}`).findComponent(GlIcon);
+
+          expect(icon.exists()).toBe(false);
+        });
+      });
+    });
+
+    describe('twice', () => {
+      beforeEach(async () => {
+        await triggerClick();
+      });
+
+      it('sorts the table by the field in descending order', () => {
+        expect(actualOrder).toEqual(orderDesc);
+      });
+
+      it('shows an arrow-down icon on the sorted column', () => {
+        const icon = wrapper.findByTestId(`column-${cellIndex}`).findComponent(GlIcon);
+
+        expect(icon.props('name')).toBe('arrow-down');
+      });
+    });
+  });
+
+  describe('when sorting by an aliased column', () => {
+    const aliasedField = {
+      key: 'p50',
+      field: 'durationQuantile',
+      label: 'Duration P50',
+      type: 'metric',
+      parameters: { quantile: 0.5 },
+    };
+
+    beforeEach(async () => {
+      await createWrapper(
+        {
+          data: {
+            nodes: [
+              { id: '1', p50: 7200 },
+              { id: '2', p50: 3600 },
+            ],
+          },
+          fields: [aliasedField],
+        },
+        mountExtended,
+      );
+
+      await wrapper.findByTestId('column-0').trigger('click');
+    });
+
+    it('reorders the rows by the alias key in ascending order', () => {
+      const actualOrder = wrapper.findAll('tbody tr').wrappers.map(getCells);
+
+      expect(actualOrder).toEqual([['1h'], ['2h']]);
+    });
+
+    it('shows an arrow-up icon on the sorted column', () => {
+      const icon = wrapper.findByTestId('column-0').findComponent(GlIcon);
+
+      expect(icon.props('name')).toBe('arrow-up');
+    });
+
+    it('reorders the rows in descending order on a second click', async () => {
+      await wrapper.findByTestId('column-0').trigger('click');
+
+      const actualOrder = wrapper.findAll('tbody tr').wrappers.map(getCells);
+
+      expect(actualOrder).toEqual([['2h'], ['1h']]);
+      expect(wrapper.findByTestId('column-0').findComponent(GlIcon).props('name')).toBe(
+        'arrow-down',
+      );
+    });
+  });
+});

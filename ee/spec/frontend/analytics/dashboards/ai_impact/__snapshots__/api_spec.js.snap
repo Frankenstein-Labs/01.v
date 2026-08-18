@@ -1,0 +1,208 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AI impact dashboard api extractGraphqlAiData returns code_suggestions_acceptance_rate given { codeSuggestions: { acceptedCount: 0, shownCount: 20 } } 1`] = `
+{
+  "identifier": "code_suggestions_acceptance_rate",
+  "tooltip": "0/20",
+  "value": 0,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns code_suggestions_acceptance_rate given { codeSuggestions: { acceptedCount: 3 } } 1`] = `
+{
+  "identifier": "code_suggestions_acceptance_rate",
+  "tooltip": "No data",
+  "value": "-",
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns code_suggestions_acceptance_rate given { codeSuggestions: { acceptedCount: 3, shownCount: 4 } } 1`] = `
+{
+  "identifier": "code_suggestions_acceptance_rate",
+  "tooltip": "3/4",
+  "value": 75,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns code_suggestions_acceptance_rate given { codeSuggestions: { shownCount: 4 } } 1`] = `
+{
+  "identifier": "code_suggestions_acceptance_rate",
+  "tooltip": "No data",
+  "value": "-",
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns code_suggestions_users_count given { codeSuggestions: { contributorsCount: 0 } } 1`] = `
+{
+  "identifier": "code_suggestions_users_count",
+  "value": 0,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns code_suggestions_users_count given { codeSuggestions: { contributorsCount: 5 } } 1`] = `
+{
+  "identifier": "code_suggestions_users_count",
+  "value": 5,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns code_suggestions_users_count given {} 1`] = `
+{
+  "identifier": "code_suggestions_users_count",
+  "value": "-",
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_agent_platform_chats given { agentPlatformChats: { createdSessionEventCount: 0 } } 1`] = `
+{
+  "identifier": "duo_agent_platform_chats",
+  "value": 0,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_agent_platform_chats given { agentPlatformChats: { createdSessionEventCount: 70 } } 1`] = `
+{
+  "identifier": "duo_agent_platform_chats",
+  "value": 70,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_agent_platform_chats given {} 1`] = `
+{
+  "identifier": "duo_agent_platform_chats",
+  "value": "-",
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_agent_platform_flows given { agentPlatformFlows: { createdSessionEventCount: 0 } } 1`] = `
+{
+  "identifier": "duo_agent_platform_flows",
+  "value": 0,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_agent_platform_flows given { agentPlatformFlows: { createdSessionEventCount: 100 } } 1`] = `
+{
+  "identifier": "duo_agent_platform_flows",
+  "value": 100,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_agent_platform_flows given {} 1`] = `
+{
+  "identifier": "duo_agent_platform_flows",
+  "value": "-",
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_chat_users_count given { duoChatContributorsCount: 0 } 1`] = `
+{
+  "identifier": "duo_chat_users_count",
+  "value": 0,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_chat_users_count given { duoChatContributorsCount: 4 } 1`] = `
+{
+  "identifier": "duo_chat_users_count",
+  "value": 4,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_chat_users_count given {} 1`] = `
+{
+  "identifier": "duo_chat_users_count",
+  "value": "-",
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_rca_users_count given { rootCauseAnalysisUsersCount: 0 } 1`] = `
+{
+  "identifier": "duo_rca_users_count",
+  "value": 0,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_rca_users_count given { rootCauseAnalysisUsersCount: 10 } 1`] = `
+{
+  "identifier": "duo_rca_users_count",
+  "value": 10,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_rca_users_count given {} 1`] = `
+{
+  "identifier": "duo_rca_users_count",
+  "value": "-",
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_review_comment_count given { codeReview: { postCommentDuoCodeReviewOnDiffEventCount: 0 } } 1`] = `
+{
+  "identifier": "duo_review_comment_count",
+  "value": 0,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_review_comment_count given { codeReview: { postCommentDuoCodeReviewOnDiffEventCount: 25 } } 1`] = `
+{
+  "identifier": "duo_review_comment_count",
+  "value": 25,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_review_comment_count given {} 1`] = `
+{
+  "identifier": "duo_review_comment_count",
+  "value": "-",
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_review_requests_count given {
+  codeReview: {
+    requestReviewDuoCodeReviewOnMrByAuthorEventCount: 0,
+    requestReviewDuoCodeReviewOnMrByNonAuthorEventCount: 0
+  }
+} 1`] = `
+{
+  "identifier": "duo_review_requests_count",
+  "value": 0,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_review_requests_count given {
+  codeReview: {
+    requestReviewDuoCodeReviewOnMrByAuthorEventCount: 5,
+    requestReviewDuoCodeReviewOnMrByNonAuthorEventCount: 10
+  }
+} 1`] = `
+{
+  "identifier": "duo_review_requests_count",
+  "value": 15,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_review_requests_count given {
+  codeReview: { requestReviewDuoCodeReviewOnMrByAuthorEventCount: 10 }
+} 1`] = `
+{
+  "identifier": "duo_review_requests_count",
+  "value": 10,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_review_requests_count given {
+  codeReview: { requestReviewDuoCodeReviewOnMrByNonAuthorEventCount: 5 }
+} 1`] = `
+{
+  "identifier": "duo_review_requests_count",
+  "value": 5,
+}
+`;
+
+exports[`AI impact dashboard api extractGraphqlAiData returns duo_review_requests_count given {} 1`] = `
+{
+  "identifier": "duo_review_requests_count",
+  "value": "-",
+}
+`;

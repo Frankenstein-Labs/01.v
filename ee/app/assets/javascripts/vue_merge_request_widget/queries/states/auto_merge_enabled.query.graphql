@@ -1,0 +1,12 @@
+#import "~/vue_merge_request_widget/queries/states/auto_merge_enabled.fragment.graphql"
+#import "./merge_train_car_count.fragment.graphql"
+
+query autoMergeEnabledEE($projectPath: ID!, $iid: String!, $targetBranches: [String!]) {
+  project(fullPath: $projectPath) {
+    id
+    mergeRequest(iid: $iid) {
+      ...autoMergeEnabled
+    }
+    ...MergeTrainCarCount
+  }
+}

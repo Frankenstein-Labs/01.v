@@ -1,0 +1,25 @@
+query getGitlabSubscription($namespaceId: ID!) {
+  subscription(namespaceId: $namespaceId) @client {
+    id
+    endDate
+    startDate
+    plan @client {
+      code
+      name
+      trial
+      auto_renew
+      upgradable
+      exclude_guests
+    }
+    usage @client {
+      seats_in_subscription
+      seats_in_use
+      max_seats_used
+      seats_owed
+    }
+    billing @client {
+      subscription_start_date
+      subscription_end_date
+    }
+  }
+}

@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TasksByTypeChart no data available should render the no data available message 1`] = `
+<gl-stacked-column-chart-stub
+  bars=""
+  groupby=""
+  includelegendavgmax="true"
+  legendaveragetext="Avg"
+  legendcurrenttext="Current"
+  legendlayout="inline"
+  legendmaxtext="Max"
+  legendmintext="Min"
+  lines=""
+  option="[object Object]"
+  presentation="stacked"
+  secondarydata=""
+  secondarydatatitle=""
+  seriesnames=""
+  xaxistitle="Date"
+  xaxistype="category"
+  y-axis-type="value"
+  yaxistitle="Number of tasks"
+/>
+`;
+
+exports[`TasksByTypeChart with data available should render the loading chart 1`] = `
+<gl-stacked-column-chart-stub
+  bars="0,1,2,5,2,3,2,4,1"
+  groupby="Group 1,Group 2,Group 3"
+  includelegendavgmax="true"
+  legendaveragetext="Avg"
+  legendcurrenttext="Current"
+  legendlayout="inline"
+  legendmaxtext="Max"
+  legendmintext="Min"
+  lines=""
+  option="[object Object]"
+  presentation="stacked"
+  secondarydata=""
+  secondarydatatitle=""
+  seriesnames="Cool label,Normal label"
+  xaxistitle="Date"
+  xaxistype="category"
+  y-axis-type="value"
+  yaxistitle="Number of tasks"
+/>
+`;

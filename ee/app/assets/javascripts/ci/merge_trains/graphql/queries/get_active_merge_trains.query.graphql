@@ -1,0 +1,30 @@
+#import "../fragments/merge_train_car.fragment.graphql"
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getActiveMergeTrains(
+  $fullPath: ID!
+  $targetBranch: String!
+  $status: MergeTrainStatus = ACTIVE
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  project(fullPath: $fullPath) {
+    id
+    mergeTrains(targetBranches: [$targetBranch], status: $status) {
+      nodes {
+        targetBranch
+        cars(after: $after, before: $before, first: $first, last: $last) {
+          count
+          nodes {
+            ...Car
+          }
+          pageInfo {
+            ...PageInfo
+          }
+        }
+      }
+    }
+  }
+}

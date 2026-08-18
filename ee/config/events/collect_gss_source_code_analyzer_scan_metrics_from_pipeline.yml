@@ -1,0 +1,36 @@
+
+---
+description: Scan metrics for a GitLab Secrets Scanner analyzer scan launched from a pipeline job.
+internal_events: true
+status: active
+action: collect_gss_source_code_analyzer_scan_metrics_from_pipeline
+identifiers:
+- project
+- namespace
+- user
+additional_properties:
+  time_s:
+    description: Scan duration in seconds.
+  exit_code:
+    description: Gitleaks exit code.
+  git_strategy:
+    description: Fetch strategy used.
+  commit_count:
+    description: Number of commits scanned.
+  bytes_scanned:
+    description: Bytes scanned by Gitleaks.
+  leaks_found:
+    description: Number of secrets detected.
+  repo_size_kb:
+    description: Repository size in KB.
+  pipeline_type:
+    description: Type of pipeline that ran the scan.
+  error_message:
+    description: Error message if scan failed.
+product_group: secret_detection
+product_categories:
+- secret_detection
+milestone: '19.2'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/240926
+tiers:
+- ultimate

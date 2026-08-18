@@ -1,0 +1,10 @@
+---
+name: dap_powered_recommend_reviewers
+description: Enables the DAP-powered recommend reviewers feature
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/597374
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/236211
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/602418
+milestone: '19.0'
+group: group::code review
+type: wip
+default_enabled: false

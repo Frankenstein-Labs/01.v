@@ -1,0 +1,113 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "bool": {
+            "should": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "prefix": {
+                        "traversal_ids": {
+                          "_name": "filters:permissions:global:public_and_internal_access:ancestry_filter:descendants",
+                          "value": "__NAMESPACE_ANCESTRY_PARENT__"
+                        }
+                      }
+                    }
+                  ],
+                  "filter": [
+                    {
+                      "terms": {
+                        "_name": "filters:permissions:global:public_and_internal_access:repository_access_level:enabled_or_private",
+                        "repository_access_level": [
+                          20,
+                          10
+                        ]
+                      }
+                    },
+                    {
+                      "terms": {
+                        "_name": "filters:permissions:global:public_and_internal_access:project_visibility_level:public_or_internal",
+                        "visibility_level": [
+                          20,
+                          10
+                        ]
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1
+                }
+              },
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "prefix": {
+                        "traversal_ids": {
+                          "_name": "filters:permissions:global:private_access:ancestry_filter:descendants",
+                          "value": "__NAMESPACE_ANCESTRY__"
+                        }
+                      }
+                    },
+                    {
+                      "prefix": {
+                        "traversal_ids": {
+                          "_name": "filters:permissions:global:private_access:ancestry_filter:descendants",
+                          "value": "__SHARED_NAMESPACE_ANCESTRY__"
+                        }
+                      }
+                    }
+                  ],
+                  "filter": [
+                    {
+                      "terms": {
+                        "_name": "filters:permissions:global:private_access:repository_access_level:enabled_or_private",
+                        "repository_access_level": [
+                          20,
+                          10
+                        ]
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1
+                }
+              },
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "terms": {
+                        "_name": "filters:permissions:global:repository_access_level:enabled",
+                        "repository_access_level": [
+                          20
+                        ]
+                      }
+                    }
+                  ],
+                  "filter": [
+                    {
+                      "terms": {
+                        "_name": "filters:permissions:global:visibility_level:public_and_internal",
+                        "visibility_level": [
+                          20,
+                          10
+                        ]
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1
+                }
+              }
+            ],
+            "minimum_should_match": 1
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

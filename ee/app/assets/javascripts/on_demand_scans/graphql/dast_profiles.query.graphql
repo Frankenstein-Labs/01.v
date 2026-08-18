@@ -1,0 +1,30 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query SavedScans($fullPath: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+  project(fullPath: $fullPath) {
+    id
+    pipelines: dastProfiles(after: $after, before: $before, first: $first, last: $last)
+      @connection(key: "dastProfilesList") {
+      pageInfo {
+        ...PageInfo
+      }
+      nodes {
+        id
+        name
+        dastSiteProfile {
+          id
+          targetUrl
+        }
+        dastScannerProfile {
+          id
+          scanType
+        }
+        branch {
+          name
+          exists
+        }
+        editPath
+      }
+    }
+  }
+}

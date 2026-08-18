@@ -1,0 +1,137 @@
+{
+  "version": "15.2.2",
+  "vulnerabilities": [
+    {
+      "id": "878843d5b4edf0042e3066429a4cac5f66f8c7ad72b40056601fbb191fa13214",
+      "category": "sast",
+      "name": "Additional vulnerability 1",
+      "description": "The application was found using the `requests` module without configuring a timeout value.",
+      "cve": "semgrep_id:bandit.B501:44:45",
+      "severity": "Medium",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "tests/e2e_zap.py",
+        "start_line": 44,
+        "end_line": 45
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B501",
+          "value": "bandit.B501",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B501"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-295",
+          "value": "295",
+          "url": "https://cwe.mitre.org/data/definitions/295.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A07:2021 - Identification and Authentication Failures",
+          "value": "A07:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A2:2017 - Broken Authentication",
+          "value": "A2:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B501",
+          "value": "B501"
+        }
+      ]
+    },
+    {
+      "id": "6cac58319f88ad3a1cb16df9c1272049ea0f909fa5fc3f67508148fda3ce5e2c",
+      "category": "sast",
+      "name": "Additional vulnerability 2",
+      "description": "The `RegExp` constructor was called with a non-literal value.",
+      "cve": "semgrep_id:eslint.detect-non-literal-regexp:15:15",
+      "severity": "Medium",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "app/static/main.js",
+        "start_line": 15
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "eslint.detect-non-literal-regexp",
+          "value": "eslint.detect-non-literal-regexp",
+          "url": "https://semgrep.dev/r/gitlab.eslint.detect-non-literal-regexp"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-185",
+          "value": "185",
+          "url": "https://cwe.mitre.org/data/definitions/185.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A03:2021 - Injection",
+          "value": "A03:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A1:2017 - Injection",
+          "value": "A1:2017"
+        },
+        {
+          "type": "eslint_rule_id",
+          "name": "ESLint rule ID/detect-non-literal-regexp",
+          "value": "detect-non-literal-regexp"
+        }
+      ]
+    }
+  ],
+  "scan": {
+    "analyzer": {
+      "id": "semgrep",
+      "name": "Semgrep",
+      "url": "https://gitlab.com/gitlab-org/security-products/analyzers/semgrep",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "6.7.1"
+    },
+    "scanner": {
+      "id": "semgrep",
+      "name": "Semgrep",
+      "url": "https://github.com/returntocorp/semgrep",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "1.118.0"
+    },
+    "type": "sast",
+    "start_time": "2025-11-07T18:35:36",
+    "end_time": "2025-11-07T18:35:41",
+    "status": "success",
+    "observability": {
+      "events": [
+        {
+          "event": "collect_sast_scan_metrics_from_pipeline",
+          "property": "fcdda559-730c-40ab-9aea-0356dbb429b6",
+          "label": "semgrep",
+          "value": 0,
+          "version": "6.7.1",
+          "exit_code": 2,
+          "override_count": 0,
+          "passthrough_count": 0,
+          "custom_exclude_path_count": 0,
+          "time_s": 5,
+          "file_count": 4
+        }
+      ]
+    }
+  }
+}

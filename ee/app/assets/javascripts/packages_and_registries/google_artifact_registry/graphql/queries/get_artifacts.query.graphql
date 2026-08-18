@@ -1,0 +1,31 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getArtifacts(
+  $fullPath: ID!
+  $first: Int
+  $sort: GoogleCloudArtifactRegistryArtifactsSort
+  $after: String
+) {
+  project(fullPath: $fullPath) {
+    id
+    googleCloudArtifactRegistryRepository {
+      projectId
+      artifacts(first: $first, sort: $sort, after: $after) {
+        nodes {
+          ... on GoogleCloudArtifactRegistryDockerImage {
+            name
+            uri
+            image
+            digest
+            tags
+            uploadTime
+            updateTime
+          }
+        }
+        pageInfo {
+          ...PageInfo
+        }
+      }
+    }
+  }
+}

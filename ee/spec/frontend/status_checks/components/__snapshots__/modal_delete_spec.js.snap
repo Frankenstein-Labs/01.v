@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modal delete Modal the modal text matches the snapshot 1`] = `
+<div>
+  You are about to delete the
+  <strong>
+    Foo
+  </strong>
+  status check.
+</div>
+`;

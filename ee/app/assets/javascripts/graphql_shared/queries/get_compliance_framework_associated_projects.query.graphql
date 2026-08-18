@@ -1,0 +1,21 @@
+query complianceFrameworksProjects(
+  $fullPath: ID!
+  $complianceFramework: ComplianceManagementFrameworkID
+) {
+  group(fullPath: $fullPath) {
+    id
+    name
+    projects(includeSubgroups: true, complianceFrameworkFilters: { id: $complianceFramework }) {
+      nodes {
+        id
+        name
+        webUrl
+        complianceFrameworks {
+          nodes {
+            id
+          }
+        }
+      }
+    }
+  }
+}

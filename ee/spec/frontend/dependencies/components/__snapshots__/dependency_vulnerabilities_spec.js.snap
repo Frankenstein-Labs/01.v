@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DependencVulnerabilities component given a huge number vulnerabilities renders the excess message 1`] = `
+<li
+  class="!gl-mt-5 !gl-text-center gl-text-subtle"
+>
+  1 additional vulnerability not shown
+</li>
+`;
+
+exports[`DependencVulnerabilities component given no vulnerabilities renders an empty list 1`] = `
+<ul
+  class="!gl-mb-0 list-unstyled"
+/>
+`;

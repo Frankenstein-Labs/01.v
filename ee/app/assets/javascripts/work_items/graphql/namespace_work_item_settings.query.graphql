@@ -1,0 +1,10 @@
+# @feature_category: team_planning
+
+query namespaceWorkItemSettings($fullPath: ID!) {
+  namespace(fullPath: $fullPath) {
+    id
+    workItemSettings {
+      customizableTypeVisibility
+    }
+  }
+}

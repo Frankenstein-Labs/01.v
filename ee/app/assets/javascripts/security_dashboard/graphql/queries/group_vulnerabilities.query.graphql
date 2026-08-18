@@ -1,0 +1,78 @@
+#import "../fragments/vulnerability_report_list.fragment.graphql"
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query groupVulnerabilities(
+  $fullPath: ID!
+  $before: String
+  $after: String
+  $first: Int = 20
+  $last: Int
+  $projectId: [ID!]
+  $severity: [VulnerabilitySeverity!]
+  $reportType: [VulnerabilityReportType!]
+  $scanner: [String!]
+  $scannerId: [VulnerabilitiesScannerID!]
+  $state: [VulnerabilityState!]
+  $dismissalReason: [VulnerabilityDismissalReason!]
+  $identifierName: String
+  $sort: VulnerabilitySort
+  $hasIssues: Boolean
+  $hasResolution: Boolean
+  $hasMergeRequest: Boolean
+  $hasRemediations: Boolean
+  $hasAiResolution: Boolean
+  $vetEnabled: Boolean = false
+  $clusterAgentId: [ClustersAgentID!]
+  $owaspTopTen: [VulnerabilityOwaspTop10!]
+  $owaspTopTen2021: [VulnerabilityOwasp2021Top10!]
+  $owaspTopTen2025: [VulnerabilityOwasp2025Top10!]
+  $includeSeverityOverrides: Boolean = false
+  $useLatestMr: Boolean = false
+  $policyAutoDismissed: Boolean
+  $policyViolations: [PolicyViolations!]
+  $reachability: ReachabilityType
+  $validityCheck: [VulnerabilityFindingTokenStatusState!]
+  $falsePositive: Boolean
+  $malware: Boolean
+) {
+  group(fullPath: $fullPath) {
+    id
+    vulnerabilities(
+      before: $before
+      after: $after
+      first: $first
+      last: $last
+      severity: $severity
+      reportType: $reportType
+      scanner: $scanner
+      scannerId: $scannerId
+      state: $state
+      dismissalReason: $dismissalReason
+      policyAutoDismissed: $policyAutoDismissed
+      projectId: $projectId
+      sort: $sort
+      hasIssues: $hasIssues
+      hasResolution: $hasResolution
+      hasMergeRequest: $hasMergeRequest
+      hasRemediations: $hasRemediations
+      hasAiResolution: $hasAiResolution
+      clusterAgentId: $clusterAgentId
+      owaspTopTen: $owaspTopTen
+      owaspTopTen2021: $owaspTopTen2021
+      owaspTopTen2025: $owaspTopTen2025
+      identifierName: $identifierName
+      policyViolations: $policyViolations
+      reachability: $reachability
+      validityCheck: $validityCheck
+      falsePositive: $falsePositive
+      malware: $malware
+    ) {
+      nodes {
+        ...VulnerabilityReportListFragment
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

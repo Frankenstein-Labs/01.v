@@ -1,0 +1,30 @@
+# @feature_category: ai_abstraction_layer
+query getGroupAiDomainSettings(
+  $fullPath: ID!
+  $type: AiDomainSettingType!
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+  $search: String
+) {
+  namespace(fullPath: $fullPath) {
+    id
+    aiDomainSettings(
+      domainSettingType: $type
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+      search: $search
+    ) {
+      nodes
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+}

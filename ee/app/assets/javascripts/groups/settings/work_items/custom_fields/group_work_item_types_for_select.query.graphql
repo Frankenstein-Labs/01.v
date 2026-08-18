@@ -1,0 +1,15 @@
+# @feature_category: team_planning
+query groupWorkItemTypesForSelect($fullPath: ID!) {
+  namespace(fullPath: $fullPath) {
+    id
+    workItemTypes {
+      nodes {
+        id
+        name
+        widgetDefinitions {
+          type
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+query Subgroups($fullPath: ID!, $after: String, $search: String, $hasSearch: Boolean = false) {
+  group(fullPath: $fullPath) {
+    id
+    name
+    fullPath
+    avatarUrl
+    descendantGroups(
+      archived: false
+      includeParentDescendants: $hasSearch
+      first: 10
+      after: $after
+      search: $search
+    ) {
+      edges {
+        node {
+          id
+          name
+          projectsCount
+          descendantGroupsCount
+          fullPath
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}

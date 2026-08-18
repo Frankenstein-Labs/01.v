@@ -1,0 +1,23 @@
+query getEECostFactoredProjectStorageStatistics($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    statisticsDetailsPaths {
+      containerRegistry
+      buildArtifacts
+      packages
+      repository
+      snippets
+      wiki
+    }
+    statistics {
+      containerRegistrySize
+      buildArtifactsSize: costFactoredBuildArtifactsSize
+      lfsObjectsSize: costFactoredLfsObjectsSize
+      packagesSize: costFactoredPackagesSize
+      repositorySize: costFactoredRepositorySize
+      snippetsSize: costFactoredSnippetsSize
+      storageSize: costFactoredStorageSize
+      wikiSize: costFactoredWikiSize
+    }
+  }
+}

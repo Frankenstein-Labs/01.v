@@ -1,0 +1,8 @@
+# @feature_category: ai_abstraction_layer
+mutation aiDomainSettingsInstanceUpdate($input: AiDomainSettingsInstanceUpdateInput!) {
+  aiDomainSettingsInstanceUpdate(input: $input) {
+    addedDomains
+    removedDomains
+    errors
+  }
+}

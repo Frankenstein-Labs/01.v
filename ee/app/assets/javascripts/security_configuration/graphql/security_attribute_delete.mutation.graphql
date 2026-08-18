@@ -1,0 +1,6 @@
+mutation deleteSecurityAttribute($id: SecurityAttributeID!) {
+  securityAttributeDestroy(input: { id: $id }) {
+    deletedAttributeGid
+    errors
+  }
+}

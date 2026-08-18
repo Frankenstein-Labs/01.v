@@ -1,0 +1,10 @@
+---
+name: agent_artifacts_page
+description: Enable Agent Artifacts page for monitoring and observing AI agent behavior
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/592473
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/226927
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/593223
+milestone: '18.11'
+group: group::compliance
+type: beta
+default_enabled: true

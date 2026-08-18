@@ -1,0 +1,14 @@
+# @feature_category: virtual_registry
+
+query getMavenVirtualRegistries($groupPath: ID!, $first: Int) {
+  group(fullPath: $groupPath) {
+    id
+    registries: virtualRegistriesPackagesMavenRegistries(first: $first) {
+      nodes {
+        id
+        name
+        updatedAt
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EE billings subscription module mutations RECEIVE_SUBSCRIPTION_SUCCESS with Free plan updates table free with subscription plan 1`] = `
+[
+  {
+    "seatsInUse": 0,
+    "subscriptionStartDate": "2018-10-30",
+  },
+]
+`;
+
+exports[`EE billings subscription module mutations RECEIVE_SUBSCRIPTION_SUCCESS with Ultimate subscription updates table default with subscription plan 1`] = `
+[
+  {
+    "maxSeatsUsed": 104,
+    "seatsInSubscription": 100,
+    "seatsInUse": 98,
+    "seatsOwed": 4,
+  },
+  {
+    "nextInvoice": "2018-10-01",
+    "nextTermStartDate": null,
+    "subscriptionEndDate": "2019-07-11",
+    "subscriptionStartDate": "2018-07-11",
+  },
+]
+`;
+
+exports[`EE billings subscription module mutations RECEIVE_SUBSCRIPTION_SUCCESS with Ultimate trial updates table trial with subscription plan 1`] = `
+[
+  {
+    "seatsInUse": 1,
+    "subscriptionStartDate": "2018-12-13",
+    "trialEndsOn": "2019-12-13",
+  },
+]
+`;

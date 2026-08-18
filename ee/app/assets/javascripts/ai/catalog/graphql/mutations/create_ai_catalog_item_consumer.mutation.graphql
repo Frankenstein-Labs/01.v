@@ -1,0 +1,18 @@
+# @feature_category: workflow_catalog
+mutation createAiCatalogItemConsumer($input: AiCatalogItemConsumerCreateInput!) {
+  aiCatalogItemConsumerCreate(input: $input) {
+    errors
+    itemConsumer {
+      id
+      webPath @gl_introduced(version: "18.9.0")
+      project {
+        id
+        name
+      }
+      group {
+        id
+        name
+      }
+    }
+  }
+}

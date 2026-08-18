@@ -1,0 +1,21 @@
+{
+  "allOf": [
+    { "$ref": "../../../../../../spec/fixtures/api/schemas/entities/issue_sidebar.json" },
+    {
+      "properties": {
+        "supports_epic": { "type": ["null", "boolean"] },
+        "features_available": {
+          "type": "object",
+          "properties": {
+            "health_status": { "type": "boolean" },
+            "issue_weights": { "type": "boolean" },
+            "epics": { "type": ["null", "boolean"] }
+          }
+        }
+      },
+      "required": [
+        "supports_epic", "features_available"
+      ]
+    }
+  ]
+}

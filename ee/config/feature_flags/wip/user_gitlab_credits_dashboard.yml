@@ -1,0 +1,10 @@
+---
+name: user_gitlab_credits_dashboard
+description: GitLab Credits usage dashboard for individual users
+feature_issue_url: https://gitlab.com/groups/gitlab-org/-/work_items/22817
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/246133
+rollout_issue_url:
+milestone: '19.3'
+group: group::utilization
+type: wip
+default_enabled: false

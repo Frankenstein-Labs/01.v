@@ -1,0 +1,31 @@
+mutation updateInstanceGcpLoggingDestination(
+  $id: AuditEventsInstanceGoogleCloudLoggingConfigurationID!
+  $name: String!
+  $googleProjectIdName: String!
+  $clientEmail: String!
+  $privateKey: String
+  $logIdName: String!
+  $active: Boolean = true
+) {
+  instanceGoogleCloudLoggingConfigurationUpdate(
+    input: {
+      id: $id
+      name: $name
+      googleProjectIdName: $googleProjectIdName
+      clientEmail: $clientEmail
+      privateKey: $privateKey
+      logIdName: $logIdName
+      active: $active
+    }
+  ) {
+    errors
+    instanceGoogleCloudLoggingConfiguration {
+      id
+      name
+      logIdName
+      googleProjectIdName
+      clientEmail
+      active
+    }
+  }
+}

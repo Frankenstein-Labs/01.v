@@ -1,0 +1,35 @@
+# @feature_category: team_planning
+query namespaceDefaultLifecycleTemplate($fullPath: ID!) {
+  namespace(fullPath: $fullPath) {
+    id
+    lifecycleTemplates {
+      id
+      name
+      workItemTypes {
+        id
+        name
+        iconName
+      }
+      defaultOpenStatus {
+        id
+        name
+      }
+      defaultClosedStatus {
+        id
+        name
+      }
+      defaultDuplicateStatus {
+        id
+        name
+      }
+      statuses {
+        id
+        name
+        iconName
+        color
+        category
+        description
+      }
+    }
+  }
+}

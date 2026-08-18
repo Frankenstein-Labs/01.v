@@ -1,0 +1,7 @@
+query getAiSlashCommands($url: String!) {
+  aiSlashCommands(url: $url) {
+    description
+    name
+    shouldSubmit
+  }
+}

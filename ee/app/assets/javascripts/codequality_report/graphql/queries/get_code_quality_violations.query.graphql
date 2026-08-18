@@ -1,0 +1,23 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getCodeQualityViolations($projectPath: ID!, $iid: ID!, $first: Int, $after: String) {
+  project(fullPath: $projectPath) {
+    id
+    pipeline(iid: $iid) {
+      id
+      codeQualityReports(first: $first, after: $after) {
+        count
+        nodes {
+          line
+          description
+          path
+          fingerprint
+          severity
+        }
+        pageInfo {
+          ...PageInfo
+        }
+      }
+    }
+  }
+}

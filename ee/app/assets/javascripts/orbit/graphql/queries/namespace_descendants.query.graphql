@@ -1,0 +1,20 @@
+# @feature_category: knowledge_graph
+query namespaceDescendants($fullPath: ID!, $search: String) {
+  group(fullPath: $fullPath) {
+    id
+    descendantGroups(search: $search, includeParentDescendants: false) {
+      nodes {
+        id
+        name
+        fullPath
+      }
+    }
+    projects(search: $search, includeSubgroups: true, sort: ACTIVITY_DESC) {
+      nodes {
+        id
+        name
+        fullPath
+      }
+    }
+  }
+}

@@ -1,0 +1,906 @@
+{
+  "version": "15.2.2",
+  "vulnerabilities": [
+    {
+      "id": "6e86f289638ae8edfd805b3f6cc865b7ad6c5651ded3faec4af6d54f3c0a48a9",
+      "category": "sast",
+      "name": "Key exchange without entity authentication. This is a very long title which exceeds the 255 character limit and will most certainly become truncated when the vulnerability is marked as already having been migrated. Vulnerability with issue link.",
+      "description": "The application was found to ignore host keys. Host keys are important as\nthey provide assurance that the client can prove that the host is trusted.\nBy ignoring these host keys, it is impossible for the client to validate the\nconnection is to a trusted host.\n\nFor the `ssh.ClientConfig` `HostKeyCallback` property, consider using the\n[knownhosts](https://pkg.go.dev/golang.org/x/crypto/ssh/knownhosts) package that\nparses OpenSSH's `known_hosts` key database.\n\nExample configuration connecting to a known, trusted host:\n```\nknownHostCallback, err := knownhosts.New(\"/home/user/.ssh/known_hosts\")\nif err != nil {\n  log.Fatal(err)\n}\n\n// Create client config using the knownHost callback function\nconfig := &ssh.ClientConfig{\n  ...\n  HostKeyCallback: knownHostCallback,\n}\n\n// Connect to ssh server\nconn, err := ssh.Dial(\"tcp\", \"localhost:22\", config)\nif err != nil {\n  log.Fatal(\"unable to connect: \", err)\n}\ndefer conn.Close()\n```\n",
+      "cve": "semgrep_id:gosec.G106-1:13:13",
+      "severity": "Critical",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "foo.go",
+        "start_line": 13
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "gosec.G106-1",
+          "value": "gosec.G106-1"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-322",
+          "value": "322",
+          "url": "https://cwe.mitre.org/data/definitions/322.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A07:2021 - Identification and Authentication Failures",
+          "value": "A07:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A2:2017 - Broken Authentication",
+          "value": "A2:2017"
+        },
+        {
+          "type": "gosec_rule_id",
+          "name": "Gosec Rule ID G106",
+          "value": "G106"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "foo.go",
+            "line_start": 9,
+            "line_end": 9,
+            "signatures": [
+              {
+                "algorithm": "scope_offset",
+                "value": "foo.go|bar[0]:0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "4869c7a76035fc3a42066c660dd4aee86204d2ee63542855103aa164d8daed55",
+      "category": "sast",
+      "name": "Exposure of Sensitive Information to an Unauthorized Actor. Vulnerability with flag.",
+      "description": "Function baz detected\n",
+      "cve": "semgrep_id:baz:7:7",
+      "severity": "Critical",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "foo.go",
+        "start_line": 7
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "baz",
+          "value": "baz"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-200",
+          "value": "200",
+          "url": "https://cwe.mitre.org/data/definitions/200.html"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "foo.go",
+            "line_start": 7,
+            "line_end": 7,
+            "signatures": [
+              {
+                "algorithm": "scope_offset",
+                "value": "foo.go|baz[0]:0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "6a8d97c532a32e7bb9e1d93b3300977b8a7e75f9ddcc5bac4edaa6cda3603833",
+      "category": "sast",
+      "name": "Deserialization of untrusted data. Vulnerability with external issue link.",
+      "description": "The application was found using an unsafe version of `yaml` load which is vulnerable to\ndeserialization attacks. Deserialization attacks exploit the process of reading serialized\ndata and turning it back\ninto an object. By constructing malicious objects and serializing them, an adversary may\nattempt to:\n\n- Inject code that is executed upon object construction, which occurs during the\ndeserialization process.\n- Exploit mass assignment by including fields that are not normally a part of the serialized\ndata but are read in during deserialization.\n\nTo remediate this issue, use `safe_load()` or call `yaml.load()` with the `Loader` argument\nset to\n`yaml.SafeLoader`.\n\nExample loading YAML using `safe_load`:\n```\nimport yaml\n\n# Use safe_load to load data into an intermediary object\nintermediary_object = yaml.safe_load(\"\"\"user:\n    name: 'test user'\"\"\"\n)\n# Create our real object, copying over only the necessary fields\nuser_object = {'user': {\n        # Assign the deserialized data from intermediary object\n        'name': intermediary_object['user']['name'],\n        # Add in protected data in object definition (or set it from a class constructor)\n        'is_admin': False,\n    }\n}\n# Work with user_object\n# ...\n```\n\nFor more details on deserialization attacks in general, see OWASP's guide:\n- https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html\n",
+      "cve": "semgrep_id:bandit.B506:329:329",
+      "severity": "High",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "app/app.py",
+        "start_line": 329
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B506",
+          "value": "bandit.B506",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B506"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-502",
+          "value": "502",
+          "url": "https://cwe.mitre.org/data/definitions/502.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A08:2021 - Software and Data Integrity Failures",
+          "value": "A08:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A8:2017 - Insecure Deserialization",
+          "value": "A8:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B506",
+          "value": "B506"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "app/app.py",
+            "line_start": 329,
+            "line_end": 329,
+            "signatures": [
+              {
+                "algorithm": "scope_offset_compressed",
+                "value": "app/app.py|yaml_hammer[0]:11"
+              },
+              {
+                "algorithm": "scope_offset",
+                "value": "app/app.py|yaml_hammer[0]:13"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "185f6aa5aece728c2b94f16ff36ea99339dbeb39a027964d65a0e544b439529d",
+      "category": "sast",
+      "name": "Improper neutralization of special elements used in an SQL Command ('SQL Injection'). Vulnerability with user mention.",
+      "description": "SQL Injection is a critical vulnerability that can lead to data or system compromise.",
+      "cve": "semgrep_id:bandit.B608:265:265",
+      "severity": "High",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "app/app.py",
+        "start_line": 265
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B608",
+          "value": "bandit.B608",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B608"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-89",
+          "value": "89",
+          "url": "https://cwe.mitre.org/data/definitions/89.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A03:2021 - Injection",
+          "value": "A03:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A1:2017 - Injection",
+          "value": "A1:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B608",
+          "value": "B608"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "app/app.py",
+            "line_start": 265,
+            "line_end": 265,
+            "signatures": [
+              {
+                "algorithm": "scope_offset_compressed",
+                "value": "app/app.py|search_customer[0]:15"
+              },
+              {
+                "algorithm": "scope_offset",
+                "value": "app/app.py|search_customer[0]:18"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "afb3a18f344a72ed01c842afd1939b4c33b150ba50234001d8eb34ce72a977f4",
+      "category": "sast",
+      "name": "Improper neutralization of directives in dynamically evaluated code ('Eval Injection'). Vulnerability to be confirmed.",
+      "description": "The application was found calling the `eval` function OR Function()\n  constructor OR setTimeout() OR setInterval() methods. If the\n\n  variables or strings or functions passed to these methods contains user-supplied input, an adversary could attempt to execute arbitrary\n\n  JavaScript\n\n  code. This could lead to a full system compromise in Node applications or Cross-site Scripting\n\n  (XSS) in web applications.\n\n\n  To remediate this issue, remove all calls to above methods and consider alternative methods for\n\n  executing\n\n  the necessary business logic. There is almost no safe method of calling `eval` or other above stated sinks with\n\n  user-supplied input.\n\n  Instead, consider alternative methods such as using property accessors to dynamically access\n\n  values.\n\n\n  Example using property accessors to dynamically access an object's property:\n\n  ```\n\n  // Define an object\n\n  const obj = {key1: 'value1', key2: 'value2'};\n\n  // Get key dynamically from user input\n\n  const key = getUserInput();\n\n  // Check if the key exists in our object and return it, or a default empty string\n\n  const value = (obj.hasOwnProperty(key)) ? obj[key] : '';\n\n  // Work with the value\n\n  ```\n\n\n  For more information on why not to use `eval`, and alternatives see:\n\n  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!\n\n  Other References:\n\n  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/Function\n\n  - https://developer.mozilla.org/en-US/docs/Web/API/setTimeout\n\n  - https://developer.mozilla.org/en-US/docs/Web/API/setInterval\n",
+      "cve": "semgrep_id:eslint.detect-eval-with-expression:10:10",
+      "severity": "High",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "app/static/main.js",
+        "start_line": 10
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "eslint.detect-eval-with-expression",
+          "value": "eslint.detect-eval-with-expression",
+          "url": "https://semgrep.dev/r/gitlab.eslint.detect-eval-with-expression"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-95",
+          "value": "95",
+          "url": "https://cwe.mitre.org/data/definitions/95.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A03:2021 - Injection",
+          "value": "A03:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A1:2017 - Injection",
+          "value": "A1:2017"
+        },
+        {
+          "type": "eslint_rule_id",
+          "name": "ESLint rule ID/detect-eval-with-expression",
+          "value": "detect-eval-with-expression"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "app/static/main.js",
+            "line_start": 10,
+            "line_end": 10,
+            "signatures": [
+              {
+                "algorithm": "scope_offset",
+                "value": "app/static/main.js|dangerous_eval[0]:1"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "4e7633d40f31f6398b4c7ffc4bf481ba6fe627c34042d7439b71259e6ea9b32c",
+      "category": "sast",
+      "name": "Improper neutralization of special elements used in an SQL Command ('SQL Injection'). Vulnerability to be confirmed.",
+      "description": "Detected user input used to manually construct a SQL string. This is usually\nbad practice because manual construction could accidentally result in a SQL\ninjection. An attacker could use a SQL injection to steal or modify contents\nof the database. Instead, use a parameterized query which is available\nby default in most database engines. Alternatively, consider using an\nobject-relational mapper (ORM) such as SQLAlchemy which will protect your queries.\n\nSQL Injections are a critical type of vulnerability that can lead to data \nor system compromise. By dynamically generating SQL query strings, user \ninput may be able to influence the logic of an SQL statement. \nThis could lead to an malicious parties accessing information they should not \nhave access to, or in some circumstances, being able to execute OS functionality\nor code.\n\nReplace all dynamically generated SQL queries with parameterized queries. \nIn situations where dynamic queries must be created, never use direct user input,\nbut instead use a map or dictionary of valid values and resolve them using a user \nsupplied key.\n\nFor example, some database drivers do not allow parameterized queries for \n`>` or `<` comparison operators. In these cases, do not use a user supplied \n`>` or `<` value, but rather have the user supply a `gt` or `lt` value. \nThe alphabetical values are then used to look up the `>` and `<` values to be used \nin the construction of the dynamic query. The same goes for other queries where \ncolumn or table names are required but cannot be parameterized.\nData that is possible user-controlled from a python request is passed\nto `execute()` function. To remediate this issue, use SQLAlchemy statements\nwhich are built with query parameterization and therefore not vulnerable \nto sql injection.\n\nIf for some reason this is not feasible, ensure calls including user-supplied \ndata pass it in to the `params` parameter of the `execute()` method.\nBelow is an example using `execute()`, passing in user-supplied data as `params`. \nThis will treat the query as a parameterized query and `params` as strictly data, \npreventing any possibility of SQL Injection.\n\n```\nname = request.args.get('name')\nreq = text('SELECT * FROM student WHERE firstname = :x')\nresult = db.session.execute(req, {\"x\":name})\n```\nFor more information on QuerySets see:\n- https://docs.djangoproject.com/en/4.2/ref/models/querysets/#queryset-api\nFor more information on SQL Injections see OWASP:\n- https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html\n",
+      "cve": "semgrep_id:python_flask_rule-flask-tainted-sql-string:261:261",
+      "severity": "High",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "app/app.py",
+        "start_line": 261
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "python_flask_rule-flask-tainted-sql-string",
+          "value": "python_flask_rule-flask-tainted-sql-string"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-89",
+          "value": "89",
+          "url": "https://cwe.mitre.org/data/definitions/89.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A03:2021 - Injection",
+          "value": "A03:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A1:2017 - Injection",
+          "value": "A1:2017"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "app/app.py",
+            "line_start": 261,
+            "line_end": 261,
+            "signatures": [
+              {
+                "algorithm": "scope_offset",
+                "value": "app/app.py|search_customer[0]:14"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "819fa95af305ebbf12f83f5cd85ce6b9720a22a112869bb6ef76bec8fe449d62",
+      "category": "sast",
+      "name": "Allocation of resources without limits or throttling. Vulnerability to be dismissed from pipeline security tab.",
+      "description": "The application was found using the `requests` module without configuring a timeout value for\nconnections. This could lead to uncontrolled resource consumption where the application could\nrun out of\nsocket descriptors, effectively causing a Denial of Service (DoS).\n\nTo remediate this issue, pass in a `timeout=` argument to each `requests` call.\n\nExample using a timeout for an HTTP GET request:\n```\n# Issue a GET request to https://example.com with a timeout of 10 seconds\nresponse = requests.get('https://example.com', timeout=10)\n# Work with the response object\n# ...\n```\n\nFor more information on using the requests module see:\n- https://requests.readthedocs.io/en/latest/api/\n",
+      "cve": "semgrep_id:bandit.B113:17:18",
+      "severity": "Critical",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "tests/e2e_zap.py",
+        "start_line": 17,
+        "end_line": 18
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B113",
+          "value": "bandit.B113",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B113"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-770",
+          "value": "770",
+          "url": "https://cwe.mitre.org/data/definitions/770.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A05:2021 - Security Misconfiguration",
+          "value": "A05:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A6:2017 - Security Misconfiguration",
+          "value": "A6:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B113",
+          "value": "B113"
+        }
+      ]
+    },
+    {
+      "id": "10ea0fe99f1cb7743ecc12fd2a83cb76853523f53e8f24f688daddd2d5687e32",
+      "category": "sast",
+      "name": "Allocation of resources without limits or throttling. Vulnerability with discussion note.",
+      "description": "The application was found using the `requests` module without configuring a timeout value for\nconnections. This could lead to uncontrolled resource consumption where the application could\nrun out of\nsocket descriptors, effectively causing a Denial of Service (DoS).\n\nTo remediate this issue, pass in a `timeout=` argument to each `requests` call.\n\nExample using a timeout for an HTTP GET request:\n```\n# Issue a GET request to https://example.com with a timeout of 10 seconds\nresponse = requests.get('https://example.com', timeout=10)\n# Work with the response object\n# ...\n```\n\nFor more information on using the requests module see:\n- https://requests.readthedocs.io/en/latest/api/\n",
+      "cve": "semgrep_id:bandit.B113:28:29",
+      "severity": "Critical",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "tests/e2e_zap.py",
+        "start_line": 28,
+        "end_line": 29
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B113",
+          "value": "bandit.B113",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B113"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-770",
+          "value": "770",
+          "url": "https://cwe.mitre.org/data/definitions/770.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A05:2021 - Security Misconfiguration",
+          "value": "A05:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A6:2017 - Security Misconfiguration",
+          "value": "A6:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B113",
+          "value": "B113"
+        }
+      ]
+    },
+    {
+      "id": "61c61d9440d5a9c4b76ca89d7a6146b50dfdce4d5ec3e93d42fe255c67bf4684",
+      "category": "sast",
+      "name": "Allocation of resources without limits or throttling. Vulnerability with discussion note.",
+      "description": "The application was found using the `requests` module without configuring a timeout value for\nconnections. This could lead to uncontrolled resource consumption where the application could\nrun out of\nsocket descriptors, effectively causing a Denial of Service (DoS).\n\nTo remediate this issue, pass in a `timeout=` argument to each `requests` call.\n\nExample using a timeout for an HTTP GET request:\n```\n# Issue a GET request to https://example.com with a timeout of 10 seconds\nresponse = requests.get('https://example.com', timeout=10)\n# Work with the response object\n# ...\n```\n\nFor more information on using the requests module see:\n- https://requests.readthedocs.io/en/latest/api/\n",
+      "cve": "semgrep_id:bandit.B113:36:37",
+      "severity": "Critical",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "tests/e2e_zap.py",
+        "start_line": 36,
+        "end_line": 37
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B113",
+          "value": "bandit.B113",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B113"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-770",
+          "value": "770",
+          "url": "https://cwe.mitre.org/data/definitions/770.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A05:2021 - Security Misconfiguration",
+          "value": "A05:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A6:2017 - Security Misconfiguration",
+          "value": "A6:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B113",
+          "value": "B113"
+        }
+      ]
+    },
+    {
+      "id": "7fef73eeb450ba731ada304710b14f4ca65790c4d571ebad2af3ee5191e5b42f",
+      "category": "sast",
+      "name": "Allocation of resources without limits or throttling. Vulnerability with merge request link.",
+      "description": "The application was found using the `requests` module without configuring a timeout value for\nconnections. This could lead to uncontrolled resource consumption where the application could\nrun out of\nsocket descriptors, effectively causing a Denial of Service (DoS).\n\nTo remediate this issue, pass in a `timeout=` argument to each `requests` call.\n\nExample using a timeout for an HTTP GET request:\n```\n# Issue a GET request to https://example.com with a timeout of 10 seconds\nresponse = requests.get('https://example.com', timeout=10)\n# Work with the response object\n# ...\n```\n\nFor more information on using the requests module see:\n- https://requests.readthedocs.io/en/latest/api/\n",
+      "cve": "semgrep_id:bandit.B113:44:45",
+      "severity": "Critical",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "tests/e2e_zap.py",
+        "start_line": 44,
+        "end_line": 45
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B113",
+          "value": "bandit.B113",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B113"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-770",
+          "value": "770",
+          "url": "https://cwe.mitre.org/data/definitions/770.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A05:2021 - Security Misconfiguration",
+          "value": "A05:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A6:2017 - Security Misconfiguration",
+          "value": "A6:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B113",
+          "value": "B113"
+        }
+      ]
+    },
+    {
+      "id": "e81f87450a35ed038550bfe4f56dcff5bebd9c5ca5f309b6144de063cb99e1b2",
+      "category": "sast",
+      "name": "Use of a broken or risky cryptographic algorithm. Vulnerability to be resolved.",
+      "description": "The application was found using an insecure or risky digest or signature algorithm. MD2, MD4,\n MD5  and SHA1 hash algorithms have been found to be vulnerable to producing collisions.\n\nThis means\nthat two different values, when hashed, can lead to the same hash value. If the application is\ntrying\nto use these hash methods for storing passwords, then it is recommended to switch to a\npassword hashing\nalgorithm such as Argon2id or PBKDF2.\n\nNote that the `Crypto` and `Cryptodome` Python packages are no longer recommended for\nnew applications, instead consider using the [cryptography](https://cryptography.io/) package.\n\nExample of creating a SHA-384 hash using the `cryptography` package:\n```\nfrom cryptography.hazmat.primitives import hashes\n# Create a SHA384 digest\ndigest = hashes.Hash(hashes.SHA384())\n# Update the digest with some initial data\ndigest.update(b\"some data to hash\")\n# Add more data to the digest\ndigest.update(b\"some more data\")\n# Finalize the digest as bytes\nresult = digest.finalize()\n```\n\nFor more information on secure password storage see OWASP:\n- https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html\n\nFor more information on the cryptography module see:\n- https://cryptography.io/en/latest/\n",
+      "cve": "semgrep_id:bandit.B303-1:141:141",
+      "severity": "Medium",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "app/app.py",
+        "start_line": 141
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B303-1",
+          "value": "bandit.B303-1",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B303-1"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-327",
+          "value": "327",
+          "url": "https://cwe.mitre.org/data/definitions/327.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A02:2021 - Cryptographic Failures",
+          "value": "A02:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A3:2017 - Sensitive Data Exposure",
+          "value": "A3:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B303",
+          "value": "B303"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "app/app.py",
+            "line_start": 141,
+            "line_end": 141,
+            "signatures": [
+              {
+                "algorithm": "scope_offset",
+                "value": "app/app.py|reg_customer[0]:6"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "3f8a15b8ea5a1e062262c837c4b5c763320c40622f50183f04fa2e584fc05e13",
+      "category": "sast",
+      "name": "Improper certificate validation. Vulnerability to be resolved.",
+      "description": "The application was found using the `requests` module without configuring a timeout value for\nconnections. The `verify=False` argument has been set, which effectively disables the\nvalidation\nof server certificates.\n\nThis allows for an adversary who is in between the application and the target host to intercept\npotentially sensitive information or transmit malicious data.\n\nTo remediate this issue either remove the `verify=False` argument, or set `verify=True`to each\n`requests` call.\n\nExample verifying server certificates for an HTTP GET request:\n```\n# Issue a GET request to https://example.com with a timeout of 10 seconds and verify the\n# server certificate explicitly.\nresponse = requests.get('https://example.com', timeout=10, verify=True)\n# Work with the response object\n# ...\n```\n\nFor more information on using the requests module see:\n- https://requests.readthedocs.io/en/latest/api/\n",
+      "cve": "semgrep_id:bandit.B501:17:18",
+      "severity": "Medium",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "tests/e2e_zap.py",
+        "start_line": 17,
+        "end_line": 18
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B501",
+          "value": "bandit.B501",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B501"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-295",
+          "value": "295",
+          "url": "https://cwe.mitre.org/data/definitions/295.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A07:2021 - Identification and Authentication Failures",
+          "value": "A07:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A2:2017 - Broken Authentication",
+          "value": "A2:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B501",
+          "value": "B501"
+        }
+      ]
+    },
+    {
+      "id": "8b6a98da4410a8abe0a3338ec5db34f4a9a48d0716ba296dcda0e93b63a5766f",
+      "category": "sast",
+      "name": "Improper certificate validation. Vulnerability to be resolved.",
+      "description": "The application was found using the `requests` module without configuring a timeout value for\nconnections. The `verify=False` argument has been set, which effectively disables the\nvalidation\nof server certificates.\n\nThis allows for an adversary who is in between the application and the target host to intercept\npotentially sensitive information or transmit malicious data.\n\nTo remediate this issue either remove the `verify=False` argument, or set `verify=True`to each\n`requests` call.\n\nExample verifying server certificates for an HTTP GET request:\n```\n# Issue a GET request to https://example.com with a timeout of 10 seconds and verify the\n# server certificate explicitly.\nresponse = requests.get('https://example.com', timeout=10, verify=True)\n# Work with the response object\n# ...\n```\n\nFor more information on using the requests module see:\n- https://requests.readthedocs.io/en/latest/api/\n",
+      "cve": "semgrep_id:bandit.B501:28:29",
+      "severity": "Medium",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "tests/e2e_zap.py",
+        "start_line": 28,
+        "end_line": 29
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B501",
+          "value": "bandit.B501",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B501"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-295",
+          "value": "295",
+          "url": "https://cwe.mitre.org/data/definitions/295.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A07:2021 - Identification and Authentication Failures",
+          "value": "A07:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A2:2017 - Broken Authentication",
+          "value": "A2:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B501",
+          "value": "B501"
+        }
+      ]
+    },
+    {
+      "id": "3b65f8017d6b3a73a5f6e7d1c0e9e78aa0daf817f06234985a9d011da1a9d804",
+      "category": "sast",
+      "name": "Improper certificate validation. Vulnerability to be resolved.",
+      "description": "The application was found using the `requests` module without configuring a timeout value for\nconnections. The `verify=False` argument has been set, which effectively disables the\nvalidation\nof server certificates.\n\nThis allows for an adversary who is in between the application and the target host to intercept\npotentially sensitive information or transmit malicious data.\n\nTo remediate this issue either remove the `verify=False` argument, or set `verify=True`to each\n`requests` call.\n\nExample verifying server certificates for an HTTP GET request:\n```\n# Issue a GET request to https://example.com with a timeout of 10 seconds and verify the\n# server certificate explicitly.\nresponse = requests.get('https://example.com', timeout=10, verify=True)\n# Work with the response object\n# ...\n```\n\nFor more information on using the requests module see:\n- https://requests.readthedocs.io/en/latest/api/\n",
+      "cve": "semgrep_id:bandit.B501:36:37",
+      "severity": "Medium",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "tests/e2e_zap.py",
+        "start_line": 36,
+        "end_line": 37
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B501",
+          "value": "bandit.B501",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B501"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-295",
+          "value": "295",
+          "url": "https://cwe.mitre.org/data/definitions/295.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A07:2021 - Identification and Authentication Failures",
+          "value": "A07:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A2:2017 - Broken Authentication",
+          "value": "A2:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B501",
+          "value": "B501"
+        }
+      ]
+    },
+    {
+      "id": "512131f12839cd51c58aaabf643870dc262bf169f0af15a47d0d073fcfd449ac",
+      "category": "sast",
+      "name": "Use of cryptographically weak pseudo-random number generator (PRNG). Vulnerability to be dismissed.",
+      "description": "Depending on the context, generating weak random numbers may expose cryptographic functions,\nwhich rely on these numbers, to be exploitable. When generating numbers for sensitive values\nsuch as tokens, nonces, and cryptographic keys, it is recommended that the `secrets` module\nbe used instead.\n\nExample using the secrets module:\n```\nimport secrets\n\n# Generate a secure random 64 byte array\nrandom_bytes = secrets.token_bytes(64)\nprint(random_bytes)\n\n# Generate a secure random 64 byte array as a hex string\nrandom_bytes_hex = secrets.token_hex(64)\n\n# Generate a secure random 64 byte array base64 encoded for use in URLs\nrandom_string = secrets.token_urlsafe(64)\n```\n\nFor more information on the `secrets` module see:\n- https://docs.python.org/3/library/secrets.html\n",
+      "cve": "semgrep_id:bandit.B311:295:295",
+      "severity": "Low",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "app/app.py",
+        "start_line": 295
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B311",
+          "value": "bandit.B311",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B311"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-338",
+          "value": "338",
+          "url": "https://cwe.mitre.org/data/definitions/338.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A02:2021 - Cryptographic Failures",
+          "value": "A02:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A3:2017 - Sensitive Data Exposure",
+          "value": "A3:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B311",
+          "value": "B311"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "app/app.py",
+            "line_start": 295,
+            "line_end": 295,
+            "signatures": [
+              {
+                "algorithm": "scope_offset_compressed",
+                "value": "app/app.py|hello[0]:3"
+              },
+              {
+                "algorithm": "scope_offset",
+                "value": "app/app.py|hello[0]:4"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "6cf069d55d47c54f5b2363af43f3c7a2d71ef25e04751111b6566fe89b90c8aa",
+      "category": "sast",
+      "name": "Use of cryptographically weak pseudo-random number generator (PRNG). Vulnerability to be dismissed.",
+      "description": "Depending on the context, generating weak random numbers may expose cryptographic functions",
+      "cve": "semgrep_id:bandit.B311:319:319",
+      "severity": "Low",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "app/app.py",
+        "start_line": 319
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B311",
+          "value": "bandit.B311",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B311"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-338",
+          "value": "338",
+          "url": "https://cwe.mitre.org/data/definitions/338.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A02:2021 - Cryptographic Failures",
+          "value": "A02:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A3:2017 - Sensitive Data Exposure",
+          "value": "A3:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B311",
+          "value": "B311"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "app/app.py",
+            "line_start": 319,
+            "line_end": 319,
+            "signatures": [
+              {
+                "algorithm": "scope_offset",
+                "value": "app/app.py|yaml_hammer[0]:3"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "scan": {
+    "analyzer": {
+      "id": "semgrep",
+      "name": "Semgrep",
+      "url": "https://gitlab.com/gitlab-org/security-products/analyzers/semgrep",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "6.7.1"
+    },
+    "scanner": {
+      "id": "semgrep",
+      "name": "Semgrep",
+      "url": "https://github.com/returntocorp/semgrep",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "1.118.0"
+    },
+    "type": "sast",
+    "start_time": "2025-11-07T18:35:36",
+    "end_time": "2025-11-07T18:35:41",
+    "status": "success",
+    "observability": {
+      "events": [
+        {
+          "event": "collect_sast_scan_metrics_from_pipeline",
+          "property": "fcdda559-730c-40ab-9aea-0356dbb429b6",
+          "label": "semgrep",
+          "value": 0,
+          "version": "6.7.1",
+          "exit_code": 2,
+          "override_count": 0,
+          "passthrough_count": 0,
+          "custom_exclude_path_count": 0,
+          "time_s": 5,
+          "file_count": 4
+        }
+      ]
+    }
+  }
+}

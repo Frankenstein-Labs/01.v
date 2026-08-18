@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "required": [
+    "added",
+    "duplicate",
+    "invalid"
+  ],
+  "properties": {
+    "added": {
+      "type": "array",
+      "items": { "type": "integer" }
+    },
+    "duplicate": {
+      "type": "array",
+      "items": { "type": "integer" }
+    },
+    "invalid": {
+      "type": "array",
+      "items": {
+        "items": { "type": "integer" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

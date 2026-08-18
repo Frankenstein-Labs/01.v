@@ -1,0 +1,5 @@
+# @feature_category: duo_agent_platform
+query getGitlabCreditsStatus($namespaceId: NamespaceID) {
+  gitlabCreditsAvailable(namespaceId: $namespaceId)
+  gitlabCreditsUnavailableReason(namespaceId: $namespaceId) @gl_introduced(version: "19.2.0")
+}

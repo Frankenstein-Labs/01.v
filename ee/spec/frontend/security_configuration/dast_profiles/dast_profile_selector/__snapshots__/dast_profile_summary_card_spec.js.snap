@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DastProfileSummaryCard renders properly 1`] = `
+<div
+  class="gl-card gl-my-3"
+>
+  <div
+    class="gl-card-header"
+  >
+    <div
+      class="gl-flex gl-items-center gl-justify-between"
+    >
+      <div>
+        <h3
+          class="gl-inline gl-my-0 gl-text-lg"
+        />
+      </div>
+      <div
+        class="gl-flex gl-gap-x-3"
+      >
+        <gl-button-stub
+          accessibledisabled="true"
+          buttontextclasses=""
+          category="secondary"
+          data-testid="profile-select-btn"
+          icon=""
+          size="small"
+          tag="button"
+          title="Select Profile"
+          type="button"
+          variant="confirm"
+        >
+          Select
+        </gl-button-stub>
+        <gl-button-stub
+          accessibledisabled="true"
+          aria-label="Edit %{profileType} profile"
+          buttontextclasses=""
+          category="primary"
+          data-testid="profile-edit-btn"
+          icon="pencil"
+          size="small"
+          tag="button"
+          title="Edit scanner profile"
+          type="button"
+          variant="default"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    class="gl-card-body"
+  />
+</div>
+`;

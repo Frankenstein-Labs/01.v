@@ -1,0 +1,5 @@
+mutation runnersExportUsage($input: RunnersExportUsageInput!) {
+  runnersExportUsage(input: $input) {
+    errors
+  }
+}

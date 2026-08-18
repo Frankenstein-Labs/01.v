@@ -1,0 +1,79 @@
+{
+  "time": "2026-01-26T17:51:15.111915Z",
+  "type": "response",
+  "auth": {
+    "display_name": "user_1-project_92-auth-pipeline_jwt-92",
+    "policies": [
+      "default",
+      "pipelines/branch/6d61696e",
+      "pipelines/global"
+    ],
+    "token_policies": [
+      "default",
+      "pipelines/branch/6d61696e",
+      "pipelines/global"
+    ],
+    "policy_results": {
+      "allowed": true,
+      "granting_policies": [
+        {
+          "name": "pipelines/branch/6d61696e",
+          "namespace_id": "p15WXd",
+          "namespace_path": "user_1/project_92/",
+          "type": "acl"
+        }
+      ]
+    },
+    "metadata": {
+      "namespace_id": "1",
+      "project_id": "92",
+      "role": "all_pipelines",
+      "user_id": "1"
+    },
+    "entity_id": "a42e2a3c-66b8-8be3-7537-f7fc7f484d83.p15WXd",
+    "token_type": "service",
+    "token_ttl": 900,
+    "token_issue_time": "2026-01-26T18:51:15+01:00"
+  },
+  "request": {
+    "id": "8a0fe80b-43df-c4c9-003b-a52728fc32b0",
+    "client_id": "a42e2a3c-66b8-8be3-7537-f7fc7f484d83.p15WXd",
+    "operation": "read",
+    "mount_point": "user_1/project_92/secrets/kv/",
+    "mount_type": "kv",
+    "mount_accessor": "kv_1872e05f",
+    "mount_running_version": "v2.4.4+builtin.bao",
+    "mount_class": "secret",
+    "namespace": {
+      "id": "p15WXd",
+      "path": "user_1/project_92/"
+    },
+    "path": "secrets/kv/data/explicit/test2",
+    "remote_address": "127.0.0.1",
+    "remote_port": 50955
+  },
+  "response": {
+    "mount_point": "user_1/project_92/secrets/kv/",
+    "mount_type": "kv",
+    "mount_accessor": "kv_1872e05f",
+    "mount_running_plugin_version": "v2.4.4+builtin.bao",
+    "mount_class": "secret",
+    "data": {
+      "data": {
+        "value": "REDACTED"
+      },
+      "metadata": {
+        "created_time": "2026-01-26T17:09:26.023158Z",
+        "custom_metadata": {
+          "branch": "main",
+          "create_completed_at": "2026-01-26T17:09:26Z",
+          "description": "test 2 test",
+          "environment": "*"
+        },
+        "deletion_time": "",
+        "destroyed": false,
+        "version": 1
+      }
+    }
+  }
+}

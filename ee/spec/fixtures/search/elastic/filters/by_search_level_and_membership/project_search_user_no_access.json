@@ -1,0 +1,52 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "terms": {
+            "_name": "filters:level:project",
+            "project_id": [
+              SEARCHED_PROJECT
+            ]
+          }
+        },
+        {
+          "bool": {
+            "should": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "terms": {
+                        "_name": "filters:permissions:project:repository_access_level:enabled",
+                        "repository_access_level": [
+                          20
+                        ]
+                      }
+                    }
+                  ],
+                  "filter": [
+                    {
+                      "terms": {
+                        "_name": "filters:permissions:project:visibility_level:public_and_internal",
+                        "visibility_level": [
+                          20,
+                          10
+                        ]
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1
+                }
+              }
+            ],
+            "minimum_should_match": 1
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

@@ -1,0 +1,18 @@
+fragment FeatureRetention on Analytics {
+  duoUsageEvents(feature: $feature, timestampFrom: $startDate, timestampTo: $endDate) {
+    aggregated(after: $after) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        dimensions {
+          feature
+          timestamp(granularity: $granularity)
+        }
+        returningUsersCount
+        previousPeriodUsersCount
+      }
+    }
+  }
+}

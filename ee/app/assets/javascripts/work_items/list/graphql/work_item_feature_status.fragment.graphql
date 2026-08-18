@@ -1,0 +1,12 @@
+# This fragment should only be used on the features field
+fragment WorkItemFeatureStatus on WorkItemWidgetStatus {
+  status {
+    id
+    category
+    color
+    description
+    iconName
+    name
+    position
+  }
+}

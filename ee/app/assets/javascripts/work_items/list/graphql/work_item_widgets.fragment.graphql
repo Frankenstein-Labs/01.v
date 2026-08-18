@@ -1,0 +1,34 @@
+#import "~/work_items/list/graphql/base_work_item_widgets.fragment.graphql"
+#import "ee/work_items/graphql/work_item_status.fragment.graphql"
+
+fragment WorkItemWidgets on WorkItemWidget {
+  ...BaseWorkItemWidgets
+  ... on WorkItemWidgetHealthStatus {
+    healthStatus
+  }
+  ... on WorkItemWidgetWeight {
+    weight
+  }
+  ... on WorkItemWidgetLinkedItems {
+    blockingCount
+    blockedByCount
+  }
+  ... on WorkItemWidgetIteration {
+    iteration {
+      id
+      title
+      startDate
+      dueDate
+      webUrl
+      iterationCadence {
+        id
+        title
+      }
+    }
+  }
+  ... on WorkItemWidgetStatus {
+    status {
+      ...WorkItemStatusFragment
+    }
+  }
+}

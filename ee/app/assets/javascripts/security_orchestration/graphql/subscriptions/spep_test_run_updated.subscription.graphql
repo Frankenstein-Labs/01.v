@@ -1,0 +1,9 @@
+#import "../fragments/spep_test_run.fragment.graphql"
+# @feature_category: security_policy_management
+subscription securityPolicyScheduleTestRunUpdated(
+  $testRunId: SecurityScheduledPipelineExecutionPolicyTestRunID!
+) {
+  securityPolicyScheduleTestRunUpdated(testRunId: $testRunId) {
+    ...SpepTestRun
+  }
+}

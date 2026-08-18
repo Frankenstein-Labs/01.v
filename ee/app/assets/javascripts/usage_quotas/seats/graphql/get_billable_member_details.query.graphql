@@ -1,0 +1,6 @@
+query getBillableMemberDetailsQuery($namespaceId: ID!, $memberId: ID!) {
+  billableMemberDetails(namespaceId: $namespaceId, memberId: $memberId) @client {
+    memberships
+    hasIndirectMembership
+  }
+}

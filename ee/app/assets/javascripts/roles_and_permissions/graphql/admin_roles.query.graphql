@@ -1,0 +1,9 @@
+#import "./fragments/role.fragment.graphql"
+
+query getAdminRoles {
+  adminMemberRoles {
+    nodes {
+      ...Role
+    }
+  }
+}

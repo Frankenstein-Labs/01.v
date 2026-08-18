@@ -1,0 +1,13 @@
+#import "./escalation_policy.fragment.graphql"
+
+query issueEscalationPolicy($fullPath: ID!, $iid: String!) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    issuable: issue(iid: $iid) {
+      id
+      attribute: escalationPolicy {
+        ...EscalationPolicyFragment
+      }
+    }
+  }
+}

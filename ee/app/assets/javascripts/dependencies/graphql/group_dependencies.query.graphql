@@ -1,0 +1,49 @@
+query getGroupDependencies(
+  $fullPath: ID!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $sort: DependencySort
+  $malware: Boolean
+) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    dependencies(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      sort: $sort
+      malware: $malware
+    ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      nodes {
+        id
+        name
+        version
+        componentVersion {
+          id
+          version
+        }
+        # Note: The packager field is currently associated with an issue, which needs to be resolved before it can be used:
+        # https://gitlab.com/gitlab-org/gitlab/-/issues/538181
+        # packager
+        location {
+          path
+        }
+        licenses {
+          name
+          url
+        }
+        vulnerabilityCount
+        malware @gl_introduced(version: "19.1.0")
+      }
+    }
+  }
+}

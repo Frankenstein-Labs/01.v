@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "confidential",
+    "title",
+    "assignees",
+    "milestone",
+    "due_date",
+    "state",
+    "reference",
+    "path",
+    "relation_path",
+    "weight",
+    "blocked"
+  ],
+  "properties": {
+    "id": { "type": "integer" },
+    "iid": { "type": "integer" },
+    "confidential": { "type": "boolean" },
+    "title": { "type": "string" },
+    "type": { "type": "string" },
+    "assignees": { "type": "array" },
+    "milestone": { "type": ["object", "null"] },
+    "due_date": { "type": ["string", "null"] },
+    "state": { "type": "string" },
+    "weight": { "type": ["integer", "null"] },
+    "blocked": { "type": "boolean" },
+    "reference": { "type": "string" },
+    "path": { "type": "string" },
+    "relation_path": { "type": "string" },
+    "epic_issue_id": { "type": ["integer", "null"] },
+    "created_at": { "type": "string" },
+    "closed_at": { "type": ["string", "null"] }
+  }
+}

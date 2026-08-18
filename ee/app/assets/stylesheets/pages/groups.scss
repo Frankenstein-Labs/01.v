@@ -1,0 +1,95 @@
+@use "sass:color";
+
+.plan-badge {
+  margin-right: 15px;
+
+  svg {
+    position: relative;
+    top: 3px;
+    height: 16px;
+    width: 16px;
+  }
+
+  &[data-plan='gold'] {
+    color: color.adjust($gl-ultimate-plan, $lightness: -20%);
+    svg g { fill: $gl-ultimate-plan; }
+  }
+
+  &[data-plan='ultimate'] {
+    color: color.adjust($gl-ultimate-plan, $lightness: -20%);
+    svg g { fill: $gl-ultimate-plan; }
+  }
+
+  &[data-plan='silver'] {
+    color: color.adjust($gl-premium-plan, $lightness: -20%);
+    svg g { fill: $gl-premium-plan; }
+  }
+
+  &[data-plan='premium'] {
+    color: color.adjust($gl-premium-plan, $lightness: -20%);
+    svg g { fill: $gl-premium-plan; }
+  }
+
+  &[data-plan='bronze'] {
+    color: color.adjust($gl-bronze-plan, $lightness: -20%);
+    svg g { fill: $gl-bronze-plan; }
+  }
+
+  &:not([data-plan]) {
+    svg g { fill: $gray-600; }
+  }
+}
+
+.plan-badge-vue {
+  &[data-plan='gold'] {
+    color: $gl-ultimate-plan;
+  }
+
+  &[data-plan='ultimate'] {
+    color: $gl-ultimate-plan;
+  }
+
+  &[data-plan='silver'] {
+    color: $gl-premium-plan;
+  }
+
+  &[data-plan='premium'] {
+    color: $gl-premium-plan;
+  }
+
+  &[data-plan='bronze'] {
+    color: $gl-bronze-plan;
+  }
+}
+
+.invite-modal-content {
+  grid-row: 1;
+  grid-column: 1;
+  min-width: 0;
+}
+
+$max-invite-modal-height: 600px;
+
+// These are composite classes for use with Vue Transition
+// https://vuejs.org/guide/built-ins/transition
+.invite-modal-transition-enter-active,
+.invite-modal-transition-leave-active {
+  transition-property: max-height, opacity;
+  transition-timing-function: ease-in-out;
+
+  @apply gl-transition-all;
+  @apply gl-duration-slow;
+
+  overflow: hidden;
+}
+
+.invite-modal-transition-enter,
+.invite-modal-transition-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+.invite-modal-transition-enter-to,
+.invite-modal-transition-leave {
+  max-height: px-to-rem($max-invite-modal-height);
+}

@@ -1,0 +1,5 @@
+mutation deleteGroupDestination($id: AuditEventsGroupExternalStreamingDestinationID!) {
+  groupAuditEventStreamingDestinationsDelete(input: { id: $id }) {
+    errors
+  }
+}

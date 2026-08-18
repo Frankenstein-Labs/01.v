@@ -1,0 +1,27 @@
+fragment WorkItemLifecycle on WorkItemLifecycle {
+  id
+  name
+  statuses {
+    id
+    name
+    iconName
+    color
+  }
+  defaultOpenStatus {
+    id
+    name
+  }
+  defaultClosedStatus {
+    id
+    name
+  }
+  defaultDuplicateStatus {
+    id
+    name
+  }
+  workItemTypes {
+    id
+    name
+    iconName
+  }
+}

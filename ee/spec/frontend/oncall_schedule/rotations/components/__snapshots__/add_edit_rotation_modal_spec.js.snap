@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddEditRotationModal renders rotation modal layout 1`] = `
+<div>
+  <div
+    data-testid="slot-default"
+  >
+    <gl-alert-stub
+      dismissible="true"
+      dismisslabel="Dismiss"
+      headerlevel="2"
+      politeness="polite"
+      primarybuttonlink=""
+      primarybuttontext=""
+      secondarybuttonlink=""
+      secondarybuttontext=""
+      title=""
+      variant="danger"
+    >
+      Error: Unexpected error whilst calling request handler: Request handler not defined for query: query searchProjectMembers($fullPath: ID!, $search: String, $ids: [ID!], $accessLevels: [AccessLevelEnum!], $relations: [ProjectMemberRelation!]) { project(fullPath: $fullPath) { id projectMembers( search: $search ids: $ids accessLevels: $accessLevels relations: $relations ) { nodes { id user { id name username avatarUrl } } } }}
+    </gl-alert-stub>
+    <add-edit-rotation-form-stub
+      form="[object Object]"
+      participants=""
+      schedule="[object Object]"
+      validationstate="[object Object]"
+    />
+  </div>
+</div>
+`;

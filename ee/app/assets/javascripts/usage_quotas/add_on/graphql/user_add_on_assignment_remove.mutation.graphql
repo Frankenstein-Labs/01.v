@@ -1,0 +1,26 @@
+mutation userAddOnAssignmentRemove(
+  $userId: UserID!
+  $addOnPurchaseId: GitlabSubscriptionsAddOnPurchaseID!
+) {
+  userAddOnAssignmentRemove(input: { userId: $userId, addOnPurchaseId: $addOnPurchaseId }) {
+    errors
+    clientMutationId
+    addOnPurchase {
+      id
+      name
+      purchasedQuantity
+      assignedQuantity
+    }
+    user {
+      id
+      addOnAssignments(addOnPurchaseIds: [$addOnPurchaseId]) {
+        nodes {
+          # eslint-disable-next-line @graphql-eslint/require-selections
+          addOnPurchase {
+            name
+          }
+        }
+      }
+    }
+  }
+}

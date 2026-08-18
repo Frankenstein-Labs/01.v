@@ -1,0 +1,11 @@
+# @feature_category: subscription_management
+query namespacePurchaseEligibility($glNamespaceId: Int!, $planType: String!, $tier: String) {
+  namespacePurchaseEligibility(glNamespaceId: $glNamespaceId, planType: $planType, tier: $tier) {
+    path
+    errors {
+      attribute
+      type
+      message: fullMessage
+    }
+  }
+}

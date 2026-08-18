@@ -1,0 +1,6 @@
+query projectIdentifiers($fullPath: ID!, $searchTerm: String!) {
+  project(fullPath: $fullPath) {
+    id
+    vulnerabilityIdentifierSearch(name: $searchTerm)
+  }
+}

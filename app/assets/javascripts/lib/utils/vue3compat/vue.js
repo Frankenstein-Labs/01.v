@@ -1,0 +1,70 @@
+import VueCompatOriginal from '@vue/compat';
+
+import GlLicensedFeaturesPlugin from '../../../vue_shared/gl_licensed_features_plugin';
+import GlFeatureFlagsPlugin from '../../../vue_shared/gl_feature_flags_plugin';
+import GlAbilitiesPlugin from '../../../vue_shared/gl_abilities_plugin';
+import Translate from '../../../vue_shared/translate';
+import { vueErrorHandler } from '../../../sentry/vue_error_handler';
+
+import { logDevNotice } from '../../logger';
+import { compatConfig } from './compat_config';
+
+export * from '@vue/compat';
+
+class GitLabPatchedVue extends VueCompatOriginal {
+  constructor(rawConfig, ...rest) {
+    const appName = rawConfig?.name;
+    if (appName) {
+      logDevNotice(`[V] Using Vue.js 3 (with @vue/compat) for ${appName}`);
+    }
+
+    const config = rawConfig?.el ? { ...rawConfig } : rawConfig;
+    let originalEl;
+    if (config?.el) {
+      originalEl = config.el instanceof Element ? config.el : document.querySelector(config.el);
+      config.el = document.createElement('div');
+      config.el.style.display = 'contents';
+      config.el.dataset.info = 'gitlab-vue3-compat-wrapper';
+      // We need to have it in real HTML otherwise accessing for example attached CSS vars might fail
+      originalEl.appendChild(config.el);
+    }
+    super(config, ...rest);
+    if (originalEl) {
+      const fragment = new DocumentFragment();
+
+      // Mark Vue 3 apps in production
+      for (const node of config.el.childNodes) {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          // Can be located with `document.querySelectorAll('[data-gitlab-vue3-app]')`.
+          // This attribute is the official hook used by E2E specs to verify
+          // that a page really mounted under Vue 3 (see
+          // `qa/qa/specs/features/browser_ui/4_verify/pipeline/vue3_rollout_spec.rb`);
+          // keep it stable while the migration is ongoing.
+          node.dataset.gitlabVue3App = appName || '';
+        }
+      }
+
+      fragment.replaceChildren(...config.el.childNodes);
+      originalEl.replaceWith(fragment);
+    }
+  }
+}
+
+GitLabPatchedVue.configureCompat(compatConfig);
+
+// This is temporary place for this
+// We are basically mirroring app/assets/javascripts/commons/vue.js
+// We should not put them in jest, but we don't want for now to add
+// extra entrypoint in vite/webpack - so this ugly check
+if (typeof jest === 'undefined') {
+  GitLabPatchedVue.use(GlLicensedFeaturesPlugin);
+  GitLabPatchedVue.use(GlFeatureFlagsPlugin);
+  GitLabPatchedVue.use(GlAbilitiesPlugin);
+  GitLabPatchedVue.use(Translate);
+
+  if (process.env.NODE_ENV === 'production') {
+    GitLabPatchedVue.config.errorHandler = vueErrorHandler;
+  }
+}
+
+export default GitLabPatchedVue;

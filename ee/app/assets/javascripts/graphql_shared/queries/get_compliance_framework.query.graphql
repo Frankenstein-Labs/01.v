@@ -1,0 +1,46 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getComplianceFramework(
+  $fullPath: ID!
+  $complianceFramework: ComplianceManagementFrameworkID
+  $search: String
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $ids: [ComplianceManagementFrameworkID!] = null
+) {
+  namespace(fullPath: $fullPath) {
+    id
+    name
+    complianceFrameworks(
+      id: $complianceFramework
+      ids: $ids
+      search: $search
+      before: $before
+      after: $after
+      first: $first
+      last: $last
+    ) {
+      nodes {
+        id
+        name
+        default
+        description
+        color
+        pipelineConfigurationFullPath
+        namespaceId
+        projects {
+          nodes {
+            id
+            name
+            webUrl
+          }
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

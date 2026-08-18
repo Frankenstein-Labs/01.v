@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Environment matchs the snapshot 1`] = `
+<div
+  class="card dashboard-card gl-border-0"
+>
+  <environment-header-stub
+    environment="[object Object]"
+    haserrors="true"
+  />
+  <div
+    class="card-body dashboard-card-body dashboard-card-body-warning"
+  >
+    <div
+      class="row"
+    >
+      <div
+        class="gl-col-1 gl-px-5 gl-self-center"
+      >
+        <gl-avatar-link-stub
+          href="/root"
+        >
+          <gl-avatar-stub
+            alt="avatar"
+            entityid="0"
+            entityname="root"
+            shape="circle"
+            size="32"
+            src="https://secure.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=80&d=identicon"
+            title="Administrator"
+          />
+        </gl-avatar-link-stub>
+      </div>
+      <div
+        class="ci-table gl-align-middle gl-col-10 gl-col-sm-7 gl-pl-7 gl-pr-0 gl-self-center"
+      >
+        <div
+          class="branch-commit"
+        >
+          <gl-icon-stub
+            name="work"
+            size="14"
+            variant="current"
+          />
+          <gl-link-stub
+            class="str-truncated"
+            href="/root/minimal-ruby-app/-/jobs/1097"
+          >
+            production #1097
+          </gl-link-stub>
+        </div>
+        <commit-stub
+          author="[object Object]"
+          commitref="[object Object]"
+          commiturl="https://22878.qa-tunnel.gitlab.info/root/minimal-ruby-app/commit/63492726c2264a0277141d6a6573c3d22ecd7de3"
+          shortsha="63492726"
+          show-branch="true"
+          showrefinfo="true"
+          title="Improve code quality"
+        />
+      </div>
+      <div
+        class="@sm/panel:gl-block @sm/panel:gl-pl-0 @sm/panel:gl-text-right gl-col-12 gl-col-sm-3 gl-mt-0 gl-offset-1 gl-offset-sm-0 gl-pl-8 gl-pr-0 gl-self-center"
+      >
+        <time-ago-stub
+          time="2019-02-20T16:15:40.122Z"
+          tooltiptext="Finished"
+        />
+        <alerts-stub
+          count="1"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

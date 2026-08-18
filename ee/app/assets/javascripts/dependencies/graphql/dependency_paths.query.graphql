@@ -1,0 +1,25 @@
+query getDependencyPaths(
+  $occurrence: SbomOccurrenceID!
+  $fullPath: ID!
+  $after: String
+  $before: String
+) {
+  project(fullPath: $fullPath) {
+    id
+    dependencyPaths(occurrence: $occurrence, limit: 10, after: $after, before: $before) {
+      nodes {
+        isCyclic
+        path {
+          name
+          version
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+}

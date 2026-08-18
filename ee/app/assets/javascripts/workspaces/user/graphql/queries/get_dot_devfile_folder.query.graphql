@@ -1,0 +1,27 @@
+query getDotDevfileFolderQuery(
+  $projectPath: ID!
+  $path: String!
+  $ref: String!
+  $pageSize: Int = 10
+  $nextPageCursor: String
+) {
+  project(fullPath: $projectPath) {
+    id
+    repository {
+      tree(path: $path, ref: $ref) {
+        blobs(first: $pageSize, after: $nextPageCursor) {
+          edges {
+            node {
+              id
+              path
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    }
+  }
+}

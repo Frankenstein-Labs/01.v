@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MR Widget Security Reports - Summary Highlights snapshots displays "0 vulnerabilities" when all counts are zero 1`] = `
+<div
+  class="gl-text-sm"
+>
+  <span
+    class="gl-text-subtle"
+  >
+    0 vulnerabilities
+  </span>
+</div>
+`;
+
+exports[`MR Widget Security Reports - Summary Highlights snapshots displays all three severities when all are non-zero 1`] = `
+<div
+  class="gl-text-sm"
+>
+  <strong
+    class="severity-text-critical"
+    data-testid="critical"
+  >
+    10 critical
+  </strong>
+  ,
+  <strong
+    class="severity-text-high"
+    data-testid="high"
+  >
+    20 high
+  </strong>
+  , and
+  <strong
+    class="gl-text-subtle"
+    data-testid="other"
+  >
+    60 others
+  </strong>
+</div>
+`;
+
+exports[`MR Widget Security Reports - Summary Highlights snapshots displays all three severities with zero counts muted 1`] = `
+<div
+  class="gl-text-sm"
+>
+  <strong
+    class="severity-text-critical"
+    data-testid="critical"
+  >
+    21 critical
+  </strong>
+  ,
+  <span
+    class="gl-text-subtle"
+    data-testid="high"
+  >
+    0 high
+  </span>
+  , and
+  <strong
+    class="gl-text-subtle"
+    data-testid="other"
+  >
+    8 others
+  </strong>
+</div>
+`;

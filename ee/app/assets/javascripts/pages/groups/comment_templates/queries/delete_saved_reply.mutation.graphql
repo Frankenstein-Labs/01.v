@@ -1,0 +1,5 @@
+mutation deleteGroupSavedReply($id: GroupsSavedReplyID!) {
+  groupSavedReplyDestroy(input: { id: $id }) {
+    errors
+  }
+}

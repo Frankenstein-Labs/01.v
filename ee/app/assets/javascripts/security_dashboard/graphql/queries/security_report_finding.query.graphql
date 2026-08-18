@@ -1,0 +1,199 @@
+#import "ee/graphql_shared/fragments/vulnerability_detail.fragment.graphql"
+
+query getSecurityReportFinding($projectFullPath: ID!, $pipelineIid: ID!, $findingUuid: String!) {
+  project(fullPath: $projectFullPath) {
+    id
+    webUrl
+    nameWithNamespace
+    pipeline(iid: $pipelineIid) {
+      id
+      securityReportFinding(uuid: $findingUuid) {
+        uuid
+        aiResolutionEnabled
+        title
+        unverified
+        description
+        descriptionHtml
+        state
+        severity
+        solution
+        solutionHtml
+        reportType
+        falsePositive
+        dismissalReason
+        remediations {
+          diff
+          summary
+        }
+        scanner {
+          id
+          name
+        }
+        assets {
+          name
+          url
+        }
+        project {
+          id
+          name
+          webUrl
+          nameWithNamespace
+          fullPath
+          hasJiraVulnerabilityIssueCreationEnabled
+          visibility
+        }
+        evidence {
+          summary
+          request {
+            body
+            headers {
+              name
+              value
+            }
+            method
+            url
+          }
+          response {
+            body
+            reasonPhrase
+            statusCode
+            headers {
+              name
+              value
+            }
+          }
+          supportingMessages {
+            name
+            response {
+              body
+              reasonPhrase
+              statusCode
+              headers {
+                name
+                value
+              }
+            }
+          }
+          source {
+            name
+          }
+        }
+        location {
+          ... on VulnerabilityLocationContainerScanning {
+            image
+            operatingSystem
+          }
+          ... on VulnerabilityLocationSast {
+            startLine
+            endLine
+            file
+            blobPath
+          }
+          ... on VulnerabilityLocationDependencyScanning {
+            blobPath
+            file
+          }
+          ... on VulnerabilityLocationSecretDetection {
+            startLine
+            endLine
+            file
+            blobPath
+          }
+          ... on VulnerabilityLocationCoverageFuzzing {
+            startLine
+            endLine
+            file
+            blobPath
+            crashAddress
+            crashType
+            stacktraceSnippet
+            vulnerableMethod
+            vulnerableClass
+          }
+          ... on VulnerabilityLocationDast {
+            hostname
+            path
+          }
+        }
+        links {
+          name
+          url
+        }
+        identifiers {
+          name
+          url
+          externalType
+          externalId
+        }
+        issueLinks {
+          nodes {
+            id
+            linkType
+            issue {
+              id
+              iid
+              createdAt
+              webUrl
+              author {
+                id
+                webUrl
+                name
+                username
+              }
+            }
+          }
+        }
+        details {
+          ...NonNestedReportTypes
+          ...List
+          ...Table
+          ...NamedList
+          ...CodeFlows
+        }
+        dismissedAt
+        dismissedBy {
+          id
+          name
+          username
+          webUrl
+        }
+        stateComment
+        vulnerability {
+          id
+          externalIssueLinks {
+            nodes {
+              id
+              linkType
+              externalIssue {
+                externalTracker
+                webUrl
+              }
+            }
+          }
+          mergeRequest {
+            id
+            iid
+            createdAt
+            webUrl
+            author {
+              id
+              webUrl
+              name
+              username
+            }
+          }
+          presentOnDefaultBranch
+        }
+        findingTokenStatus {
+          id
+          status
+          lastVerifiedAt
+        }
+        userPermissions {
+          adminVulnerability
+          createIssue
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+- @force_fluid_layout = true
+- add_page_specific_style 'page_bundles/orbit'
+- if params[:vueroute].present?
+  - add_to_breadcrumbs _('Orbit'), dashboard_orbit_path
+- breadcrumb_title orbit_page_label
+- page_title orbit_page_label
+
+#js-orbit-app{ data: orbit_app_data }

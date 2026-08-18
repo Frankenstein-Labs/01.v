@@ -1,0 +1,10 @@
+---
+name: approval_policies_block_on_failed_scan_job
+description: Require approval when a scanner required by a merge request approval policy has a failed CI job that produced no security report, so fail-closed policies block the merge request.
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/604648
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/243540
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/604861
+milestone: '19.3'
+group: group::policy management
+type: gitlab_com_derisk
+default_enabled: false

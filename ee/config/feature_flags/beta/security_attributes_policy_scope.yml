@@ -1,0 +1,9 @@
+---
+name: security_attributes_policy_scope
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/589342
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/227155
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/600085
+milestone: '18.11'
+group: group::security policies
+type: beta
+default_enabled: true

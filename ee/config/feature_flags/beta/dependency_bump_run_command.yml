@@ -1,0 +1,10 @@
+---
+name: dependency_bump_run_command
+description: Enables run command capabilities for the dependency bump Duo flow.
+feature_issue_url: https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/work_items/2662
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/250168
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/613911
+milestone: '19.3'
+group: group::compliance
+type: beta
+default_enabled: false

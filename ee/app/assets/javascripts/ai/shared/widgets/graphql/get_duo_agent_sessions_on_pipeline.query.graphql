@@ -1,0 +1,30 @@
+# @feature_category: duo_agent_platform
+#import "~/graphql_shared/fragments/user.fragment.graphql"
+
+query getDuoAgentSessionsOnPipeline($projectPath: ID!, $iid: ID!, $first: Int = 20) {
+  project(fullPath: $projectPath) {
+    id
+    pipeline(iid: $iid) {
+      id
+      duoWorkflows(first: $first) @gl_introduced(version: "19.3.0") {
+        nodes {
+          id
+          title
+          status
+          humanStatus
+          createdAt
+          updatedAt
+          workflowDefinition
+          user @gl_introduced(version: "19.1.0") {
+            ...User
+          }
+          project {
+            id
+            name
+            fullPath
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,557 @@
+[
+  {
+    "apiVersion": "v1",
+    "kind": "ConfigMap",
+    "metadata": {
+      "annotations": {
+        "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+        "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+        "workspaces.gitlab.com/include-in-partial-reconciliation": "true",
+        "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "labels": {
+        "agent.gitlab.com/id": "1",
+        "cli-utils.sigs.k8s.io/inventory-id": "$WORKSPACE_NAME-workspace-inventory"
+      },
+      "name": "$WORKSPACE_NAME-workspace-inventory",
+      "namespace": "$WORKSPACE_NAMESPACE"
+    }
+  },
+  {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+      "annotations": {
+        "config.k8s.io/owning-inventory": "$WORKSPACE_NAME-workspace-inventory",
+        "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+        "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+        "workspaces.gitlab.com/include-in-partial-reconciliation": "true",
+        "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "labels": {
+        "agent.gitlab.com/id": "1"
+      },
+      "name": "$WORKSPACE_NAME",
+      "namespace": "$WORKSPACE_NAMESPACE"
+    },
+    "spec": {
+      "replicas": $REPLICA,
+      "selector": {
+        "matchLabels": {
+          "agent.gitlab.com/id": "1"
+        }
+      },
+      "strategy": {
+        "type": "Recreate"
+      },
+      "template": {
+        "metadata": {
+          "annotations": {
+            "config.k8s.io/owning-inventory": "$WORKSPACE_NAME-workspace-inventory",
+            "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+            "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+            "workspaces.gitlab.com/include-in-partial-reconciliation": "true",
+            "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+          },
+          "labels": {
+            "agent.gitlab.com/id": "1"
+          },
+          "name": "$WORKSPACE_NAME",
+          "namespace": "$WORKSPACE_NAMESPACE"
+        },
+        "spec": {
+          "containers": [
+            {
+              "args": [
+                "tail -f /dev/null\n"
+              ],
+              "command": [
+                "/bin/sh",
+                "-c"
+              ],
+              "env": [
+                {
+                  "name": "PROJECT_SOURCE",
+                  "value": "/projects"
+                },
+                {
+                  "name": "PROJECTS_ROOT",
+                  "value": "/projects"
+                },
+                {
+                  "name": "GL_TOOLS_DIR",
+                  "value": "/projects/.gl-tools"
+                },
+                {
+                  "name": "GL_EDITOR_LOG_LEVEL",
+                  "value": "info"
+                },
+                {
+                  "name": "GL_EDITOR_PORT",
+                  "value": "60001"
+                },
+                {
+                  "name": "GL_SSH_PORT",
+                  "value": "60022"
+                },
+                {
+                  "name": "GL_EDITOR_ENABLE_MARKETPLACE",
+                  "value": "false"
+                }
+              ],
+              "envFrom": [
+                {
+                  "secretRef": {
+                    "name": "$WORKSPACE_NAME-env-var"
+                  }
+                }
+              ],
+              "image": "registry.gitlab.com/gitlab-org/workspaces/gitlab-workspaces-docs/ubuntu:22.04",
+              "imagePullPolicy": "Always",
+              "lifecycle": {
+                "postStart": {
+                  "exec": {
+                    "command": [
+                      "/bin/sh",
+                      "-c",
+                      "#!/bin/sh\n\nmkdir -p \"${GL_WORKSPACE_LOGS_DIR}\"\nln -sf \"${GL_WORKSPACE_LOGS_DIR}\" /tmp\n\"/workspace-scripts/gl-run-poststart-commands.sh\" 1>>\"${GL_WORKSPACE_LOGS_DIR}/poststart-stdout.log\" 2>>\"${GL_WORKSPACE_LOGS_DIR}/poststart-stderr.log\"\n"
+                    ]
+                  }
+                }
+              },
+              "name": "tooling-container",
+              "ports": [
+                {
+                  "containerPort": 60001,
+                  "name": "editor-server",
+                  "protocol": "TCP"
+                },
+                {
+                  "containerPort": 60022,
+                  "name": "ssh-server",
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {},
+              "securityContext": {
+                "allowPrivilegeEscalation": false,
+                "privileged": false,
+                "runAsNonRoot": true,
+                "runAsUser": 5001
+              },
+              "volumeMounts": [
+                {
+                  "mountPath": "/projects",
+                  "name": "gl-workspace-data"
+                },
+                {
+                  "mountPath": "/.workspace-data/variables/file",
+                  "name": "gl-workspace-variables"
+                },
+                {
+                  "mountPath": "/workspace-scripts",
+                  "name": "gl-workspace-scripts"
+                }
+              ]
+            }
+          ],
+          "initContainers": [
+            {
+              "args": [
+                "echo \"$(date -Iseconds): ----------------------------------------\"\necho \"$(date -Iseconds): Cloning project if necessary...\"\n\nif [ -f \"/projects/.gl_project_cloning_successful\" ]\nthen\n  echo \"$(date -Iseconds): Project cloning was already successful\"\n  exit 0\nfi\n\nif [ -d \"/projects/gitlab-shell\" ]\nthen\n  echo \"$(date -Iseconds): Removing unsuccessfully cloned project directory\"\n  rm -rf \"/projects/gitlab-shell\"\nfi\n\necho \"$(date -Iseconds): Cloning project\"\ngit clone --branch \"main\" \"http://gdk.test:3000/gitlab-org/gitlab-shell.git\" \"/projects/gitlab-shell\"\nexit_code=$?\n\nif [ \"${exit_code}\" -eq 0 ]\nthen\n  echo \"$(date -Iseconds): Project cloning successful\"\n  touch \"/projects/.gl_project_cloning_successful\"\n  echo \"$(date -Iseconds): Updated file to indicate successful project cloning\"\nelse\n  echo \"$(date -Iseconds): Project cloning failed with exit code: ${exit_code}\" >&2\nfi\n\necho \"$(date -Iseconds): Finished cloning project if necessary.\"\nexit \"${exit_code}\"\n"
+              ],
+              "command": [
+                "/bin/sh",
+                "-c"
+              ],
+              "env": [
+                {
+                  "name": "PROJECT_SOURCE",
+                  "value": "/projects"
+                },
+                {
+                  "name": "PROJECTS_ROOT",
+                  "value": "/projects"
+                }
+              ],
+              "envFrom": [
+                {
+                  "secretRef": {
+                    "name": "$WORKSPACE_NAME-env-var"
+                  }
+                }
+              ],
+              "image": "alpine/git:2.45.2",
+              "imagePullPolicy": "Always",
+              "name": "gl-project-cloner-gl-project-cloner-command-1",
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "1000Mi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "500Mi"
+                }
+              },
+              "securityContext": {
+                "allowPrivilegeEscalation": false,
+                "privileged": false,
+                "runAsNonRoot": true,
+                "runAsUser": 5001
+              },
+              "volumeMounts": [
+                {
+                  "mountPath": "/projects",
+                  "name": "gl-workspace-data"
+                },
+                {
+                  "mountPath": "/.workspace-data/variables/file",
+                  "name": "gl-workspace-variables"
+                }
+              ]
+            },
+            {
+              "env": [
+                {
+                  "name": "PROJECT_SOURCE",
+                  "value": "/projects"
+                },
+                {
+                  "name": "PROJECTS_ROOT",
+                  "value": "/projects"
+                },
+                {
+                  "name": "GL_TOOLS_DIR",
+                  "value": "/projects/.gl-tools"
+                }
+              ],
+              "envFrom": [
+                {
+                  "secretRef": {
+                    "name": "$WORKSPACE_NAME-env-var"
+                  }
+                }
+              ],
+              "image": "registry.gitlab.com/gitlab-org/workspaces/gitlab-workspaces-tools:15.0.0",
+              "imagePullPolicy": "Always",
+              "name": "gl-tools-injector-gl-tools-injector-command-2",
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "512Mi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+                }
+              },
+              "securityContext": {
+                "allowPrivilegeEscalation": false,
+                "privileged": false,
+                "runAsNonRoot": true,
+                "runAsUser": 5001
+              },
+              "volumeMounts": [
+                {
+                  "mountPath": "/projects",
+                  "name": "gl-workspace-data"
+                },
+                {
+                  "mountPath": "/.workspace-data/variables/file",
+                  "name": "gl-workspace-variables"
+                }
+              ]
+            }
+          ],
+          "securityContext": {
+            "fsGroup": 0,
+            "fsGroupChangePolicy": "OnRootMismatch",
+            "runAsNonRoot": true,
+            "runAsUser": 5001
+          },
+          "serviceAccountName": "$WORKSPACE_NAME",
+          "volumes": [
+            {
+              "name": "gl-workspace-data",
+              "persistentVolumeClaim": {
+                "claimName": "$WORKSPACE_NAME-gl-workspace-data"
+              }
+            },
+            {
+              "name": "gl-workspace-variables",
+              "projected": {
+                "defaultMode": 508,
+                "sources": [
+                  {
+                    "secret": {
+                      "name": "$WORKSPACE_NAME-file"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "gl-workspace-scripts",
+              "projected": {
+                "defaultMode": 365,
+                "sources": [
+                  {
+                    "configMap": {
+                      "name": "$WORKSPACE_NAME-scripts-configmap"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "status": {}
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+      "annotations": {
+        "config.k8s.io/owning-inventory": "$WORKSPACE_NAME-workspace-inventory",
+        "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+        "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+        "workspaces.gitlab.com/include-in-partial-reconciliation": "true",
+        "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "labels": {
+        "agent.gitlab.com/id": "1"
+      },
+      "name": "$WORKSPACE_NAME",
+      "namespace": "$WORKSPACE_NAMESPACE"
+    },
+    "spec": {
+      "ports": [
+        {
+          "name": "editor-server",
+          "port": 60001,
+          "targetPort": 60001
+        },
+        {
+          "name": "ssh-server",
+          "port": 60022,
+          "targetPort": 60022
+        }
+      ],
+      "selector": {
+        "agent.gitlab.com/id": "1"
+      }
+    },
+    "status": {
+      "loadBalancer": {}
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "PersistentVolumeClaim",
+    "metadata": {
+      "annotations": {
+        "config.k8s.io/owning-inventory": "$WORKSPACE_NAME-workspace-inventory",
+        "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+        "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+        "workspaces.gitlab.com/include-in-partial-reconciliation": "true",
+        "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "labels": {
+        "agent.gitlab.com/id": "1"
+      },
+      "name": "$WORKSPACE_NAME-gl-workspace-data",
+      "namespace": "$WORKSPACE_NAMESPACE"
+    },
+    "spec": {
+      "accessModes": [
+        "ReadWriteOnce"
+      ],
+      "resources": {
+        "requests": {
+          "storage": "50Gi"
+        }
+      }
+    },
+    "status": {}
+  },
+  {
+    "apiVersion": "v1",
+    "automountServiceAccountToken": false,
+    "imagePullSecrets": [],
+    "kind": "ServiceAccount",
+    "metadata": {
+      "annotations": {
+        "config.k8s.io/owning-inventory": "$WORKSPACE_NAME-workspace-inventory",
+        "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+        "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+        "workspaces.gitlab.com/include-in-partial-reconciliation": "true",
+        "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "labels": {
+        "agent.gitlab.com/id": "1"
+      },
+      "name": "$WORKSPACE_NAME",
+      "namespace": "$WORKSPACE_NAMESPACE"
+    }
+  },
+  {
+    "apiVersion": "networking.k8s.io/v1",
+    "kind": "NetworkPolicy",
+    "metadata": {
+      "annotations": {
+        "config.k8s.io/owning-inventory": "$WORKSPACE_NAME-workspace-inventory",
+        "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+        "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+        "workspaces.gitlab.com/include-in-partial-reconciliation": "true",
+        "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "labels": {
+        "agent.gitlab.com/id": "1"
+      },
+      "name": "$WORKSPACE_NAME",
+      "namespace": "$WORKSPACE_NAMESPACE"
+    },
+    "spec": {
+      "egress": [
+        {
+          "ports": [
+            {
+              "port": 53,
+              "protocol": "TCP"
+            },
+            {
+              "port": 53,
+              "protocol": "UDP"
+            }
+          ],
+          "to": [
+            {
+              "namespaceSelector": {
+                "matchLabels": {
+                  "kubernetes.io/metadata.name": "kube-system"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "to": [
+            {
+              "ipBlock": {
+                "cidr": "0.0.0.0/0",
+                "except": [
+                  "10.0.0.0/8",
+                  "172.16.0.0/12",
+                  "192.168.0.0/16"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "ingress": [
+        {
+          "from": [
+            {
+              "namespaceSelector": {
+                "matchLabels": {
+                  "kubernetes.io/metadata.name": "gitlab-workspaces"
+                }
+              },
+              "podSelector": {
+                "matchLabels": {
+                  "app.kubernetes.io/name": "gitlab-workspaces-proxy"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "podSelector": {},
+      "policyTypes": [
+        "Ingress",
+        "Egress"
+      ]
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "data": {
+      "gl-init-tools-command": "#!/bin/sh\necho \"$(date -Iseconds): ----------------------------------------\"\necho \"$(date -Iseconds): Running ${GL_TOOLS_DIR}/init_tools.sh with output written to ${GL_WORKSPACE_LOGS_DIR}/init-tools.log...\"\n\"${GL_TOOLS_DIR}/init_tools.sh\" >> \"${GL_WORKSPACE_LOGS_DIR}/init-tools.log\" 2>&1 &\necho \"$(date -Iseconds): Finished running ${GL_TOOLS_DIR}/init_tools.sh.\"\n",
+      "gl-run-poststart-commands.sh": "#!/bin/sh\necho \"$(date -Iseconds): ----------------------------------------\"\necho \"$(date -Iseconds): Running /workspace-scripts/gl-start-sshd-command...\"\n/workspace-scripts/gl-start-sshd-command || true\necho \"$(date -Iseconds): Finished running /workspace-scripts/gl-start-sshd-command.\"\necho \"$(date -Iseconds): ----------------------------------------\"\necho \"$(date -Iseconds): Running /workspace-scripts/gl-init-tools-command...\"\n/workspace-scripts/gl-init-tools-command || true\necho \"$(date -Iseconds): Finished running /workspace-scripts/gl-init-tools-command.\"\necho \"$(date -Iseconds): ----------------------------------------\"\necho \"$(date -Iseconds): Running /workspace-scripts/gl-sleep-until-container-is-running-command...\"\n/workspace-scripts/gl-sleep-until-container-is-running-command || true\necho \"$(date -Iseconds): Finished running /workspace-scripts/gl-sleep-until-container-is-running-command.\"\n",
+      "gl-sleep-until-container-is-running-command": "#!/bin/sh\necho \"$(date -Iseconds): ----------------------------------------\"\necho \"$(date -Iseconds): Sleeping until workspace is running...\"\ntime_to_sleep=5\nstatus_file=\"/.workspace-data/variables/file/gl_workspace_reconciled_actual_state.txt\"\nwhile [ \"$(cat ${status_file})\" != \"Running\" ]; do\n  echo \"$(date -Iseconds): Workspace state is '$(cat ${status_file})' from status file '${status_file}'. Blocking remaining postStart events execution for ${time_to_sleep} seconds until state is 'Running'...\"\n  sleep ${time_to_sleep}\ndone\necho \"$(date -Iseconds): Workspace state is now 'Running', continuing postStart hook execution.\"\necho \"$(date -Iseconds): Finished sleeping until workspace is running.\"\n",
+      "gl-start-sshd-command": "#!/bin/sh\necho \"$(date -Iseconds): ----------------------------------------\"\necho \"$(date -Iseconds): Starting sshd if it is found...\"\nsshd_path=$(which sshd)\nif [ -x \"${sshd_path}\" ]; then\n  echo \"$(date -Iseconds): Starting ${sshd_path} on port ${GL_SSH_PORT} with output written to ${GL_WORKSPACE_LOGS_DIR}/start-sshd.log\"\n  \"${sshd_path}\" -D -p \"${GL_SSH_PORT}\" >> \"${GL_WORKSPACE_LOGS_DIR}/start-sshd.log\" 2>&1 &\nelse\n  echo \"$(date -Iseconds): 'sshd' not found in path. Not starting SSH server.\" >&2\nfi\necho \"$(date -Iseconds): Finished starting sshd if it is found.\"\n"
+    },
+    "kind": "ConfigMap",
+    "metadata": {
+      "annotations": {
+        "config.k8s.io/owning-inventory": "$WORKSPACE_NAME-workspace-inventory",
+        "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+        "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+        "workspaces.gitlab.com/include-in-partial-reconciliation": "true",
+        "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "labels": {
+        "agent.gitlab.com/id": "1"
+      },
+      "name": "$WORKSPACE_NAME-scripts-configmap",
+      "namespace": "$WORKSPACE_NAMESPACE"
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "ConfigMap",
+    "metadata": {
+      "annotations": {
+        "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+        "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+        "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "labels": {
+        "agent.gitlab.com/id": "1",
+        "cli-utils.sigs.k8s.io/inventory-id": "$WORKSPACE_NAME-secrets-inventory"
+      },
+      "name": "$WORKSPACE_NAME-secrets-inventory",
+      "namespace": "$WORKSPACE_NAMESPACE"
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "data": {},
+    "kind": "Secret",
+    "metadata": {
+      "annotations": {
+        "config.k8s.io/owning-inventory": "$WORKSPACE_NAME-secrets-inventory",
+        "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+        "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+        "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "labels": {
+        "agent.gitlab.com/id": "1"
+      },
+      "name": "$WORKSPACE_NAME-env-var",
+      "namespace": "$WORKSPACE_NAMESPACE"
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "data": {},
+    "kind": "Secret",
+    "metadata": {
+      "annotations": {
+        "config.k8s.io/owning-inventory": "$WORKSPACE_NAME-secrets-inventory",
+        "workspaces.gitlab.com/host-template": "{{.port}}-$WORKSPACE_NAME.test.workspace.me",
+        "workspaces.gitlab.com/id": "$WORKSPACE_ID",
+        "workspaces.gitlab.com/max-resources-per-workspace-sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "labels": {
+        "agent.gitlab.com/id": "1"
+      },
+      "name": "$WORKSPACE_NAME-file",
+      "namespace": "$WORKSPACE_NAMESPACE"
+    }
+  }
+]

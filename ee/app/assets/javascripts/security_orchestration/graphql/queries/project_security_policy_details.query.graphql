@@ -1,0 +1,48 @@
+# @feature_category: security_policy_management
+#import "../fragments/policy_scope_drawer.fragment.graphql"
+
+query projectSecurityPolicyDetails(
+  $fullPath: ID!
+  $relationship: SecurityPolicyRelationType = INHERITED
+  $type: PolicyType!
+) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    securityPolicies(includeUnscoped: false, type: $type, relationship: $relationship, first: 50) {
+      nodes {
+        id
+        name
+        policyScope {
+          ...PolicyScopeDrawer
+        }
+        policyAttributes {
+          ... on ApprovalPolicyAttributesType {
+            actionApprovers {
+              allGroups {
+                id
+                webUrl
+                fullPath
+              }
+              customRoles {
+                id
+                name
+              }
+              roles
+              users {
+                id
+                webUrl
+                name
+              }
+            }
+          }
+          ... on PipelineExecutionPolicyAttributesType {
+            policyBlobFilePath
+          }
+          ... on PipelineExecutionScheduledPolicyAttributesType {
+            policyBlobFilePath
+          }
+        }
+      }
+    }
+  }
+}

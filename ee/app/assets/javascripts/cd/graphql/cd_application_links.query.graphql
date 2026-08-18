@@ -1,0 +1,29 @@
+# @feature_category: continuous_delivery
+
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query cdApplicationLinks(
+  $applicationId: CdApplicationID!
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+) {
+  organization {
+    id
+    cdApplication(id: $applicationId) {
+      id
+      links(first: $first, after: $after, last: $last, before: $before) {
+        nodes {
+          id
+          name
+          url
+          linkType
+        }
+        pageInfo {
+          ...PageInfo
+        }
+      }
+    }
+  }
+}

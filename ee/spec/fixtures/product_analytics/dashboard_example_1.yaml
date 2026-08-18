@@ -1,0 +1,56 @@
+---
+version: '2'
+title: Dashboard Example 1
+description: North Star Metrics across all departments for the last 3 quarters.
+filters:
+  excludeAnonymousUsers:
+    enabled: true
+  dateRange:
+    enabled: true
+  projects:
+    enabled: true
+  filteredSearch:
+    enabled: true
+    options:
+      - token: label
+        maxSuggestions: 20
+panels:
+  - title: Overall Conversion Rate
+    titleIcon: chart
+    tooltip:
+      description: 'Percentage of visitors who complete a desired action. %{linkStart}Learn more%{linkEnd}.'
+      descriptionLink: 'https://gitlab.com'
+    gridAttributes:
+      yPos: 4
+      xPos: 1
+      width: 12
+      height: 2
+    visualization: cube_line_chart
+    views:
+      - text: Line
+        visualization: cube_line_chart
+      - text: Bar
+        visualization: cube_bar_chart
+    queryOverrides:
+      timeDimensions:
+        - dimension: Stories.time
+          dateRange:
+            - '2016-01-01'
+            - '2016-02-30'
+          granularity: month
+  - title: Overall Conversion Rate
+    tooltip:
+      description: 'Percentage of visitors who complete a desired action.'
+    gridAttributes:
+      yPos: 4
+      xPos: 1
+      width: 12
+      height: 2
+    visualization: cube_line_chart
+    queryOverrides:
+      timeDimensions:
+        - dimension: Stories.time
+          dateRange:
+            - '2016-01-01'
+            - '2016-02-30'
+          granularity: month

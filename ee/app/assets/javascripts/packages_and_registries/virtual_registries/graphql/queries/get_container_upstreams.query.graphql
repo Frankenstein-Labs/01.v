@@ -1,0 +1,33 @@
+# @feature_category: virtual_registry
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getContainerUpstreams(
+  $groupPath: ID!
+  $upstreamName: String
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  group(fullPath: $groupPath) {
+    id
+    upstreams: virtualRegistriesContainerUpstreams(
+      upstreamName: $upstreamName
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
+      nodes {
+        id
+        cacheValidityHours
+        name
+        url
+        registriesCount
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

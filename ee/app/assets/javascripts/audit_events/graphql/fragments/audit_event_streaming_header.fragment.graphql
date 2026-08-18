@@ -1,0 +1,6 @@
+fragment AuditEventStreamingHeaderFragment on AuditEventStreamingHeader {
+  key
+  value
+  id
+  active
+}

@@ -1,0 +1,1004 @@
+{
+  "version": "15.1.4",
+  "vulnerabilities": [
+    {
+      "id": "e91171040ffd6c7fcf4a99f23ecaca22b907cb8e86d1fd83d218025ef592f422",
+      "name": "SQL Injection",
+      "description": "Due to an error in shallow key transformation, key and index lookups for `django.contrib.postgres.fields.JSONField`, and key lookups for `django.contrib.postgres.fields.HStoreField`, were subject to SQL injection. This could, for example, be exploited via crafted use of `OR 1=1` in a key or index name to return all records, using a suitably crafted dictionary, with dictionary expansion, as the `**kwargs` passed to the `QuerySet.filter()` function.",
+      "severity": "Critical",
+      "solution": "Upgrade to versions 1.11.23, 2.1.11, 2.2.4 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-1c876f07-617f-4ba9-8ea3-a871d14bcde2",
+          "value": "1c876f07-617f-4ba9-8ea3-a871d14bcde2",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2019-14234.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2019-14234",
+          "value": "CVE-2019-14234",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14234"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:N/C:P/I:P/A:P"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-14234"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2019/aug/01/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "8fed1901e6a339ee79c106f909ed9431e98f2c2fff58719b4cf9313644e79910",
+      "name": "Weak Password Recovery Mechanism for Forgotten Password",
+      "description": "Django allows account takeover. A suitably crafted email address (that is equal to an existing user's email address after case transformation of Unicode characters) would allow an attacker to be sent a password reset token for the matched user account. (One mitigation in the new releases is to send password reset tokens only to the registered user email address.)",
+      "severity": "Critical",
+      "solution": "Upgrade to versions 1.11.27, 2.2.9, 3.0.1 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-e1db52dc-7f84-4281-8b82-6a64da18a721",
+          "value": "e1db52dc-7f84-4281-8b82-6a64da18a721",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2019-19844.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2019-19844",
+          "value": "CVE-2019-19844",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-19844"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:N/C:N/I:P/A:N"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-19844"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2019/dec/18/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "1338c7f2022f64efebe1251e08bb3bfc4cebba592d1451dc9a8c41108d5f28b5",
+      "name": "SQL Injection",
+      "description": "Django allows SQL Injection if untrusted data is used as a delimiter (e.g., in Django applications that offer downloads of data as a series of rows with a user-specified column delimiter). By passing a suitably crafted delimiter to a `contrib.postgres.aggregates.StringAgg` instance, it was possible to break escaping and inject malicious SQL.",
+      "severity": "Critical",
+      "solution": "Upgrade to versions 1.11.28, 2.2.10, 3.0.3 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-ea400310-29db-4c48-8236-42d462d1de1c",
+          "value": "ea400310-29db-4c48-8236-42d462d1de1c",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2020-7471.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2020-7471",
+          "value": "CVE-2020-7471",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-7471"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:N/C:P/I:P/A:P"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.djangoproject.com/en/3.0/releases/security/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7471"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2020/feb/03/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "f04fcdb9f41228e007f31dc5a7e4ddcd6bf1a678faec9b60701400c6c38ec986",
+      "name": "Improper Input Validation",
+      "description": "A call to the methods `chars()` or `words() in `django.utils.text.Truncator` with the argument `html=True` evaluates certain inputs extremely slowly due to a catastrophic backtracking vulnerability in a regular expression. The `chars()` and `words()` methods are used to implement the `truncatechars_html` and `truncatewords_html` template filters, which were thus vulnerable.",
+      "severity": "High",
+      "solution": "Upgrade to versions 1.11.23, 2.1.11, 2.2.4 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-3fee86b0-d8c1-4c65-9242-7607562190ae",
+          "value": "3fee86b0-d8c1-4c65-9242-7607562190ae",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2019-14232.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2019-14232",
+          "value": "CVE-2019-14232",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14232"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-14232"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2019/aug/01/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "878ca2f563ddb3907db91c1949d4cc78250a60fc22113af7e34adc9170ef7c35",
+      "name": "Denial-of-service",
+      "description": "If passed certain inputs, `django.utils.encoding.uri_to_iri` could lead to significant memory usage due to a recursion when repercent-encoding invalid UTF-8 octet sequences.",
+      "severity": "High",
+      "solution": "Upgrade to versions 1.11.23, 2.1.11, 2.2.4 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-49afe3f9-e7ab-4d52-ad25-6e04bfdd670d",
+          "value": "49afe3f9-e7ab-4d52-ad25-6e04bfdd670d",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2019-14235.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2019-14235",
+          "value": "CVE-2019-14235",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14235"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-14235"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2019/aug/01/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "044d210bee399688c229093ad5c7720ad790501db4bb00c7c4d7cb08f596f89a",
+      "name": "Improper Input Validation",
+      "description": "Due to the behaviour of the underlying HTMLParser, `django.utils.html.strip_tags` would be extremely slow to evaluate certain inputs containing large sequences of nested incomplete HTML entities.",
+      "severity": "High",
+      "solution": "Upgrade to versions 1.11.23, 2.1.11, 2.2.4 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-4be2dbd8-301a-48cd-8ffd-db2edf367ac4",
+          "value": "4be2dbd8-301a-48cd-8ffd-db2edf367ac4",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2019-14233.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2019-14233",
+          "value": "CVE-2019-14233",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14233"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-14233"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2019/aug/01/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "3ae0aaddf20a715620265072db1ea87f090cab9db46a1ee0d4346b27c9447883",
+      "name": "SQL Injection",
+      "description": "Django allows SQL Injection if untrusted data is used as a tolerance parameter in GIS functions and aggregates on Oracle. By passing a suitably crafted tolerance to GIS functions and aggregates on Oracle, it was possible to break escaping and inject malicious SQL.",
+      "severity": "High",
+      "solution": "Upgrade to versions 1.11.29, 2.2.11, 3.0.4 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-5295f830-9e63-4a53-a81c-c6a7745e7aa8",
+          "value": "5295f830-9e63-4a53-a81c-c6a7745e7aa8",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2020-9402.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2020-9402",
+          "value": "CVE-2020-9402",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-9402"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:S/C:P/I:P/A:P"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.djangoproject.com/en/3.0/releases/security/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-9402"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2020/mar/04/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "d568403a75ab53eb7fa70d2a73fb991e596419cd2e1003a57260f1fd23d6ab31",
+      "name": "Uncontrolled Memory Consumption",
+      "description": "Django allows Uncontrolled Memory Consumption via a malicious attacker-supplied value to the `django.utils.numberformat.format()` function.",
+      "severity": "High",
+      "solution": "Upgrade to versions 1.11.20, 2.0.12, 2.1.7 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-aa6b0729-ecca-4f48-8ea0-b364044c09cc",
+          "value": "aa6b0729-ecca-4f48-8ea0-b364044c09cc",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2019-6975.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2019-6975",
+          "value": "CVE-2019-6975",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-6975"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P"
+        }
+      ],
+      "links": [
+        {
+          "url": "http://www.securityfocus.com/bid/106964"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-6975"
+        },
+        {
+          "url": "https://cwe.mitre.org/data/definitions/789.html"
+        },
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+        },
+        {
+          "url": "https://groups.google.com/forum/#!topic/django-announce/WTwEAprR0IQ"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/66WMXHGBXD7GSM3PEXVCMCAGLMQYHZCU/"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/HVXDOVCXLD74SHR2BENGCE2OOYYYWJHZ/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-6975"
+        },
+        {
+          "url": "https://usn.ubuntu.com/3890-1/"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2019/feb/11/security-releases/"
+        },
+        {
+          "url": "https://www.openwall.com/lists/oss-security/2019/02/11/1"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "8dc3e9f26ca12556d9b7d9ea99dd6f4f06236df5a22f505771d6dab28b2223a3",
+      "name": "Cross-site Scripting",
+      "description": "An issue was discovered in Django. The `clickable` Current URL value displayed by the `AdminURLFieldWidget` displays the provided value without validating it as a safe URL. Thus, an unvalidated value stored in the database, or a value provided as a URL query parameter payload, could result in a clickable JavaScript link.",
+      "severity": "Medium",
+      "solution": "Upgrade to versions 1.11.21, 2.1.9, 2.2.2 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-149e1ab4-7152-4fa8-a40a-9a50a31d6d2f",
+          "value": "149e1ab4-7152-4fa8-a40a-9a50a31d6d2f",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2019-12308.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2019-12308",
+          "value": "CVE-2019-12308",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-12308"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:M/Au:N/C:N/I:P/A:N"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/1.11.21/"
+        },
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/2.1.9/"
+        },
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/2.2.2/"
+        },
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+        },
+        {
+          "url": "https://github.com/django/django/commit/09186a13d975de6d049f8b3e05484f66b01ece62"
+        },
+        {
+          "url": "https://github.com/django/django/commit/afddabf8428ddc89a332f7a78d0d21eaf2b5a673"
+        },
+        {
+          "url": "https://github.com/django/django/commit/c238701859a52d584f349cce15d56c8e8137c52b"
+        },
+        {
+          "url": "https://github.com/django/django/commit/deeba6d92006999fee9adfbd8be79bf0a59e8008"
+        },
+        {
+          "url": "https://groups.google.com/forum/#!topic/django-announce/GEbHU7YoVz8"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-12308"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2019/jun/03/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "74e77a3a8311e5ce854510a874fc9b21c95f853e7c20067a9368ac90cc9750d2",
+      "name": "Incorrect Regular Expression",
+      "description": "If `django.utils.text.Truncator`'s `chars()` and `words()` methods were passed the `html=True` argument, they were extremely slow to evaluate certain inputs due to a catastrophic backtracking vulnerability in a regular expression. The `chars()` and words()` methods are used to implement the `truncatechars_html` and `truncatewords_html` template filters, which were thus vulnerable.",
+      "severity": "Medium",
+      "solution": "Upgrade to versions 1.8.19, 1.11.11, 2.0.3 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-1f2c3ac1-b729-4ac9-8c64-1dcbff84250e",
+          "value": "1f2c3ac1-b729-4ac9-8c64-1dcbff84250e",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2018-7537.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2018-7537",
+          "value": "CVE-2018-7537",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-7537"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P"
+        }
+      ],
+      "links": [
+        {
+          "url": "http://www.securityfocus.com/bid/103357"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-7537"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2018/mar/06/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "16c6b562d0305b2d8cdc10489908ec02250f3c1f7f7f90428e965ffce80ab0be",
+      "name": "URL Redirection to Untrusted Site (Open Redirect)",
+      "description": "`django.middleware.common.CommonMiddleware` has an Open Redirect.",
+      "severity": "Medium",
+      "solution": "Upgrade to versions 1.11.15, 2.0.8 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-25669e1a-dcaa-4722-adfc-0f089945c95c",
+          "value": "25669e1a-dcaa-4722-adfc-0f089945c95c",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2018-14574.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2018-14574",
+          "value": "CVE-2018-14574",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-14574"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:M/Au:N/C:P/I:P/A:N"
+        }
+      ],
+      "links": [
+        {
+          "url": "http://www.securityfocus.com/bid/104970"
+        },
+        {
+          "url": "http://www.securitytracker.com/id/1041403"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-14574"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2018/aug/01/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "e167d51aa01b6133c39be20d408bd08d968f42e1c97d0ea4093ca9b283e27021",
+      "name": "Improper Input Validation",
+      "description": "An HTTP request is not redirected to HTTPS when the `SECURE_PROXY_SSL_HEADER` and `SECURE_SSL_REDIRECT` settings are used, and the proxy connects to Django via HTTPS. In other words, `django.http.HttpRequest.scheme` has incorrect behavior when a client uses HTTP.",
+      "severity": "Medium",
+      "solution": "Upgrade to versions 1.11.22, 2.1.10, 2.2.3 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-42367e41-2c04-4f04-bdaa-ea72d0957ef8",
+          "value": "42367e41-2c04-4f04-bdaa-ea72d0957ef8",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2019-12781.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2019-12781",
+          "value": "CVE-2019-12781",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-12781"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:N/C:P/I:N/A:N"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-12781"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2019/jul/01/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "114bbfe336bdc3ba96470216c1b46a28c00cf6e0b61362a8d97ab623c3a683b3",
+      "name": "Incorrect Regular Expression",
+      "description": "An issue was discovered in Django. The `django.utils.html.urlize()` function was extremely slow to evaluate certain inputs due to catastrophic backtracking vulnerabilities in two regular expressions. The `urlize()` function is used to implement the urlize and urlizetrunc template filters, which were thus vulnerable.",
+      "severity": "Medium",
+      "solution": "Upgrade to versions 1.8.19, 1.11.11, 2.0.3 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-483f1247-a680-44c4-b609-c7a3ac65bd82",
+          "value": "483f1247-a680-44c4-b609-c7a3ac65bd82",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2018-7536.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2018-7536",
+          "value": "CVE-2018-7536",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-7536"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P"
+        }
+      ],
+      "links": [
+        {
+          "url": "http://www.securityfocus.com/bid/103361"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-7536"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2018/mar/06/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "14cadd4b55c3698da7c4b0e0fdcfcfc0545efea0a0ac12dbba6e8bb6195bc1d2",
+      "name": "Possible XSS in traceback section of technical 500 debug page",
+      "description": "HTML auto-escaping was disabled in a portion of the template for the technical debug page. Given the right circumstances, this allowed a cross-site scripting attack. This vulnerability shouldn't affect most production sites since you shouldn't run with `DEBUG = True` (which makes this page accessible) in your production settings.",
+      "severity": "Medium",
+      "solution": "Upgrade to versions 1.10.8, 1.11.5 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-6162a015-8635-4a15-8d7c-dc9321db366f",
+          "value": "6162a015-8635-4a15-8d7c-dc9321db366f",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2017-12794.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2017-12794",
+          "value": "CVE-2017-12794",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-12794"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:M/Au:N/C:N/I:P/A:N"
+        }
+      ],
+      "links": [
+        {
+          "url": "http://www.securityfocus.com/bid/100643"
+        },
+        {
+          "url": "http://www.securitytracker.com/id/1039264"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-12794"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2017/sep/05/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    },
+    {
+      "id": "b8bbb6b4b4d6662d6c18d4586750a8f35801889ce3a73a040b30c8dbb978780d",
+      "name": "Content Spoofing",
+      "description": "Improper Neutralization of Special Elements in Output Used by a Downstream Component issue exists in `django.views.defaults.page_not_found()`, leading to content spoofing (in a 404 error page) if a user fails to recognize that a crafted URL has malicious content.",
+      "severity": "Medium",
+      "solution": "Upgrade to versions 1.11.18, 2.0.10, 2.1.5 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Django"
+          },
+          "version": "1.11.4"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-94f5e552-ad49-49c7-bd9f-8857bba2354b",
+          "value": "94f5e552-ad49-49c7-bd9f-8857bba2354b",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/v1.2.142/pypi/Django/CVE-2019-3498.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2019-3498",
+          "value": "CVE-2019-3498",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-3498"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:N"
+        },
+        {
+          "vendor": "NVD",
+          "vector": "AV:N/AC:M/Au:N/C:N/I:P/A:N"
+        }
+      ],
+      "links": [
+        {
+          "url": "http://www.securityfocus.com/bid/106453"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-3498"
+        },
+        {
+          "url": "https://cwe.mitre.org/data/definitions/148.html"
+        },
+        {
+          "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+        },
+        {
+          "url": "https://groups.google.com/forum/#!topic/django-announce/VYU7xQQTEPQ"
+        },
+        {
+          "url": "https://lists.debian.org/debian-lts-announce/2019/01/msg00005.html"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/HVXDOVCXLD74SHR2BENGCE2OOYYYWJHZ/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-3498"
+        },
+        {
+          "url": "https://usn.ubuntu.com/3851-1/"
+        },
+        {
+          "url": "https://www.debian.org/security/2019/dsa-4363"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2019/jan/04/security-releases/"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Django:1.11.4"
+        }
+      }
+    }
+  ],
+  "scan": {
+    "analyzer": {
+      "id": "gemnasium-python",
+      "name": "gemnasium-python",
+      "url": "https://gitlab.com/gitlab-org/security-products/analyzers/gemnasium",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "6.2.0"
+    },
+    "scanner": {
+      "id": "gemnasium-python",
+      "name": "gemnasium-python",
+      "url": "https://gitlab.com/gitlab-org/security-products/analyzers/gemnasium",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "6.2.0"
+    },
+    "type": "dependency_scanning",
+    "start_time": "2025-09-20T02:04:23",
+    "end_time": "2025-09-20T02:04:52",
+    "status": "success",
+    "observability": {
+      "events": [
+        {
+          "event": "collect_gemnasium_python_scan_metrics_from_pipeline",
+          "property": "eb0e47db-9d04-4557-ae8e-c3b9dffc601e",
+          "label": "6.2.0",
+          "value": 15
+        },
+        {
+          "event": "collect_gemnasium_python_scan_performance_metrics_from_pipeline",
+          "property": "eb0e47db-9d04-4557-ae8e-c3b9dffc601e",
+          "value": 28
+        },
+        {
+          "event": "collect_gemnasium_python_scan_sbom_metrics_from_pipeline",
+          "property": "eb0e47db-9d04-4557-ae8e-c3b9dffc601e",
+          "label": "pypi",
+          "value": 12,
+          "input_file_path": "requirements.txt"
+        },
+        {
+          "event": "collect_gemnasium_python_scan_non_default_config_metrics_from_pipeline",
+          "property": "eb0e47db-9d04-4557-ae8e-c3b9dffc601e",
+          "label": "DS_INCLUDE_DEV_DEPENDENCIES"
+        }
+      ]
+    }
+  }
+}

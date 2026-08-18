@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Learn GitLab Section Card renders correctly 1`] = `
+<div
+  class="gl-card gl-h-full gl-pt-0"
+>
+  <div
+    class="gl-border-0 gl-card-header gl-pb-0"
+  >
+    <img
+      role="presentation"
+      src="workspace.svg"
+    />
+    <h2
+      class="gl-mb-3 gl-text-lg"
+    >
+      Configure your project
+    </h2>
+    <p
+      class="gl-mb-6 gl-text-subtle"
+    >
+      Complete these tasks first so you can enjoy GitLab's features to their fullest:
+    </p>
+  </div>
+  <div
+    class="gl-card-body gl-pt-0"
+  >
+    <learn-gitlab-section-link-stub
+      action="created"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="userAdded"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="issueCreated"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="codeAdded"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="duoSeatAssigned"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="mergeRequestCreated"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="pipelineCreated"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="licenseScanningRun"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="trialStarted"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="secureDependencyScanningRun"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="codeOwnersEnabled"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="secureDastRun"
+      value="[object Object]"
+    />
+    <learn-gitlab-section-link-stub
+      action="requiredMrApprovalsEnabled"
+      value="[object Object]"
+    />
+  </div>
+</div>
+`;

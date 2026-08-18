@@ -1,0 +1,21 @@
+- page_title _('Tell us about your company')
+- content_for :body_class, '!gl-bg-default'
+
+- content_for :page_specific_javascripts do
+  = render "layouts/google_tag_manager_head"
+  = render "layouts/one_trust"
+  = render "layouts/bizible"
+= render "layouts/google_tag_manager_body"
+
+.gl-max-w-4xl.gl-mx-auto.gl-grid.gl-gap-8{ class: "@md/panel:gl-grid-cols-9" }
+  .gl-col-span-6{ class: onboarding_status_presenter.show_company_form_side_column? ? '' : '@md/panel:gl-col-start-3' }
+    %h2.gl-mt-0.gl-text-center
+      = _("Tell us about your company")
+
+    %p.gl-text-subtle.gl-text-lg.gl-text-center
+      = s_('Trial|We need a few more details from you to activate your trial.')
+    .gl-max-w-80
+      #js-registrations-company-form{ data: { provide: create_company_form_data(onboarding_status_presenter) } }
+
+  - if onboarding_status_presenter.show_company_form_side_column?
+    = render GitlabSubscriptions::Trials::AdvantagesListComponent.new

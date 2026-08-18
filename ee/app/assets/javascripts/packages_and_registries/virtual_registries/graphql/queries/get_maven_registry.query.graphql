@@ -1,0 +1,9 @@
+# @feature_category: virtual_registry
+
+query getMavenVirtualRegistry($id: VirtualRegistriesPackagesMavenRegistryID!) {
+  registry: virtualRegistriesPackagesMavenRegistry(id: $id) {
+    id
+    name
+    description
+  }
+}

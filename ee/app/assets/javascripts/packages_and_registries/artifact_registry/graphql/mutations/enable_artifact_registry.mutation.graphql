@@ -1,0 +1,10 @@
+# @feature_category: artifact_registry
+
+# Entirely @client: the Artifact Registry enable mutation does not exist in the schema
+# yet, so graphql-verify reports this document as a client query and skips it. Removing
+# the directive is the only change needed once the backend lands.
+mutation enableArtifactRegistry($input: LocalArtifactRegistryEnableInput!) {
+  enableRegistry: artifactRegistryEnable(input: $input) @client {
+    errors
+  }
+}

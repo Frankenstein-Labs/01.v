@@ -1,0 +1,33 @@
+# @feature_category: team_planning
+mutation workItemUpdateCurrentUserTodos(
+  $input: WorkItemUpdateInput!
+  $useWorkItemFeatures: Boolean = false
+) {
+  workItemUpdate(input: $input) {
+    workItem {
+      id
+      widgets @skip(if: $useWorkItemFeatures) {
+        ... on WorkItemWidgetCurrentUserTodos {
+          type
+          currentUserTodos {
+            nodes {
+              id
+              state
+            }
+          }
+        }
+      }
+      features @include(if: $useWorkItemFeatures) {
+        currentUserTodos {
+          currentUserTodos(state: pending) {
+            nodes {
+              id
+              state
+            }
+          }
+        }
+      }
+    }
+    errors
+  }
+}

@@ -1,0 +1,7 @@
+mutation deleteDuoWorkflowsWorkflow($input: DeleteDuoWorkflowsWorkflowInput!) {
+  deleteDuoWorkflowsWorkflow(input: $input) {
+    clientMutationId
+    errors
+    success
+  }
+}

@@ -1,0 +1,17 @@
+# @feature_category: duo_chat
+query getRuleContent($projectPath: ID!, $paths: [String!]!) {
+  project(fullPath: $projectPath) {
+    id
+    repository {
+      blobs(paths: $paths) {
+        nodes {
+          id
+          oid
+          name
+          rawBlob
+          webPath
+        }
+      }
+    }
+  }
+}

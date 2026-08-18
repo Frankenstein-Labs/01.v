@@ -1,0 +1,21 @@
+fragment WorkItemCustomFieldValuesFragment on WorkItemWidgetCustomFields {
+  customFieldValues {
+    customField {
+      id
+      name
+      fieldType
+    }
+    ... on WorkItemNumberFieldValue {
+      value
+    }
+    ... on WorkItemTextFieldValue {
+      value
+    }
+    ... on WorkItemSelectFieldValue {
+      selectedOptions {
+        id
+        value
+      }
+    }
+  }
+}

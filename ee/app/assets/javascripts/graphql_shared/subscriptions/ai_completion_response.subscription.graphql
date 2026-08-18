@@ -1,0 +1,28 @@
+subscription aiCompletionResponse(
+  $userId: UserID
+  $resourceId: AiModelID
+  $clientSubscriptionId: String
+  $aiAction: AiAction
+  $htmlResponse: Boolean = true
+) {
+  aiCompletionResponse(
+    userId: $userId
+    resourceId: $resourceId
+    aiAction: $aiAction
+    clientSubscriptionId: $clientSubscriptionId
+  ) {
+    id
+    requestId
+    content
+    contentHtml @include(if: $htmlResponse)
+    errors
+    role
+    threadId
+    timestamp
+    type
+    chunkId
+    extras {
+      sources
+    }
+  }
+}

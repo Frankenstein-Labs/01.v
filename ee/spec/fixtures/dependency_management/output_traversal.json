@@ -1,0 +1,45 @@
+{
+  "dependency_updates": [],
+  "updated_files": [
+    {
+      "name": "Gemfile",
+      "directory": "../../../etc/",
+      "content": "malicious",
+      "mode": null,
+      "deleted": false,
+      "binary": false
+    },
+    {
+      "name": "Gemfile",
+      "directory": "/another/path",
+      "content": "safe",
+      "mode": null,
+      "deleted": false,
+      "binary": false
+    },
+    {
+      "name": "Gemfile",
+      "directory": "valid/",
+      "content": "safe",
+      "mode": null,
+      "deleted": false,
+      "binary": false
+    },
+    {
+      "name": "/etc/passwd",
+      "directory": "/",
+      "content": "malicious",
+      "mode": null,
+      "deleted": false,
+      "binary": false
+    },
+    {
+      "name": "passwd",
+      "directory": "//etc",
+      "content": "malicious",
+      "mode": null,
+      "deleted": false,
+      "binary": false
+    }
+  ]
+}

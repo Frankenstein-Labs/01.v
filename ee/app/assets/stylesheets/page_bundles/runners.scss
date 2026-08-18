@@ -1,0 +1,49 @@
+@import 'page_bundles/mixins_and_variables_and_functions';
+
+.runners-dashboard-half-gap-4 {
+  // Subtract the length of gl-gap-4 to show a correct gap
+  flex-basis: calc(50% - #{$gl-spacing-scale-4});
+  flex-grow: 1;
+}
+
+.runners-dashboard-third-gap-4 {
+  // Subtract the length of gl-gap-4 to show a correct gap
+  flex-basis: calc(33.33% - #{$gl-spacing-scale-4});
+  flex-grow: 1;
+}
+
+.runners-dashboard-two-thirds-gap-4 {
+  // Subtract half of the length of gl-gap-4 to show a correct gap
+  flex-basis: calc(66.66% - #{$gl-spacing-scale-4 / 2});
+  flex-grow: 1;
+}
+
+.runner-active-list-table tr:first-child th {
+  border-top: 0;
+}
+
+.runner-active-list-table tr:last-child td {
+  border-bottom: 0;
+}
+
+
+.runners-usage-table {
+  th,
+  td {
+    padding-top: $gl-spacing-scale-3 !important;
+    padding-bottom: $gl-spacing-scale-3 !important;
+  }
+
+  th {
+    font-size: 0.75rem !important;
+    @apply gl-text-strong #{!important};
+  }
+
+  td {
+    max-width: 1px; // allows td content to truncate
+  }
+
+  tr:last-child td {
+    border-bottom: 0;
+  }
+}

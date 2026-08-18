@@ -1,0 +1,51 @@
+# @feature_category: fleet_visibility
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getJobAnalytics(
+  $fullPath: ID!
+  $fromTime: Time!
+  $toTime: Time!
+  $source: CiPipelineSources
+  $branch: String
+  $jobName: String
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $sort: CiJobAnalyticsSort
+) {
+  project(fullPath: $fullPath) {
+    id
+    jobAnalytics(
+      fromTime: $fromTime
+      toTime: $toTime
+      source: $source
+      ref: $branch
+      nameSearch: $jobName
+      before: $before
+      after: $after
+      first: $first
+      last: $last
+      sort: $sort
+    ) {
+      nodes {
+        name
+        stageName
+        statistics {
+          successRate: rate(status: SUCCESS)
+          failedRate: rate(status: FAILED)
+          successCount: count(status: SUCCESS)
+          failedCount: count(status: FAILED)
+          count
+          durationStatistics {
+            meanDuration: mean
+            p95Duration: p95
+          }
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

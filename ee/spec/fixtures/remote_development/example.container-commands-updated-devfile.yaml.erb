@@ -1,0 +1,105 @@
+---
+schemaVersion: 2.2.0
+metadata: {}
+components:
+  - name: tooling-container
+    attributes:
+      gl/inject-editor: true
+      overrideCommand: true
+    container:
+      image: quay.io/mloriedo/universal-developer-image:ubi8-dw-demo
+      args:
+        - |
+          <%= indent_yaml_literal(CONTAINER_KEEPALIVE_COMMAND_ARGS, 10) %>
+      command:
+        - "/bin/sh"
+        - "-c"
+      env:
+        - name: GL_TOOLS_DIR
+          value: "/projects/.gl-tools"
+        - name: GL_VSCODE_LOG_LEVEL
+          value: "info"
+        - name: GL_VSCODE_PORT
+          value: "<%= WORKSPACE_EDITOR_PORT %>"
+        - name: GL_SSH_PORT
+          value: "<%= WORKSPACE_SSH_PORT %>"
+        - name: GL_VSCODE_ENABLE_MARKETPLACE
+          value: "false"
+      endpoints:
+        - name: editor-server
+          targetPort: <%= WORKSPACE_EDITOR_PORT %>
+          exposure: public
+          secure: true
+          protocol: https
+        - name: ssh-server
+          targetPort: <%= WORKSPACE_SSH_PORT %>
+          exposure: internal
+          secure: true
+      dedicatedPod: false
+      mountSources: true
+  - name: database-container
+    attributes:
+      overrideCommand: false
+    container:
+      image: mysql
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "my-secret-pw"
+      dedicatedPod: false
+      mountSources: true
+  - name: user-defined-entrypoint-cmd-component
+    attributes:
+      overrideCommand: false
+    container:
+      image: quay.io/mloriedo/universal-developer-image:ubi8-dw-demo
+      command: ["echo"]
+      args: ["-n", "user-defined entrypoint command"]
+      dedicatedPod: false
+      mountSources: true
+  - name: gl-tools-injector
+    attributes:
+      overrideCommand: false
+    container:
+      image: <%= WORKSPACE_TOOLS_IMAGE %>
+      env:
+        - name: GL_TOOLS_DIR
+          value: "/projects/.gl-tools"
+      memoryLimit: 512Mi
+      memoryRequest: 256Mi
+      cpuLimit: 500m
+      cpuRequest: 100m
+events:
+  preStart:
+    - gl-tools-injector-command
+  postStart:
+    - db-component-command-with-working-dir
+    - db-component-command-without-working-dir
+    - main-component-command-without-working-dir
+    - user-defined-command
+commands:
+  - id: user-defined-command
+    exec:
+      component: tooling-container
+      commandLine: echo 'executes postStart command in the specified workingDir'
+      workingDir: test-dir
+      hotReloadCapable: false
+  - id: main-component-command-without-working-dir
+    exec:
+      component: tooling-container
+      commandLine: echo 'executes postStart command in the projects/project_path directory'
+      hotReloadCapable: false
+  - id: db-component-command-with-working-dir
+    exec:
+      component: database-container
+      commandLine: echo 'executes postStart command in the specified workingDir'
+      workingDir: test-dir
+      hotReloadCapable: false
+  - id: db-component-command-without-working-dir
+    exec:
+      component: database-container
+      commandLine: echo 'executes postStart command in the the container's default WORKDIR'
+      hotReloadCapable: false
+  - id: gl-tools-injector-command
+    apply:
+      component: gl-tools-injector
+variables: {}

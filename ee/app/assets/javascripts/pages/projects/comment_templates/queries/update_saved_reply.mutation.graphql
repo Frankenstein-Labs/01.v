@@ -1,0 +1,10 @@
+mutation projectSavedReplyUpdate($id: ProjectsSavedReplyID!, $name: String!, $content: String!) {
+  savedReplyMutation: projectSavedReplyUpdate(input: { id: $id, name: $name, content: $content }) {
+    errors
+    savedReply {
+      id
+      name
+      content
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "projects"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "projects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/project"
+      }
+    }
+  },
+  "definitions": {
+    "project": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "avatar_url",
+        "remove_path",
+        "web_url",
+        "namespace",
+        "environments"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "avatar_url": { "type": ["string", "null"] },
+        "remove_path": { "type": "string" },
+        "web_url": { "type": "string" },
+        "namespace": { "$ref": "#/definitions/namespace" },
+        "environments": { "type": "array", "items": { "$ref": "#/definitions/environment" } }
+      }
+    },
+    "namespace": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "avatar_url",
+        "full_path"
+      ],
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "avatar_url": { "type": ["string", "null"] },
+        "full_path": { "type": "string" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "external_url",
+        "environment_path"
+      ],
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "external_url": { "type": "string" },
+        "environment_path": { "type": "string" },
+        "last_deployment": { "$ref": "../../../../../../../spec/fixtures/api/schemas/deployment.json" }
+      }
+    }
+  }
+}

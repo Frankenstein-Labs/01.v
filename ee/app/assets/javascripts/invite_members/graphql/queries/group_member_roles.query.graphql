@@ -1,0 +1,10 @@
+#import "ee/graphql_shared/fragments/member_roles.fragment.graphql"
+
+query getInviteModalGroupMemberRoles($fullPath: ID!) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    memberRoles(assignable: true) {
+      ...MemberRoles
+    }
+  }
+}

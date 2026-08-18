@@ -1,0 +1,14 @@
+# @feature_category: duo_agent_platform
+mutation updateDuoWorkflowWebSearch(
+  $workflowId: AiDuoWorkflowsWorkflowID!
+  $webSearchEnabled: Boolean!
+) {
+  updateDuoWorkflowWebSearch(
+    input: { workflowId: $workflowId, webSearchEnabled: $webSearchEnabled }
+  ) {
+    workflow {
+      id
+    }
+    errors
+  }
+}

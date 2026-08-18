@@ -1,0 +1,5 @@
+mutation deleteComplianceFramework($input: DestroyComplianceFrameworkInput!) {
+  destroyComplianceFramework(input: $input) {
+    errors
+  }
+}

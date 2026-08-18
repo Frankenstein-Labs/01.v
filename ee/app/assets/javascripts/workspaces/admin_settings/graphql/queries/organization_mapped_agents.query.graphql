@@ -1,0 +1,10 @@
+query mappedAgents($organizationId: OrganizationsOrganizationID!) {
+  organization(id: $organizationId) {
+    id
+    mappedAgents: workspacesClusterAgents(filter: DIRECTLY_MAPPED) {
+      nodes {
+        id
+      }
+    }
+  }
+}

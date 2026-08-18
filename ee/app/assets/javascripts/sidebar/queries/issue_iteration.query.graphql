@@ -1,0 +1,13 @@
+query issueSprint($fullPath: ID!, $iid: String!) {
+  project(fullPath: $fullPath) {
+    id
+    issue(iid: $iid) {
+      id
+      iteration {
+        id
+        title
+        webUrl
+      }
+    }
+  }
+}

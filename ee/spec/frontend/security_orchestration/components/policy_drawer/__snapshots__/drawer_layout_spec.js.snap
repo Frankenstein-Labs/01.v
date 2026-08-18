@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DrawerLayout component enabled policy matches the snapshots 1`] = `
+<div>
+  <span
+    data-testid="summary-text"
+  >
+    Summary
+  </span>
+  <info-row-stub
+    data-testid="policy-type"
+    label="Policy Type"
+  >
+    Scan Execution
+  </info-row-stub>
+  <info-row-stub
+    label="Description"
+  >
+    <div
+      data-testid="custom-description-text"
+    >
+      This policy enforces pipeline configuration to have a job with DAST scan
+    </div>
+  </info-row-stub>
+  <scope-info-row-stub
+    policyscope="[object Object]"
+  />
+  <info-row-stub
+    label="Source"
+  >
+    <div
+      data-testid="policy-source"
+    >
+      <span>
+        This is a project-level policy
+      </span>
+    </div>
+  </info-row-stub>
+  <info-row-stub
+    label="Status"
+  >
+    <div
+      class="gl-text-success"
+      data-testid="enabled-status-text"
+    >
+      <gl-icon-stub
+        class="gl-mr-3"
+        name="check-circle-filled"
+        size="16"
+        variant="success"
+      />
+      Enabled
+    </div>
+  </info-row-stub>
+</div>
+`;
+
+exports[`DrawerLayout component not enabled policy matches the snapshots 1`] = `
+<div>
+  <span
+    data-testid="summary-text"
+  >
+    Summary
+  </span>
+  <info-row-stub
+    data-testid="policy-type"
+    label="Policy Type"
+  >
+    Scan Execution
+  </info-row-stub>
+  <info-row-stub
+    label="Description"
+  >
+    <div
+      class="gl-text-subtle"
+      data-testid="default-description-text"
+    >
+      No description
+    </div>
+  </info-row-stub>
+  <scope-info-row-stub
+    policyscope="[object Object]"
+  />
+  <info-row-stub
+    label="Source"
+  >
+    <div
+      data-testid="policy-source"
+    >
+      <span>
+        This is a project-level policy
+      </span>
+    </div>
+  </info-row-stub>
+  <info-row-stub
+    label="Status"
+  >
+    <div
+      class="gl-text-subtle"
+      data-testid="not-enabled-status-text"
+    >
+      Not enabled
+    </div>
+  </info-row-stub>
+</div>
+`;

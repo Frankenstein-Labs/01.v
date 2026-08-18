@@ -1,0 +1,4 @@
+fragment EscalationPolicyFragment on EscalationPolicyType {
+  id
+  title: name
+}

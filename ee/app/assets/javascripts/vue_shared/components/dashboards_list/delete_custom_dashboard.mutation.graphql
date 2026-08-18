@@ -1,0 +1,6 @@
+# @feature_category: custom_dashboards_foundation
+mutation deleteCustomDashboard($id: AnalyticsCustomDashboardsDashboardID!) {
+  deleteCustomDashboard(input: { id: $id }) {
+    errors
+  }
+}

@@ -1,0 +1,14 @@
+mutation updateMergeRequest($projectPath: ID!, $iid: String!, $overrideRequestedChanges: Boolean) {
+  mergeRequestUpdate(
+    input: {
+      projectPath: $projectPath
+      iid: $iid
+      overrideRequestedChanges: $overrideRequestedChanges
+    }
+  ) {
+    mergeRequest {
+      id
+    }
+    errors
+  }
+}

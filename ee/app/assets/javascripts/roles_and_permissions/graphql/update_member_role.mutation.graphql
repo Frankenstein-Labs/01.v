@@ -1,0 +1,12 @@
+mutation updateMemberRole(
+  $id: MemberRoleID!
+  $name: String!
+  $description: String!
+  $permissions: [MemberRolePermission!]!
+) {
+  memberRoleUpdate(
+    input: { id: $id, name: $name, description: $description, permissions: $permissions }
+  ) {
+    errors
+  }
+}

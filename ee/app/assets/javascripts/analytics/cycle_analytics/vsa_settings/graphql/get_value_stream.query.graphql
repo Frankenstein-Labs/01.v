@@ -1,0 +1,16 @@
+#import "./value_stream.fragment.graphql"
+
+query getValueStream($fullPath: ID!, $isProject: Boolean = false, $valueStreamId: ID!) {
+  group(fullPath: $fullPath) @skip(if: $isProject) {
+    id
+    valueStreams(id: $valueStreamId) {
+      ...ValueStream
+    }
+  }
+  project(fullPath: $fullPath) @include(if: $isProject) {
+    id
+    valueStreams(id: $valueStreamId) {
+      ...ValueStream
+    }
+  }
+}

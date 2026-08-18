@@ -1,0 +1,14 @@
+# @feature_category: compliance_management
+mutation createComplianceFrameworkFromTemplate(
+  $input: CreateComplianceFrameworkFromTemplateInput!
+) {
+  createComplianceFrameworkFromTemplate(input: $input) {
+    framework {
+      id
+      name
+      description
+      color
+    }
+    errors
+  }
+}

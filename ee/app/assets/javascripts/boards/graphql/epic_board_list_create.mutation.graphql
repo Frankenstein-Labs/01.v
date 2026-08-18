@@ -1,0 +1,13 @@
+#import "./epic_board_list.fragment.graphql"
+
+# @feature_category: portfolio_management
+mutation CreateEpicBoardList($boardId: BoardsEpicBoardID!, $backlog: Boolean, $labelId: LabelID) {
+  boardListCreate: epicBoardListCreate(
+    input: { boardId: $boardId, backlog: $backlog, labelId: $labelId }
+  ) {
+    list {
+      ...EpicBoardListFragment
+    }
+    errors
+  }
+}

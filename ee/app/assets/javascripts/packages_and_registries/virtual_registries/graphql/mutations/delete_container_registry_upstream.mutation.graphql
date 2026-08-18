@@ -1,0 +1,9 @@
+# @feature_category: virtual_registry
+
+mutation containerVirtualRegistryUpstreamDelete(
+  $id: VirtualRegistriesContainerRegistryUpstreamID!
+) {
+  upstreamDelete: containerVirtualRegistryUpstreamDelete(input: { upstreamId: $id }) {
+    errors
+  }
+}

@@ -1,0 +1,5 @@
+mutation adminRolesLdapSync {
+  adminRolesLdapSync(input: {}) {
+    errors
+  }
+}

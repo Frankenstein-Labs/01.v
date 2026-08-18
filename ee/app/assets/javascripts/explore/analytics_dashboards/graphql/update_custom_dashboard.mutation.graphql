@@ -1,0 +1,11 @@
+# @feature_category: custom_dashboards_foundation
+mutation updateCustomDashboard($input: UpdateCustomDashboardInput!) {
+  updateCustomDashboard(input: $input) {
+    dashboard {
+      id
+      name
+      description
+    }
+    errors
+  }
+}

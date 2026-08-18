@@ -1,0 +1,13 @@
+---
+name: skip_pipelines_for_mirror_first_sync_non_default_branches
+description: |
+  When enabled, pull mirror first sync only creates a pipeline for the default branch,
+  skipping pipelines for all other branches and tags. This prevents thousands of pipelines
+  from being triggered when a mirror is first set up on a repository with many refs.
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/598486
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/247467
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/607104
+milestone: '19.3'
+group: group::source code
+type: gitlab_com_derisk
+default_enabled: false

@@ -1,0 +1,59 @@
+# @feature_category: workflow_catalog
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "ee/ai/catalog/graphql/fragments/ai_catalog_item.fragment.graphql"
+#import "ee/ai/catalog/graphql/fragments/ai_catalog_item_version.fragment.graphql"
+
+query projectAiCatalogItems(
+  $projectPath: ID!
+  $itemTypes: [AiCatalogItemType!]
+  $enabled: Boolean
+  $allAvailable: Boolean = false
+  $projectId: ProjectID!
+  $groupId: GroupID!
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $search: String
+  $sort: AiCatalogItemsSort
+) {
+  project(fullPath: $projectPath) {
+    id
+    aiCatalogItems(
+      itemTypes: $itemTypes
+      enabled: $enabled
+      allAvailable: $allAvailable
+      before: $before
+      after: $after
+      first: $first
+      last: $last
+      search: $search
+      sort: $sort
+    ) {
+      nodes {
+        ...BaseAiCatalogItem
+        project {
+          id
+          nameWithNamespace
+        }
+        latestVersion {
+          ...BaseAiCatalogItemVersion
+        }
+        configurationForProject(projectId: $projectId) {
+          id
+          enabled
+          pinnedItemVersion {
+            ...BaseAiCatalogItemVersion
+          }
+        }
+        configurationForGroup(groupId: $groupId) {
+          id
+          enabled
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

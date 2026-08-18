@@ -1,0 +1,17 @@
+#import "../fragments/streaming_destination.fragment.graphql"
+
+query instanceDestinations {
+  auditEventsInstanceStreamingDestinations {
+    nodes {
+      ...StreamingDestinationFragment
+      namespaceFilters {
+        id
+        namespace {
+          id
+          name
+          fullPath
+        }
+      }
+    }
+  }
+}

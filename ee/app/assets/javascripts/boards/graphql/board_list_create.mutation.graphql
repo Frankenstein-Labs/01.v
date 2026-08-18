@@ -1,0 +1,31 @@
+#import "./board_list.fragment.graphql"
+
+# @feature_category: portfolio_management
+mutation createBoardListEE(
+  $boardId: BoardID!
+  $backlog: Boolean
+  $labelId: LabelID
+  $milestoneId: MilestoneID
+  $iterationId: IterationID
+  $assigneeId: UserID
+  $statusId: WorkItemsStatusesStatusID
+  $position: Int
+) {
+  boardListCreate(
+    input: {
+      boardId: $boardId
+      backlog: $backlog
+      labelId: $labelId
+      milestoneId: $milestoneId
+      iterationId: $iterationId
+      assigneeId: $assigneeId
+      statusId: $statusId
+      position: $position
+    }
+  ) {
+    list {
+      ...BoardListFragment
+    }
+    errors
+  }
+}

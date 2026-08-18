@@ -1,0 +1,18 @@
+# @feature_category: continuous_delivery
+
+#import "./cd_rollout_steps.fragment.graphql"
+
+query cdRolloutFlow($id: CdRolloutID!) {
+  organization {
+    id
+    cdRollout(id: $id) {
+      id
+      applicationFlowDefinition {
+        id
+        version
+        definition
+      }
+      ...CdRolloutSteps
+    }
+  }
+}

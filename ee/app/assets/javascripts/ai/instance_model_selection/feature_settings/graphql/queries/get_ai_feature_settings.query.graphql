@@ -1,0 +1,57 @@
+query getAiFeatureSetting {
+  aiFeatureSettings {
+    nodes {
+      feature
+      title
+      mainFeature
+      provider
+      releaseState
+      selfHostedModel {
+        id
+        releaseState
+      }
+      defaultGitlabModel {
+        name
+        ref
+        modelProvider @gl_introduced(version: "18.6.0")
+        modelDescription @gl_introduced(version: "18.7.0")
+        costIndicator @gl_introduced(version: "18.7.0")
+      }
+      gitlabModel {
+        name
+        ref
+        modelProvider @gl_introduced(version: "18.6.0")
+      }
+      validModels {
+        nodes {
+          id
+          name
+          model
+          modelDisplayName
+          releaseState
+        }
+      }
+      validGitlabModels {
+        nodes {
+          name
+          ref
+          modelProvider @gl_introduced(version: "18.6.0")
+          modelDescription @gl_introduced(version: "18.7.0")
+          costIndicator @gl_introduced(version: "18.7.0")
+        }
+      }
+      allowList @gl_introduced(version: "19.1.0") {
+        enabled
+        models {
+          nodes {
+            ref
+            name
+            modelDescription
+            costIndicator
+            allowed
+          }
+        }
+      }
+    }
+  }
+}

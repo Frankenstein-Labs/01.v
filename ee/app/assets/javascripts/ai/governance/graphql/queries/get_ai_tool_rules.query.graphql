@@ -1,0 +1,40 @@
+# @feature_category: compliance_management
+
+query getAiToolRules(
+  $fullPath: ID!
+  $projectPath: ID
+  $search: String
+  $actionType: AiToolActionType
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+) {
+  aiToolRules(
+    fullPath: $fullPath
+    projectPath: $projectPath
+    search: $search
+    actionType: $actionType
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+  ) {
+    nodes {
+      id
+      name
+      actionType
+      category
+      source
+      webAccess
+      localAccess
+      backgroundAccess
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

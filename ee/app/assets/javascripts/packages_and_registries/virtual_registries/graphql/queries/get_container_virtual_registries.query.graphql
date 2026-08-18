@@ -1,0 +1,14 @@
+# @feature_category: virtual_registry
+
+query getContainerVirtualRegistries($groupPath: ID!, $first: Int) {
+  group(fullPath: $groupPath) {
+    id
+    registries: virtualRegistriesContainerRegistries(first: $first) {
+      nodes {
+        id
+        name
+        updatedAt
+      }
+    }
+  }
+}

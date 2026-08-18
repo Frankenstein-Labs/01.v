@@ -1,0 +1,12 @@
+# @feature_category: virtual_registry
+
+query getContainerUpstream($id: VirtualRegistriesContainerUpstreamID!) {
+  upstream: virtualRegistriesContainerUpstream(id: $id) {
+    id
+    url
+    name
+    username
+    description
+    cacheValidityHours
+  }
+}

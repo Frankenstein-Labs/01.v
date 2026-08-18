@@ -1,0 +1,7 @@
+# @feature_category: workflow_catalog
+mutation aiCatalogItemStar($input: AiCatalogItemStarInput!) {
+  aiCatalogItemStar(input: $input) {
+    starCount
+    errors
+  }
+}

@@ -1,0 +1,10 @@
+# @feature_category: team_planning
+query customFieldSelectOptions($fieldId: IssuablesCustomFieldID!) {
+  customField(id: $fieldId) {
+    id
+    selectOptions {
+      id
+      value
+    }
+  }
+}

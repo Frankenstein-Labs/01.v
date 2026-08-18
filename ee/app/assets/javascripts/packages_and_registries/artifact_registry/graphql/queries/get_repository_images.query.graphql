@@ -1,0 +1,28 @@
+# @feature_category: artifact_registry
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getArtifactRegistryRepositoryImages(
+  $organizationId: OrganizationsOrganizationID!
+  $name: String!
+  $first: Int
+  $last: Int
+  $before: String
+  $after: String
+) {
+  organization(id: $organizationId) {
+    id
+    artifactRegistryRepository(name: $name) {
+      name
+      format
+      images(first: $first, last: $last, before: $before, after: $after) @client {
+        nodes {
+          id
+          name
+        }
+        pageInfo {
+          ...PageInfo
+        }
+      }
+    }
+  }
+}

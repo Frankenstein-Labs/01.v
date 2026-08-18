@@ -1,0 +1,20 @@
+query getDownstreamSubscriptions($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    ciSubscribedProjects {
+      count
+      nodes {
+        id
+        downstreamProject {
+          id
+          name
+          namespace {
+            id
+            name
+          }
+          webUrl
+        }
+      }
+    }
+  }
+}

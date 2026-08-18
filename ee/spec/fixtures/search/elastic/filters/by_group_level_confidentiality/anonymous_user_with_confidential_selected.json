@@ -1,0 +1,24 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "match_none": {
+            "_name": "filters:confidentiality:groups:anonymous_user_confidential_filter_not_allowed"
+          }
+        },
+        {
+          "term": {
+            "confidential": {
+              "_name": "filters:confidentiality:groups:non_confidential",
+              "value": false
+            }
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

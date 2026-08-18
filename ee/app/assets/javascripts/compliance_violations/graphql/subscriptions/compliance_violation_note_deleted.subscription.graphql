@@ -1,0 +1,8 @@
+# @feature_category: compliance_management
+subscription complianceViolationNoteDeleted($noteableId: NoteableID) {
+  workItemNoteDeleted(noteableId: $noteableId) {
+    id
+    discussionId
+    lastDiscussionNote
+  }
+}

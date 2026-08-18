@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DependenciesApp component on creation if project has no dependencies shows only the empty state 1`] = `
+{
+  "compact": false,
+  "contentClass": [],
+  "description": null,
+  "headerLevel": 2,
+  "illustrationName": null,
+  "invertInDarkMode": true,
+  "primaryButtonLink": null,
+  "primaryButtonText": null,
+  "secondaryButtonLink": null,
+  "secondaryButtonText": null,
+  "svgHeight": null,
+  "svgPath": "/bar.svg",
+  "title": "View dependency details for your project",
+}
+`;

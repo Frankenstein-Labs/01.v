@@ -1,0 +1,70 @@
+query projectComplianceRequirementsStatuses(
+  $fullPath: ID!
+  $first: Int
+  $last: Int
+  $before: String
+  $after: String
+  $filters: ProjectRequirementComplianceStatusInput
+  $orderBy: ProjectComplianceRequirementStatusOrderBy
+) {
+  container: project(fullPath: $fullPath) {
+    id
+    complianceRequirementStatuses(
+      first: $first
+      last: $last
+      before: $before
+      after: $after
+      filters: $filters
+      orderBy: $orderBy
+    ) {
+      nodes {
+        id
+        pendingCount
+        passCount
+        failCount
+        updatedAt
+        complianceFramework {
+          id
+          name
+          default
+          color
+        }
+        complianceRequirement {
+          id
+          name
+          description
+          complianceRequirementsControls {
+            nodes {
+              id
+            }
+          }
+        }
+        project {
+          id
+          name
+          webUrl
+          complianceControlStatus {
+            nodes {
+              id
+              status
+              complianceRequirementsControl {
+                id
+                name
+                controlType
+                externalUrl
+                pingEnabled
+                externalControlName
+              }
+            }
+          }
+        }
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+}

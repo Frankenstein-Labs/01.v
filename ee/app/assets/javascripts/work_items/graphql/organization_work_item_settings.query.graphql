@@ -1,0 +1,10 @@
+# @feature_category: team_planning
+
+query organizationWorkItemSettings {
+  organization {
+    id
+    workItemSettings {
+      customizableTypeVisibility
+    }
+  }
+}

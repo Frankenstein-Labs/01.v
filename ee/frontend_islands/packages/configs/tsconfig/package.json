@@ -1,0 +1,25 @@
+{
+  "name": "@frontend-islands/tsconfig",
+  "version": "0.1.0",
+  "description": "Shared TypeScript configurations for Vue 3 + TypeScript + Tailwind 4 projects",
+  "main": "tsconfig.json",
+  "scripts": {
+    "build:prod": "echo skip",
+    "build": "echo skip"
+  },
+  "files": [
+    "*.json",
+    "README.md"
+  ],
+  "keywords": [
+    "typescript",
+    "tsconfig",
+    "vue3",
+    "frontend-islands",
+    "shared-config"
+  ],
+  "peerDependencies": {
+    "typescript": "^5.9.3",
+    "@vue/tsconfig": "^0.7.0"
+  }
+}

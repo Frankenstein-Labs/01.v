@@ -1,0 +1,34 @@
+#import "~/issuable/popover/queries/base_work_item_popover.fragment.graphql"
+#import "~/issuable/popover/queries/base_work_item_popover_features.fragment.graphql"
+#import "ee/work_items/graphql/work_item_status.fragment.graphql"
+#import "ee/work_items/list/graphql/work_item_feature_status.fragment.graphql"
+
+query workItemPopoverEE($fullPath: ID!, $iid: String!, $useWorkItemFeatures: Boolean = false) {
+  namespace(fullPath: $fullPath) {
+    id
+    workItem(iid: $iid) {
+      ...BaseWorkItemPopover
+      widgets @skip(if: $useWorkItemFeatures) {
+        ... on WorkItemWidgetWeight {
+          type
+          weight
+        }
+        ... on WorkItemWidgetStatus {
+          type
+          status {
+            ...WorkItemStatusFragment
+          }
+        }
+      }
+      features @include(if: $useWorkItemFeatures) {
+        ...BaseWorkItemPopoverFeatures
+        weight {
+          weight
+        }
+        status {
+          ...WorkItemFeatureStatus
+        }
+      }
+    }
+  }
+}

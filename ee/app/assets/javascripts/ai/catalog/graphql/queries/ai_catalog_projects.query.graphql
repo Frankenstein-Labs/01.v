@@ -1,0 +1,38 @@
+# @feature_category: workflow_catalog
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query aiCatalogProjects(
+  $search: String!
+  $after: String = ""
+  $before: String = ""
+  $first: Int
+  $last: Int
+  $searchNamespaces: Boolean = false
+  $sort: String
+  $membership: Boolean = true
+  $minAccessLevel: AccessLevelEnum
+  $duoLicensedFeature: DuoLicensedFeature
+) {
+  projects(
+    search: $search
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    membership: $membership
+    minAccessLevel: $minAccessLevel
+    searchNamespaces: $searchNamespaces
+    sort: $sort
+    duoLicensedFeature: $duoLicensedFeature
+  ) {
+    nodes {
+      id
+      name
+      nameWithNamespace
+    }
+    pageInfo {
+      ...PageInfo
+    }
+    count(limit: 100)
+  }
+}

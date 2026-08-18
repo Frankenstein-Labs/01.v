@@ -1,0 +1,157 @@
+  components:
+    - attributes:
+        gl/inject-editor: true
+      container:
+        dedicatedPod: false
+        image: registry.gitlab.com/gitlab-org/workspaces/gitlab-workspaces-docs/ubuntu:22.04
+        mountSources: true
+        env:
+          - name: GL_TOOLS_DIR
+            value: "/projects/.gl-tools"
+          - name: GL_EDITOR_LOG_LEVEL
+            value: info
+          - name: GL_EDITOR_PORT
+            value: '60001'
+          - name: GL_SSH_PORT
+            value: '60022'
+          - name: GL_EDITOR_ENABLE_MARKETPLACE
+            value: 'false'
+        endpoints:
+          - name: editor-server
+            targetPort: 60001
+            exposure: public
+            secure: true
+            protocol: https
+          - name: ssh-server
+            targetPort: 60022
+            exposure: internal
+            secure: true
+        command:
+          - "/bin/sh"
+          - "-c"
+        args:
+          - 'tail -f /dev/null
+
+            '
+        volumeMounts:
+          - name: gl-workspace-data
+            path: "/projects"
+      name: tooling-container
+    - name: gl-tools-injector
+      container:
+        image: registry.gitlab.com/gitlab-org/workspaces/gitlab-workspaces-tools:15.0.0
+        env:
+          - name: GL_TOOLS_DIR
+            value: "/projects/.gl-tools"
+        memoryLimit: 512Mi
+        memoryRequest: 256Mi
+        cpuLimit: 500m
+        cpuRequest: 100m
+        volumeMounts:
+          - name: gl-workspace-data
+            path: "/projects"
+    - name: gl-project-cloner
+      container:
+        image: alpine/git:2.45.2
+        args:
+          - |
+            echo "$(date -Iseconds): ----------------------------------------"
+            echo "$(date -Iseconds): Cloning project if necessary..."
+
+            if [ -f "/projects/.gl_project_cloning_successful" ]
+            then
+              echo "$(date -Iseconds): Project cloning was already successful"
+              exit 0
+            fi
+
+            if [ -d "/projects/gitlab-shell" ]
+            then
+              echo "$(date -Iseconds): Removing unsuccessfully cloned project directory"
+              rm -rf "/projects/gitlab-shell"
+            fi
+
+            echo "$(date -Iseconds): Cloning project"
+            git clone --branch "main" "http://gdk.test:3000/gitlab-org/gitlab-shell.git" "/projects/gitlab-shell"
+            exit_code=$?
+
+            if [ "${exit_code}" -eq 0 ]
+            then
+              echo "$(date -Iseconds): Project cloning successful"
+              touch "/projects/.gl_project_cloning_successful"
+              echo "$(date -Iseconds): Updated file to indicate successful project cloning"
+            else
+              echo "$(date -Iseconds): Project cloning failed with exit code: ${exit_code}" >&2
+            fi
+
+            echo "$(date -Iseconds): Finished cloning project if necessary."
+            exit "${exit_code}"
+        command:
+          - "/bin/sh"
+          - "-c"
+        memoryLimit: 1000Mi
+        memoryRequest: 500Mi
+        cpuLimit: 500m
+        cpuRequest: 100m
+        volumeMounts:
+          - name: gl-workspace-data
+            path: "/projects"
+    - name: gl-workspace-data
+      volume:
+        size: 50Gi
+  metadata: {}
+  schemaVersion: 2.2.0
+  commands:
+    - id: gl-tools-injector-command
+      apply:
+        component: gl-tools-injector
+    - id: gl-start-sshd-command
+      exec:
+        commandLine: |
+          #!/bin/sh
+          echo "$(date -Iseconds): ----------------------------------------"
+          echo "$(date -Iseconds): Starting sshd if it is found..."
+          sshd_path=$(which sshd)
+          if [ -x "${sshd_path}" ]; then
+            echo "$(date -Iseconds): Starting ${sshd_path} on port ${GL_SSH_PORT} with output written to ${GL_WORKSPACE_LOGS_DIR}/start-sshd.log"
+            "${sshd_path}" -D -p "${GL_SSH_PORT}" >> "${GL_WORKSPACE_LOGS_DIR}/start-sshd.log" 2>&1 &
+          else
+            echo "$(date -Iseconds): 'sshd' not found in path. Not starting SSH server." >&2
+          fi
+          echo "$(date -Iseconds): Finished starting sshd if it is found."
+        component: tooling-container
+    - id: gl-init-tools-command
+      exec:
+        commandLine: |
+          #!/bin/sh
+          echo "$(date -Iseconds): ----------------------------------------"
+          echo "$(date -Iseconds): Running ${GL_TOOLS_DIR}/init_tools.sh with output written to ${GL_WORKSPACE_LOGS_DIR}/init-tools.log..."
+          "${GL_TOOLS_DIR}/init_tools.sh" >> "${GL_WORKSPACE_LOGS_DIR}/init-tools.log" 2>&1 &
+          echo "$(date -Iseconds): Finished running ${GL_TOOLS_DIR}/init_tools.sh."
+        component: tooling-container
+    - id: gl-sleep-until-container-is-running-command
+      exec:
+        commandLine: |
+          #!/bin/sh
+          echo "$(date -Iseconds): ----------------------------------------"
+          echo "$(date -Iseconds): Sleeping until workspace is running..."
+          time_to_sleep=5
+          status_file="/.workspace-data/variables/file/gl_workspace_reconciled_actual_state.txt"
+          while [ "$(cat ${status_file})" != "Running" ]; do
+            echo "$(date -Iseconds): Workspace state is '$(cat ${status_file})' from status file '${status_file}'. Blocking remaining postStart events execution for ${time_to_sleep} seconds until state is 'Running'..."
+            sleep ${time_to_sleep}
+          done
+          echo "$(date -Iseconds): Workspace state is now 'Running', continuing postStart hook execution."
+          echo "$(date -Iseconds): Finished sleeping until workspace is running."
+        component: tooling-container
+    - id: gl-project-cloner-command
+      apply:
+        component: gl-project-cloner
+  events:
+    preStart:
+      - gl-tools-injector-command
+      - gl-project-cloner-command
+    postStart:
+      - gl-start-sshd-command
+      - gl-init-tools-command
+      - gl-sleep-until-container-is-running-command
+  variables: {}

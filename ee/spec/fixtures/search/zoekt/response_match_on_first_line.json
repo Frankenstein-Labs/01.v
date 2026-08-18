@@ -1,0 +1,65 @@
+{
+  "Result": {
+    "ContentBytesLoaded": 377,
+    "IndexBytesLoaded": 8,
+    "Crashes": 0,
+    "Duration": 70125,
+    "FileCount": 1,
+    "ShardFilesConsidered": 0,
+    "FilesConsidered": 1,
+    "FilesLoaded": 1,
+    "FilesSkipped": 0,
+    "ShardsScanned": 1,
+    "ShardsSkipped": 0,
+    "ShardsSkippedFilter": 0,
+    "MatchCount": 1,
+    "NgramMatches": 1,
+    "NgramLookups": 117,
+    "Wait": 2750,
+    "MatchTreeConstruction": 31042,
+    "MatchTreeSearch": 10083,
+    "RegexpsConsidered": 0,
+    "FlushReason": 0,
+    "Files": [
+      {
+        "FileName": "test/test-main.js",
+        "Repository": "7",
+        "Version": "573d3e1037664d0f1d7c8acf1197dd0cb8d253fa",
+        "Language": "JavaScript",
+        "Branches": [
+          "HEAD"
+        ],
+        "LineMatches": [
+          {
+            "Line": "dmFyIHRlc3RzID0gT2JqZWN0LmtleXMod2luZG93Ll9fa2FybWFfXy5maWxlcykuZmlsdGVyKGZ1bmN0aW9uIChmaWxlKSB7Cg==",
+            "LineStart": 0,
+            "LineEnd": 73,
+            "LineNumber": 1,
+            "Before": "",
+            "After": "ICByZXR1cm4gKC9fc3BlY1wuanMkLy50ZXN0KGZpbGUpKTsK",
+            "FileName": false,
+            "Score": 51,
+            "DebugScore": "",
+            "LineFragments": [
+              {
+                "LineOffset": 23,
+                "Offset": 23,
+                "MatchLength": 22,
+                "SymbolInfo": null
+              }
+            ]
+          }
+        ],
+        "Checksum": "aTu5ePmhW+4=",
+        "Score": 5.000000038636364e+8,
+        "RepositoryID": 7
+      }
+    ],
+    "RepoURLs": {
+      "7": ""
+    },
+    "LineFragments": {
+      "7": ""
+    }
+  }
+}

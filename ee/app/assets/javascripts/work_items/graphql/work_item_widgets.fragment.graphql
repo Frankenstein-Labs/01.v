@@ -1,0 +1,73 @@
+# @feature_category: team_planning
+
+#import "./work_item_status.fragment.graphql"
+#import "./work_item_custom_field_values.fragment.graphql"
+#import "~/work_items/graphql/base_work_item_widgets.fragment.graphql"
+
+fragment WorkItemWidgets on WorkItemWidget {
+  type
+  ...BaseWorkItemWidgets
+  ... on WorkItemWidgetLabels @skip(if: $useWorkItemFeatures) {
+    allowsScopedLabels
+    labels {
+      nodes {
+        ...Label
+      }
+    }
+  }
+  ... on WorkItemWidgetStartAndDueDate @skip(if: $useWorkItemFeatures) {
+    dueDate
+    startDate
+    rollUp
+    isFixed
+  }
+  ... on WorkItemWidgetWeight @skip(if: $useWorkItemFeatures) {
+    weight
+    rolledUpWeight
+    rolledUpCompletedWeight
+  }
+  ... on WorkItemWidgetProgress @skip(if: $useWorkItemFeatures) {
+    progress
+    updatedAt
+  }
+  ... on WorkItemWidgetIteration @skip(if: $useWorkItemFeatures) {
+    iteration {
+      id
+      title
+      startDate
+      dueDate
+      webUrl
+      iterationCadence {
+        id
+        title
+      }
+    }
+  }
+  ... on WorkItemWidgetHealthStatus @skip(if: $useWorkItemFeatures) {
+    healthStatus
+    rolledUpHealthStatus {
+      count
+      healthStatus
+    }
+  }
+  ... on WorkItemWidgetColor @skip(if: $useWorkItemFeatures) {
+    color
+    textColor
+  }
+  ... on WorkItemWidgetLinkedItems @skip(if: $useWorkItemFeatures) {
+    blockedByCount
+    blockingCount
+  }
+  ... on WorkItemWidgetCustomFields @skip(if: $useWorkItemFeatures) {
+    ...WorkItemCustomFieldValuesFragment
+  }
+  ... on WorkItemWidgetStatus @skip(if: $useWorkItemFeatures) {
+    status {
+      ...WorkItemStatusFragment
+    }
+  }
+  ... on WorkItemWidgetAgentPlan @skip(if: $useWorkItemFeatures) {
+    type
+    content
+  }
+}

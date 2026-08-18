@@ -1,0 +1,13 @@
+# @feature_category: continuous_delivery
+
+query cdAvailableAgents {
+  organization {
+    id
+    cdAvailableAgents {
+      nodes {
+        id
+        name
+      }
+    }
+  }
+}

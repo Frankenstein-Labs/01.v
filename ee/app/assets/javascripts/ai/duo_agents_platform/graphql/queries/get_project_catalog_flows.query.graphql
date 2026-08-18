@@ -1,0 +1,36 @@
+# @feature_category: workflow_catalog
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "ee/ai/catalog/graphql/fragments/ai_catalog_item.fragment.graphql"
+
+query projectAiCatalogTabFlows(
+  $projectPath: ID!
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $search: String
+) {
+  project(fullPath: $projectPath) {
+    id
+    aiCatalogItems(
+      itemTypes: [FLOW]
+      allAvailable: true
+      before: $before
+      after: $after
+      first: $first
+      last: $last
+      search: $search
+    ) {
+      nodes {
+        ...BaseAiCatalogItem
+        project {
+          id
+          nameWithNamespace
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

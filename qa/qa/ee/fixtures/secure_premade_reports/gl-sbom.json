@@ -1,0 +1,101 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "serialNumber": "urn:uuid:b9b7822a-19fb-4087-b690-88273bb93f76",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-04-23T06:54:54Z",
+    "tools": [
+      {
+        "vendor": "GitLab",
+        "name": "Gemnasium",
+        "version": "5.0.0-rc3"
+      }
+    ],
+    "authors": [
+      {
+        "name": "GitLab",
+        "email": "support@gitlab.com"
+      }
+    ],
+    "properties": [
+      {
+        "name": "gitlab:dependency_scanning:input_file:path",
+        "value": "Gemfile.lock"
+      },
+      {
+        "name": "gitlab:dependency_scanning:package_manager:name",
+        "value": "bundler"
+      },
+      {
+        "name": "gitlab:meta:schema_version",
+        "value": "1"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "CFPropertyList",
+      "version": "3.0.5",
+      "purl": "pkg:gem/CFPropertyList@3.0.5",
+      "type": "library",
+      "bom-ref": "pkg:gem/CFPropertyList@3.0.5"
+    },
+    {
+      "name": "RedCloth",
+      "version": "4.3.2",
+      "purl": "pkg:gem/RedCloth@4.3.2",
+      "type": "library",
+      "bom-ref": "pkg:gem/RedCloth@4.3.2"
+    },
+    {
+      "name": "acme-client",
+      "version": "2.0.11",
+      "purl": "pkg:gem/acme-client@2.0.11",
+      "type": "library",
+      "bom-ref": "pkg:gem/acme-client@2.0.11"
+    },
+    {
+      "name": "actioncable",
+      "version": "6.1.7.2",
+      "purl": "pkg:gem/actioncable@6.1.7.2",
+      "type": "library",
+      "bom-ref": "pkg:gem/actioncable@6.1.7.2"
+    },
+    {
+      "name": "actionmailbox",
+      "version": "6.1.7.2",
+      "purl": "pkg:gem/actionmailbox@6.1.7.2",
+      "type": "library",
+      "bom-ref": "pkg:gem/actionmailbox@6.1.7.2"
+    },
+    {
+      "name": "actionmailer",
+      "version": "6.1.7.2",
+      "purl": "pkg:gem/actionmailer@6.1.7.2",
+      "type": "library",
+      "bom-ref": "pkg:gem/actionmailer@6.1.7.2"
+    },
+    {
+      "name": "actionpack",
+      "version": "6.1.7.2",
+      "purl": "pkg:gem/actionpack@6.1.7.2",
+      "type": "library",
+      "bom-ref": "pkg:gem/actionpack@6.1.7.2"
+    },
+    {
+      "name": "actiontext",
+      "version": "6.1.7.2",
+      "purl": "pkg:gem/actiontext@6.1.7.2",
+      "type": "library",
+      "bom-ref": "pkg:gem/actiontext@6.1.7.2"
+    },
+    {
+      "name": "actionview",
+      "version": "6.1.7.2",
+      "purl": "pkg:gem/actionview@6.1.7.2",
+      "type": "library",
+      "bom-ref": "pkg:gem/actionview@6.1.7.2"
+    }
+  ]
+}

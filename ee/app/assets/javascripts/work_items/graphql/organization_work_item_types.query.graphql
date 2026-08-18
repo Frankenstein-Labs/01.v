@@ -1,0 +1,13 @@
+# @feature_category: team_planning
+#import "ee_else_ce/work_items/graphql/work_item_types_configuration.fragment.graphql"
+
+query organizationWorkItemTypes {
+  organization {
+    id
+    workItemTypes {
+      nodes {
+        ...WorkItemTypesConfiguration
+      }
+    }
+  }
+}

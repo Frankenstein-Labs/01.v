@@ -1,0 +1,19 @@
+query groupSavedReplies($path: ID!, $after: String = "", $before: String = "") {
+  object: group(fullPath: $path) {
+    id
+    savedReplies(after: $after, before: $before) {
+      nodes {
+        id
+        name
+        content
+      }
+      count
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        endCursor
+        startCursor
+      }
+    }
+  }
+}

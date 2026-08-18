@@ -1,0 +1,12 @@
+#import "../fragments/spep_test_run.fragment.graphql"
+# @feature_category: security_policy_management
+mutation spepTestRun($policyId: SecurityPolicyID!, $projectPath: ID!) {
+  pipelineExecutionSchedulePolicyTestRun(
+    input: { policyId: $policyId, projectPath: $projectPath }
+  ) {
+    testRun {
+      ...SpepTestRun
+    }
+    errors
+  }
+}

@@ -1,0 +1,6 @@
+# @feature_category: self-hosted_models
+mutation aiFeatureSettingModelAllowlistUpdate($input: AiFeatureSettingModelAllowlistUpdateInput!) {
+  aiFeatureSettingModelAllowlistUpdate(input: $input) {
+    errors
+  }
+}

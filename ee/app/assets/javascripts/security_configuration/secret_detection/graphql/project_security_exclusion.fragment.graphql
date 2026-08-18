@@ -1,0 +1,10 @@
+fragment ProjectSecurityExclusionFragment on ProjectSecurityExclusion {
+  id
+  type
+  value
+  description
+  scanner
+  active
+  createdAt
+  updatedAt
+}

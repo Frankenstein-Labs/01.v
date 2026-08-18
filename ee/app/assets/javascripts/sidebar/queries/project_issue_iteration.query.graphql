@@ -1,0 +1,13 @@
+#import "./iteration.fragment.graphql"
+
+query projectIssueIteration($fullPath: ID!, $iid: String!) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    issuable: issue(iid: $iid) {
+      id
+      attribute: iteration {
+        ...IterationFragment
+      }
+    }
+  }
+}

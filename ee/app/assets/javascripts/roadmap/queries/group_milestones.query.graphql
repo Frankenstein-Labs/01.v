@@ -1,0 +1,34 @@
+# @feature_category: portfolio_management
+query groupMilestonesEE(
+  $fullPath: ID!
+  $state: MilestoneStateEnum
+  $timeframe: Timeframe
+  $includeDescendants: Boolean
+  $includeAncestors: Boolean
+  $searchTitle: String
+) {
+  group(fullPath: $fullPath) {
+    id
+    name
+    milestones(
+      state: $state
+      includeDescendants: $includeDescendants
+      includeAncestors: $includeAncestors
+      timeframe: $timeframe
+      searchTitle: $searchTitle
+    ) {
+      nodes {
+        id
+        description
+        title
+        state
+        dueDate
+        startDate
+        webPath
+        projectMilestone
+        groupMilestone
+        subgroupMilestone
+      }
+    }
+  }
+}

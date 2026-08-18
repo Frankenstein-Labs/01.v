@@ -1,0 +1,15 @@
+query getParent($id: WorkItemID!) {
+  workItem(id: $id) {
+    id
+    widgets {
+      ... on WorkItemWidgetHierarchy {
+        type
+        parent {
+          id
+          title
+          webUrl
+        }
+      }
+    }
+  }
+}

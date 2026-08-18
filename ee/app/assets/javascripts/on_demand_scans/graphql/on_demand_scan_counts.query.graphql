@@ -1,0 +1,22 @@
+query onDemandScanCounts($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    pipelineCounts(source: "ondemand_dast_scan") {
+      all
+      running
+      finished
+    }
+  }
+  scheduled: project(fullPath: $fullPath) {
+    id
+    pipelines: dastProfiles(hasDastProfileSchedule: true) {
+      count
+    }
+  }
+  saved: project(fullPath: $fullPath) {
+    id
+    pipelines: dastProfiles {
+      count
+    }
+  }
+}

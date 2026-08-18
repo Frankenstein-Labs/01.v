@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": "string" },
+    "slug": { "type": "string" },
+    "external_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "environment_path": { "type": "string" },
+    "project": { "$ref": "../../../../../../spec/fixtures/api/schemas/public_api/v4/project/identity.json" },
+    "last_deployment": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "deployment.json" }
+      ]
+    },
+    "rollout_status": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "../rollout_status.json" }
+      ]
+    },
+    "logs_path": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

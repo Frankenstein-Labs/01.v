@@ -1,0 +1,8 @@
+#import './local_roadmap_settings.fragment.graphql'
+
+# @feature_category: portfolio_management
+mutation updateLocalRoadmapSettings($input: LocalRoadmapSettingsInput!) {
+  updateLocalRoadmapSettings(input: $input) @client {
+    ...LocalSettings
+  }
+}

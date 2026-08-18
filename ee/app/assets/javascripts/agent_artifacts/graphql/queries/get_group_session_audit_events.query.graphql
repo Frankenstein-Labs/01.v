@@ -1,0 +1,41 @@
+# @feature_category: ai_agents
+query getGroupSessionAuditEvents(
+  $groupFullPath: ID!
+  $workflowId: AiDuoWorkflowsWorkflowID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  group(fullPath: $groupFullPath) {
+    id
+    duoWorkflowSessionArtifacts(workflowId: $workflowId) {
+      nodes {
+        id
+        auditEvents(after: $after, before: $before, first: $first, last: $last) {
+          nodes {
+            id
+            eventName
+            createdAt
+            details
+            ipAddress
+            workflowId
+            author {
+              id
+              name
+              username
+              avatarUrl
+              webPath
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+        }
+      }
+    }
+  }
+}

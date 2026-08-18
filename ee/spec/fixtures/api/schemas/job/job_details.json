@@ -1,0 +1,10 @@
+{
+  "allOf": [
+    { "$ref": "../../../../../../spec/fixtures/api/schemas/job/job_details.json" },
+    {
+      "properties": {
+        "runners": { "$ref": "runners.json" }
+      }
+    }
+  ]
+}

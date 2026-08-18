@@ -1,0 +1,69 @@
+#import "./scan_profile.fragment.graphql"
+#import "./scan_profile_statuses.fragment.graphql"
+
+# @feature_category: security_testing_configuration
+query GroupScannerDetailsProjects(
+  $namespaceId: NamespaceID!
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+  $search: String
+  $securityAnalyzerFilters: [AnalyzerFilterInput!]
+  $vulnerabilityCountFilters: [VulnerabilityCountFilterInput!]
+  $attributeFilters: [AttributeFilterInput!]
+  $sortBy: SortableAnalyzerType
+  $canReadAttributes: Boolean!
+) {
+  namespaceSecurityProjects(
+    namespaceId: $namespaceId
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+    search: $search
+    securityAnalyzerFilters: $securityAnalyzerFilters
+    vulnerabilityCountFilters: $vulnerabilityCountFilters
+    attributeFilters: $attributeFilters
+    sortBy: $sortBy
+    includeSubgroups: true
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    nodes {
+      id
+      avatarUrl
+      name
+      fullPath
+      group {
+        id
+        name
+        webPath
+      }
+      securityConfigurationPath
+      securityScanProfiles {
+        ...ScanProfileFields
+      }
+      analyzerStatuses {
+        source
+        status
+        analyzerType
+        updatedAt
+      }
+      scanProfileStatuses {
+        ...ScanProfileStatusesFields
+      }
+      securityAttributes @include(if: $canReadAttributes) {
+        nodes {
+          id
+          name
+          color
+        }
+      }
+    }
+  }
+}

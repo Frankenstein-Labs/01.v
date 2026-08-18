@@ -1,0 +1,14 @@
+mutation createValueStream(
+  $fullPath: ID!
+  $name: String!
+  $stages: [CreateValueStreamStageInput!]
+) {
+  valueStreamChange: valueStreamCreate(
+    input: { namespacePath: $fullPath, name: $name, stages: $stages }
+  ) {
+    valueStream {
+      id
+    }
+    errors
+  }
+}

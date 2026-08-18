@@ -1,0 +1,17 @@
+{
+  "type" : "object",
+  "required" : [
+    "total"
+  ],
+  "properties" : {
+    "total": { "type" : "object" },
+    "ignore": { "type" : "object" },
+    "unknown": { "type" : "object" },
+    "experimental": { "type" : "object" },
+    "low": { "type" : "object" },
+    "medium": { "type" : "object" },
+    "high": { "type" : "object" },
+    "critical": { "type" : "object" }
+  },
+  "additional_properties" : false
+}

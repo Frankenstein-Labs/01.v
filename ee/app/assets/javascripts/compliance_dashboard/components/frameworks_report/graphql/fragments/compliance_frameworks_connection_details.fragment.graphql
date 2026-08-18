@@ -1,0 +1,53 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+fragment ComplianceFrameworkConnectionDetails on ComplianceFrameworkConnection {
+  nodes {
+    id
+    name
+    default
+    description
+    color
+    updatedAt
+    namespaceId
+    pipelineConfigurationFullPath
+    securityPolicies @gl_introduced(version: "19.0.0") {
+      nodes {
+        name
+        type
+        source {
+          ... on GroupSecurityPolicySource {
+            namespace {
+              id
+              fullPath
+            }
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+    complianceRequirements {
+      nodes {
+        id
+        name
+        description
+        complianceRequirementsControls {
+          nodes {
+            id
+            name
+            controlType
+            expression
+            externalControlName
+            externalUrl
+            pingEnabled
+          }
+        }
+      }
+    }
+  }
+  pageInfo {
+    ...PageInfo
+  }
+}

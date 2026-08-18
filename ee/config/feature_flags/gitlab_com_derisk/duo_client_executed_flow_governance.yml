@@ -1,0 +1,12 @@
+---
+name: duo_client_executed_flow_governance
+description: 'Governs a run of a foundational flow by how it is executed: AI catalog
+  governance when GitLab was asked to run it in the background, agentic chat access
+  plus flow entitlement when the caller executes it itself'
+feature_issue_url: https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp/-/work_items/2701
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/248339
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/608032
+milestone: '19.3'
+group: group::agent developer
+type: gitlab_com_derisk
+default_enabled: false

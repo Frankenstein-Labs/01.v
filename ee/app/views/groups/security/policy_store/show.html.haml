@@ -1,0 +1,9 @@
+- title = _('Policy details')
+- page_title title
+- breadcrumb_title title
+- @content_wrapper_class = 'js-security-policies-container-wrapper'
+
+#js-policy-store-detail{ data: { organization_id: group.organization_id,
+  policy_id: policy_id,
+  list_path: group_security_policy_store_index_path(group),
+  edit_path: edit_group_security_policy_store_path(group, policy_id) } }

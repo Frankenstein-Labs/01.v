@@ -1,0 +1,9 @@
+include:
+  - template: Jobs/SAST.latest.gitlab-ci.yml
+
+variables:
+  GITLAB_ADVANCED_SAST_ENABLED: true
+
+semgrep-sast:
+  script:
+    - echo 'no op'

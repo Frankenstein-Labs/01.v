@@ -1,0 +1,19 @@
+---
+description: User switches between the map and table views in the Orbit explorer
+internal_events: true
+action: click_orbit_switch_view
+identifiers:
+- user
+- namespace
+- project
+additional_properties:
+  label:
+    description: The view selected. One of "graph" or "table".
+product_group: knowledge_graph
+product_categories:
+- knowledge_graph
+milestone: '19.1'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/237283
+tiers:
+- premium
+- ultimate

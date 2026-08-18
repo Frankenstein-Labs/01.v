@@ -1,0 +1,6 @@
+fragment CustomizableDashboardVisualizationFragment on CustomizableDashboardVisualization {
+  slug
+  type
+  data
+  options
+}

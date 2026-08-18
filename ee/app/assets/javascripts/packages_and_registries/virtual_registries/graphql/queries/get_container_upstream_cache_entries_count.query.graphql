@@ -1,0 +1,13 @@
+# @feature_category: virtual_registry
+
+query getContainerUpstreamCacheEntriesCount(
+  $id: VirtualRegistriesContainerUpstreamID!
+  $search: String
+) {
+  upstream: virtualRegistriesContainerUpstream(id: $id) {
+    id
+    cacheEntries(search: $search) {
+      count
+    }
+  }
+}

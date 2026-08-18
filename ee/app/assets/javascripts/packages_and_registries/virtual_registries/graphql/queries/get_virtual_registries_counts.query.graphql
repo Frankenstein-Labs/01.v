@@ -1,0 +1,17 @@
+# @feature_category: virtual_registry
+
+query getVirtualRegistriesCounts(
+  $groupPath: ID!
+  $includeMaven: Boolean!
+  $includeContainer: Boolean!
+) {
+  group(fullPath: $groupPath) {
+    id
+    mavenRegistries: virtualRegistriesPackagesMavenRegistries @include(if: $includeMaven) {
+      count
+    }
+    containerRegistries: virtualRegistriesContainerRegistries @include(if: $includeContainer) {
+      count
+    }
+  }
+}

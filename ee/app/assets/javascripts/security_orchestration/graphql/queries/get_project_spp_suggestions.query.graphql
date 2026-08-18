@@ -1,0 +1,28 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query projectSuggestions(
+  $fullPath: ID!
+  $onlyLinked: Boolean = false
+  $search: String!
+  $after: String = ""
+  $first: Int!
+) {
+  project(fullPath: $fullPath) {
+    id
+    securityPolicyProjectSuggestions(
+      onlyLinked: $onlyLinked
+      search: $search
+      after: $after
+      first: $first
+    ) {
+      nodes {
+        id
+        name
+        nameWithNamespace
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AI Agent platform flow metrics data source returns the flow metrics as nodes on success 1`] = `
+{
+  "nodes": [
+    {
+      "flowType": "a",
+      "sessionsCount": 100,
+      "user": {
+        "avatarUrl": "test.com",
+        "id": 1,
+        "name": "Test",
+        "username": "test",
+        "webPath": "/test",
+        "webUrl": "web.test.com",
+      },
+    },
+    {
+      "flowType": "b",
+      "sessionsCount": 300,
+      "user": {
+        "avatarUrl": "test.com",
+        "id": 1,
+        "name": "Test",
+        "username": "test",
+        "webPath": "/test",
+        "webUrl": "web.test.com",
+      },
+    },
+  ],
+  "pageInfo": {
+    "first": 10,
+  },
+}
+`;

@@ -1,0 +1,9 @@
+query getTargetedMessageData($fullPath: ID!) {
+  namespace(fullPath: $fullPath) {
+    id
+    targetedMessages {
+      id
+      targetType
+    }
+  }
+}

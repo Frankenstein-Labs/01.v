@@ -1,0 +1,8 @@
+mutation deletePipelineSubscription($id: CiSubscriptionsProjectID!) {
+  projectSubscriptionDelete(input: { subscriptionId: $id }) {
+    project {
+      id
+    }
+    errors
+  }
+}

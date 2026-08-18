@@ -1,0 +1,26 @@
+mutation createInstanceGcpLoggingDestination(
+  $name: String!
+  $googleProjectIdName: String!
+  $clientEmail: String!
+  $privateKey: String!
+  $logIdName: String!
+) {
+  instanceGoogleCloudLoggingConfigurationCreate(
+    input: {
+      name: $name
+      googleProjectIdName: $googleProjectIdName
+      clientEmail: $clientEmail
+      privateKey: $privateKey
+      logIdName: $logIdName
+    }
+  ) {
+    errors
+    instanceGoogleCloudLoggingConfiguration {
+      id
+      name
+      logIdName
+      googleProjectIdName
+      clientEmail
+    }
+  }
+}

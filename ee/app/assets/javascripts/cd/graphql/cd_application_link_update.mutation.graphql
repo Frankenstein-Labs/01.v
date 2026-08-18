@@ -1,0 +1,7 @@
+# @feature_category: continuous_delivery
+
+mutation cdApplicationLinkUpdate($input: CdApplicationLinkUpdateInput!) {
+  cdApplicationLinkUpdate(input: $input) {
+    errors
+  }
+}

@@ -1,0 +1,41 @@
+fragment BaseAiCatalogItem on AiCatalogItem {
+  id
+  createdAt
+  itemType
+  description
+  descriptionHtml @gl_introduced(version: "19.1.0")
+  foundationalFlowReference
+  foundational @gl_introduced(version: "18.10.0")
+  verificationLevel
+  ... on AiCatalogAgent {
+    foundational @gl_introduced(version: "18.7.0")
+    foundationalAgentReference @gl_introduced(version: "19.2.0")
+  }
+  ... on AiCatalogFlow {
+    foundational @gl_introduced(version: "18.7.0")
+  }
+  name
+  public
+  updatedAt
+  softDeleted
+  latestVersion {
+    id
+    versionName
+    createdAt
+    updatedAt
+    createdBy {
+      id
+      name
+      username
+      webUrl
+    }
+  }
+  userPermissions {
+    adminAiCatalogItem
+  }
+  starCount
+  starred
+  last30DayUsageCount
+  visibility
+  __typename
+}

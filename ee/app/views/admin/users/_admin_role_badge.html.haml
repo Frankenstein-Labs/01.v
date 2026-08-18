@@ -1,0 +1,2 @@
+- if has_admin_role?(@user)
+  = render Pajamas::BadgeComponent.new(@user.member_role.name, variant: :info, icon: 'admin')

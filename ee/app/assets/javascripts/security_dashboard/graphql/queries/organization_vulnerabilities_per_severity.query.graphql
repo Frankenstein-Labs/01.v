@@ -1,0 +1,16 @@
+# @feature_category: vulnerability_management
+#import "../fragments/vulnerabilities_per_severity.fragment.graphql"
+
+query organizationVulnerabilitiesPerSeverity(
+  $projectId: [ID!]
+  $reportType: [VulnerabilityReportType!]
+) {
+  namespace: organization {
+    id
+    securityMetrics(projectId: $projectId, reportType: $reportType) {
+      vulnerabilitiesPerSeverity {
+        ...VulnerabilitiesPerSeverity
+      }
+    }
+  }
+}

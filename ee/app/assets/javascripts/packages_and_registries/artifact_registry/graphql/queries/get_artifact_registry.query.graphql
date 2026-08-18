@@ -1,0 +1,15 @@
+# @feature_category: artifact_registry
+
+# The organization's registry. `organization { id }` stays a non-@client sibling
+# selection: the graphql-verify redactor drops @client fields outright, so a selection
+# set holding nothing else would redact to an empty one.
+query getArtifactRegistry($organizationId: OrganizationsOrganizationID!) {
+  organization(id: $organizationId) {
+    id
+    artifactRegistry @client {
+      handle
+      status
+      createdAt
+    }
+  }
+}

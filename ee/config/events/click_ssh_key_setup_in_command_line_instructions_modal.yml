@@ -1,0 +1,13 @@
+---
+description: User clicks the "Add SSH key to your GitLab account" link in command line instructions modal
+internal_events: true
+action: click_ssh_key_setup_in_command_line_instructions_modal
+identifiers:
+  - user
+product_group: activation
+milestone: '18.4'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/200553
+tiers:
+  - free
+  - premium
+  - ultimate

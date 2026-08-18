@@ -1,0 +1,53 @@
+#import "ee/graphql_shared/fragments/epic.fragment.graphql"
+#import "~/graphql_shared/fragments/label.fragment.graphql"
+
+# @feature_category: portfolio_management
+mutation EpicMoveList(
+  $epicId: EpicID!
+  $boardId: BoardsEpicBoardID!
+  $fromListId: BoardsEpicListID!
+  $toListId: BoardsEpicListID!
+  $moveAfterId: EpicID
+  $moveBeforeId: EpicID
+  $positionInList: Int
+) {
+  issuableMoveList: epicMoveList(
+    input: {
+      epicId: $epicId
+      boardId: $boardId
+      fromListId: $fromListId
+      toListId: $toListId
+      moveAfterId: $moveAfterId
+      moveBeforeId: $moveBeforeId
+      positionInList: $positionInList
+    }
+  ) {
+    issuable: epic {
+      ...EpicNode
+      relativePosition
+      referencePath: reference(full: true)
+      confidential
+      subscribed
+      blocked
+      blockedByCount
+      labels {
+        nodes {
+          ...Label
+        }
+      }
+      hasIssues
+      descendantCounts {
+        closedEpics
+        closedIssues
+        openedEpics
+        openedIssues
+      }
+      descendantWeightSum {
+        closedIssues
+        openedIssues
+      }
+      color
+    }
+    errors
+  }
+}

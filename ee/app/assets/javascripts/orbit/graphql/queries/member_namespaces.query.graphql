@@ -1,0 +1,17 @@
+# @feature_category: knowledge_graph
+query getMemberNamespaces($first: Int = 25) {
+  groups(topLevelOnly: true, allAvailable: false, first: $first, sort: "name_asc") {
+    nodes {
+      id
+      name
+      fullName
+      fullPath
+      avatarUrl
+      knowledgeGraphEnabled
+      knowledgeGraphAvailable
+      maxAccessLevel {
+        integerValue
+      }
+    }
+  }
+}

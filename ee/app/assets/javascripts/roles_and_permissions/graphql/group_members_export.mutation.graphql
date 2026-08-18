@@ -1,0 +1,5 @@
+mutation groupMembersExport($groupId: GroupID!) {
+  groupMembersExport(input: { groupId: $groupId }) {
+    errors
+  }
+}

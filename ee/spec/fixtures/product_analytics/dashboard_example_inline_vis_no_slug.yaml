@@ -1,0 +1,53 @@
+---
+version: '2'
+title: Dashboard Example Inline Vis No Slug
+description: North Star Metrics across all departments for the last 3 quarters.
+filters:
+  excludeAnonymousUsers:
+    enabled: true
+  dateRange:
+    enabled: true
+panels:
+  - title: Overall Conversion Rate
+    gridAttributes:
+      yPos: 4
+      xPos: 1
+      width: 12
+      height: 2
+    visualization:
+      type: LineChart
+      options:
+        xAxis:
+          name: Time
+          type: time
+        yAxis:
+          name: Counts
+      data:
+        type: Cube
+        query:
+          measures:
+            - Stories.count
+          dimensions:
+            - Stories.category
+          filters:
+            - member: Stories.isDraft
+              operator: equals
+              values:
+                - 'No'
+          timeDimensions:
+            - dimension: Stories.time
+              # dateRange set by the dashboard filter
+              granularity: month
+          limit: 100
+          offset: 50
+          order:
+            Stories.time: asc
+            Stories.count: desc
+          timezone: America/Los_Angeles
+    queryOverrides:
+      timeDimensions:
+        - dimension: Stories.time
+          dateRange:
+            - '2016-01-01'
+            - '2016-02-30'
+          granularity: month

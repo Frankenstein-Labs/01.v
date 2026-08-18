@@ -1,0 +1,7 @@
+# @feature_category: virtual_registry
+
+mutation upsertVirtualRegistriesCleanupPolicy($input: VirtualRegistriesCleanupPolicyUpsertInput!) {
+  virtualRegistriesCleanupPolicyUpsert(input: $input) {
+    errors
+  }
+}

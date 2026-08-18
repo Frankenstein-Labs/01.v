@@ -1,0 +1,35 @@
+fragment FindingFields on ComparedSecurityReportFinding {
+  title
+  uuid
+  severity
+  state
+  foundByPipelineIid
+  aiResolutionEnabled
+  matchesAutoDismissPolicy @gl_introduced(version: "18.9.0")
+}
+
+# @feature_category: vulnerability_management
+query FindingReportsComparer(
+  $fullPath: ID!
+  $iid: String!
+  $reportType: ComparableSecurityReportType!
+  $scanMode: ScanModeEnum
+) {
+  project(fullPath: $fullPath) {
+    id
+    mergeRequest(iid: $iid) {
+      id
+      findingReportsComparer(reportType: $reportType, scanMode: $scanMode) {
+        status
+        report {
+          added {
+            ...FindingFields
+          }
+          fixed {
+            ...FindingFields
+          }
+        }
+      }
+    }
+  }
+}

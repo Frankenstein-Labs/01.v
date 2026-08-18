@@ -1,0 +1,134 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "bool": {
+            "should": [
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "bool": {
+                        "_name": "filters:confidentiality:notes:not_on_issue_or_not_confidential",
+                        "should": [
+                          {
+                            "bool": {
+                              "_name": "filters:confidentiality:notes:not_on_issue",
+                              "must_not": [
+                                {
+                                  "exists": {
+                                    "field": "issue"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "term": {
+                              "issue.confidential": {
+                                "_name": "filters:confidentiality:notes:non_confidential_issue",
+                                "value": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "bool": {
+                        "_name": "filters:confidentiality:notes:not_confidential",
+                        "should": [
+                          {
+                            "bool": {
+                              "must_not": [
+                                {
+                                  "exists": {
+                                    "field": "confidential"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "term": {
+                              "confidential": false
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "issue.confidential": {
+                          "_name": "filters:confidentiality:notes:issue:confidential",
+                          "value": true
+                        }
+                      }
+                    },
+                    {
+                      "bool": {
+                        "_name": "filters:confidentiality:notes:not_confidential",
+                        "should": [
+                          {
+                            "bool": {
+                              "must_not": [
+                                {
+                                  "exists": {
+                                    "field": "confidential"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "term": {
+                              "confidential": false
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "bool": {
+                        "minimum_should_match": 1,
+                        "should": [
+                          {
+                            "term": {
+                              "issue.author_id": {
+                                "_name": "filters:confidentiality:notes:confidential:as_author",
+                                "value": __USER_ID__
+                              }
+                            }
+                          },
+                          {
+                            "term": {
+                              "issue.assignee_id": {
+                                "_name": "filters:confidentiality:notes:confidential:as_assignee",
+                                "value": __USER_ID__
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "minimum_should_match": 1
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

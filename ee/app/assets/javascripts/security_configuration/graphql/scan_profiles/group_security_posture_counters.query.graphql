@@ -1,0 +1,11 @@
+# @feature_category: security_testing_configuration
+query groupSecurityPostureCounters($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    securityPostureCounters {
+      withScanners
+      withFailures
+      withStale
+    }
+  }
+}

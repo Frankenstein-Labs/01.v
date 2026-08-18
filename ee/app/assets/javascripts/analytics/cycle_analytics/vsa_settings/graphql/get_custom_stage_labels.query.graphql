@@ -1,0 +1,22 @@
+query getCustomStageLabels($fullPath: ID!, $searchTerm: String, $after: String) {
+  group(fullPath: $fullPath) {
+    id
+    labels(
+      searchTerm: $searchTerm
+      onlyGroupLabels: true
+      includeAncestorGroups: true
+      after: $after
+    ) {
+      nodes {
+        id
+        title
+        color
+        textColor
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}

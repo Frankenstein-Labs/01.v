@@ -1,0 +1,15 @@
+# @feature_category: continuous_delivery
+
+subscription cdDeploymentUpdated($applicationId: CdApplicationID!) {
+  cdDeploymentUpdated(applicationId: $applicationId) {
+    id
+    rolloutEnvironment {
+      id
+      state
+      rollout {
+        id
+        state
+      }
+    }
+  }
+}

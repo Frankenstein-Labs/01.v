@@ -1,0 +1,9 @@
+mutation deleteInstanceNamespaceFiltersFromDestination(
+  $namespaceFilterId: AuditEventsInstanceNamespaceFilterID!
+) {
+  auditEventsInstanceDestinationNamespaceFilterDelete(
+    input: { namespaceFilterId: $namespaceFilterId }
+  ) {
+    errors
+  }
+}

@@ -1,0 +1,3799 @@
+{
+  "type": "object",
+  "required": [
+    "geo_node_id",
+    "healthy",
+    "health",
+    "health_status",
+    "missing_oauth_application",
+    "lfs_objects_count",
+    "lfs_objects_failed_count",
+    "lfs_objects_synced_count",
+    "lfs_objects_checksum_total_count",
+    "lfs_objects_checksummed_count",
+    "lfs_objects_checksum_failed_count",
+    "lfs_objects_registry_count",
+    "lfs_objects_verification_total_count",
+    "lfs_objects_verified_count",
+    "lfs_objects_verified_in_percentage",
+    "lfs_objects_verification_failed_count",
+    "lfs_objects_oldest_unsynced_time",
+    "job_artifacts_count",
+    "job_artifacts_failed_count",
+    "job_artifacts_synced_count",
+    "job_artifacts_checksum_total_count",
+    "job_artifacts_checksummed_count",
+    "job_artifacts_checksum_failed_count",
+    "job_artifacts_registry_count",
+    "job_artifacts_verification_total_count",
+    "job_artifacts_verified_count",
+    "job_artifacts_verification_failed_count",
+    "job_artifacts_verified_in_percentage",
+    "job_artifacts_oldest_unsynced_time",
+    "ci_secure_files_count",
+    "ci_secure_files_checksum_total_count",
+    "ci_secure_files_checksummed_count",
+    "ci_secure_files_checksum_failed_count",
+    "ci_secure_files_synced_count",
+    "ci_secure_files_failed_count",
+    "ci_secure_files_registry_count",
+    "ci_secure_files_verification_total_count",
+    "ci_secure_files_verified_count",
+    "ci_secure_files_verification_failed_count",
+    "ci_secure_files_synced_in_percentage",
+    "ci_secure_files_verified_in_percentage",
+    "ci_secure_files_oldest_unsynced_time",
+    "db_replication_lag_seconds",
+    "container_repositories_replication_enabled",
+    "container_repositories_count",
+    "container_repositories_synced_count",
+    "container_repositories_failed_count",
+    "container_repositories_registry_count",
+    "container_repositories_synced_in_percentage",
+    "container_repositories_checksummed_count",
+    "container_repositories_checksum_failed_count",
+    "container_repositories_checksum_total_count",
+    "container_repositories_verification_failed_count",
+    "container_repositories_verification_total_count",
+    "container_repositories_verified_count",
+    "container_repositories_verified_in_percentage",
+    "container_repositories_oldest_unsynced_time",
+    "design_management_repositories_count",
+    "design_management_repositories_checksum_failed_count",
+    "design_management_repositories_checksum_total_count",
+    "design_management_repositories_checksummed_count",
+    "design_management_repositories_registry_count",
+    "design_management_repositories_failed_count",
+    "design_management_repositories_synced_count",
+    "design_management_repositories_synced_in_percentage",
+    "design_management_repositories_verification_failed_count",
+    "design_management_repositories_verification_total_count",
+    "design_management_repositories_verified_count",
+    "design_management_repositories_verified_in_percentage",
+    "design_management_repositories_oldest_unsynced_time",
+    "dependency_proxy_manifests_count",
+    "dependency_proxy_manifests_checksum_failed_count",
+    "dependency_proxy_manifests_checksum_total_count",
+    "dependency_proxy_manifests_checksummed_count",
+    "dependency_proxy_manifests_registry_count",
+    "dependency_proxy_manifests_failed_count",
+    "dependency_proxy_manifests_synced_count",
+    "dependency_proxy_manifests_synced_in_percentage",
+    "dependency_proxy_manifests_verification_failed_count",
+    "dependency_proxy_manifests_verification_total_count",
+    "dependency_proxy_manifests_verified_count",
+    "dependency_proxy_manifests_verified_in_percentage",
+    "dependency_proxy_manifests_oldest_unsynced_time",
+    "projects_count",
+    "project_wiki_repositories_count",
+    "project_wiki_repositories_checksum_total_count",
+    "project_wiki_repositories_checksummed_count",
+    "project_wiki_repositories_checksum_failed_count",
+    "project_wiki_repositories_synced_count",
+    "project_wiki_repositories_failed_count",
+    "project_wiki_repositories_registry_count",
+    "project_wiki_repositories_verification_total_count",
+    "project_wiki_repositories_verified_count",
+    "project_wiki_repositories_verification_failed_count",
+    "project_wiki_repositories_synced_in_percentage",
+    "project_wiki_repositories_verified_in_percentage",
+    "project_wiki_repositories_oldest_unsynced_time",
+    "repositories_count",
+    "merge_request_diffs_count",
+    "merge_request_diffs_checksum_failed_count",
+    "merge_request_diffs_checksum_total_count",
+    "merge_request_diffs_checksummed_count",
+    "merge_request_diffs_registry_count",
+    "merge_request_diffs_failed_count",
+    "merge_request_diffs_synced_count",
+    "merge_request_diffs_synced_in_percentage",
+    "merge_request_diffs_verification_failed_count",
+    "merge_request_diffs_verification_total_count",
+    "merge_request_diffs_verified_count",
+    "merge_request_diffs_verified_in_percentage",
+    "merge_request_diffs_oldest_unsynced_time",
+    "package_files_count",
+    "package_files_checksum_failed_count",
+    "package_files_checksum_total_count",
+    "package_files_checksummed_count",
+    "package_files_registry_count",
+    "package_files_failed_count",
+    "package_files_synced_count",
+    "package_files_synced_in_percentage",
+    "package_files_verification_failed_count",
+    "package_files_verification_total_count",
+    "package_files_verified_count",
+    "package_files_verified_in_percentage",
+    "package_files_oldest_unsynced_time",
+    "packages_helm_metadata_caches_count",
+    "packages_helm_metadata_caches_checksum_failed_count",
+    "packages_helm_metadata_caches_checksum_total_count",
+    "packages_helm_metadata_caches_checksummed_count",
+    "packages_helm_metadata_caches_registry_count",
+    "packages_helm_metadata_caches_failed_count",
+    "packages_helm_metadata_caches_synced_count",
+    "packages_helm_metadata_caches_synced_in_percentage",
+    "packages_helm_metadata_caches_verification_failed_count",
+    "packages_helm_metadata_caches_verification_total_count",
+    "packages_helm_metadata_caches_verified_count",
+    "packages_helm_metadata_caches_verified_in_percentage",
+    "packages_helm_metadata_caches_oldest_unsynced_time",
+    "packages_nuget_symbols_count",
+    "packages_nuget_symbols_checksum_total_count",
+    "packages_nuget_symbols_checksummed_count",
+    "packages_nuget_symbols_checksum_failed_count",
+    "packages_nuget_symbols_synced_count",
+    "packages_nuget_symbols_failed_count",
+    "packages_nuget_symbols_registry_count",
+    "packages_nuget_symbols_verification_total_count",
+    "packages_nuget_symbols_verified_count",
+    "packages_nuget_symbols_verification_failed_count",
+    "packages_nuget_symbols_synced_in_percentage",
+    "packages_nuget_symbols_verified_in_percentage",
+    "packages_nuget_symbols_oldest_unsynced_time",
+    "supply_chain_attestations_count",
+    "supply_chain_attestations_checksum_total_count",
+    "supply_chain_attestations_checksummed_count",
+    "supply_chain_attestations_checksum_failed_count",
+    "supply_chain_attestations_synced_count",
+    "supply_chain_attestations_failed_count",
+    "supply_chain_attestations_registry_count",
+    "supply_chain_attestations_verification_total_count",
+    "supply_chain_attestations_verified_count",
+    "supply_chain_attestations_verification_failed_count",
+    "supply_chain_attestations_synced_in_percentage",
+    "supply_chain_attestations_verified_in_percentage",
+    "supply_chain_attestations_oldest_unsynced_time",
+    "pages_deployments_count",
+    "pages_deployments_checksum_failed_count",
+    "pages_deployments_checksum_total_count",
+    "pages_deployments_checksummed_count",
+    "pages_deployments_registry_count",
+    "pages_deployments_failed_count",
+    "pages_deployments_synced_count",
+    "pages_deployments_synced_in_percentage",
+    "pages_deployments_verification_failed_count",
+    "pages_deployments_verification_total_count",
+    "pages_deployments_verified_count",
+    "pages_deployments_verified_in_percentage",
+    "pages_deployments_oldest_unsynced_time",
+    "terraform_state_versions_count",
+    "terraform_state_versions_checksum_failed_count",
+    "terraform_state_versions_checksum_total_count",
+    "terraform_state_versions_checksummed_count",
+    "terraform_state_versions_registry_count",
+    "terraform_state_versions_failed_count",
+    "terraform_state_versions_synced_count",
+    "terraform_state_versions_synced_in_percentage",
+    "terraform_state_versions_verification_failed_count",
+    "terraform_state_versions_verification_total_count",
+    "terraform_state_versions_verified_count",
+    "terraform_state_versions_verified_in_percentage",
+    "terraform_state_versions_oldest_unsynced_time",
+    "snippet_repositories_count",
+    "snippet_repositories_checksum_failed_count",
+    "snippet_repositories_checksum_total_count",
+    "snippet_repositories_checksummed_count",
+    "snippet_repositories_registry_count",
+    "snippet_repositories_failed_count",
+    "snippet_repositories_synced_count",
+    "snippet_repositories_synced_in_percentage",
+    "snippet_repositories_verification_failed_count",
+    "snippet_repositories_verification_total_count",
+    "snippet_repositories_verified_count",
+    "snippet_repositories_verified_in_percentage",
+    "snippet_repositories_oldest_unsynced_time",
+    "group_wiki_repositories_count",
+    "group_wiki_repositories_checksum_total_count",
+    "group_wiki_repositories_checksummed_count",
+    "group_wiki_repositories_checksum_failed_count",
+    "group_wiki_repositories_synced_count",
+    "group_wiki_repositories_failed_count",
+    "group_wiki_repositories_registry_count",
+    "group_wiki_repositories_verification_total_count",
+    "group_wiki_repositories_verified_count",
+    "group_wiki_repositories_verification_failed_count",
+    "group_wiki_repositories_synced_in_percentage",
+    "group_wiki_repositories_verified_in_percentage",
+    "group_wiki_repositories_oldest_unsynced_time",
+    "pipeline_artifacts_count",
+    "pipeline_artifacts_checksum_total_count",
+    "pipeline_artifacts_checksummed_count",
+    "pipeline_artifacts_checksum_failed_count",
+    "pipeline_artifacts_synced_count",
+    "pipeline_artifacts_failed_count",
+    "pipeline_artifacts_registry_count",
+    "pipeline_artifacts_verification_total_count",
+    "pipeline_artifacts_verified_count",
+    "pipeline_artifacts_verification_failed_count",
+    "pipeline_artifacts_synced_in_percentage",
+    "pipeline_artifacts_verified_in_percentage",
+    "pipeline_artifacts_oldest_unsynced_time",
+    "dependency_proxy_blobs_count",
+    "dependency_proxy_blobs_checksum_total_count",
+    "dependency_proxy_blobs_checksummed_count",
+    "dependency_proxy_blobs_checksum_failed_count",
+    "dependency_proxy_blobs_synced_count",
+    "dependency_proxy_blobs_failed_count",
+    "dependency_proxy_blobs_registry_count",
+    "dependency_proxy_blobs_verification_total_count",
+    "dependency_proxy_blobs_verified_count",
+    "dependency_proxy_blobs_verification_failed_count",
+    "dependency_proxy_blobs_synced_in_percentage",
+    "dependency_proxy_blobs_verified_in_percentage",
+    "dependency_proxy_blobs_oldest_unsynced_time",
+    "repositories_checked_count",
+    "repositories_checked_failed_count",
+    "repositories_checked_in_percentage",
+    "replication_slots_count",
+    "replication_slots_used_count",
+    "replication_slots_used_in_percentage",
+    "replication_slots_max_retained_wal_bytes",
+    "uploads_count",
+    "uploads_checksum_total_count",
+    "uploads_checksummed_count",
+    "uploads_checksum_failed_count",
+    "uploads_synced_count",
+    "uploads_failed_count",
+    "uploads_registry_count",
+    "uploads_verification_total_count",
+    "uploads_verified_count",
+    "uploads_verification_failed_count",
+    "uploads_synced_in_percentage",
+    "uploads_verified_in_percentage",
+    "uploads_oldest_unsynced_time",
+    "project_repositories_count",
+    "project_repositories_checksum_total_count",
+    "project_repositories_checksummed_count",
+    "project_repositories_checksum_failed_count",
+    "project_repositories_synced_count",
+    "project_repositories_failed_count",
+    "project_repositories_registry_count",
+    "project_repositories_verification_total_count",
+    "project_repositories_verified_count",
+    "project_repositories_verification_failed_count",
+    "project_repositories_synced_in_percentage",
+    "project_repositories_verified_in_percentage",
+    "project_repositories_oldest_unsynced_time",
+    "abuse_report_uploads_count",
+    "abuse_report_uploads_checksum_total_count",
+    "abuse_report_uploads_checksummed_count",
+    "abuse_report_uploads_checksum_failed_count",
+    "abuse_report_uploads_synced_count",
+    "abuse_report_uploads_failed_count",
+    "abuse_report_uploads_registry_count",
+    "abuse_report_uploads_verification_total_count",
+    "abuse_report_uploads_verified_count",
+    "abuse_report_uploads_verification_failed_count",
+    "abuse_report_uploads_synced_in_percentage",
+    "abuse_report_uploads_verified_in_percentage",
+    "abuse_report_uploads_oldest_unsynced_time",
+    "project_uploads_count",
+    "project_uploads_checksum_total_count",
+    "project_uploads_checksummed_count",
+    "project_uploads_checksum_failed_count",
+    "project_uploads_synced_count",
+    "project_uploads_failed_count",
+    "project_uploads_registry_count",
+    "project_uploads_verification_total_count",
+    "project_uploads_verified_count",
+    "project_uploads_verification_failed_count",
+    "project_uploads_synced_in_percentage",
+    "project_uploads_verified_in_percentage",
+    "project_uploads_oldest_unsynced_time",
+    "group_uploads_count",
+    "group_uploads_checksum_total_count",
+    "group_uploads_checksummed_count",
+    "group_uploads_checksum_failed_count",
+    "group_uploads_synced_count",
+    "group_uploads_failed_count",
+    "group_uploads_registry_count",
+    "group_uploads_verification_total_count",
+    "group_uploads_verified_count",
+    "group_uploads_verification_failed_count",
+    "group_uploads_synced_in_percentage",
+    "group_uploads_verified_in_percentage",
+    "group_uploads_oldest_unsynced_time",
+    "user_uploads_count",
+    "user_uploads_checksum_total_count",
+    "user_uploads_checksummed_count",
+    "user_uploads_checksum_failed_count",
+    "user_uploads_synced_count",
+    "user_uploads_failed_count",
+    "user_uploads_registry_count",
+    "user_uploads_verification_total_count",
+    "user_uploads_verified_count",
+    "user_uploads_verification_failed_count",
+    "user_uploads_synced_in_percentage",
+    "user_uploads_verified_in_percentage",
+    "user_uploads_oldest_unsynced_time",
+    "design_management_action_uploads_count",
+    "design_management_action_uploads_checksum_total_count",
+    "design_management_action_uploads_checksummed_count",
+    "design_management_action_uploads_checksum_failed_count",
+    "design_management_action_uploads_synced_count",
+    "design_management_action_uploads_failed_count",
+    "design_management_action_uploads_registry_count",
+    "design_management_action_uploads_verification_total_count",
+    "design_management_action_uploads_verified_count",
+    "design_management_action_uploads_verification_failed_count",
+    "design_management_action_uploads_synced_in_percentage",
+    "design_management_action_uploads_verified_in_percentage",
+    "design_management_action_uploads_oldest_unsynced_time",
+    "achievement_uploads_count",
+    "achievement_uploads_checksum_total_count",
+    "achievement_uploads_checksummed_count",
+    "achievement_uploads_checksum_failed_count",
+    "achievement_uploads_synced_count",
+    "achievement_uploads_failed_count",
+    "achievement_uploads_registry_count",
+    "achievement_uploads_verification_total_count",
+    "achievement_uploads_verified_count",
+    "achievement_uploads_verification_failed_count",
+    "achievement_uploads_synced_in_percentage",
+    "achievement_uploads_verified_in_percentage",
+    "achievement_uploads_oldest_unsynced_time",
+    "ai_vectorizable_file_uploads_count",
+    "ai_vectorizable_file_uploads_checksum_total_count",
+    "ai_vectorizable_file_uploads_checksummed_count",
+    "ai_vectorizable_file_uploads_checksum_failed_count",
+    "ai_vectorizable_file_uploads_synced_count",
+    "ai_vectorizable_file_uploads_failed_count",
+    "ai_vectorizable_file_uploads_registry_count",
+    "ai_vectorizable_file_uploads_verification_total_count",
+    "ai_vectorizable_file_uploads_verified_count",
+    "ai_vectorizable_file_uploads_verification_failed_count",
+    "ai_vectorizable_file_uploads_synced_in_percentage",
+    "ai_vectorizable_file_uploads_verified_in_percentage",
+    "ai_vectorizable_file_uploads_oldest_unsynced_time",
+    "import_export_upload_uploads_count",
+    "import_export_upload_uploads_checksum_total_count",
+    "import_export_upload_uploads_checksummed_count",
+    "import_export_upload_uploads_checksum_failed_count",
+    "import_export_upload_uploads_synced_count",
+    "import_export_upload_uploads_failed_count",
+    "import_export_upload_uploads_registry_count",
+    "import_export_upload_uploads_verification_total_count",
+    "import_export_upload_uploads_verified_count",
+    "import_export_upload_uploads_verification_failed_count",
+    "import_export_upload_uploads_synced_in_percentage",
+    "import_export_upload_uploads_verified_in_percentage",
+    "import_export_upload_uploads_oldest_unsynced_time",
+    "bulk_import_export_upload_uploads_count",
+    "bulk_import_export_upload_uploads_checksum_total_count",
+    "bulk_import_export_upload_uploads_checksummed_count",
+    "bulk_import_export_upload_uploads_checksum_failed_count",
+    "bulk_import_export_upload_uploads_synced_count",
+    "bulk_import_export_upload_uploads_failed_count",
+    "bulk_import_export_upload_uploads_registry_count",
+    "bulk_import_export_upload_uploads_verification_total_count",
+    "bulk_import_export_upload_uploads_verified_count",
+    "bulk_import_export_upload_uploads_verification_failed_count",
+    "bulk_import_export_upload_uploads_synced_in_percentage",
+    "bulk_import_export_upload_uploads_verified_in_percentage",
+    "bulk_import_export_upload_uploads_oldest_unsynced_time",
+    "vulnerability_archive_export_uploads_count",
+    "vulnerability_archive_export_uploads_checksum_total_count",
+    "vulnerability_archive_export_uploads_checksummed_count",
+    "vulnerability_archive_export_uploads_checksum_failed_count",
+    "vulnerability_archive_export_uploads_synced_count",
+    "vulnerability_archive_export_uploads_failed_count",
+    "vulnerability_archive_export_uploads_registry_count",
+    "vulnerability_archive_export_uploads_verification_total_count",
+    "vulnerability_archive_export_uploads_verified_count",
+    "vulnerability_archive_export_uploads_verification_failed_count",
+    "vulnerability_archive_export_uploads_synced_in_percentage",
+    "vulnerability_archive_export_uploads_verified_in_percentage",
+    "vulnerability_archive_export_uploads_oldest_unsynced_time",
+    "project_import_export_relation_export_upload_uploads_count",
+    "project_import_export_relation_export_upload_uploads_checksum_total_count",
+    "project_import_export_relation_export_upload_uploads_checksummed_count",
+    "project_import_export_relation_export_upload_uploads_checksum_failed_count",
+    "project_import_export_relation_export_upload_uploads_synced_count",
+    "project_import_export_relation_export_upload_uploads_failed_count",
+    "project_import_export_relation_export_upload_uploads_registry_count",
+    "project_import_export_relation_export_upload_uploads_verification_total_count",
+    "project_import_export_relation_export_upload_uploads_verified_count",
+    "project_import_export_relation_export_upload_uploads_verification_failed_count",
+    "project_import_export_relation_export_upload_uploads_synced_in_percentage",
+    "project_import_export_relation_export_upload_uploads_verified_in_percentage",
+    "project_import_export_relation_export_upload_uploads_oldest_unsynced_time",
+    "vulnerability_export_part_uploads_count",
+    "vulnerability_export_part_uploads_checksum_total_count",
+    "vulnerability_export_part_uploads_checksummed_count",
+    "vulnerability_export_part_uploads_checksum_failed_count",
+    "vulnerability_export_part_uploads_synced_count",
+    "vulnerability_export_part_uploads_failed_count",
+    "vulnerability_export_part_uploads_registry_count",
+    "vulnerability_export_part_uploads_verification_total_count",
+    "vulnerability_export_part_uploads_verified_count",
+    "vulnerability_export_part_uploads_verification_failed_count",
+    "vulnerability_export_part_uploads_synced_in_percentage",
+    "vulnerability_export_part_uploads_verified_in_percentage",
+    "vulnerability_export_part_uploads_oldest_unsynced_time",
+    "vulnerability_export_uploads_count",
+    "vulnerability_export_uploads_checksum_total_count",
+    "vulnerability_export_uploads_checksummed_count",
+    "vulnerability_export_uploads_checksum_failed_count",
+    "vulnerability_export_uploads_synced_count",
+    "vulnerability_export_uploads_failed_count",
+    "vulnerability_export_uploads_registry_count",
+    "vulnerability_export_uploads_verification_total_count",
+    "vulnerability_export_uploads_verified_count",
+    "vulnerability_export_uploads_verification_failed_count",
+    "vulnerability_export_uploads_synced_in_percentage",
+    "vulnerability_export_uploads_verified_in_percentage",
+    "vulnerability_export_uploads_oldest_unsynced_time",
+    "user_permission_export_upload_uploads_count",
+    "user_permission_export_upload_uploads_checksum_total_count",
+    "user_permission_export_upload_uploads_checksummed_count",
+    "user_permission_export_upload_uploads_checksum_failed_count",
+    "user_permission_export_upload_uploads_synced_count",
+    "user_permission_export_upload_uploads_failed_count",
+    "user_permission_export_upload_uploads_registry_count",
+    "user_permission_export_upload_uploads_verification_total_count",
+    "user_permission_export_upload_uploads_verified_count",
+    "user_permission_export_upload_uploads_verification_failed_count",
+    "user_permission_export_upload_uploads_synced_in_percentage",
+    "user_permission_export_upload_uploads_verified_in_percentage",
+    "user_permission_export_upload_uploads_oldest_unsynced_time",
+    "issuable_metric_image_uploads_count",
+    "issuable_metric_image_uploads_checksum_total_count",
+    "issuable_metric_image_uploads_checksummed_count",
+    "issuable_metric_image_uploads_checksum_failed_count",
+    "issuable_metric_image_uploads_synced_count",
+    "issuable_metric_image_uploads_failed_count",
+    "issuable_metric_image_uploads_registry_count",
+    "issuable_metric_image_uploads_verification_total_count",
+    "issuable_metric_image_uploads_verified_count",
+    "issuable_metric_image_uploads_verification_failed_count",
+    "issuable_metric_image_uploads_synced_in_percentage",
+    "issuable_metric_image_uploads_verified_in_percentage",
+    "issuable_metric_image_uploads_oldest_unsynced_time",
+    "dependency_list_export_uploads_count",
+    "dependency_list_export_uploads_checksum_total_count",
+    "dependency_list_export_uploads_checksummed_count",
+    "dependency_list_export_uploads_checksum_failed_count",
+    "dependency_list_export_uploads_synced_count",
+    "dependency_list_export_uploads_failed_count",
+    "dependency_list_export_uploads_registry_count",
+    "dependency_list_export_uploads_verification_total_count",
+    "dependency_list_export_uploads_verified_count",
+    "dependency_list_export_uploads_verification_failed_count",
+    "dependency_list_export_uploads_synced_in_percentage",
+    "dependency_list_export_uploads_verified_in_percentage",
+    "dependency_list_export_uploads_oldest_unsynced_time",
+    "packages_debian_project_component_files_count",
+    "packages_debian_project_component_files_checksum_total_count",
+    "packages_debian_project_component_files_checksummed_count",
+    "packages_debian_project_component_files_checksum_failed_count",
+    "packages_debian_project_component_files_synced_count",
+    "packages_debian_project_component_files_failed_count",
+    "packages_debian_project_component_files_registry_count",
+    "packages_debian_project_component_files_verification_total_count",
+    "packages_debian_project_component_files_verified_count",
+    "packages_debian_project_component_files_verification_failed_count",
+    "packages_debian_project_component_files_synced_in_percentage",
+    "packages_debian_project_component_files_verified_in_percentage",
+    "packages_debian_project_component_files_oldest_unsynced_time",
+    "alert_management_metric_image_uploads_count",
+    "alert_management_metric_image_uploads_checksum_total_count",
+    "alert_management_metric_image_uploads_checksummed_count",
+    "alert_management_metric_image_uploads_checksum_failed_count",
+    "alert_management_metric_image_uploads_synced_count",
+    "alert_management_metric_image_uploads_failed_count",
+    "alert_management_metric_image_uploads_registry_count",
+    "alert_management_metric_image_uploads_verification_total_count",
+    "alert_management_metric_image_uploads_verified_count",
+    "alert_management_metric_image_uploads_verification_failed_count",
+    "alert_management_metric_image_uploads_synced_in_percentage",
+    "alert_management_metric_image_uploads_verified_in_percentage",
+    "alert_management_metric_image_uploads_oldest_unsynced_time",
+    "personal_snippet_uploads_count",
+    "personal_snippet_uploads_checksum_total_count",
+    "personal_snippet_uploads_checksummed_count",
+    "personal_snippet_uploads_checksum_failed_count",
+    "personal_snippet_uploads_synced_count",
+    "personal_snippet_uploads_failed_count",
+    "personal_snippet_uploads_registry_count",
+    "personal_snippet_uploads_verification_total_count",
+    "personal_snippet_uploads_verified_count",
+    "personal_snippet_uploads_verification_failed_count",
+    "personal_snippet_uploads_synced_in_percentage",
+    "personal_snippet_uploads_verified_in_percentage",
+    "personal_snippet_uploads_oldest_unsynced_time",
+    "project_topic_uploads_count",
+    "project_topic_uploads_checksum_total_count",
+    "project_topic_uploads_checksummed_count",
+    "project_topic_uploads_checksum_failed_count",
+    "project_topic_uploads_synced_count",
+    "project_topic_uploads_failed_count",
+    "project_topic_uploads_registry_count",
+    "project_topic_uploads_verification_total_count",
+    "project_topic_uploads_verified_count",
+    "project_topic_uploads_verification_failed_count",
+    "project_topic_uploads_synced_in_percentage",
+    "project_topic_uploads_verified_in_percentage",
+    "project_topic_uploads_oldest_unsynced_time",
+    "organization_detail_uploads_count",
+    "organization_detail_uploads_checksum_total_count",
+    "organization_detail_uploads_checksummed_count",
+    "organization_detail_uploads_checksum_failed_count",
+    "organization_detail_uploads_synced_count",
+    "organization_detail_uploads_failed_count",
+    "organization_detail_uploads_registry_count",
+    "organization_detail_uploads_verification_total_count",
+    "organization_detail_uploads_verified_count",
+    "organization_detail_uploads_verification_failed_count",
+    "organization_detail_uploads_synced_in_percentage",
+    "organization_detail_uploads_verified_in_percentage",
+    "organization_detail_uploads_oldest_unsynced_time",
+    "dependency_list_export_part_uploads_count",
+    "dependency_list_export_part_uploads_checksum_total_count",
+    "dependency_list_export_part_uploads_checksummed_count",
+    "dependency_list_export_part_uploads_checksum_failed_count",
+    "dependency_list_export_part_uploads_synced_count",
+    "dependency_list_export_part_uploads_failed_count",
+    "dependency_list_export_part_uploads_registry_count",
+    "dependency_list_export_part_uploads_verification_total_count",
+    "dependency_list_export_part_uploads_verified_count",
+    "dependency_list_export_part_uploads_verification_failed_count",
+    "dependency_list_export_part_uploads_synced_in_percentage",
+    "dependency_list_export_part_uploads_verified_in_percentage",
+    "dependency_list_export_part_uploads_oldest_unsynced_time",
+    "vulnerability_remediation_uploads_count",
+    "vulnerability_remediation_uploads_checksum_total_count",
+    "vulnerability_remediation_uploads_checksummed_count",
+    "vulnerability_remediation_uploads_checksum_failed_count",
+    "vulnerability_remediation_uploads_synced_count",
+    "vulnerability_remediation_uploads_failed_count",
+    "vulnerability_remediation_uploads_registry_count",
+    "vulnerability_remediation_uploads_verification_total_count",
+    "vulnerability_remediation_uploads_verified_count",
+    "vulnerability_remediation_uploads_verification_failed_count",
+    "vulnerability_remediation_uploads_synced_in_percentage",
+    "vulnerability_remediation_uploads_verified_in_percentage",
+    "vulnerability_remediation_uploads_oldest_unsynced_time",
+    "appearance_uploads_count",
+    "appearance_uploads_checksum_total_count",
+    "appearance_uploads_checksummed_count",
+    "appearance_uploads_checksum_failed_count",
+    "appearance_uploads_synced_count",
+    "appearance_uploads_failed_count",
+    "appearance_uploads_registry_count",
+    "appearance_uploads_verification_total_count",
+    "appearance_uploads_verified_count",
+    "appearance_uploads_verification_failed_count",
+    "appearance_uploads_synced_in_percentage",
+    "appearance_uploads_verified_in_percentage",
+    "appearance_uploads_oldest_unsynced_time",
+    "git_fetch_event_count_weekly",
+    "git_push_event_count_weekly",
+    "proxy_remote_requests_event_count_weekly",
+    "proxy_local_requests_event_count_weekly",
+    "last_event_id",
+    "last_event_timestamp",
+    "cursor_last_event_id",
+    "cursor_last_event_timestamp",
+    "selective_sync_type",
+    "namespaces",
+    "version",
+    "revision",
+    "_links",
+    "updated_at"
+  ],
+  "properties": {
+    "geo_node_id": {
+      "type": "integer"
+    },
+    "healthy": {
+      "type": "boolean"
+    },
+    "health": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "health_status": {
+      "type": "string"
+    },
+    "missing_oauth_application": {
+      "type": "boolean"
+    },
+    "db_replication_lag_seconds": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lfs_objects_count": {
+      "type": "integer"
+    },
+    "lfs_objects_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lfs_objects_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lfs_objects_synced_in_percentage": {
+      "type": "string"
+    },
+    "lfs_objects_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lfs_objects_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lfs_objects_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lfs_objects_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lfs_objects_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lfs_objects_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lfs_objects_verified_in_percentage": {
+      "type": "string"
+    },
+    "lfs_objects_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lfs_objects_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "job_artifacts_count": {
+      "type": "integer"
+    },
+    "job_artifacts_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "job_artifacts_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "job_artifacts_synced_in_percentage": {
+      "type": "string"
+    },
+    "job_artifacts_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "job_artifacts_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "job_artifacts_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "job_artifacts_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "job_artifacts_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "job_artifacts_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "job_artifacts_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "job_artifacts_verified_in_percentage": {
+      "type": "string"
+    },
+    "job_artifacts_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "ci_secure_files_count": {
+      "type": "integer"
+    },
+    "ci_secure_files_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_secure_files_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_secure_files_synced_in_percentage": {
+      "type": "string"
+    },
+    "ci_secure_files_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_secure_files_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_secure_files_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_secure_files_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_secure_files_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_secure_files_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_secure_files_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ci_secure_files_verified_in_percentage": {
+      "type": "string"
+    },
+    "ci_secure_files_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "container_repositories_replication_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "container_repositories_count": {
+      "type": "integer"
+    },
+    "container_repositories_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "container_repositories_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "container_repositories_synced_in_percentage": {
+      "type": "string"
+    },
+    "container_repositories_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "container_repositories_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "container_repositories_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "container_repositories_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "container_repositories_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "container_repositories_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "container_repositories_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "container_repositories_verified_in_percentage": {
+      "type": "string"
+    },
+    "container_repositories_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "dependency_proxy_blobs_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_blobs_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_blobs_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_blobs_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_blobs_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_blobs_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_blobs_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_blobs_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_blobs_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_blobs_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_blobs_synced_in_percentage": {
+      "type": "string"
+    },
+    "dependency_proxy_blobs_verified_in_percentage": {
+      "type": "string"
+    },
+    "dependency_proxy_blobs_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "design_management_repositories_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_repositories_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_repositories_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_repositories_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_repositories_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_repositories_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_repositories_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_repositories_synced_in_percentage": {
+      "type": "string"
+    },
+    "design_management_repositories_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_repositories_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_repositories_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_repositories_verified_in_percentage": {
+      "type": "string"
+    },
+    "design_management_repositories_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "dependency_proxy_manifests_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_manifests_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_manifests_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_manifests_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_manifests_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_manifests_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_manifests_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_manifests_synced_in_percentage": {
+      "type": "string"
+    },
+    "dependency_proxy_manifests_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_manifests_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_manifests_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_proxy_manifests_verified_in_percentage": {
+      "type": "string"
+    },
+    "dependency_proxy_manifests_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "projects_count": {
+      "type": "integer"
+    },
+    "repositories_count": {
+      "type": "integer"
+    },
+    "merge_request_diffs_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_diffs_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_diffs_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_diffs_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_diffs_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_diffs_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_diffs_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_diffs_synced_in_percentage": {
+      "type": "string"
+    },
+    "merge_request_diffs_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_diffs_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_diffs_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_diffs_verified_in_percentage": {
+      "type": "string"
+    },
+    "merge_request_diffs_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "package_files_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "package_files_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "package_files_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "package_files_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "package_files_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "package_files_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "package_files_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "package_files_synced_in_percentage": {
+      "type": "string"
+    },
+    "package_files_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "package_files_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "package_files_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "package_files_verified_in_percentage": {
+      "type": "string"
+    },
+    "package_files_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "packages_helm_metadata_caches_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_helm_metadata_caches_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_helm_metadata_caches_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_helm_metadata_caches_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_helm_metadata_caches_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_helm_metadata_caches_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_helm_metadata_caches_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_helm_metadata_caches_synced_in_percentage": {
+      "type": "string"
+    },
+    "packages_helm_metadata_caches_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_helm_metadata_caches_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_helm_metadata_caches_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_helm_metadata_caches_verified_in_percentage": {
+      "type": "string"
+    },
+    "packages_helm_metadata_caches_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "packages_nuget_symbols_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_nuget_symbols_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_nuget_symbols_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_nuget_symbols_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_nuget_symbols_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_nuget_symbols_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_nuget_symbols_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_nuget_symbols_synced_in_percentage": {
+      "type": "string"
+    },
+    "packages_nuget_symbols_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_nuget_symbols_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_nuget_symbols_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_nuget_symbols_verified_in_percentage": {
+      "type": "string"
+    },
+    "packages_nuget_symbols_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "pages_deployments_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pages_deployments_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pages_deployments_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pages_deployments_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pages_deployments_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pages_deployments_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pages_deployments_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pages_deployments_synced_in_percentage": {
+      "type": "string"
+    },
+    "pages_deployments_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pages_deployments_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pages_deployments_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pages_deployments_verified_in_percentage": {
+      "type": "string"
+    },
+    "pages_deployments_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "supply_chain_attestations_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "supply_chain_attestations_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "supply_chain_attestations_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "supply_chain_attestations_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "supply_chain_attestations_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "supply_chain_attestations_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "supply_chain_attestations_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "supply_chain_attestations_synced_in_percentage": {
+      "type": "string"
+    },
+    "supply_chain_attestations_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "supply_chain_attestations_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "supply_chain_attestations_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "supply_chain_attestations_verified_in_percentage": {
+      "type": "string"
+    },
+    "supply_chain_attestations_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "terraform_state_versions_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_state_versions_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_state_versions_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_state_versions_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_state_versions_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_state_versions_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_state_versions_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_state_versions_synced_in_percentage": {
+      "type": "string"
+    },
+    "terraform_state_versions_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_state_versions_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_state_versions_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terraform_state_versions_verified_in_percentage": {
+      "type": "string"
+    },
+    "terraform_state_versions_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "snippet_repositories_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "snippet_repositories_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "snippet_repositories_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "snippet_repositories_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "snippet_repositories_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "snippet_repositories_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "snippet_repositories_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "snippet_repositories_synced_in_percentage": {
+      "type": "string"
+    },
+    "snippet_repositories_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "snippet_repositories_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "snippet_repositories_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "snippet_repositories_verified_in_percentage": {
+      "type": "string"
+    },
+    "snippet_repositories_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "project_wiki_repositories_count": {
+      "type": "integer"
+    },
+    "project_wiki_repositories_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_wiki_repositories_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_wiki_repositories_synced_in_percentage": {
+      "type": "string"
+    },
+    "project_wiki_repositories_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_wiki_repositories_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_wiki_repositories_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_wiki_repositories_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_wiki_repositories_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_wiki_repositories_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_wiki_repositories_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_wiki_repositories_verified_in_percentage": {
+      "type": "string"
+    },
+    "project_wiki_repositories_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "group_wiki_repositories_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_wiki_repositories_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_wiki_repositories_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_wiki_repositories_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_wiki_repositories_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_wiki_repositories_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_wiki_repositories_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_wiki_repositories_synced_in_percentage": {
+      "type": "string"
+    },
+    "group_wiki_repositories_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_wiki_repositories_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_wiki_repositories_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_wiki_repositories_verified_in_percentage": {
+      "type": "string"
+    },
+    "group_wiki_repositories_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "pipeline_artifacts_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_artifacts_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_artifacts_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_artifacts_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_artifacts_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_artifacts_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_artifacts_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_artifacts_synced_in_percentage": {
+      "type": "string"
+    },
+    "pipeline_artifacts_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_artifacts_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_artifacts_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pipeline_artifacts_verified_in_percentage": {
+      "type": "string"
+    },
+    "pipeline_artifacts_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "project_repositories_count": {
+      "type": "integer"
+    },
+    "project_repositories_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_repositories_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_repositories_synced_in_percentage": {
+      "type": "string"
+    },
+    "project_repositories_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_repositories_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_repositories_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_repositories_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_repositories_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_repositories_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_repositories_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_repositories_verified_in_percentage": {
+      "type": "string"
+    },
+    "project_repositories_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "repositories_checked_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "repositories_checked_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "repositories_checked_in_percentage": {
+      "type": "string"
+    },
+    "replication_slots_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "replication_slots_used_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "replication_slots_used_in_percentage": {
+      "type": "string"
+    },
+    "replication_slots_max_retained_wal_bytes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_report_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "abuse_report_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "abuse_report_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "project_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "project_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "project_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "group_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "group_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "group_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "user_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "user_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "user_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "design_management_action_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_action_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_action_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_action_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_action_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_action_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_action_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_action_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_action_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_action_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "design_management_action_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "design_management_action_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "design_management_action_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "achievement_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "achievement_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "achievement_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "achievement_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "achievement_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "achievement_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "achievement_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "achievement_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "achievement_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "achievement_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "achievement_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "achievement_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "achievement_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "import_export_upload_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "import_export_upload_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "import_export_upload_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "import_export_upload_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "import_export_upload_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "import_export_upload_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "import_export_upload_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "import_export_upload_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "import_export_upload_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "import_export_upload_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "import_export_upload_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "import_export_upload_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "import_export_upload_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "ai_vectorizable_file_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_vectorizable_file_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_vectorizable_file_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_vectorizable_file_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_vectorizable_file_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_vectorizable_file_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_vectorizable_file_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_vectorizable_file_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_vectorizable_file_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_vectorizable_file_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_vectorizable_file_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "ai_vectorizable_file_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "ai_vectorizable_file_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "bulk_import_export_upload_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_debian_project_component_files_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_export_upload_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_debian_project_component_files_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_export_upload_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_debian_project_component_files_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_export_upload_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_debian_project_component_files_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_export_upload_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_debian_project_component_files_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_export_upload_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_debian_project_component_files_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_export_upload_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_debian_project_component_files_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_export_upload_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_debian_project_component_files_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_export_upload_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_debian_project_component_files_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_export_upload_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "packages_debian_project_component_files_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bulk_import_export_upload_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "bulk_import_export_upload_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "bulk_import_export_upload_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "vulnerability_archive_export_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_archive_export_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_archive_export_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_archive_export_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_archive_export_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_archive_export_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_archive_export_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_archive_export_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_archive_export_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_archive_export_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_archive_export_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "vulnerability_archive_export_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "vulnerability_archive_export_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "project_import_export_relation_export_upload_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_import_export_relation_export_upload_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_import_export_relation_export_upload_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_import_export_relation_export_upload_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_import_export_relation_export_upload_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_import_export_relation_export_upload_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_import_export_relation_export_upload_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_import_export_relation_export_upload_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_import_export_relation_export_upload_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_import_export_relation_export_upload_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_import_export_relation_export_upload_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "project_import_export_relation_export_upload_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "project_import_export_relation_export_upload_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "vulnerability_export_part_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_part_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_part_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_part_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_part_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_part_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_part_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_part_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_part_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_part_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_part_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "vulnerability_export_part_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "vulnerability_export_part_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "vulnerability_export_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_export_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "vulnerability_export_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "vulnerability_export_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "user_permission_export_upload_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_permission_export_upload_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_permission_export_upload_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_permission_export_upload_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_permission_export_upload_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_permission_export_upload_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_permission_export_upload_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_permission_export_upload_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_permission_export_upload_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_permission_export_upload_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_permission_export_upload_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "user_permission_export_upload_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "user_permission_export_upload_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "issuable_metric_image_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issuable_metric_image_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issuable_metric_image_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issuable_metric_image_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issuable_metric_image_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issuable_metric_image_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issuable_metric_image_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issuable_metric_image_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issuable_metric_image_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issuable_metric_image_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "issuable_metric_image_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "issuable_metric_image_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "issuable_metric_image_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "packages_debian_project_component_files_synced_in_percentage": {
+      "type": "string"
+    },
+    "packages_debian_project_component_files_verified_in_percentage": {
+      "type": "string"
+    },
+    "packages_debian_project_component_files_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "alert_management_metric_image_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alert_management_metric_image_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alert_management_metric_image_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alert_management_metric_image_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alert_management_metric_image_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alert_management_metric_image_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alert_management_metric_image_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alert_management_metric_image_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alert_management_metric_image_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alert_management_metric_image_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "alert_management_metric_image_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "alert_management_metric_image_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "alert_management_metric_image_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "personal_snippet_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organization_detail_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "personal_snippet_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organization_detail_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "personal_snippet_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organization_detail_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "personal_snippet_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organization_detail_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "personal_snippet_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organization_detail_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "personal_snippet_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organization_detail_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "personal_snippet_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organization_detail_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "personal_snippet_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organization_detail_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "personal_snippet_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organization_detail_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "personal_snippet_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organization_detail_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "personal_snippet_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "personal_snippet_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "personal_snippet_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "project_topic_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_topic_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_topic_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_topic_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_topic_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_topic_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_topic_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_topic_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_topic_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_topic_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_topic_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "project_topic_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "project_topic_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "dependency_list_export_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "dependency_list_export_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "dependency_list_export_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "organization_detail_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "organization_detail_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "organization_detail_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "dependency_list_export_part_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_part_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_part_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_part_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_part_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_part_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_part_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_part_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_part_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_part_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "dependency_list_export_part_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "dependency_list_export_part_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "dependency_list_export_part_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "vulnerability_remediation_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_remediation_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_remediation_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_remediation_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_remediation_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_remediation_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_remediation_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_remediation_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_remediation_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_remediation_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vulnerability_remediation_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "vulnerability_remediation_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "vulnerability_remediation_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "appearance_uploads_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "appearance_uploads_checksum_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "appearance_uploads_checksummed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "appearance_uploads_checksum_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "appearance_uploads_synced_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "appearance_uploads_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "appearance_uploads_registry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "appearance_uploads_verification_total_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "appearance_uploads_verified_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "appearance_uploads_verification_failed_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "appearance_uploads_synced_in_percentage": {
+      "type": "string"
+    },
+    "appearance_uploads_verified_in_percentage": {
+      "type": "string"
+    },
+    "appearance_uploads_oldest_unsynced_time": {
+      "type": "integer"
+    },
+    "git_fetch_event_count_weekly": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "git_push_event_count_weekly": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "proxy_remote_requests_event_count_weekly": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "proxy_local_requests_event_count_weekly": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "last_event_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "last_event_timestamp": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "cursor_last_event_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "cursor_last_event_timestamp": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "last_successful_status_check_timestamp": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "selective_sync_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "namespaces": {
+      "type": "array"
+    },
+    "storage_shards": {
+      "type": "array"
+    },
+    "storage_shards_match": {
+      "type": "boolean"
+    },
+    "version": {
+      "type": [
+        "string"
+      ]
+    },
+    "revision": {
+      "type": [
+        "string"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "required": [
+        "self",
+        "site"
+      ],
+      "properties": {
+        "self": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

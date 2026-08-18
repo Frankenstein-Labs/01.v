@@ -1,0 +1,116 @@
+{
+  "version": "15.1.4",
+  "vulnerabilities": [
+    {
+      "id": "6b398f9953a29076b5c3602f5c6a1ac4507d052c42003b1e95443cc6051fde44",
+      "name": "Flask vulnerable to possible disclosure of permanent session cookie due to missing Vary: Cookie header",
+      "description": "When all of the following conditions are met, a response containing data intended for one client may be cached and subsequently sent by a proxy to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. The severity depends on the application's use of the session, and the proxy's behavior regarding cookies. The risk depends on _all_ these conditions being met.",
+      "severity": "High",
+      "solution": "Upgrade to versions 2.2.5, 2.3.2 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "Flask"
+          },
+          "version": "2.0.2"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-1765d1bd-56e7-4808-8901-6b704956a89b",
+          "value": "1765d1bd-56e7-4808-8901-6b704956a89b",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/master/pypi/Flask/CVE-2023-30861.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2023-30861",
+          "value": "CVE-2023-30861",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-30861"
+        },
+        {
+          "type": "ghsa",
+          "name": "GHSA-m2qf-hxjv-5gpq",
+          "value": "GHSA-m2qf-hxjv-5gpq",
+          "url": "https://github.com/advisories/GHSA-m2qf-hxjv-5gpq"
+        }
+      ],
+      "cvss_vectors": [
+        {
+          "vendor": "NVD",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://github.com/advisories/GHSA-m2qf-hxjv-5gpq"
+        },
+        {
+          "url": "https://github.com/pallets/flask"
+        },
+        {
+          "url": "https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b"
+        },
+        {
+          "url": "https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965"
+        },
+        {
+          "url": "https://github.com/pallets/flask/releases/tag/2.2.5"
+        },
+        {
+          "url": "https://github.com/pallets/flask/releases/tag/2.3.2"
+        },
+        {
+          "url": "https://github.com/pallets/flask/security/advisories/GHSA-m2qf-hxjv-5gpq"
+        },
+        {
+          "url": "https://github.com/pypa/advisory-database/tree/main/vulns/flask/PYSEC-2023-62.yaml"
+        },
+        {
+          "url": "https://lists.debian.org/debian-lts-announce/2023/08/msg00024.html"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-30861"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20230818-0006"
+        },
+        {
+          "url": "https://www.debian.org/security/2023/dsa-5442"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "Flask:2.0.2"
+        }
+      }
+    }
+  ],
+  "scan": {
+    "analyzer": {
+      "id": "gemnasium-python",
+      "name": "gemnasium-python",
+      "url": "https://gitlab.com/gitlab-org/security-products/analyzers/gemnasium",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "6.1.10"
+    },
+    "scanner": {
+      "id": "gemnasium-python",
+      "name": "gemnasium-python",
+      "url": "https://gitlab.com/gitlab-org/security-products/analyzers/gemnasium",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "6.1.10"
+    },
+    "type": "dependency_scanning",
+    "start_time": "2025-08-21T20:15:17",
+    "end_time": "2025-08-21T20:15:48",
+    "status": "success"
+  }
+}

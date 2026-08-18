@@ -1,0 +1,79 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Semgrep",
+          "version": "1.50.0",
+          "rules": [
+            {
+              "id": "sql-injection",
+              "shortDescription": {
+                "text": "Potential SQL injection vulnerability"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "sql-injection",
+          "level": "error",
+          "message": {
+            "text": "SQL injection found"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/models/user.rb"
+                },
+                "region": {
+                  "startLine": 42
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "ESLint",
+          "version": "8.0.0",
+          "rules": [
+            {
+              "id": "no-eval",
+              "shortDescription": {
+                "text": "Disallow eval()"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "no-eval",
+          "level": "warning",
+          "message": {
+            "text": "eval() usage detected"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/javascript/utils.js"
+                },
+                "region": {
+                  "startLine": 7
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

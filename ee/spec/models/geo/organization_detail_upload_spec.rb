@@ -1,0 +1,74 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+
+RSpec.describe Geo::OrganizationDetailUpload, feature_category: :geo_replication do
+  include ::EE::GeoHelpers
+
+  it { expect(described_class.table_name).to eq('organization_detail_uploads') }
+  it { expect(described_class.primary_key).to eq('id') }
+  it { expect(described_class.superclass).to eq(::Upload) }
+
+  describe 'Geo replication' do
+    describe 'associations' do
+      it 'has one verification state table class' do
+        is_expected
+          .to have_one(:organization_detail_upload_state)
+          .class_name('Geo::OrganizationDetailUploadState')
+          .inverse_of(:organization_detail_upload)
+          .autosave(false)
+      end
+    end
+
+    include_examples 'a verifiable model for verification state' do
+      # The factory creates the record via Upload, which may trigger
+      # save_partition_verification_details and create the state row.
+      # The shared example expects save! to create the state row
+      # (count change by 1), so we delete any pre-existing state row
+      # and reload the record to clear the cached association.
+      let(:verifiable_model_record) do
+        record = create(:geo_organization_detail_upload)
+        described_class.verification_state_table_class.where(organization_detail_upload_id: record.id).delete_all
+        record.reload
+      end
+
+      let(:unverifiable_model_record) do
+        record = create(:geo_organization_detail_upload, :remote_store)
+        described_class.verification_state_table_class.where(organization_detail_upload_id: record.id).delete_all
+        record.reload
+      end
+    end
+
+    describe 'replication/verification' do
+      let_it_be(:organization_1) { create(:organization) }
+      let_it_be(:organization_2) { create(:organization) }
+      let_it_be(:group_1) { create(:group, organization: organization_1) }
+      let_it_be(:group_2) { create(:group, organization: organization_2) }
+
+      # Organizations::OrganizationDetail is 1:1 with Organization (organization_id
+      # is its primary key), so all in-scope uploads must hang off a single detail
+      # owned by organization_1. avatar: nil avoids creating an extra avatar upload
+      # in the partition that would pollute the selective-sync match_array assertions.
+      let_it_be(:organization_detail_1) { create(:organization_detail, organization: organization_1, avatar: nil) }
+      let_it_be(:organization_detail_2) { create(:organization_detail, organization: organization_2, avatar: nil) }
+
+      let!(:first_replicable_and_in_selective_sync) do
+        create(:geo_organization_detail_upload, parent_model: organization_detail_1)
+      end
+
+      let!(:second_replicable_and_in_selective_sync) do
+        create(:geo_organization_detail_upload, parent_model: organization_detail_1)
+      end
+
+      let!(:third_replicable_on_object_storage_and_in_selective_sync) do
+        create(:geo_organization_detail_upload, :remote_store, parent_model: organization_detail_1)
+      end
+
+      let!(:last_replicable_and_not_in_selective_sync) do
+        create(:geo_organization_detail_upload, parent_model: organization_detail_2)
+      end
+
+      include_examples 'Geo Framework selective sync behavior'
+    end
+  end
+end

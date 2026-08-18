@@ -1,0 +1,17 @@
+mutation AddNamespaceFiltersToInstanceDestination(
+  $destinationId: AuditEventsInstanceExternalStreamingDestinationID!
+  $namespacePath: String
+) {
+  auditEventsInstanceDestinationNamespaceFilterCreate(
+    input: { destinationId: $destinationId, namespacePath: $namespacePath }
+  ) {
+    errors
+    namespaceFilter {
+      id
+      namespace {
+        id
+        fullPath
+      }
+    }
+  }
+}

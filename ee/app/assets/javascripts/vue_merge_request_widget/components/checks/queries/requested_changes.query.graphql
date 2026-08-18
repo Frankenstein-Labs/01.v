@@ -1,0 +1,20 @@
+query requestedChanges($projectPath: ID!, $iid: String!) {
+  project(fullPath: $projectPath) {
+    id
+    mergeRequest(iid: $iid) {
+      id
+      changeRequesters {
+        nodes {
+          id
+          avatarUrl
+          name
+          username
+          webPath
+        }
+      }
+      userPermissions {
+        canMerge
+      }
+    }
+  }
+}

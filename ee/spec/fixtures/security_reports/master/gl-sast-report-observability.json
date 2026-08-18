@@ -1,0 +1,193 @@
+{
+  "version": "15.1.4",
+  "vulnerabilities": [
+    {
+      "id": "f664e59f7877a7a508cb3e935cc03c805346b8d2b4c0f795da744009e650862c",
+      "category": "sast",
+      "name": "Incorrect permission assignment for critical resource",
+      "description": "description",
+      "cve": "gitlab-advanced-sast_id:go-lang-accesscontrol-poor-file-permissions-atomic:10:10",
+      "severity": "Low",
+      "scanner": {
+        "id": "gitlab-advanced-sast",
+        "name": "GitLab Advanced SAST"
+      },
+      "location": {
+        "file": "main.go",
+        "start_line": 10
+      },
+      "identifiers": [
+        {
+          "type": "gitlab-advanced-sast_id",
+          "name": "go-lang-accesscontrol-poor-file-permissions-atomic",
+          "value": "go-lang-accesscontrol-poor-file-permissions-atomic"
+        },
+        {
+          "type": "semgrep_id",
+          "name": "SAST Rules ID - go_file-permissions_rule-fileperm",
+          "value": "go_file-permissions_rule-fileperm"
+        },
+        {
+          "type": "semgrep_id",
+          "name": "Gosec Rule ID gosec.G302-1",
+          "value": "gosec.G302-1"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-732",
+          "value": "732",
+          "url": "https://cwe.mitre.org/data/definitions/732.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A5:2017 - Broken Access Control",
+          "value": "A5:2017"
+        },
+        {
+          "type": "owasp",
+          "name": "A01:2021 - Broken Access Control",
+          "value": "A01:2021"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "main.go",
+            "line_start": 10,
+            "line_end": 10,
+            "signatures": [
+              {
+                "algorithm": "scope_offset_compressed",
+                "value": "main.go|main[0]:1"
+              },
+              {
+                "algorithm": "scope_offset",
+                "value": "main.go|main[0]:2"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "7c0b289823a7a2590389aed5c9745891a94dfb88d9ec6a4a6716f9acb915b1a7",
+      "category": "sast",
+      "name": "Incorrect permission assignment for critical resource",
+      "description": "description",
+      "cve": "gitlab-advanced-sast_id:go-lang-accesscontrol-poor-file-permissions-atomic:12:12",
+      "severity": "Low",
+      "scanner": {
+        "id": "gitlab-advanced-sast",
+        "name": "GitLab Advanced SAST"
+      },
+      "location": {
+        "file": "main.go",
+        "start_line": 12
+      },
+      "identifiers": [
+        {
+          "type": "gitlab-advanced-sast_id",
+          "name": "go-lang-accesscontrol-poor-file-permissions-atomic",
+          "value": "go-lang-accesscontrol-poor-file-permissions-atomic"
+        },
+        {
+          "type": "semgrep_id",
+          "name": "SAST Rules ID - go_file-permissions_rule-fileperm",
+          "value": "go_file-permissions_rule-fileperm"
+        },
+        {
+          "type": "semgrep_id",
+          "name": "Gosec Rule ID gosec.G302-1",
+          "value": "gosec.G302-1"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-732",
+          "value": "732",
+          "url": "https://cwe.mitre.org/data/definitions/732.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A5:2017 - Broken Access Control",
+          "value": "A5:2017"
+        },
+        {
+          "type": "owasp",
+          "name": "A01:2021 - Broken Access Control",
+          "value": "A01:2021"
+        }
+      ],
+      "tracking": {
+        "type": "source",
+        "items": [
+          {
+            "file": "main.go",
+            "line_start": 12,
+            "line_end": 12,
+            "signatures": [
+              {
+                "algorithm": "scope_offset_compressed",
+                "value": "main.go|main[0]:3"
+              },
+              {
+                "algorithm": "scope_offset",
+                "value": "main.go|main[0]:4"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "dependency_files": null,
+  "scan": {
+    "analyzer": {
+      "id": "gitlab-advanced-sast",
+      "name": "GitLab Advanced SAST",
+      "url": "https://gitlab.com/gitlab-org/security-products/analyzers/gitlab-advanced-sast-src",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "2.0.1"
+    },
+    "scanner": {
+      "id": "gitlab-advanced-sast",
+      "name": "GitLab Advanced SAST",
+      "url": "https://gitlab.com",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "v1.1.122"
+    },
+    "primary_identifiers": [
+      {
+        "type": "gitlab-advanced-sast_id",
+        "name": "go-lang-accesscontrol-poor-file-permissions-atomic",
+        "value": "go-lang-accesscontrol-poor-file-permissions-atomic"
+      }
+    ],
+    "type": "sast",
+    "observability": {
+      "events": [
+        {
+          "event": "collect_sast_scan_metrics_from_pipeline",
+          "property": "294f623d-b2ce-4568-8008-6fd4a5fb3330",
+          "label": "semgrep",
+          "value": 1,
+          "version": "1.1.1",
+          "exit_code": 2,
+          "override_count": 3,
+          "passthrough_count": 4,
+          "custom_exclude_path_count": 5,
+          "time_s": 100,
+          "file_count": 1000,
+          "language_feature_usage": "{\".cpp\":{\"modules\":6}}"
+        }
+      ]
+    },
+    "start_time": "2025-03-25T11:33:17",
+    "end_time": "2025-03-25T11:34:14",
+    "status": "success"
+  }
+}

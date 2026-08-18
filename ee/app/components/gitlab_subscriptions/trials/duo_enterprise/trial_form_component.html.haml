@@ -1,0 +1,16 @@
+= render GitlabSubscriptions::Trials::DuoEnterprise::TopPageComponent.new
+
+.gl-max-w-5xl.gl-mx-auto.gl-grid.gl-gap-8.gl-bg-no-repeat.bg-decorations{ class: "@md/panel:gl-grid-cols-9" }
+  .gl-col-span-6.gl-rounded-lg.gl-bg-default
+    .gl-pl-6.gl-mt-6
+      = sprite_icon('tanuki-ai', size: 32)
+    %h2.gl-mt-0.gl-px-6
+      = s_('DuoEnterpriseTrial|Start your free GitLab Duo Enterprise trial')
+
+    %p.gl-text-subtle.gl-text-lg.gl-px-6.gl-mb-0
+      = s_('DuoEnterpriseTrial|We need a few more details from you to activate your trial.')
+
+    .gl-max-w-80
+      #js-create-trial-form{ data: { view_model: form_data } }
+
+  = render GitlabSubscriptions::Trials::DuoEnterprise::AdvantagesListComponent.new

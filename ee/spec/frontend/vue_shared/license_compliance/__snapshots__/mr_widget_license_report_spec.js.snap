@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`License Report MR Widget report section report body should render correctly 1`] = `
+<smart-virtual-list-stub
+  class="report-block-container"
+  length="2"
+  remain="20"
+  rtag="div"
+  wclass="report-block-list !gl-my-2"
+  wtag="ul"
+>
+  <li
+    class="!gl-mb-2 !gl-mx-2"
+    data-testid="report-heading"
+  >
+    <h2
+      class="!gl-m-0 h5"
+    >
+      some-status group-name
+    </h2>
+    <p
+      class="!gl-m-0"
+    >
+      some-status group-description
+    </p>
+  </li>
+</smart-virtual-list-stub>
+`;

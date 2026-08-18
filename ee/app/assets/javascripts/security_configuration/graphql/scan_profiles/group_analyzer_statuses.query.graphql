@@ -1,0 +1,15 @@
+# @feature_category: security_testing_configuration
+query groupAnalyzerStatuses($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    analyzerStatuses {
+      success
+      failure
+      stale
+      notConfigured
+      analyzerType
+      totalProjectsCount
+      updatedAt
+    }
+  }
+}

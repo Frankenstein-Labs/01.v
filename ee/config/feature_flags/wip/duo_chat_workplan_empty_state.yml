@@ -1,0 +1,9 @@
+---
+name: duo_chat_workplan_empty_state
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/601244
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/239186
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/601244
+milestone: '19.2'
+type: wip
+group: group::agent execution
+default_enabled: false

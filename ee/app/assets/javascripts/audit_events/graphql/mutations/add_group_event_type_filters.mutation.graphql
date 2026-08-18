@@ -1,0 +1,11 @@
+mutation AddEventTypesToGroupDestination(
+  $destinationId: AuditEventsGroupExternalStreamingDestinationID!
+  $eventTypeFilters: [String!]!
+) {
+  auditEventsGroupDestinationEventsAdd(
+    input: { destinationId: $destinationId, eventTypeFilters: $eventTypeFilters }
+  ) {
+    errors
+    eventTypeFilters
+  }
+}

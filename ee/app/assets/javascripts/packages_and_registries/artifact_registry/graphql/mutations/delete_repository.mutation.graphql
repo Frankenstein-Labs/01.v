@@ -1,0 +1,9 @@
+# @feature_category: artifact_registry
+
+# The payload selects `errors` alone: a deleted repository has nothing left to return, and
+# the cache is corrected by eviction rather than by normalizing a payload.
+mutation deleteArtifactRegistryRepository($input: ArtifactRegistryRepositoryDeleteInput!) {
+  deleteRepository: artifactRegistryRepositoryDelete(input: $input) {
+    errors
+  }
+}

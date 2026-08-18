@@ -1,0 +1,14 @@
+{
+  "extends": "@frontend-islands/tsconfig/tsconfig.app.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "./src/**/*_spec.ts",
+    "./src/**/*.spec.ts"
+  ]
+}

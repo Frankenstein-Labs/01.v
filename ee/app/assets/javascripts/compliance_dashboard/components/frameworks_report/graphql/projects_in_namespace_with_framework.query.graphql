@@ -1,0 +1,30 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query projectsInGroupWithComplianceFramework(
+  $fullPath: ID!
+  $frameworkId: ComplianceManagementFrameworkID!
+  $pageCount: Int = 20
+  $after: String
+) {
+  namespace(fullPath: $fullPath) {
+    id
+    projects(
+      complianceFrameworkFilters: { ids: [$frameworkId] }
+      includeSubgroups: true
+      includeArchived: false
+      first: $pageCount
+      after: $after
+    ) {
+      nodes {
+        id
+        name
+        webUrl
+        fullPath
+      }
+      count
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

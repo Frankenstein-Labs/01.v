@@ -1,0 +1,20 @@
+# @feature_category: portfolio_management
+query getBoardNamespaceStatusesEE($fullPath: ID!, $ids: [WorkItemsStatusesStatusID!]) {
+  namespace(fullPath: $fullPath) {
+    id
+    rootNamespace {
+      id
+      statuses(ids: $ids) {
+        nodes {
+          id
+          name
+          iconName
+          color
+          category
+          description
+          position
+        }
+      }
+    }
+  }
+}

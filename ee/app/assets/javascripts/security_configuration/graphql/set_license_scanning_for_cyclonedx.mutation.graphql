@@ -1,0 +1,7 @@
+# @feature_category: software_composition_analysis
+mutation SetLicenseScanningForCyclonedx($input: SetLicenseScanningForCyclonedxInput!) {
+  setLicenseScanningForCyclonedx(input: $input) {
+    licenseScanningForCyclonedxEnabled
+    errors
+  }
+}

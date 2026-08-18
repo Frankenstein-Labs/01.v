@@ -1,0 +1,9 @@
+- page_title _('Policy store')
+
+-# One client-rendered app (list + editor). namespace_path is the organization path;
+-# organization-scoped project selection matures with Organizations support.
+#js-policy-store{ data: { namespace_path: @organization.path,
+  organization_id: @organization.id,
+  empty_list_svg_path: image_path('illustrations/empty-state/empty-secure-add-md.svg'),
+  new_policy_path: new_security_policy_store_organization_path(@organization),
+  list_path: security_policy_store_organization_path(@organization) } }

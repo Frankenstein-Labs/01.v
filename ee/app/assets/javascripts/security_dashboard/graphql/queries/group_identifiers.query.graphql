@@ -1,0 +1,6 @@
+query groupIdentifiers($fullPath: ID!, $searchTerm: String!) {
+  group(fullPath: $fullPath) {
+    id
+    vulnerabilityIdentifierSearch(name: $searchTerm)
+  }
+}

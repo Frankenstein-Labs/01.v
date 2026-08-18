@@ -1,0 +1,12 @@
+mutation projectSavedReplyCreate($namespaceId: ProjectID!, $name: String!, $content: String!) {
+  savedReplyMutation: projectSavedReplyCreate(
+    input: { projectId: $namespaceId, name: $name, content: $content }
+  ) {
+    errors
+    savedReply {
+      id
+      name
+      content
+    }
+  }
+}

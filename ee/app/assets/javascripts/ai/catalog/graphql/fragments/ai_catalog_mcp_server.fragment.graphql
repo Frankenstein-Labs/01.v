@@ -1,0 +1,12 @@
+fragment BaseAiCatalogMcpServer on AiCatalogMcpServer {
+  id
+  name
+  description
+  url
+  homepageUrl
+  transport
+  authType
+  oauthClientId
+  createdAt
+  updatedAt
+}

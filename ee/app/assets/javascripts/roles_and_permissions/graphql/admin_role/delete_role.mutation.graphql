@@ -1,0 +1,5 @@
+mutation deleteAdminMemberRole($id: MemberRoleID!) {
+  memberRoleDelete: memberRoleAdminDelete(input: { id: $id }) {
+    errors
+  }
+}

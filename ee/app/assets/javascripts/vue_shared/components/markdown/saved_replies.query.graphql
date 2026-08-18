@@ -1,0 +1,37 @@
+query getSavedRepliesEE(
+  $groupPath: ID = null
+  $hideGroup: Boolean = true
+  $projectPath: ID = null
+  $hideProject: Boolean = true
+) {
+  group(fullPath: $groupPath) @skip(if: $hideGroup) {
+    id
+    savedReplies(includeAncestorGroups: true) {
+      nodes {
+        id
+        name
+        content
+      }
+    }
+  }
+  project(fullPath: $projectPath) @skip(if: $hideProject) {
+    id
+    savedReplies {
+      nodes {
+        id
+        name
+        content
+      }
+    }
+  }
+  currentUser {
+    id
+    savedReplies {
+      nodes {
+        id
+        name
+        content
+      }
+    }
+  }
+}

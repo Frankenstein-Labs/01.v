@@ -1,0 +1,26 @@
+mutation createInstanceAmazonS3Destination(
+  $name: String!
+  $accessKeyXid: String!
+  $secretAccessKey: String!
+  $awsRegion: String!
+  $bucketName: String!
+) {
+  auditEventsInstanceAmazonS3ConfigurationCreate(
+    input: {
+      name: $name
+      accessKeyXid: $accessKeyXid
+      secretAccessKey: $secretAccessKey
+      awsRegion: $awsRegion
+      bucketName: $bucketName
+    }
+  ) {
+    errors
+    instanceAmazonS3Configuration {
+      id
+      name
+      accessKeyXid
+      awsRegion
+      bucketName
+    }
+  }
+}

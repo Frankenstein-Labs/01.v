@@ -1,0 +1,113 @@
+---
+schemaVersion: 2.2.0
+metadata: {}
+components:
+  - name: tooling-container
+    attributes:
+      gl/inject-editor: true
+    container:
+      image: quay.io/mloriedo/universal-developer-image:ubi8-dw-demo
+      args:
+        - |
+          <%= indent_yaml_literal(INTERNAL_POSTSTART_COMMAND_START_SSHD_SCRIPT, 10) %>
+          <%= indent_yaml_literal(INTERNAL_POSTSTART_COMMAND_START_VSCODE_SCRIPT, 10) %>
+      command:
+        - "/bin/sh"
+        - "-c"
+      volumeMounts:
+        - name: gl-workspace-data
+          path: /projects
+      env:
+        - name: GL_TOOLS_DIR
+          value: "/projects/.gl-tools"
+        - name: GL_VSCODE_LOG_LEVEL
+          value: "info"
+        - name: GL_VSCODE_PORT
+          value: "<%= WORKSPACE_EDITOR_PORT %>"
+        - name: GL_SSH_PORT
+          value: "<%= WORKSPACE_SSH_PORT %>"
+        - name: GL_VSCODE_ENABLE_MARKETPLACE
+          value: "false"
+      endpoints:
+        - name: editor-server
+          targetPort: <%= WORKSPACE_EDITOR_PORT %>
+          exposure: public
+          secure: true
+          protocol: https
+        - name: ssh-server
+          targetPort: <%= WORKSPACE_SSH_PORT %>
+          exposure: internal
+          secure: true
+      dedicatedPod: false
+      mountSources: true
+  - name: database-container
+    container:
+      image: mysql
+      volumeMounts:
+        - name: gl-workspace-data
+          path: /projects
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "my-secret-pw"
+      dedicatedPod: false
+      mountSources: true
+  - name: user-defined-entrypoint-cmd-component
+    attributes:
+      overrideCommand: false
+    container:
+      image: quay.io/mloriedo/universal-developer-image:ubi8-dw-demo
+      command: ["echo"]
+      args: ["-n", "user-defined entrypoint command"]
+      volumeMounts:
+        - name: gl-workspace-data
+          path: /projects
+      dedicatedPod: false
+      mountSources: true
+  - name: gl-tools-injector
+    container:
+      image: <%= WORKSPACE_TOOLS_IMAGE %>
+      volumeMounts:
+        - name: gl-workspace-data
+          path: /projects
+      env:
+        - name: GL_TOOLS_DIR
+          value: "/projects/.gl-tools"
+      memoryLimit: 512Mi
+      memoryRequest: 256Mi
+      cpuLimit: 500m
+      cpuRequest: 100m
+  - name: gl-project-cloner
+    container:
+      image: alpine/git:2.45.2
+      volumeMounts:
+        - name: gl-workspace-data
+          path: "/projects"
+      args:
+        - |
+          <%=
+            script = INTERNAL_POSTSTART_COMMAND_CLONE_PROJECT_SCRIPT.dup
+            script.gsub!("#!/bin/sh\n", "")
+            indent_yaml_literal(script, 10)
+          %>
+      command:
+        - "/bin/sh"
+        - "-c"
+      memoryLimit: 1000Mi
+      memoryRequest: 500Mi
+      cpuLimit: 500m
+      cpuRequest: 100m
+  - name: gl-workspace-data
+    volume:
+      size: 50Gi
+commands:
+  - id: gl-tools-injector-command
+    apply:
+      component: gl-tools-injector
+  - id: gl-project-cloner-command
+    apply:
+      component: gl-project-cloner
+events:
+  preStart:
+    - gl-tools-injector-command
+    - gl-project-cloner-command
+variables: {}

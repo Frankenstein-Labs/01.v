@@ -1,0 +1,9 @@
+---
+name: product_analytics_billing
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/437878
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/141624
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/438399
+milestone: '16.9'
+group: group::product analytics
+type: development
+default_enabled: true

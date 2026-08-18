@@ -1,0 +1,15 @@
+#import "./test_case.fragment.graphql"
+
+mutation updateTestCase($input: UpdateIssueInput!) {
+  updateIssue(input: $input) {
+    clientMutationId
+    errors
+    issue {
+      ...TestCase
+      taskCompletionStatus {
+        count
+        completedCount
+      }
+    }
+  }
+}

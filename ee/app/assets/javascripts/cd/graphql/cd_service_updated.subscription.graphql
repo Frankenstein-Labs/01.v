@@ -1,0 +1,25 @@
+# @feature_category: continuous_delivery
+
+subscription cdServiceUpdated($applicationId: CdApplicationID!) {
+  cdServiceUpdated(applicationId: $applicationId) {
+    id
+    lastDeployedAt
+    serviceEnvironmentHealths {
+      nodes {
+        id
+        health
+        environment {
+          id
+          name
+          tier
+        }
+        deployedVersions(first: 1) {
+          nodes {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+# @feature_category: vulnerability_management
+query groupVulnerabilitiesByAge(
+  $fullPath: ID!
+  $projectId: [ID!]
+  $reportType: [VulnerabilityReportType!]
+  $includeBySeverity: Boolean!
+  $includeByReportType: Boolean!
+  $severity: [VulnerabilitySeverity!]
+  $securityAttributesFilters: [AttributeFilterInput!]
+) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    securityMetrics(
+      projectId: $projectId
+      reportType: $reportType
+      securityAttributesFilters: $securityAttributesFilters
+    ) {
+      vulnerabilitiesByAge(severity: $severity) {
+        name
+        ... @include(if: $includeBySeverity) {
+          bySeverity {
+            count
+            severity
+          }
+        }
+        ... @include(if: $includeByReportType) {
+          byReportType {
+            count
+            reportType
+          }
+        }
+      }
+    }
+  }
+}

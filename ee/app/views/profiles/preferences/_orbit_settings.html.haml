@@ -1,0 +1,24 @@
+- return unless ::Ai::Orbit::Settings.user_preference_section_visible?(current_user)
+
+.form-group.gl-mt-5.gl-mb-6{ data: { testid: 'orbit-settings-section' } }
+  %span.label-bold.gl-flex.gl-items-center.gl-gap-2
+    = s_('Preferences|Orbit in GitLab Duo')
+    = gl_badge_tag s_('Preferences|Beta'), variant: :info, size: :sm
+  = f.gitlab_ui_checkbox_component :orbit_enabled,
+    s_('Preferences|Use Orbit in GitLab Duo'),
+    help_text: s_('Preferences|When enabled, you can choose which Orbit-powered features to use below. Turning this off disables all Orbit features.')
+
+  - subsettings_class = ::Ai::Orbit::Settings.killswitch_on?(current_user) ? '' : 'gl-hidden'
+  .gl-ml-6.gl-mt-3{ class: subsettings_class, data: { testid: 'orbit-subsettings' } }
+    = f.gitlab_ui_checkbox_component :orbit_agentic_chat_enabled,
+      s_('Preferences|Agentic Chat'),
+      help_text: s_('Preferences|Make Orbit tools available in agentic chat.')
+    = f.gitlab_ui_checkbox_component :orbit_agent_enabled,
+      s_('Preferences|Orbit Agent'),
+      help_text: s_('Preferences|Make the standalone Orbit agent available in GitLab Duo.')
+    = f.gitlab_ui_checkbox_component :orbit_other_foundational_agents_enabled,
+      s_('Preferences|Other Foundational Agents'),
+      help_text: s_('Preferences|Make Orbit tools available to non-chat foundational agents (e.g. software development, security analyst).')
+    = f.gitlab_ui_checkbox_component :orbit_custom_agents_enabled,
+      s_('Preferences|Custom Agents'),
+      help_text: s_('Preferences|Make Orbit tools available to user-built custom agents.')

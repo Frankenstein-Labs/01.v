@@ -1,0 +1,14 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "match_none": {}
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

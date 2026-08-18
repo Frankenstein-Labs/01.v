@@ -1,0 +1,18 @@
+# Mock requests for events in tests in:
+#    qa/qa/specs/features/ee/api/10_govern/instance_audit_event_streaming_spec.rb
+#    qa/qa/specs/features/ee/browser_ui/10_govern/group/group_audit_event_streaming_spec.rb
+# Match any event. Verification will be performed in the tests.
+- request:
+    path: /logs
+    method: POST
+    body:
+      event_type:
+        matcher: ShouldMatch
+        value: .*
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+      X-Gitlab-Audit-Event-Type:
+        matcher: ShouldMatch
+        value: .*
+  response:
+    status: 200

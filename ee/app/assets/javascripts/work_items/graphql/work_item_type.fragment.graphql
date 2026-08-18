@@ -1,0 +1,66 @@
+#import "./work_item_status.fragment.graphql"
+
+fragment WorkItemTypeFragment on WorkItemType {
+  id
+  name
+  iconName
+  supportedConversionTypes {
+    id
+    name
+  }
+  widgetDefinitions {
+    type
+    ... on WorkItemWidgetDefinitionAssignees {
+      allowsMultipleAssignees
+      canInviteMembers
+    }
+    ... on WorkItemWidgetDefinitionLabels {
+      allowsScopedLabels
+    }
+    ... on WorkItemWidgetDefinitionHierarchy {
+      allowedChildTypes {
+        nodes {
+          id
+          name
+        }
+      }
+      allowedParentTypes {
+        nodes {
+          id
+          name
+        }
+      }
+    }
+    ... on WorkItemWidgetDefinitionCustomFields {
+      type
+      customFieldValues {
+        customField {
+          id
+          name
+          fieldType
+        }
+        ... on WorkItemNumberFieldValue {
+          value
+        }
+        ... on WorkItemTextFieldValue {
+          value
+        }
+        ... on WorkItemSelectFieldValue {
+          selectedOptions {
+            id
+            value
+          }
+        }
+      }
+    }
+
+    ... on WorkItemWidgetDefinitionStatus {
+      allowedStatuses {
+        ...WorkItemStatusFragment
+      }
+      defaultOpenStatus {
+        ...WorkItemStatusFragment
+      }
+    }
+  }
+}

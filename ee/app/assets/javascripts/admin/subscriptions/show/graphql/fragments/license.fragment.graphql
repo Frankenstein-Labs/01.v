@@ -1,0 +1,19 @@
+fragment License on CurrentLicense {
+  id
+  type
+  plan
+  name
+  email
+  company
+  startsAt
+  expiresAt
+  activatedAt
+  lastSync
+  usersInLicenseCount
+  billableUsersCount
+  maximumUserCount
+  usersOverLicenseCount
+  trial
+  hasGitlabCreditsAddOn @gl_introduced(version: "19.0.0")
+  subscriptionName @gl_introduced(version: "19.3.0")
+}

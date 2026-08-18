@@ -1,0 +1,20 @@
+{
+  "name": "frontend-islands",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/configs/*"
+  ],
+  "scripts": {
+    "lint:types": "for app in apps/*/; do (cd \"$app\" && yarn run lint:types) || exit 1; done",
+    "build": "yarn workspaces run build",
+    "build:prod": "yarn workspaces run build:prod"
+  },
+  "resolutions": {
+    "rollup": "^4.60.0",
+    "vite": "8.0.3",
+    "eslint-scope": "^8.2.0",
+    "eslint-visitor-keys": "^4.2.0",
+    "espree": "^10.3.0"
+  }
+}

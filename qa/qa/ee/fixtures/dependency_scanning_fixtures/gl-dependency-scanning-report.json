@@ -1,0 +1,461 @@
+{
+  "version": "15.0.0",
+  "vulnerabilities": [
+    {
+      "id": "e736ae22ff9b35288bbb279351610d7cd92142cfa1240f5be206cdc59ca77502",
+      "name": "Improper Input Validation in httpx",
+      "description": "Encode OSS httpx <=1.0.0.beta0 is affected by improper input validation in `httpx.URL`, `httpx.Client` and some functions using `httpx.URL.copy_with`.",
+      "cve": "",
+      "severity": "Critical",
+      "solution": "Upgrade to version 0.23.0 or above.",
+      "location": {
+        "file": "requirements.txt",
+        "dependency": {
+          "package": {
+            "name": "httpx"
+          },
+          "version": "0.18.2"
+        }
+      },
+      "identifiers": [
+        {
+          "type": "gemnasium",
+          "name": "Gemnasium-bca9e459-e409-469d-b242-d15230842685",
+          "value": "bca9e459-e409-469d-b242-d15230842685",
+          "url": "https://gitlab.com/gitlab-org/security-products/gemnasium-db/-/blob/master/pypi/httpx/CVE-2021-41945.yml"
+        },
+        {
+          "type": "cve",
+          "name": "CVE-2021-41945",
+          "value": "CVE-2021-41945",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41945"
+        },
+        {
+          "type": "ghsa",
+          "name": "GHSA-h8pj-cxx2-jfg2",
+          "value": "GHSA-h8pj-cxx2-jfg2",
+          "url": "https://github.com/advisories/GHSA-h8pj-cxx2-jfg2"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://gist.github.com/lebr0nli/4edb76bbd3b5ff993cf44f2fbce5e571"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-h8pj-cxx2-jfg2"
+        },
+        {
+          "url": "https://github.com/encode/httpx/discussions/1831"
+        },
+        {
+          "url": "https://github.com/encode/httpx/issues/2184"
+        },
+        {
+          "url": "https://github.com/encode/httpx/pull/2185"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-41945"
+        }
+      ],
+      "details": {
+        "vulnerable_package": {
+          "type": "text",
+          "name": "Vulnerable Package",
+          "value": "httpx:0.18.2"
+        }
+      }
+    }
+  ],
+  "dependency_files": [
+    {
+      "path": "requirements.txt",
+      "package_manager": "pip",
+      "dependencies": [
+        {
+          "package": {
+            "name": "Pillow"
+          },
+          "version": "10.0.0"
+        },
+        {
+          "package": {
+            "name": "PyYAML"
+          },
+          "version": "6.0.1"
+        },
+        {
+          "package": {
+            "name": "anyio"
+          },
+          "version": "3.7.1"
+        },
+        {
+          "package": {
+            "name": "beautifulsoup4"
+          },
+          "version": "4.12.2"
+        },
+        {
+          "package": {
+            "name": "bs4"
+          },
+          "version": "0.0.1"
+        },
+        {
+          "package": {
+            "name": "certifi"
+          },
+          "version": "2023.7.22"
+        },
+        {
+          "package": {
+            "name": "cfscrape"
+          },
+          "version": "2.1.1"
+        },
+        {
+          "package": {
+            "name": "charset-normalizer"
+          },
+          "version": "3.2.0"
+        },
+        {
+          "package": {
+            "name": "colorama"
+          },
+          "version": "0.4.6"
+        },
+        {
+          "package": {
+            "name": "configparser"
+          },
+          "version": "6.0.0"
+        },
+        {
+          "package": {
+            "name": "contourpy"
+          },
+          "version": "1.1.0"
+        },
+        {
+          "package": {
+            "name": "cycler"
+          },
+          "version": "0.11.0"
+        },
+        {
+          "package": {
+            "name": "decorator"
+          },
+          "version": "5.1.1"
+        },
+        {
+          "package": {
+            "name": "duckpy"
+          },
+          "version": "3.2.0"
+        },
+        {
+          "package": {
+            "name": "exceptiongroup"
+          },
+          "version": "1.1.3"
+        },
+        {
+          "package": {
+            "name": "fonttools"
+          },
+          "version": "4.42.1"
+        },
+        {
+          "package": {
+            "name": "future"
+          },
+          "version": "0.18.3"
+        },
+        {
+          "package": {
+            "name": "h11"
+          },
+          "version": "0.12.0"
+        },
+        {
+          "package": {
+            "name": "h2"
+          },
+          "version": "3.2.0"
+        },
+        {
+          "package": {
+            "name": "hpack"
+          },
+          "version": "3.0.0"
+        },
+        {
+          "package": {
+            "name": "httpcore"
+          },
+          "version": "0.13.7"
+        },
+        {
+          "package": {
+            "name": "httpx"
+          },
+          "version": "0.18.2"
+        },
+        {
+          "package": {
+            "name": "hyperframe"
+          },
+          "version": "5.2.0"
+        },
+        {
+          "package": {
+            "name": "idna"
+          },
+          "version": "3.4"
+        },
+        {
+          "package": {
+            "name": "importlib-resources"
+          },
+          "version": "6.0.1"
+        },
+        {
+          "package": {
+            "name": "jdcal"
+          },
+          "version": "1.4.1"
+        },
+        {
+          "package": {
+            "name": "kiwisolver"
+          },
+          "version": "1.4.5"
+        },
+        {
+          "package": {
+            "name": "matplotlib"
+          },
+          "version": "3.7.2"
+        },
+        {
+          "package": {
+            "name": "networkx"
+          },
+          "version": "3.1"
+        },
+        {
+          "package": {
+            "name": "numpy"
+          },
+          "version": "1.25.2"
+        },
+        {
+          "package": {
+            "name": "oauthlib"
+          },
+          "version": "3.2.2"
+        },
+        {
+          "package": {
+            "name": "odfpy"
+          },
+          "version": "0.9.6"
+        },
+        {
+          "package": {
+            "name": "openpyxl"
+          },
+          "version": "2.2.2"
+        },
+        {
+          "package": {
+            "name": "osrframework"
+          },
+          "version": "0.20.5"
+        },
+        {
+          "package": {
+            "name": "packaging"
+          },
+          "version": "23.1"
+        },
+        {
+          "package": {
+            "name": "pyexcel"
+          },
+          "version": "0.2.1"
+        },
+        {
+          "package": {
+            "name": "pyexcel-io"
+          },
+          "version": "0.1.0"
+        },
+        {
+          "package": {
+            "name": "pyexcel-ods"
+          },
+          "version": "0.1.1"
+        },
+        {
+          "package": {
+            "name": "pyexcel-text"
+          },
+          "version": "0.2.0"
+        },
+        {
+          "package": {
+            "name": "pyexcel-xls"
+          },
+          "version": "0.1.0"
+        },
+        {
+          "package": {
+            "name": "pyexcel-xlsx"
+          },
+          "version": "0.1.0"
+        },
+        {
+          "package": {
+            "name": "pyparsing"
+          },
+          "version": "3.0.9"
+        },
+        {
+          "package": {
+            "name": "python-dateutil"
+          },
+          "version": "2.8.2"
+        },
+        {
+          "package": {
+            "name": "python-emailahoy3"
+          },
+          "version": "0.1.3"
+        },
+        {
+          "package": {
+            "name": "python-whois"
+          },
+          "version": "0.8.0"
+        },
+        {
+          "package": {
+            "name": "requests"
+          },
+          "version": "2.31.0"
+        },
+        {
+          "package": {
+            "name": "requests-oauthlib"
+          },
+          "version": "1.3.1"
+        },
+        {
+          "package": {
+            "name": "rfc3986"
+          },
+          "version": "1.5.0"
+        },
+        {
+          "package": {
+            "name": "setuptools"
+          },
+          "version": "68.2.0"
+        },
+        {
+          "package": {
+            "name": "six"
+          },
+          "version": "1.16.0"
+        },
+        {
+          "package": {
+            "name": "sniffio"
+          },
+          "version": "1.3.0"
+        },
+        {
+          "package": {
+            "name": "soupsieve"
+          },
+          "version": "2.5"
+        },
+        {
+          "package": {
+            "name": "tabulate"
+          },
+          "version": "0.9.0"
+        },
+        {
+          "package": {
+            "name": "texttable"
+          },
+          "version": "1.6.7"
+        },
+        {
+          "package": {
+            "name": "tweepy"
+          },
+          "version": "4.14.0"
+        },
+        {
+          "package": {
+            "name": "urllib3"
+          },
+          "version": "2.0.4"
+        },
+        {
+          "package": {
+            "name": "validate-email"
+          },
+          "version": "1.3"
+        },
+        {
+          "package": {
+            "name": "xlrd"
+          },
+          "version": "2.0.1"
+        },
+        {
+          "package": {
+            "name": "xlwt-future"
+          },
+          "version": "0.8.0"
+        },
+        {
+          "package": {
+            "name": "zipp"
+          },
+          "version": "3.16.2"
+        }
+      ]
+    }
+  ],
+  "scan": {
+    "analyzer": {
+      "id": "gemnasium-python",
+      "name": "gemnasium-python",
+      "url": "https://gitlab.com/gitlab-org/security-products/analyzers/gemnasium",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "4.3.1"
+    },
+    "scanner": {
+      "id": "gemnasium-python",
+      "name": "gemnasium-python",
+      "url": "https://gitlab.com/gitlab-org/security-products/analyzers/gemnasium",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "4.3.1"
+    },
+    "type": "dependency_scanning",
+    "start_time": "2023-09-07T08:02:26",
+    "end_time": "2023-09-07T08:03:05",
+    "status": "success"
+  }
+}

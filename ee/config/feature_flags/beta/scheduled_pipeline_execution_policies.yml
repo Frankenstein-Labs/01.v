@@ -1,0 +1,10 @@
+---
+name: scheduled_pipeline_execution_policies
+description: Gate scheduled pipeline execution policies for GA de-risking
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/581414
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/238197
+rollout_issue_url: https://gitlab.com/groups/gitlab-org/-/work_items/17875
+milestone: '19.1'
+group: group::security policies
+type: beta
+default_enabled: true

@@ -1,0 +1,6 @@
+# @feature_category: workflow_catalog
+mutation createAiCatalogItemConsumerBulk($input: AiCatalogItemConsumerBulkCreateInput!) {
+  aiCatalogItemConsumerBulkCreate(input: $input) {
+    errors
+  }
+}

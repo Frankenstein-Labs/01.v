@@ -1,0 +1,16 @@
+mutation projectIssueEpicMutation($fullPath: ID!, $iid: String!, $attributeId: EpicID) {
+  issuableSetAttribute: issueSetEpic(
+    input: { projectPath: $fullPath, iid: $iid, epicId: $attributeId }
+  ) {
+    errors
+    issuable: issue {
+      id
+      hasParent
+      attribute: epic {
+        title
+        id
+        state
+      }
+    }
+  }
+}

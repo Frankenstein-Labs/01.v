@@ -1,0 +1,10 @@
+# @feature_category: continuous_delivery
+
+mutation cdRolloutCreate($input: CdRolloutCreateInput!) {
+  cdRolloutCreate(input: $input) {
+    rollout {
+      id
+    }
+    errors
+  }
+}

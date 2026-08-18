@@ -1,0 +1,5 @@
+fragment DependencyProxyPackagesSettingFields on DependencyProxyPackagesSetting {
+  enabled
+  mavenExternalRegistryUrl
+  mavenExternalRegistryUsername
+}

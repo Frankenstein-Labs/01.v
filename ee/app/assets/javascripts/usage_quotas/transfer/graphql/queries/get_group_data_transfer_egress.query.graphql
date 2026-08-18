@@ -1,0 +1,41 @@
+query getGroupDataTransferEgress(
+  $fullPath: ID!
+  $first: Int
+  $last: Int
+  $before: String
+  $after: String
+) {
+  group(fullPath: $fullPath) {
+    id
+    dataTransfer {
+      egressNodes {
+        nodes {
+          date
+          totalEgress
+        }
+      }
+    }
+    projects(first: $first, last: $last, before: $before, after: $after, includeSubgroups: true) {
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+      nodes {
+        id
+        webUrl
+        name
+        nameWithNamespace
+        avatarUrl
+        dataTransfer {
+          egressNodes {
+            nodes {
+              totalEgress
+            }
+          }
+        }
+      }
+    }
+  }
+}

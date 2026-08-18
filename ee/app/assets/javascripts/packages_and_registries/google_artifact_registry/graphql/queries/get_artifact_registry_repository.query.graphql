@@ -1,0 +1,10 @@
+query getArtifactRegistryRepository($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    googleCloudArtifactRegistryRepository {
+      projectId
+      repository
+      artifactRegistryRepositoryUrl
+    }
+  }
+}

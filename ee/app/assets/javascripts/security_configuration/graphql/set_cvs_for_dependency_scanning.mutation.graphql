@@ -1,0 +1,7 @@
+# @feature_category: software_composition_analysis
+mutation SetCvsForDependencyScanning($input: SetCvsForDependencyScanningInput!) {
+  setCvsForDependencyScanning(input: $input) {
+    cvsForDependencyScanningEnabled
+    errors
+  }
+}

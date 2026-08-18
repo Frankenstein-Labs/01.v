@@ -1,0 +1,10 @@
+query failedRequirements($groupPath: ID!) {
+  group(fullPath: $groupPath) {
+    id
+    complianceRequirementCoverage {
+      failed
+      passed
+      pending
+    }
+  }
+}

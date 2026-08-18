@@ -1,0 +1,12 @@
+mutation updateValueStream(
+  $id: AnalyticsCycleAnalyticsValueStreamID!
+  $name: String
+  $stages: [UpdateValueStreamStageInput!]
+) {
+  valueStreamChange: valueStreamUpdate(input: { id: $id, name: $name, stages: $stages }) {
+    valueStream {
+      id
+    }
+    errors
+  }
+}

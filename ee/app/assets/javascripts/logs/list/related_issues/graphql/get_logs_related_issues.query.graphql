@@ -1,0 +1,27 @@
+#import "ee/graphql_shared/fragments/related_issue.fragment.graphql"
+
+query getLogsRelatedIssues(
+  $projectFullPath: ID!
+  $traceId: String!
+  $fingerprint: String!
+  $severityNumber: Int!
+  $service: String!
+  $timestamp: ISO8601DateTime!
+) {
+  project(fullPath: $projectFullPath) {
+    id
+    observabilityLogsLinks(
+      timestamp: $timestamp
+      severityNumber: $severityNumber
+      serviceName: $service
+      fingerprint: $fingerprint
+      traceIdentifier: $traceId
+    ) {
+      nodes {
+        issue {
+          ...RelatedIssue
+        }
+      }
+    }
+  }
+}

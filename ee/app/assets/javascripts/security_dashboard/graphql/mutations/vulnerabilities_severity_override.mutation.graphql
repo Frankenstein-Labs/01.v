@@ -1,0 +1,15 @@
+mutation vulnerabilitiesSeverityOverride(
+  $vulnerabilityIds: [VulnerabilityID!]!
+  $severity: VulnerabilitySeverity!
+  $comment: String!
+) {
+  vulnerabilitiesSeverityOverride(
+    input: { vulnerabilityIds: $vulnerabilityIds, severity: $severity, comment: $comment }
+  ) {
+    errors
+    vulnerabilities {
+      id
+      severity
+    }
+  }
+}

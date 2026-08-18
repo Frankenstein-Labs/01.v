@@ -1,0 +1,32 @@
+# @feature_category: virtual_registry
+
+mutation containerUpstreamUpdate(
+  $id: VirtualRegistriesContainerUpstreamID!
+  $name: String!
+  $url: String!
+  $description: String
+  $username: String
+  $password: String
+  $cacheValidityHours: Int
+) {
+  updateUpstream: containerUpstreamUpdate(
+    input: {
+      id: $id
+      name: $name
+      url: $url
+      description: $description
+      username: $username
+      password: $password
+      cacheValidityHours: $cacheValidityHours
+    }
+  ) {
+    upstream {
+      id
+      name
+      url
+      description
+      cacheValidityHours
+    }
+    errors
+  }
+}

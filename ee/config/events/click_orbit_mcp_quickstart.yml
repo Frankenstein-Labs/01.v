@@ -1,0 +1,16 @@
+---
+description: User clicks the "MCP quickstart" button in the Orbit Get Started section to open the MCP configuration modal
+internal_events: true
+action: click_orbit_mcp_quickstart
+identifiers:
+- user
+- namespace
+- project
+product_group: knowledge_graph
+product_categories:
+- knowledge_graph
+milestone: '19.1'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/237283
+tiers:
+- premium
+- ultimate

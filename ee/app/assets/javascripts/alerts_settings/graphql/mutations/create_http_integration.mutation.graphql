@@ -1,0 +1,26 @@
+#import "~/alerts_settings/graphql/fragments/http_integration_item.fragment.graphql"
+
+mutation createHttpIntegrationEE(
+  $projectPath: ID!
+  $name: String!
+  $active: Boolean!
+  $type: AlertManagementIntegrationType
+  $payloadExample: JsonString
+  $payloadAttributeMappings: [AlertManagementPayloadAlertFieldInput!]
+) {
+  httpIntegrationCreate(
+    input: {
+      projectPath: $projectPath
+      name: $name
+      active: $active
+      type: $type
+      payloadExample: $payloadExample
+      payloadAttributeMappings: $payloadAttributeMappings
+    }
+  ) {
+    errors
+    integration {
+      ...HttpIntegrationItem
+    }
+  }
+}

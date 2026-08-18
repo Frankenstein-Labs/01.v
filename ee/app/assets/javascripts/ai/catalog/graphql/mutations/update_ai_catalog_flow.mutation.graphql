@@ -1,0 +1,18 @@
+# @feature_category: workflow_catalog
+#import "../fragments/ai_catalog_item.fragment.graphql"
+#import "../fragments/ai_catalog_flow_version.fragment.graphql"
+
+mutation updateAiCatalogFlow($input: AiCatalogFlowUpdateInput!) {
+  aiCatalogFlowUpdate(input: $input) {
+    errors
+    item {
+      ...BaseAiCatalogItem
+      project {
+        id
+      }
+      latestVersion {
+        ...BaseAiCatalogFlowVersion
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+<script>
+// eslint-disable-next-line no-restricted-imports
+import { mapState } from 'vuex';
+import { PROJECT_APPROVAL_SETTINGS_LABELS_I18N } from 'ee/approvals/constants';
+import ApprovalSettings from 'ee/approvals/components/approval_settings/approval_settings.vue';
+
+export default {
+  name: 'ProjectApprovalSettings',
+  components: {
+    ApprovalSettings,
+  },
+  computed: {
+    ...mapState({
+      approvalsPath: (state) => state.settings.approvalsPath,
+      canPreventMrApprovalRuleEdit: (state) => state.settings.canEdit,
+      canModifyAuthorSettings: (state) => state.settings.canModifyAuthorSettings,
+      canModifyCommiterSettings: (state) => state.settings.canModifyCommiterSettings,
+    }),
+  },
+  labels: PROJECT_APPROVAL_SETTINGS_LABELS_I18N,
+};
+</script>
+
+<template>
+  <div data-testid="merge-request-approval-settings">
+    <approval-settings
+      :approval-settings-path="approvalsPath"
+      :can-prevent-author-approval="canModifyAuthorSettings"
+      :can-prevent-committers-approval="canModifyCommiterSettings"
+      :can-prevent-mr-approval-rule-edit="canPreventMrApprovalRuleEdit"
+      :settings-labels="$options.labels"
+    />
+  </div>
+</template>

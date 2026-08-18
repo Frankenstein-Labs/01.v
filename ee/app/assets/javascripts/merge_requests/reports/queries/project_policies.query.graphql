@@ -1,0 +1,44 @@
+query getProjectPolicies($projectPath: ID!) {
+  project(fullPath: $projectPath) {
+    id
+    approvalPolicies {
+      nodes {
+        id @gl_introduced(version: "18.11.0")
+        enabled
+        name
+        description
+        yaml
+        actionApprovers {
+          allGroups {
+            id
+            webUrl
+            fullPath
+          }
+          roles
+          users {
+            id
+            webUrl
+            name
+          }
+        }
+        source {
+          ... on GroupSecurityPolicySource {
+            inherited
+            namespace {
+              id
+              name
+              webUrl
+            }
+          }
+          ... on ProjectSecurityPolicySource {
+            namespace: project {
+              id
+              name
+              webUrl
+            }
+          }
+        }
+      }
+    }
+  }
+}

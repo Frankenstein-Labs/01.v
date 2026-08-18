@@ -1,0 +1,987 @@
+import { cloneDeep } from 'lodash-es';
+import {
+  WIDGET_TYPE_HIERARCHY,
+  WIDGET_TYPE_ITERATION,
+  WIDGET_TYPE_STATUS,
+  WIDGET_TYPE_WEIGHT,
+  STATE_CLOSED,
+} from '~/work_items/constants';
+import {
+  addHierarchyChild,
+  removeHierarchyChild,
+  addHierarchyChildren,
+  setNewWorkItemCache,
+  getNewWorkItemSharedCache,
+  legacyGetNewWorkItemSharedCache,
+  updateCacheAfterCreatingNote,
+  updateCountsForParent,
+} from '~/work_items/graphql/cache_utils';
+import {
+  findHierarchyWidget,
+  findNotesWidget,
+  getWorkItemWidgets,
+  getNewWorkItemWidgetsAutoSaveKey,
+} from '~/work_items/utils';
+import getWorkItemTreeQuery from '~/work_items/graphql/work_item_tree.query.graphql';
+import workItemByIdQuery from '~/work_items/graphql/work_item_by_id.query.graphql';
+import workItemLinkedItemsSlimQuery from '~/work_items/graphql/work_items_linked_items_slim.query.graphql';
+import waitForPromises from 'helpers/wait_for_promises';
+import { apolloProvider } from '~/graphql_shared/issuable_client';
+import {
+  linkedItems,
+  currentAssignees,
+  appliedLabels,
+} from '~/graphql_shared/issuable_client_state';
+
+import {
+  workItemResponseFactory,
+  childrenWorkItems,
+  createWorkItemNoteResponse,
+  mockWorkItemNotesByIidResponse,
+  mockCreateWorkItemDraftData,
+  mockNewWorkItemCache,
+  restoredDraftDataWidgets,
+  restoredDraftDataWidgetsEmpty,
+  mockAssignees,
+  mockLabels,
+  mockWorkItemFeaturesData,
+} from 'ee_else_ce_jest/work_items/mock_data';
+
+describe('work items graphql cache utils', () => {
+  const originalFeatures = window.gon.features;
+  const id = 'gid://gitlab/WorkItem/10';
+  const existingChild = { id: 'gid://gitlab/WorkItem/20', title: 'Child' };
+
+  const widgetsCacheData = {
+    workItem: {
+      id: 'gid://gitlab/WorkItem/10',
+      title: 'Work item',
+      widgets: [
+        {
+          type: WIDGET_TYPE_HIERARCHY,
+          hasChildren: true,
+          count: 1,
+          children: { nodes: [existingChild] },
+        },
+      ],
+    },
+  };
+
+  const featuresCacheData = {
+    workItem: {
+      id: 'gid://gitlab/WorkItem/10',
+      title: 'Work item',
+      features: {
+        hierarchy: {
+          hasChildren: true,
+          count: 1,
+          children: { nodes: [existingChild] },
+        },
+      },
+      widgets: [],
+    },
+  };
+
+  const readHierarchy = (data) =>
+    data.workItem.features?.hierarchy ??
+    data.workItem.widgets.find((w) => w.type === WIDGET_TYPE_HIERARCHY);
+
+  beforeEach(() => {
+    window.gon.features = {};
+  });
+
+  afterAll(() => {
+    window.gon.features = originalFeatures;
+  });
+
+  describe.each`
+    state         | flagEnabled | cacheData
+    ${'disabled'} | ${false}    | ${widgetsCacheData}
+    ${'enabled'}  | ${true}     | ${featuresCacheData}
+  `('addHierarchyChild when workItemFeaturesField is $state', ({ flagEnabled, cacheData }) => {
+    beforeEach(() => {
+      window.gon.features = { workItemFeaturesField: flagEnabled };
+    });
+
+    it('reads and writes the tree query with the correct variables', () => {
+      const mockCache = {
+        readQuery: jest.fn(() => cacheData),
+        writeQuery: jest.fn(),
+      };
+      const child = { id: 'gid://gitlab/WorkItem/30', title: 'New child' };
+      const expectedVariables = { id, useWorkItemFeatures: flagEnabled };
+
+      addHierarchyChild({ cache: mockCache, id, workItem: child });
+
+      expect(mockCache.readQuery).toHaveBeenCalledWith({
+        query: getWorkItemTreeQuery,
+        variables: expectedVariables,
+      });
+      const writeCall = mockCache.writeQuery.mock.calls[0][0];
+      expect(writeCall.variables).toEqual(expectedVariables);
+      const hierarchy = readHierarchy(writeCall.data);
+      expect(hierarchy.hasChildren).toBe(true);
+      expect(hierarchy.count).toBe(2);
+      expect(hierarchy.children.nodes).toEqual([child, existingChild]);
+    });
+
+    it('does not update the work item when there is no cache data', () => {
+      const mockCache = {
+        readQuery: () => {},
+        writeQuery: jest.fn(),
+      };
+
+      addHierarchyChild({
+        cache: mockCache,
+        id,
+        workItem: { id: 'gid://gitlab/WorkItem/30', title: 'New child' },
+      });
+
+      expect(mockCache.writeQuery).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('addHierarchyChildren', () => {
+    const existingHierarchy = {
+      __typename: 'WorkItemWidgetHierarchy',
+      type: 'HIERARCHY',
+      children: {
+        nodes: [{ __typename: 'WorkItem', id: 'gid://gitlab/WorkItem/99', state: 'OPEN' }],
+      },
+      count: 1,
+      hasChildren: true,
+    };
+
+    const callModify = () => {
+      const mockCache = {
+        identify: jest.fn().mockReturnValue(`WorkItem:${id}`),
+        modify: jest.fn(),
+      };
+      addHierarchyChildren({
+        cache: mockCache,
+        id,
+        newChildren: [childrenWorkItems[1], childrenWorkItems[0]],
+      });
+      return mockCache.modify.mock.calls[0][0].fields;
+    };
+
+    const expectMergedChildren = (hierarchy) => {
+      expect(hierarchy).toEqual(
+        expect.objectContaining({
+          __typename: 'WorkItemWidgetHierarchy',
+          children: expect.objectContaining({
+            nodes: expect.arrayContaining([
+              expect.objectContaining({ id: childrenWorkItems[0].id }),
+              expect.objectContaining({ id: 'gid://gitlab/WorkItem/99' }),
+              expect.objectContaining({ id: childrenWorkItems[1].id }),
+            ]),
+          }),
+          hasChildren: true,
+          count: 3,
+        }),
+      );
+
+      // open children come before closed ones
+      const openIndex = hierarchy.children.nodes.findIndex((n) => n.state !== STATE_CLOSED);
+      const closedIndex = hierarchy.children.nodes.findIndex((n) => n.state === STATE_CLOSED);
+      if (closedIndex !== -1) expect(openIndex).toBeLessThan(closedIndex);
+    };
+
+    it('merges new children into the hierarchy widget on the widgets[] path', () => {
+      const fields = callModify();
+      const result = fields.widgets([existingHierarchy]);
+
+      expectMergedChildren(result.find((w) => w.type === 'HIERARCHY'));
+    });
+
+    it('merges new children into the hierarchy on the features path', () => {
+      const fields = callModify();
+      const result = fields.features({
+        __typename: 'WorkItemFeatures',
+        hierarchy: existingHierarchy,
+      });
+
+      expectMergedChildren(result.hierarchy);
+    });
+
+    it('passes features through unchanged when features.hierarchy is absent', () => {
+      const fields = callModify();
+      const existingFeatures = { __typename: 'WorkItemFeatures' };
+
+      expect(fields.features(existingFeatures)).toBe(existingFeatures);
+    });
+
+    it('does not update the work item when there is no cache data', () => {
+      const mockCache = {
+        identify: jest.fn().mockReturnValue(undefined), // simulate missing cache entity
+        modify: jest.fn(),
+      };
+
+      // Should not throw
+      expect(() =>
+        addHierarchyChildren({
+          cache: mockCache,
+          id,
+          newChildren: [childrenWorkItems[1], childrenWorkItems[0]],
+        }),
+      ).not.toThrow();
+
+      // Should not modify cache at all
+      expect(mockCache.modify).not.toHaveBeenCalled();
+    });
+  });
+
+  describe.each`
+    state         | flagEnabled | cacheData
+    ${'disabled'} | ${false}    | ${widgetsCacheData}
+    ${'enabled'}  | ${true}     | ${featuresCacheData}
+  `('removeHierarchyChild when workItemFeaturesField is $state', ({ flagEnabled, cacheData }) => {
+    beforeEach(() => {
+      window.gon.features = { workItemFeaturesField: flagEnabled };
+    });
+
+    it('reads and writes the tree query with the correct variables', () => {
+      const mockCache = {
+        readQuery: jest.fn(() => cacheData),
+        writeQuery: jest.fn(),
+      };
+      const expectedVariables = { id, useWorkItemFeatures: flagEnabled };
+
+      removeHierarchyChild({ cache: mockCache, id, workItem: existingChild });
+
+      expect(mockCache.readQuery).toHaveBeenCalledWith({
+        query: getWorkItemTreeQuery,
+        variables: expectedVariables,
+      });
+      const writeCall = mockCache.writeQuery.mock.calls[0][0];
+      expect(writeCall.variables).toEqual(expectedVariables);
+      const hierarchy = readHierarchy(writeCall.data);
+      expect(hierarchy.hasChildren).toBe(false);
+      expect(hierarchy.count).toBe(0);
+      expect(hierarchy.children.nodes).toEqual([]);
+    });
+
+    it('does not update the work item when there is no cache data', () => {
+      const mockCache = {
+        readQuery: () => {},
+        writeQuery: jest.fn(),
+      };
+
+      removeHierarchyChild({ cache: mockCache, id, workItem: existingChild });
+
+      expect(mockCache.writeQuery).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('setNewWorkItemCache', () => {
+    let originalWindowLocation;
+    let mockWriteQuery;
+
+    beforeEach(() => {
+      originalWindowLocation = window.location;
+      delete window.location;
+      window.location = new URL('https://gitlab.example.com');
+      window.gon.current_user_id = 1;
+
+      mockWriteQuery = jest.fn();
+      apolloProvider.clients.defaultClient.cache.writeQuery = mockWriteQuery;
+
+      localStorage.setItem(
+        `autosave/new-gitlab-org-list-route-epic-draft`,
+        JSON.stringify(mockCreateWorkItemDraftData),
+      );
+
+      localStorage.setItem(
+        `autosave/new-gitlab-org-list-route-widgets-draft`,
+        JSON.stringify(getWorkItemWidgets(mockCreateWorkItemDraftData)),
+      );
+    });
+
+    afterEach(() => {
+      window.location = originalWindowLocation;
+    });
+
+    it('updates cache from localstorage to save cache data', async () => {
+      window.location.search = '';
+      await setNewWorkItemCache(mockNewWorkItemCache);
+      await waitForPromises();
+
+      expect(mockWriteQuery).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            namespace: expect.objectContaining({
+              workItem: expect.objectContaining({
+                title: mockCreateWorkItemDraftData.namespace.workItem.title,
+                widgets: expect.arrayContaining(restoredDraftDataWidgets),
+              }),
+            }),
+          }),
+        }),
+      );
+    });
+
+    it.each`
+      description                         | locationSearchString          | expectedTitle                                           | expectedWidgets
+      ${'restores cache with empty form'} | ${'?vulnerability_id=1'}      | ${''}                                                   | ${restoredDraftDataWidgetsEmpty}
+      ${'restores cache with empty form'} | ${'?discussion_to_resolve=1'} | ${''}                                                   | ${restoredDraftDataWidgetsEmpty}
+      ${'restores cache with draft'}      | ${'?type=ISSUE'}              | ${mockCreateWorkItemDraftData.namespace.workItem.title} | ${restoredDraftDataWidgets}
+    `(
+      '$description when URL params include $locationSearchString',
+      async ({ locationSearchString, expectedTitle, expectedWidgets }) => {
+        window.location.search = locationSearchString;
+        await setNewWorkItemCache(mockNewWorkItemCache);
+        await waitForPromises();
+
+        expect(mockWriteQuery).toHaveBeenCalledWith(
+          expect.objectContaining({
+            data: expect.objectContaining({
+              namespace: expect.objectContaining({
+                workItem: expect.objectContaining({
+                  title: expectedTitle,
+                  widgets: expect.arrayContaining(expectedWidgets),
+                }),
+              }),
+            }),
+          }),
+        );
+      },
+    );
+  });
+
+  describe('statuses for getNewWorkItemSharedCache', () => {
+    const fullPath = 'gitlab-org';
+    const context = 'list-route';
+
+    const allowedStatus1 = {
+      id: 'gid://gitlab/WorkItems::Statuses::SystemDefined::Status/1',
+      category: 'to_do',
+      name: 'To do',
+      iconName: 'status-waiting',
+      color: '#737278',
+      __typename: 'WorkItemStatus',
+    };
+    const allowedStatus2 = {
+      id: 'gid://gitlab/WorkItems::Statuses::SystemDefined::Status/2',
+      category: 'in_progress',
+      name: 'In progress',
+      iconName: 'status-running',
+      color: '#1f75cb',
+      __typename: 'WorkItemStatus',
+    };
+    const disallowedStatus = {
+      id: 'gid://gitlab/WorkItems::Statuses::SystemDefined::Status/99',
+      category: 'done',
+      name: 'Done',
+      iconName: 'status-success',
+      color: '#108548',
+      __typename: 'WorkItemStatus',
+    };
+
+    const buildWidgetDefinitions = (overrides = {}) => [
+      {
+        __typename: 'WorkItemWidgetDefinitionStatus',
+        type: WIDGET_TYPE_STATUS,
+        allowedStatuses: [allowedStatus1, allowedStatus2],
+        defaultOpenStatus: allowedStatus1,
+        ...overrides,
+      },
+    ];
+
+    const callGetNewWorkItemSharedCache = (widgetDefinitions) =>
+      getNewWorkItemSharedCache({
+        fullPath,
+        context,
+        workItemType: 'Issue',
+        relatedItemId: null,
+        isValidWorkItemDescription: false,
+        workItemDescription: '',
+        widgetDefinitions,
+      });
+
+    const setCachedStatus = (status) => {
+      const widgetsKey = `autosave/${getNewWorkItemWidgetsAutoSaveKey({ fullPath, context, relatedItemId: null })}`;
+      localStorage.setItem(widgetsKey, JSON.stringify({ [WIDGET_TYPE_STATUS]: { status } }));
+    };
+
+    beforeEach(() => {
+      localStorage.clear();
+    });
+
+    it('uses defaultOpenStatus when there is no cached status', () => {
+      const { features } = callGetNewWorkItemSharedCache(buildWidgetDefinitions());
+
+      expect(features.status.status).toEqual(allowedStatus1);
+    });
+
+    it('uses cached status when it exists in allowedStatuses', () => {
+      setCachedStatus(allowedStatus2);
+
+      const { features } = callGetNewWorkItemSharedCache(buildWidgetDefinitions());
+
+      expect(features.status.status).toEqual(allowedStatus2);
+    });
+
+    it('falls back to defaultOpenStatus when cached status is not in allowedStatuses', () => {
+      setCachedStatus(disallowedStatus);
+
+      const { features } = callGetNewWorkItemSharedCache(buildWidgetDefinitions());
+
+      expect(features.status.status).toEqual(allowedStatus1);
+    });
+
+    // Regression guard for https://gitlab.com/gitlab-org/gitlab/-/work_items/598491:
+    // every field the `WorkItemFeatures` fragment selects must be seeded here, otherwise Apollo
+    // throws "Missing field 'X' while writing result" when the create form loads with the
+    // `work_item_features_field` flag on. Keep this list in sync with the fragment.
+    it('seeds every feature key required by the WorkItemFeatures fragment', () => {
+      const { features } = callGetNewWorkItemSharedCache(buildWidgetDefinitions());
+
+      expect(Object.keys(features).sort()).toEqual(
+        [
+          'agentPlan',
+          'assignees',
+          'awardEmoji',
+          'color',
+          'crmContacts',
+          'currentUserTodos',
+          'customFields',
+          'description',
+          'development',
+          'errorTracking',
+          'healthStatus',
+          'hierarchy',
+          'iteration',
+          'labels',
+          'linkedItems',
+          'linkedResources',
+          'milestone',
+          'notes',
+          'notifications',
+          'participants',
+          'progress',
+          'startAndDueDate',
+          'status',
+          'timeTracking',
+          'weight',
+        ].sort(),
+      );
+    });
+
+    // These fragment-required fields are not sourced from the widget definition and were the
+    // repeated cause of the "Missing field" errors, so assert they are always present.
+    it('seeds fragment fields that are not derived from the widget definition', () => {
+      const { features } = callGetNewWorkItemSharedCache(buildWidgetDefinitions());
+
+      expect(features.hierarchy.type).toBe(WIDGET_TYPE_HIERARCHY);
+      expect(features.labels.allowsScopedLabels).toBeDefined();
+      expect(features.assignees.allowsMultipleAssignees).toBeDefined();
+      expect(features.assignees.canInviteMembers).toBeDefined();
+      expect(features.weight.rolledUpWeight).toBeNull();
+      expect(features.weight.rolledUpCompletedWeight).toBeNull();
+      expect(features.healthStatus.rolledUpHealthStatus).toBeNull();
+      expect(features.customFields.customFieldValues).toBeDefined();
+    });
+  });
+
+  // Regression guard for https://gitlab.com/gitlab-org/gitlab/-/work_items/608244
+  // An empty feature object is truthy, so the create form renders it as an empty Status dropdown.
+  describe('unsupported attributes for getNewWorkItemSharedCache', () => {
+    const fullPath = 'gitlab-org';
+    const context = 'list-route';
+
+    const callForSupportedWidgetTypes = (supportedWidgetTypes) =>
+      getNewWorkItemSharedCache({
+        workItemAttributesWrapperOrder: [
+          WIDGET_TYPE_STATUS,
+          WIDGET_TYPE_ITERATION,
+          WIDGET_TYPE_WEIGHT,
+        ],
+        fullPath,
+        context,
+        workItemType: 'Epic',
+        relatedItemId: null,
+        isValidWorkItemDescription: false,
+        workItemDescription: '',
+        widgetDefinitions: supportedWidgetTypes.map((type) => ({ type })),
+      });
+
+    beforeEach(() => {
+      localStorage.clear();
+    });
+
+    it('nulls the attributes the work item type does not support', () => {
+      const { features } = callForSupportedWidgetTypes([WIDGET_TYPE_WEIGHT]);
+
+      expect(features.status).toBeNull();
+      expect(features.iteration).toBeNull();
+    });
+
+    it('keeps the attributes the work item type supports', () => {
+      const { features } = callForSupportedWidgetTypes([WIDGET_TYPE_WEIGHT]);
+
+      expect(features.weight).toMatchObject({
+        __typename: 'WorkItemWidgetWeight',
+        weight: null,
+      });
+    });
+
+    // Nulled rather than removed, or Apollo throws "Missing field 'X' while writing result".
+    it('keeps every feature key present so the WorkItemFeatures selection set stays satisfied', () => {
+      const { features } = callForSupportedWidgetTypes([WIDGET_TYPE_WEIGHT]);
+
+      expect(Object.keys(features)).toEqual(expect.arrayContaining(['status', 'iteration']));
+    });
+  });
+
+  describe('statuses for legacyGetNewWorkItemSharedCache', () => {
+    const fullPath = 'gitlab-org';
+    const context = 'list-route';
+
+    const allowedStatus1 = {
+      id: 'gid://gitlab/WorkItems::Statuses::SystemDefined::Status/1',
+      category: 'to_do',
+      name: 'To do',
+      iconName: 'status-waiting',
+      color: '#737278',
+      __typename: 'WorkItemStatus',
+    };
+    const allowedStatus2 = {
+      id: 'gid://gitlab/WorkItems::Statuses::SystemDefined::Status/2',
+      category: 'in_progress',
+      name: 'In progress',
+      iconName: 'status-running',
+      color: '#1f75cb',
+      __typename: 'WorkItemStatus',
+    };
+    const disallowedStatus = {
+      id: 'gid://gitlab/WorkItems::Statuses::SystemDefined::Status/99',
+      category: 'done',
+      name: 'Done',
+      iconName: 'status-success',
+      color: '#108548',
+      __typename: 'WorkItemStatus',
+    };
+
+    const widgetDefinitions = [
+      {
+        __typename: 'WorkItemWidgetDefinitionStatus',
+        type: WIDGET_TYPE_STATUS,
+        allowedStatuses: [allowedStatus1, allowedStatus2],
+        defaultOpenStatus: allowedStatus1,
+      },
+    ];
+
+    const setCachedStatus = (status) => {
+      const widgetsKey = `autosave/${getNewWorkItemWidgetsAutoSaveKey({ fullPath, context, relatedItemId: null })}`;
+      localStorage.setItem(widgetsKey, JSON.stringify({ [WIDGET_TYPE_STATUS]: { status } }));
+    };
+
+    const buildLegacyCache = () =>
+      legacyGetNewWorkItemSharedCache({
+        workItemAttributesWrapperOrder: [WIDGET_TYPE_STATUS],
+        widgetDefinitions,
+        fullPath,
+        context,
+        workItemType: 'Issue',
+        relatedItemId: null,
+        isValidWorkItemDescription: false,
+        workItemDescription: '',
+      });
+
+    const findStatusWidget = (widgets) => widgets.find((w) => w.type === WIDGET_TYPE_STATUS);
+
+    beforeEach(() => {
+      localStorage.clear();
+    });
+
+    it('uses defaultOpenStatus when there is no cached status', () => {
+      const { widgets } = buildLegacyCache();
+
+      expect(findStatusWidget(widgets).status).toEqual(allowedStatus1);
+    });
+
+    it('uses cached status when it exists in allowedStatuses', () => {
+      setCachedStatus(allowedStatus2);
+
+      const { widgets } = buildLegacyCache();
+
+      expect(findStatusWidget(widgets).status).toEqual(allowedStatus2);
+    });
+
+    it('falls back to defaultOpenStatus when cached status is not in allowedStatuses', () => {
+      setCachedStatus(disallowedStatus);
+
+      const { widgets } = buildLegacyCache();
+
+      expect(findStatusWidget(widgets).status).toEqual(allowedStatus1);
+    });
+  });
+
+  describe('updateCacheAfterCreatingNote', () => {
+    const findDiscussions = ({ namespace }) =>
+      findNotesWidget(namespace.workItem).discussions.nodes;
+
+    it('adds a new discussion to the notes widget', () => {
+      const currentNotes = mockWorkItemNotesByIidResponse.data;
+      const newNote = createWorkItemNoteResponse().data.createNote.note;
+
+      expect(findDiscussions(currentNotes)).toHaveLength(3);
+
+      const updatedNotes = updateCacheAfterCreatingNote(currentNotes, newNote);
+
+      expect(findDiscussions(updatedNotes)).toHaveLength(4);
+      expect(findDiscussions(updatedNotes).at(-1)).toBe(newNote.discussion);
+    });
+
+    it('adds a new discussion at the top when prepend is true', () => {
+      const currentNotes = mockWorkItemNotesByIidResponse.data;
+      const newNote = createWorkItemNoteResponse().data.createNote.note;
+
+      expect(findDiscussions(currentNotes)).toHaveLength(3);
+
+      const updatedNotes = updateCacheAfterCreatingNote(currentNotes, newNote, { prepend: true });
+
+      expect(findDiscussions(updatedNotes)).toHaveLength(4);
+      expect(findDiscussions(updatedNotes).at(0)).toBe(newNote.discussion);
+    });
+
+    it('does not modify notes widget when newNote is undefined', () => {
+      const currentNotes = mockWorkItemNotesByIidResponse.data;
+      const newNote = undefined;
+
+      expect(findDiscussions(currentNotes)).toHaveLength(3);
+
+      const updatedNotes = updateCacheAfterCreatingNote(currentNotes, newNote);
+
+      expect(findDiscussions(updatedNotes)).toHaveLength(3);
+    });
+
+    it('does not add duplicate discussions', () => {
+      const currentNotes = cloneDeep(mockWorkItemNotesByIidResponse.data);
+      const newNote = createWorkItemNoteResponse().data.createNote.note;
+      findDiscussions(currentNotes).push(newNote.discussion);
+
+      expect(findDiscussions(currentNotes)).toHaveLength(4);
+
+      const updatedNotes = updateCacheAfterCreatingNote(currentNotes, newNote);
+
+      expect(findDiscussions(updatedNotes)).toHaveLength(4);
+    });
+  });
+
+  describe('updateCountsForParent', () => {
+    const mockWorkItemData = workItemResponseFactory();
+    const mockCache = {
+      readQuery: () => mockWorkItemData.data,
+      writeQuery: jest.fn(),
+    };
+    const workItemType = 'Task';
+
+    const getCounts = (data) =>
+      findHierarchyWidget(data.workItem).rolledUpCountsByType.find(
+        (i) => i.workItemType.name === workItemType,
+      );
+
+    it('updates the cache with new parent data', () => {
+      const updatedParent = updateCountsForParent({
+        cache: mockCache,
+        parentId: mockWorkItemData.data.workItem.id,
+        workItemType,
+        isClosing: true,
+      });
+
+      expect(mockCache.writeQuery).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: updatedParent,
+        }),
+      );
+    });
+
+    it('increases closed count and decreases opened count when closing', () => {
+      const updatedParent = updateCountsForParent({
+        cache: mockCache,
+        parentId: mockWorkItemData.data.workItem.id,
+        workItemType,
+        isClosing: true,
+      });
+
+      const oldCounts = getCounts(mockWorkItemData.data);
+      const newCounts = getCounts(updatedParent);
+
+      expect(newCounts.countsByState.opened).toBeLessThan(oldCounts.countsByState.opened);
+      expect(newCounts.countsByState.closed).toBeGreaterThan(oldCounts.countsByState.closed);
+    });
+
+    it('decreases closed count and increases opened count when reopening', () => {
+      const updatedParent = updateCountsForParent({
+        cache: mockCache,
+        parentId: mockWorkItemData.data.workItem.id,
+        workItemType,
+        isClosing: false,
+      });
+
+      const oldCounts = getCounts(mockWorkItemData.data);
+      const newCounts = getCounts(updatedParent);
+
+      expect(newCounts.countsByState.opened).toBeGreaterThan(oldCounts.countsByState.opened);
+      expect(newCounts.countsByState.closed).toBeLessThan(oldCounts.countsByState.closed);
+    });
+  });
+
+  describe('linkedItems reactive variable in widgets merge', () => {
+    const fullPath = 'gitlab-org';
+    const iid = '1';
+    const { cache } = apolloProvider.clients.defaultClient;
+    const originalWriteQuery = cache.writeQuery.bind(cache);
+    const originalExtract = cache.extract.bind(cache);
+    const key = `${fullPath}:${iid}`;
+
+    const mockLinkedItem = (itemId) => ({
+      __typename: 'LinkedWorkItemType',
+      linkId: `gid://gitlab/WorkItems::RelatedWorkItemLink/${itemId}`,
+      linkType: 'relates_to',
+      workItemState: 'OPEN',
+      workItem: {
+        __typename: 'WorkItem',
+        id: `gid://gitlab/WorkItem/${itemId}`,
+        iid: `${itemId}`,
+        confidential: false,
+        namespace: { __typename: 'Namespace', id: 'gid://gitlab/Group/1', fullPath },
+        workItemType: {
+          __typename: 'WorkItemType',
+          id: 'gid://gitlab/WorkItems::Type/8',
+          name: 'Epic',
+          iconName: 'work-item-epic',
+        },
+        title: `Item ${itemId}`,
+        titleHtml: `Item ${itemId}`,
+        state: 'OPEN',
+        createdAt: '2025-01-01T00:00:00Z',
+        closedAt: null,
+        webUrl: `https://example.com/${itemId}`,
+        reference: `${fullPath}#${itemId}`,
+      },
+    });
+
+    const write = (nodes) => {
+      cache.writeQuery({
+        query: workItemLinkedItemsSlimQuery,
+        variables: { fullPath, iid },
+        data: {
+          namespace: {
+            __typename: 'Namespace',
+            id: 'gid://gitlab/Group/1',
+            workItem: {
+              __typename: 'WorkItem',
+              id: 'gid://gitlab/WorkItem/1',
+              widgets: [
+                {
+                  __typename: 'WorkItemWidgetLinkedItems',
+                  type: 'LINKED_ITEMS',
+                  blockedByCount: 0,
+                  blockingCount: 0,
+                  linkedItems: { __typename: 'LinkedWorkItemTypeConnection', nodes },
+                },
+              ],
+            },
+          },
+        },
+      });
+    };
+
+    // `setNewWorkItemCache` tests replace cache.writeQuery with a mock,
+    // so we restore the original to ensure write() works correctly.
+    beforeEach(() => {
+      cache.writeQuery = originalWriteQuery;
+      cache.restore({});
+      linkedItems({});
+    });
+
+    it.each`
+      description                                                                   | writeNodes                                        | evictKey                               | expectedItems
+      ${'populates linkedItems with resolvable items when some are not yet cached'} | ${() => [mockLinkedItem(10), mockLinkedItem(99)]} | ${'WorkItem:gid://gitlab/WorkItem/99'} | ${[{ iid: '10', title: 'Item 10' }]}
+      ${'skips items not yet resolvable in cache without silently failing'}         | ${() => [mockLinkedItem(10)]}                     | ${'WorkItem:gid://gitlab/WorkItem/10'} | ${[]}
+    `('$description', ({ writeNodes, evictKey, expectedItems }) => {
+      write([mockLinkedItem(10)]);
+
+      const spy = jest.spyOn(cache, 'extract');
+      spy.mockImplementation(() => {
+        const data = originalExtract();
+        delete data[evictKey];
+        return data;
+      });
+
+      try {
+        expect(() => write(writeNodes())).not.toThrow();
+      } finally {
+        spy.mockRestore();
+      }
+
+      expect(linkedItems()[key]).toMatchObject(expectedItems);
+    });
+  });
+
+  describe('reactive variables populated from widgets and features merges', () => {
+    const fullPath = 'gitlab-org';
+    const iid = '1';
+    const workItemId = 'gid://gitlab/WorkItem/1';
+    const { cache } = apolloProvider.clients.defaultClient;
+    const originalWriteQuery = cache.writeQuery.bind(cache);
+
+    // On the widgets path the factory already provides mockAssignees/mockLabels; on the
+    // features path we overlay the same nodes so both paths assert an identical result.
+    const writeWorkItem = (useWorkItemFeatures) => {
+      const featureDefaults = mockWorkItemFeaturesData();
+      const { data } = workItemResponseFactory({
+        id: workItemId,
+        features: useWorkItemFeatures
+          ? {
+              assignees: {
+                ...featureDefaults.assignees,
+                assignees: { __typename: 'UserCoreConnection', nodes: mockAssignees },
+              },
+              labels: {
+                ...featureDefaults.labels,
+                labels: { __typename: 'LabelConnection', nodes: mockLabels },
+              },
+            }
+          : null,
+      });
+
+      cache.writeQuery({
+        query: workItemByIdQuery,
+        variables: { id: workItemId, useWorkItemFeatures },
+        data,
+      });
+    };
+
+    const linkedItemNode = {
+      __typename: 'LinkedWorkItemType',
+      linkId: 'gid://gitlab/WorkItems::RelatedWorkItemLink/1',
+      linkType: 'relates_to',
+      workItemState: 'OPEN',
+      workItem: {
+        __typename: 'WorkItem',
+        id: 'gid://gitlab/WorkItem/10',
+        iid: '10',
+        confidential: false,
+        namespace: { __typename: 'Namespace', id: 'gid://gitlab/Group/1', fullPath },
+        workItemType: {
+          __typename: 'WorkItemType',
+          id: 'gid://gitlab/WorkItems::Type/8',
+          name: 'Epic',
+          iconName: 'work-item-epic',
+        },
+        title: 'Item 10',
+        titleHtml: 'Item 10',
+        state: 'OPEN',
+        createdAt: '2025-01-01T00:00:00Z',
+        closedAt: null,
+        webUrl: 'https://example.com/10',
+        reference: `${fullPath}#10`,
+      },
+    };
+
+    const writeLinkedItems = (useWorkItemFeatures) => {
+      const widget = {
+        __typename: 'WorkItemWidgetLinkedItems',
+        type: 'LINKED_ITEMS',
+        blockedByCount: 0,
+        blockingCount: 0,
+        linkedItems: { __typename: 'LinkedWorkItemTypeConnection', nodes: [linkedItemNode] },
+      };
+
+      cache.writeQuery({
+        query: workItemLinkedItemsSlimQuery,
+        variables: { fullPath, iid, useWorkItemFeatures },
+        data: {
+          namespace: {
+            __typename: 'Namespace',
+            id: 'gid://gitlab/Group/1',
+            workItem: {
+              __typename: 'WorkItem',
+              id: workItemId,
+              ...(useWorkItemFeatures
+                ? {
+                    features: {
+                      __typename: 'WorkItemFeatures',
+                      linkedItems: { ...widget, type: undefined },
+                    },
+                  }
+                : { widgets: [widget] }),
+            },
+          },
+        },
+      });
+    };
+
+    // Restore the real writeQuery, which `setNewWorkItemCache` tests replace with a mock.
+    beforeEach(() => {
+      cache.writeQuery = originalWriteQuery;
+      cache.restore({});
+      currentAssignees({});
+      appliedLabels({});
+      linkedItems({});
+    });
+
+    describe.each`
+      path          | useWorkItemFeatures
+      ${'widgets'}  | ${false}
+      ${'features'} | ${true}
+    `('when a work item is written via the $path shape', ({ useWorkItemFeatures }) => {
+      beforeEach(() => {
+        // Write twice: the widgets merge returns `incoming` early on the first (empty) write.
+        writeWorkItem(useWorkItemFeatures);
+        writeWorkItem(useWorkItemFeatures);
+        writeLinkedItems(useWorkItemFeatures);
+        writeLinkedItems(useWorkItemFeatures);
+      });
+
+      it('populates the currentAssignees reactive variable', () => {
+        expect(currentAssignees()[workItemId]).toMatchObject(
+          mockAssignees.map(({ username, avatarUrl }) => ({ username, avatar_url: avatarUrl })),
+        );
+      });
+
+      it('populates the appliedLabels reactive variable', () => {
+        expect(appliedLabels()[workItemId]).toMatchObject(
+          mockLabels.map(({ title }) => ({ title })),
+        );
+      });
+
+      it('populates the linkedItems reactive variable', () => {
+        expect(linkedItems()[`${fullPath}:${iid}`]).toMatchObject([
+          { iid: '10', title: 'Item 10' },
+        ]);
+      });
+    });
+
+    describe('when an assignee ref is not yet resolvable in the cache', () => {
+      const originalExtract = cache.extract.bind(cache);
+      const [missingAssignee, resolvableAssignee] = mockAssignees;
+
+      beforeEach(() => {
+        // Populate the cache, then evict one assignee so it is missing during extraction.
+        writeWorkItem(true);
+
+        jest.spyOn(cache, 'extract').mockImplementation(() => {
+          const data = originalExtract();
+          delete data[`UserCore:${missingAssignee.id}`];
+          return data;
+        });
+      });
+
+      afterEach(() => {
+        cache.extract.mockRestore();
+      });
+
+      it('skips the unresolved assignee instead of throwing', () => {
+        expect(() => writeWorkItem(true)).not.toThrow();
+
+        expect(currentAssignees()[workItemId]).toMatchObject([
+          { username: resolvableAssignee.username },
+        ]);
+      });
+    });
+  });
+});

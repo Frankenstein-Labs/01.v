@@ -1,0 +1,23 @@
+# @feature_category: compliance_management
+
+mutation setMcpServerBlock(
+  $id: AiCatalogMcpServerID!
+  $groupFullPath: ID
+  $projectFullPath: ID
+  $blocked: Boolean!
+) {
+  aiCatalogMcpServerSetBlock(
+    input: {
+      id: $id
+      groupFullPath: $groupFullPath
+      projectFullPath: $projectFullPath
+      blocked: $blocked
+    }
+  ) {
+    errors
+    mcpServer {
+      id
+      blockStatus(groupFullPath: $groupFullPath, projectFullPath: $projectFullPath)
+    }
+  }
+}

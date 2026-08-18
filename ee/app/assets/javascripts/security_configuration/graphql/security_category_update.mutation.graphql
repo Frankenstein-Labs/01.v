@@ -1,0 +1,18 @@
+mutation updateSecurityCategory(
+  $id: SecurityCategoryID!
+  $namespaceId: NamespaceID!
+  $name: String!
+  $description: String
+) {
+  securityCategoryUpdate(
+    input: { id: $id, namespaceId: $namespaceId, name: $name, description: $description }
+  ) {
+    securityCategory {
+      id
+      name
+      description
+      multipleSelection
+    }
+    errors
+  }
+}

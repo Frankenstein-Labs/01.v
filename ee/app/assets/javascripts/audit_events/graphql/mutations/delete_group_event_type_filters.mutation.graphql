@@ -1,0 +1,10 @@
+mutation DeleteEventTypesFromGroupDestination(
+  $destinationId: AuditEventsGroupExternalStreamingDestinationID!
+  $eventTypeFilters: [String!]!
+) {
+  auditEventsGroupDestinationEventsDelete(
+    input: { destinationId: $destinationId, eventTypeFilters: $eventTypeFilters }
+  ) {
+    errors
+  }
+}

@@ -1,0 +1,6 @@
+fragment SuperSideBarCount on NamespaceSidebar {
+  openIssuesCount
+  openMergeRequestsCount
+  openEpicsCount
+  openWorkItemsCount
+}

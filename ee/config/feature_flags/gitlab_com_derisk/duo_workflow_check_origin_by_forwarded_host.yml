@@ -1,0 +1,10 @@
+---
+name: duo_workflow_check_origin_by_forwarded_host
+description: 'Use X-Forwarded-Host for WebSocket origin check in Duo Workflow to fix compatibility with the HTTP Router'
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/573457
+introduced_by_url: 'https://gitlab.com/gitlab-org/gitlab/-/merge_requests/240732'
+rollout_issue_url: 'https://gitlab.com/gitlab-org/gitlab/-/work_items/603094'
+milestone: '19.3'
+group: group::ai core infra
+type: gitlab_com_derisk
+default_enabled: false

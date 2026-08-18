@@ -1,0 +1,13 @@
+query getTasksByTypeLabels($fullPath: ID!, $searchTerm: String) {
+  group(fullPath: $fullPath) {
+    id
+    labels(searchTerm: $searchTerm, onlyGroupLabels: true, includeAncestorGroups: true) {
+      nodes {
+        id
+        title
+        color
+        textColor
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+# @feature_category: continuous_delivery
+
+query cdApplications($search: String, $statuses: [CdApplicationStatus!]) {
+  organization {
+    id
+    cdApplications(search: $search, statuses: $statuses) {
+      nodes {
+        id
+        description
+        lastDeployedAt
+        name
+        services {
+          count
+        }
+        status
+      }
+    }
+  }
+}

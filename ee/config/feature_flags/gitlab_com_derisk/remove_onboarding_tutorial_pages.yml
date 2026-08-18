@@ -1,0 +1,10 @@
+---
+name: remove_onboarding_tutorial_pages
+description: Redirects new signups to the project overview instead of tutorial pages
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/599757
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/239039
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/599757
+milestone: '19.1'
+group: group::activation
+type: gitlab_com_derisk
+default_enabled: false

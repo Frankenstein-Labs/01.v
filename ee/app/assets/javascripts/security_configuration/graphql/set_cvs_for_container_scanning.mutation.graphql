@@ -1,0 +1,7 @@
+# @feature_category: software_composition_analysis
+mutation SetCvsForContainerScanning($input: SetCvsForContainerScanningInput!) {
+  setCvsForContainerScanning(input: $input) {
+    cvsForContainerScanningEnabled
+    errors
+  }
+}

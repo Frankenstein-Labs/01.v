@@ -1,0 +1,17 @@
+---
+description: User clicks the Learn more link inside a Duo Agentic Chat tier_access_denied message
+internal_events: true
+status: active
+action: click_learn_more_duo_chat_tier_access_denied
+identifiers:
+  - user
+  - namespace
+product_group: duo_chat
+product_categories:
+  - duo_chat
+milestone: '19.2'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/233681
+tiers:
+  - free
+  - premium
+  - ultimate

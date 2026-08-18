@@ -1,0 +1,1 @@
+export const UPDATE_TOTAL_ITEMS = 'UPDATE_TOTAL_ITEMS';

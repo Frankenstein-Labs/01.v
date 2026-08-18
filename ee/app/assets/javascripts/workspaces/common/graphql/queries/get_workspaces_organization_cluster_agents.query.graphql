@@ -1,0 +1,18 @@
+query getWorkspacesOrganizationClusterAgents($organizationID: OrganizationsOrganizationID!) {
+  organizationAgents: organization(id: $organizationID) {
+    id
+    workspacesClusterAgents(filter: DIRECTLY_MAPPED) {
+      nodes {
+        id
+        name
+        project {
+          id
+          nameWithNamespace
+        }
+        workspacesAgentConfig {
+          id
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+#import "../fragments/vulnerability_report_list.fragment.graphql"
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query instanceVulnerabilities(
+  $before: String
+  $after: String
+  $first: Int = 20
+  $last: Int
+  $projectId: [ID!]
+  $severity: [VulnerabilitySeverity!]
+  $reportType: [VulnerabilityReportType!]
+  $scanner: [String!]
+  $scannerId: [VulnerabilitiesScannerID!]
+  $state: [VulnerabilityState!]
+  $dismissalReason: [VulnerabilityDismissalReason!]
+  $sort: VulnerabilitySort
+  $hasIssues: Boolean
+  $hasResolution: Boolean
+  $hasMergeRequest: Boolean
+  $hasRemediations: Boolean
+  $hasAiResolution: Boolean
+  $vetEnabled: Boolean = false
+  $clusterAgentId: [ClustersAgentID!]
+  $owaspTopTen: [VulnerabilityOwaspTop10!]
+  $includeSeverityOverrides: Boolean = false
+  $useLatestMr: Boolean = false
+  $falsePositive: Boolean
+) {
+  vulnerabilities(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+    severity: $severity
+    reportType: $reportType
+    state: $state
+    dismissalReason: $dismissalReason
+    projectId: $projectId
+    scanner: $scanner
+    scannerId: $scannerId
+    sort: $sort
+    hasIssues: $hasIssues
+    hasResolution: $hasResolution
+    hasMergeRequest: $hasMergeRequest
+    hasRemediations: $hasRemediations
+    hasAiResolution: $hasAiResolution
+    clusterAgentId: $clusterAgentId
+    owaspTopTen: $owaspTopTen
+    falsePositive: $falsePositive
+  ) {
+    nodes {
+      ...VulnerabilityReportListFragment
+    }
+    pageInfo {
+      ...PageInfo
+    }
+  }
+}

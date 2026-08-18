@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gitlab.com/gitlab-org/security-products/dependency-management/config.schema.json",
+  "description": "Schema for the GitLab Dependency Management feature configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "auto_remediation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether auto-remediation is enabled."
+        },
+        "cooldown": {
+          "description": "Minimum number of days after a package is released before it can be used.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "severity_level": {
+          "description": "Minimum vulnerability severity that triggers an automated upgrade. Findings below this threshold are skipped.",
+          "type": "string",
+          "enum": [
+            "info",
+            "unknown",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "upgrade_policy": {
+          "description": "Highest version bump allowed when remediating. 'patch' allows patch only, 'minor' allows patch and minor, 'major' allows any bump.",
+          "type": "string",
+          "enum": [
+            "patch",
+            "minor",
+            "major"
+          ]
+        },
+        "open_merge_requests_limit": {
+          "description": "Maximum number of open merge requests the feature may have at once. Further upgrades wait until existing ones merge or close.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        }
+      }
+    }
+  }
+}

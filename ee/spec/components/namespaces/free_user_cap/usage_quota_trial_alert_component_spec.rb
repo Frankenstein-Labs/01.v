@@ -1,0 +1,90 @@
+# frozen_string_literal: true
+
+require "spec_helper"
+
+RSpec.describe Namespaces::FreeUserCap::UsageQuotaTrialAlertComponent, :saas, :aggregate_failures,
+  feature_category: :seat_cost_management do
+  let_it_be_with_refind(:user) { create(:user) }
+  let_it_be_with_refind(:namespace) { create(:group, :private, owners: user) }
+  let(:content_class) { '_content_class_' }
+  let(:trial_ends_on) { Date.parse('2022-06-01') }
+  let(:trial_starts_on) { Date.parse('2022-05-31') }
+  let!(:gitlab_subscription) do
+    create(:gitlab_subscription, :active_trial, namespace:, trial_ends_on:,
+      trial_starts_on:)
+  end
+
+  let(:title) do
+    "On #{I18n.l(trial_ends_on, format: :long)}, your trial will end and #{namespace.name} " \
+      "will be limited to #{::Namespaces::FreeUserCap.dashboard_limit} users"
+  end
+
+  let(:body) do
+    "When your trial ends, you'll move to the Free tier. Free top-level namespaces with private " \
+      "visibility can have only #{::Namespaces::FreeUserCap.dashboard_limit} users. If your namespace " \
+      'exceeds this limit, it will become read-only. To prevent this, upgrade to a paid tier.'
+  end
+
+  subject(:component) do
+    described_class.new(namespace: namespace, user: user, content_class: content_class)
+  end
+
+  before_all do
+    namespace.add_owner(user)
+  end
+
+  before do
+    stub_ee_application_setting(dashboard_limit_enabled: true)
+    stub_ee_application_setting(dashboard_limit: 5)
+    travel_to(trial_ends_on - 1)
+  end
+
+  shared_examples 'does not render the banner' do
+    it 'does not have banner content' do
+      render_inline(component)
+
+      expect(page).not_to have_selector(".#{content_class}")
+      expect(page).not_to have_content(title)
+      expect(page).not_to have_content(body)
+    end
+  end
+
+  context 'when on trial' do
+    it 'is not using a free subscription' do
+      # Regression test to ensure that the namespace used for these tests
+      # is using a valid trial subscription and not a free subscription
+      expect(namespace.has_free_or_no_subscription?).to be(false)
+    end
+
+    it 'renders the banner' do
+      render_inline(component)
+
+      expect(page).to have_selector(".#{content_class}")
+      expect(page).to have_content(title)
+      expect(page).to have_content(body)
+      expect(page).to have_link('read-only',
+        href: help_page_path('user/read_only_namespaces.md', anchor: 'read-only-namespaces'))
+      expect(page).to have_link('upgrade to a paid tier', href: group_billings_path(namespace))
+      expect(page).not_to have_css('.gl-alert-actions')
+
+      expect(page).to have_css('.js-user-over-limit-free-plan-alert' \
+                               "[data-dismiss-endpoint='#{group_callouts_path}']" \
+                               "[data-feature-id='#{described_class::USAGE_QUOTA_TRIAL_ALERT}']" \
+                               "[data-group-id='#{namespace.id}']")
+    end
+
+    context 'when group is public' do
+      before do
+        namespace.update!(visibility_level: Gitlab::VisibilityLevel::PUBLIC)
+      end
+
+      include_examples 'does not render the banner'
+    end
+  end
+
+  context 'when not on trial' do
+    let!(:gitlab_subscription) { create(:gitlab_subscription, :free, namespace: namespace) }
+
+    include_examples 'does not render the banner'
+  end
+end

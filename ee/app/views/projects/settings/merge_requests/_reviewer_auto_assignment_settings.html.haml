@@ -1,0 +1,35 @@
+- return unless @project.reviewer_auto_assignment_available?
+
+- dap_available = @project.dap_powered_recommend_reviewers_available?
+
+= render ::Layouts::SettingsSectionComponent.new(s_('MergeRequests|Automatic reviewer assignment'),
+  id: 'merge-request-reviewer-auto-assignment-settings',
+  testid: 'reviewer-auto-assignment-settings',
+  options: { class: 'merge-requests-feature' }) do |c|
+  - c.with_description do
+    = s_('MergeRequests|Automatically assign reviewers when a merge request is ready.')
+    = link_to _("Learn more."), help_page_path("user/project/merge_requests/reviews/automatic_reviewer_assignment.md"), target: '_blank', rel: 'noopener noreferrer'
+  - c.with_body do
+    = gitlab_ui_form_for @project, url: project_settings_merge_requests_path(@project), authenticity_token: true do |f|
+      = f.fields_for :project_setting do |settings|
+        - if dap_available
+          %fieldset.form-group.gl-flex.gl-flex-col.gl-gap-3
+            %legend.gl-mt-0.gl-mb-3.gl-heading-5.gl-border-0
+              = s_('MergeRequests|Reviewer assignment strategy')
+            = settings.gitlab_ui_radio_component :reviewer_assignment_strategy, 'disabled',
+              s_('MergeRequests|Do not assign reviewers automatically')
+            = settings.gitlab_ui_radio_component :reviewer_assignment_strategy, 'code_owners',
+              s_('MergeRequests|Assign all code owners as reviewers'),
+              help_text: s_('MergeRequests|Assign every code owner defined in your CODEOWNERS file.')
+            = settings.gitlab_ui_radio_component :reviewer_assignment_strategy, 'dap_powered',
+              s_('MergeRequests|Assign reviewers with GitLab Duo Agent Platform'),
+              help_text: s_('MergeRequests|Recommends the minimum number of reviewers required to satisfy each approval rule.')
+        - else
+          .form-group
+            = settings.gitlab_ui_checkbox_component :reviewer_assignment_strategy,
+              s_('MergeRequests|Automatically assign all code owners as reviewers'),
+              help_text: s_('MergeRequests|Code owners are automatically assigned as reviewers when a merge request is marked as ready. Draft merge requests are excluded.'),
+              checkbox_options: { checked: @project.project_setting.reviewer_assignment_code_owners? },
+              checked_value: 'code_owners',
+              unchecked_value: 'disabled'
+      = f.submit _('Save changes'), pajamas_button: true

@@ -1,0 +1,17 @@
+mutation bypassSecurityPolicyExceptionViolations(
+  $reason: String!
+  $iid: String!
+  $projectPath: ID!
+  $securityPolicyIds: [ID!]!
+) {
+  mergeRequestBypassSecurityPolicy(
+    input: {
+      reason: $reason
+      iid: $iid
+      projectPath: $projectPath
+      securityPolicyIds: $securityPolicyIds
+    }
+  ) {
+    errors
+  }
+}

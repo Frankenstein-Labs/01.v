@@ -1,0 +1,16 @@
+query groupDoraPerformanceScoreCountsQuery($fullPath: ID!, $topics: [String!]) {
+  group(fullPath: $fullPath) {
+    id
+    doraPerformanceScoreCounts(projectFilters: { topic: $topics }) {
+      totalProjectsCount
+      noDoraDataProjectsCount
+      nodes {
+        metricName
+        lowProjectsCount
+        mediumProjectsCount
+        highProjectsCount
+        noDataProjectsCount
+      }
+    }
+  }
+}

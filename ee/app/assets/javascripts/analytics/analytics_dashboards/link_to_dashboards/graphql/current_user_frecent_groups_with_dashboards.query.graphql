@@ -1,0 +1,14 @@
+query CurrentUserFrecentGroupsWithDashboards {
+  frecentGroups {
+    id
+    name
+    namespace: fullName
+    avatarUrl
+    fullPath
+    customizableDashboards {
+      nodes {
+        slug
+      }
+    }
+  }
+}

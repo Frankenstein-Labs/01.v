@@ -1,0 +1,27 @@
+scan_execution_policy:
+  - name: Run DAST in every pipeline
+    description: This policy enforces to run DAST for every pipeline within the project
+    enabled: true
+    rules:
+      - type: pipeline
+        branches:
+          - "production"
+    policy_scope: {}
+    metadata: {}
+    actions:
+      - scan: dast
+        site_profile: Site Profile
+        scanner_profile: Scanner Profile
+  - name: Run DAST in every pipeline_v1
+    description: This policy enforces to run DAST for every pipeline within the project
+    enabled: true
+    rules:
+      - type: pipeline
+        branches:
+          - "master"
+    policy_scope: {}
+    metadata: {}
+    actions:
+      - scan: dast
+        site_profile: Site Profile
+        scanner_profile: Scanner Profile

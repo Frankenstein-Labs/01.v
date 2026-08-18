@@ -1,0 +1,7 @@
+# @feature_category: virtual_registry
+
+mutation deleteContainerCacheEntry($id: String!) {
+  delete: containerCacheEntryDelete(input: { id: $id }) {
+    errors
+  }
+}

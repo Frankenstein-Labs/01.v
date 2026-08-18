@@ -1,0 +1,29 @@
+# @feature_category: vulnerability_management
+query organizationVulnerabilitiesByAge(
+  $projectId: [ID!]
+  $reportType: [VulnerabilityReportType!]
+  $includeBySeverity: Boolean!
+  $includeByReportType: Boolean!
+  $severity: [VulnerabilitySeverity!]
+) {
+  namespace: organization {
+    id
+    securityMetrics(projectId: $projectId, reportType: $reportType) {
+      vulnerabilitiesByAge(severity: $severity) {
+        name
+        ... @include(if: $includeBySeverity) {
+          bySeverity {
+            count
+            severity
+          }
+        }
+        ... @include(if: $includeByReportType) {
+          byReportType {
+            count
+            reportType
+          }
+        }
+      }
+    }
+  }
+}

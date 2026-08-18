@@ -1,0 +1,12 @@
+# @feature_category: groups_and_projects
+query GroupReleaseStats($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    stats {
+      releaseStats {
+        releasesCount
+        releasesPercentage
+      }
+    }
+  }
+}

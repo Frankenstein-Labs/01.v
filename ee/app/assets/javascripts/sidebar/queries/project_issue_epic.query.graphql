@@ -1,0 +1,15 @@
+#import "./epic.fragment.graphql"
+
+query projectIssueEpic($fullPath: ID!, $iid: String!) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    issuable: issue(iid: $iid) {
+      id
+      hasEpic
+      hasParent
+      attribute: epic {
+        ...EpicFragment
+      }
+    }
+  }
+}

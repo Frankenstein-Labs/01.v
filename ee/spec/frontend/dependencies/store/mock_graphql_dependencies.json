@@ -1,0 +1,56 @@
+{
+  "data": {
+    "namespace": {
+      "dependencies": {
+        "nodes": [
+          {
+            "id": "gid://gitlab/Vulnerabilities::DependencyOccurrence/123",
+            "name": "dependency-1",
+            "componentVersion": {
+              "id": "gid://gitlab/Sbom::ComponentVersion/1",
+              "version": "1.0.0"
+            },
+            "packager": "NPM",
+            "location": {
+              "path": "package.json"
+            },
+            "licenses": [
+              {
+                "name": "MIT",
+                "url": "https://mit-license.org"
+              }
+            ],
+            "vulnerabilityCount": 2,
+            "trackedRefsCount": 2
+          },
+          {
+            "id": "gid://gitlab/Vulnerabilities::DependencyOccurrence/456",
+            "name": "dependency-2",
+            "componentVersion": {
+              "id": "gid://gitlab/Sbom::ComponentVersion/7",
+              "version": "1.0.0"
+            },
+            "packager": "PIP",
+            "location": {
+              "path": "requirements.txt"
+            },
+            "licenses": [
+              {
+                "name": "Apache-2.0",
+                "url": "https://apache.org/licenses/LICENSE-2.0"
+              }
+            ],
+            "vulnerabilityCount": 0,
+            "trackedRefsCount": 1
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": true,
+          "hasPreviousPage": false,
+          "startCursor": "eyJpZCI6IjEyMyJ9",
+          "endCursor": "eyJpZCI6IjQ1NiJ9"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "required": [
+    "id",
+    "access_level_description"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "access_level": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "access_level_description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "member_role_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "member_role_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

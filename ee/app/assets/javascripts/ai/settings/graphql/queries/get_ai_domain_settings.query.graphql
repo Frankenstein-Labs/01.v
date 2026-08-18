@@ -1,0 +1,26 @@
+# @feature_category: ai_abstraction_layer
+query getAiDomainSettings(
+  $type: AiDomainSettingType!
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+  $search: String
+) {
+  aiDomainSettings(
+    domainSettingType: $type
+    first: $first
+    after: $after
+    last: $last
+    before: $before
+    search: $search
+  ) {
+    nodes
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

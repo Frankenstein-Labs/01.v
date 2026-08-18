@@ -1,0 +1,127 @@
+# @graphql-eslint/eslint-plugin@4.0.0 reports missing IDs in `FragmentDefinition`. For now, we are
+# ignoring the newly uncovered error on this fragment. Please consider addressing the violation
+# if you are modifying this file and it turns out selecting the ID makes sense here.
+# eslint-disable-next-line @graphql-eslint/require-selections
+fragment Issue on Issue {
+  iid
+  title
+  webUrl
+  labels {
+    count
+    nodes {
+      id
+      color
+      title
+      description
+    }
+  }
+  createdAt
+  state
+  # @graphql-eslint/eslint-plugin@4.0.0 reports missing IDs in `FragmentDefinition`. For now, we are
+  # ignoring the newly uncovered error on this fragment. Please consider addressing the violation
+  # if you are modifying this file and it turns out selecting the ID makes sense here.
+  # eslint-disable-next-line @graphql-eslint/require-selections
+  epic {
+    iid
+  }
+  # @graphql-eslint/eslint-plugin@4.0.0 reports missing IDs in `FragmentDefinition`. For now, we are
+  # ignoring the newly uncovered error on this fragment. Please consider addressing the violation
+  # if you are modifying this file and it turns out selecting the ID makes sense here.
+  # eslint-disable-next-line @graphql-eslint/require-selections
+  milestone {
+    title
+  }
+  # @graphql-eslint/eslint-plugin@4.0.0 reports missing IDs in `FragmentDefinition`. For now, we are
+  # ignoring the newly uncovered error on this fragment. Please consider addressing the violation
+  # if you are modifying this file and it turns out selecting the ID makes sense here.
+  # eslint-disable-next-line @graphql-eslint/require-selections
+  iteration {
+    title
+  }
+  weight
+  dueDate
+  assignees {
+    # @graphql-eslint/eslint-plugin@4.0.0 reports missing IDs in `FragmentDefinition`. For now, we are
+    # ignoring the newly uncovered error on this fragment. Please consider addressing the violation
+    # if you are modifying this file and it turns out selecting the ID makes sense here.
+    # eslint-disable-next-line @graphql-eslint/require-selections
+    nodes {
+      name
+      webUrl
+      avatarUrl
+    }
+  }
+  # @graphql-eslint/eslint-plugin@4.0.0 reports missing IDs in `FragmentDefinition`. For now, we are
+  # ignoring the newly uncovered error on this fragment. Please consider addressing the violation
+  # if you are modifying this file and it turns out selecting the ID makes sense here.
+  # eslint-disable-next-line @graphql-eslint/require-selections
+  author {
+    name
+    webUrl
+    avatarUrl
+  }
+}
+
+query getIssuesAnalyticsTableData(
+  $fullPath: ID!
+  $isGroup: Boolean = false
+  $isProject: Boolean = false
+  $assigneeUsernames: [String!]
+  $authorUsername: String
+  $labelName: [String]
+  $milestoneTitle: [String]
+  $myReactionEmoji: String
+  $epicId: String
+  $weight: String
+  $iterationId: [ID]
+  $state: IssuableState
+  $not: NegatedIssueFilterInput
+  $createdAfter: Time
+  $createdBefore: Time
+) {
+  group(fullPath: $fullPath) @include(if: $isGroup) {
+    id
+    issues(
+      includeSubgroups: true
+      assigneeUsernames: $assigneeUsernames
+      authorUsername: $authorUsername
+      labelName: $labelName
+      milestoneTitle: $milestoneTitle
+      myReactionEmoji: $myReactionEmoji
+      epicId: $epicId
+      weight: $weight
+      iterationId: $iterationId
+      state: $state
+      not: $not
+      createdAfter: $createdAfter
+      createdBefore: $createdBefore
+    ) {
+      count
+      nodes {
+        ...Issue
+      }
+    }
+  }
+  project(fullPath: $fullPath) @include(if: $isProject) {
+    id
+    issues(
+      assigneeUsernames: $assigneeUsernames
+      authorUsername: $authorUsername
+      labelName: $labelName
+      milestoneTitle: $milestoneTitle
+      myReactionEmoji: $myReactionEmoji
+      epicId: $epicId
+      weight: $weight
+      iterationId: $iterationId
+      state: $state
+      not: $not
+      createdAfter: $createdAfter
+      createdBefore: $createdBefore
+    ) {
+      count
+      nodes {
+        ...Issue
+      }
+    }
+  }
+}

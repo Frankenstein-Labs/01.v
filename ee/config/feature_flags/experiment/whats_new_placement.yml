@@ -1,0 +1,10 @@
+---
+name: whats_new_placement
+description: Test moving the 'What's New for You' CTA from the Help menu (control) to the profile menu (candidate) to increase What's New drawer open rate
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/599275
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/238286
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/599276
+milestone: '19.1'
+group: group::monetization
+type: experiment
+default_enabled: false

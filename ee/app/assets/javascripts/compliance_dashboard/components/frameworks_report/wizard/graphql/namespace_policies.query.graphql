@@ -1,0 +1,51 @@
+# @feature_category: compliance_management
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "ee/security_orchestration/graphql/fragments/scan_policy_source.fragment.graphql"
+
+query namespacePolicies($fullPath: ID!, $after: String) {
+  namespace(fullPath: $fullPath) {
+    id
+    securityPolicies(after: $after, relationship: INHERITED) {
+      nodes {
+        id
+        name
+        yaml
+        editPath
+        enabled
+        description
+        type
+        updatedAt
+        policyAttributes {
+          ... on ApprovalPolicyAttributesType {
+            source {
+              ...SecurityPolicySource
+            }
+          }
+          ... on ScanExecutionPolicyAttributesType {
+            source {
+              ...SecurityPolicySource
+            }
+          }
+          ... on PipelineExecutionPolicyAttributesType {
+            source {
+              ...SecurityPolicySource
+            }
+          }
+          ... on PipelineExecutionScheduledPolicyAttributesType {
+            source {
+              ...SecurityPolicySource
+            }
+          }
+          ... on VulnerabilityManagementPolicyAttributesType {
+            source {
+              ...SecurityPolicySource
+            }
+          }
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

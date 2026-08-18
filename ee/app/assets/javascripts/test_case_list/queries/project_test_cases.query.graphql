@@ -1,0 +1,68 @@
+#import "~/graphql_shared/fragments/author.fragment.graphql"
+#import "~/graphql_shared/fragments/label.fragment.graphql"
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query projectIssues(
+  $projectPath: ID!
+  $state: IssuableState
+  $authorUsername: String = ""
+  $labelName: [String]
+  $search: String = ""
+  $sortBy: IssueSort = created_desc
+  $firstPageSize: Int
+  $lastPageSize: Int
+  $prevPageCursor: String = ""
+  $nextPageCursor: String = ""
+  $workItemTypeIds: [WorkItemsTypeID!]
+) {
+  project(fullPath: $projectPath) {
+    id
+    name
+    issueStatusCounts(
+      authorUsername: $authorUsername
+      labelName: $labelName
+      search: $search
+      workItemTypeIds: $workItemTypeIds
+    ) {
+      opened
+      closed
+      all
+    }
+    issues(
+      state: $state
+      authorUsername: $authorUsername
+      labelName: $labelName
+      search: $search
+      sort: $sortBy
+      workItemTypeIds: $workItemTypeIds
+      first: $firstPageSize
+      last: $lastPageSize
+      after: $nextPageCursor
+      before: $prevPageCursor
+    ) {
+      nodes {
+        id
+        iid
+        title
+        titleHtml
+        description
+        createdAt
+        updatedAt
+        webUrl
+        type
+        confidential
+        author {
+          ...Author
+        }
+        labels {
+          nodes {
+            ...Label
+          }
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+query getFlowStatus($id: AiDuoWorkflowsWorkflowID!) {
+  duoWorkflowWorkflows(workflowId: $id) {
+    edges {
+      node {
+        id
+        status
+      }
+    }
+  }
+}

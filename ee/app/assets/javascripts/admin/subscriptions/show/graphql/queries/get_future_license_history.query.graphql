@@ -1,0 +1,9 @@
+#import "../fragments/future_subscription.fragment.graphql"
+
+query getFutureLicenseHistory {
+  subscriptionFutureEntries {
+    nodes {
+      ...FutureSubscription
+    }
+  }
+}

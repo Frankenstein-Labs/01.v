@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test coverage table component when group code coverage is available with a series of coverage activities renders area chart with correct data 1`] = `
+[
+  {
+    "data": [
+      [
+        "2020-01-10",
+        77.9,
+        5,
+        5,
+      ],
+      [
+        "2020-01-11",
+        78.7,
+        5,
+        5,
+      ],
+      [
+        "2020-01-12",
+        79.6,
+        5,
+        5,
+      ],
+    ],
+    "name": "Average coverage",
+  },
+]
+`;

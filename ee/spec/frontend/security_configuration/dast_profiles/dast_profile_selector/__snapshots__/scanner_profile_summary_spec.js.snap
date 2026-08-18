@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DastScannerProfileSummary renders properly 1`] = `
+<gl-card-stub
+  bodyclass=""
+  footerclass=""
+  headerclass=""
+>
+  <div
+    class="gl-flex gl-items-center gl-justify-between"
+  >
+    <div>
+      <h3
+        class="gl-inline gl-my-0 gl-text-lg"
+      >
+        Passive scanner
+      </h3>
+    </div>
+    <div
+      class="gl-flex gl-gap-x-3"
+    >
+      <gl-button-stub
+        accessibledisabled="true"
+        aria-label="Edit %{profileType} profile"
+        buttontextclasses=""
+        category="primary"
+        data-testid="profile-edit-btn"
+        icon="pencil"
+        size="small"
+        tag="button"
+        title="Edit scanner profile"
+        type="button"
+        variant="default"
+      />
+    </div>
+  </div>
+  <summary-cell-stub
+    label="Scan mode"
+  >
+    <scan-type-badge-stub
+      scantype="PASSIVE"
+    />
+  </summary-cell-stub>
+  <summary-cell-stub
+    label="Crawl timeout"
+    value="5 minutes"
+  />
+  <summary-cell-stub
+    label="Target timeout"
+    value="10 seconds"
+  />
+  <summary-cell-stub
+    label="Debug messages"
+    value="Hide debug messages"
+  />
+</gl-card-stub>
+`;

@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dora Metrics by project Data Source for group returns filtered projects with formatted DORA metrics 1`] = `
+[
+  {
+    "__typename": "DoraMetric",
+    "avatarUrl": null,
+    "change_failure_rate": 0.4,
+    "date": "2024-09-01",
+    "deployment_frequency": 0.3333333333333333,
+    "id": "gid://gitlab/Project/7",
+    "lead_time_for_changes": 86400,
+    "name": "Flight",
+    "time_to_restore_service": 432000,
+    "trends": {
+      "change_failure_rate": 0.3333333333333335,
+      "deployment_frequency": -0.48333333333333334,
+      "lead_time_for_changes": -0.6666666666666666,
+      "time_to_restore_service": 0.6666666666666666,
+    },
+    "webUrl": "http://gdk.test:3000/flightjs/Flight",
+  },
+]
+`;

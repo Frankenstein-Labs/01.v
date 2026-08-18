@@ -1,0 +1,8 @@
+---
+name: duo_agent_onboarding
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/229847
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/596695
+milestone: '19.0'
+group: group::ai coding
+type: beta
+default_enabled: false

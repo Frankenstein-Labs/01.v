@@ -1,0 +1,29 @@
+#import "../fragments/value_stream_stage_average_durations.fragment.graphql"
+
+query getValueStreamStageAverageDurations(
+  $fullPath: ID!
+  $valueStreamId: ID!
+  $stageId: ID!
+  $startDate: Date!
+  $endDate: Date!
+  $projectIds: [ProjectID!]
+  $assigneeUsernames: [String!]
+  $authorUsername: String
+  $milestoneTitle: String
+  $labelNames: [String!]
+  $not: NegatedValueStreamAnalyticsIssuableFilterInput
+  $isProject: Boolean = false
+) {
+  group(fullPath: $fullPath) @skip(if: $isProject) {
+    id
+    valueStreams(id: $valueStreamId) {
+      ...ValueStreamStageAverageDurations
+    }
+  }
+  project(fullPath: $fullPath) @include(if: $isProject) {
+    id
+    valueStreams(id: $valueStreamId) {
+      ...ValueStreamStageAverageDurations
+    }
+  }
+}

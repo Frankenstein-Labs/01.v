@@ -1,0 +1,35 @@
+#import "~/boards/graphql/issue_node.fragment.graphql"
+#import "ee/work_items/graphql/work_item_status.fragment.graphql"
+
+fragment Issue on Issue {
+  ...IssueNode
+  id
+  weight
+  blocked
+  blockedByCount
+  blockingCount
+  epic {
+    id
+  }
+  iteration {
+    id
+    title
+    startDate
+    dueDate
+    iterationCadence {
+      id
+      title
+    }
+  }
+  linkedWorkItems {
+    nodes {
+      linkId
+      linkType
+      workItemState
+    }
+  }
+  healthStatus
+  status {
+    ...WorkItemStatusFragment
+  }
+}

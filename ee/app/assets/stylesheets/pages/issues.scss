@@ -1,0 +1,35 @@
+.cve-id-request {
+  .help-button,
+  .close-help-button {
+    cursor: pointer;
+  }
+
+  // These are composite classes for use with Vue Transition
+  // https://vuejs.org/guide/built-ins/transition
+  .help-state-toggle-enter-active {
+    transition: all 0.8s ease;
+  }
+
+  .help-state-toggle-leave-active {
+    transition: all 0.5s ease;
+  }
+
+  .help-state-toggle-enter,
+  .help-state-toggle-leave-active {
+    opacity: 0;
+  }
+
+  .cve-id-request-help-state {
+    background: $white;
+    margin: 16px -20px -20px;
+    padding: 16px 20px;
+    @apply gl-border-t;
+    @apply gl-border-b;
+  }
+}
+
+.ai-summary-card {
+  h2 {
+    margin-top: 0;
+  }
+}

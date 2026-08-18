@@ -1,0 +1,14 @@
+.compliance-report-table {
+  .view-details {
+    @apply gl-bg-subtle;
+
+    div {
+      width: 100% !important;
+      padding: 0 !important;
+    }
+  }
+
+  tr:hover .view-details {
+    background-color: transparent;
+  }
+}

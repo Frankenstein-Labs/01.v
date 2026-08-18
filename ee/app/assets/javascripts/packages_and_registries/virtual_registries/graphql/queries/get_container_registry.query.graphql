@@ -1,0 +1,9 @@
+# @feature_category: virtual_registry
+
+query getVirtualRegistryContainer($id: VirtualRegistriesContainerRegistryID!) {
+  registry: virtualRegistriesContainerRegistry(id: $id) {
+    id
+    name
+    description
+  }
+}

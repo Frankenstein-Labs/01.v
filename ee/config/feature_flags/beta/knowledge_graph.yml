@@ -1,0 +1,10 @@
+---
+name: knowledge_graph
+description: Gates the Knowledge Graph feature for Orbit, enabling graph-based code intelligence and contextual queries
+feature_issue_url: https://gitlab.com/groups/gitlab-org/-/epics/19744
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/216010
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/583676
+milestone: '19.2'
+type: beta
+group: group::context-systems
+default_enabled: true

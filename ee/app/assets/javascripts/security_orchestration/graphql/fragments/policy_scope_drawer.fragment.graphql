@@ -1,0 +1,38 @@
+fragment PolicyScopeDrawer on PolicyScope {
+  complianceFrameworks {
+    nodes {
+      id
+      name
+      color
+      description
+      editPath
+      projects {
+        nodes {
+          id
+        }
+      }
+    }
+  }
+  excludingPersonalProjects
+  excludingProjects {
+    nodes {
+      id
+      name
+      fullPath
+    }
+  }
+  includingProjects {
+    nodes {
+      id
+      name
+      fullPath
+    }
+  }
+  includingGroups {
+    nodes {
+      id
+      name
+      fullPath
+    }
+  }
+}

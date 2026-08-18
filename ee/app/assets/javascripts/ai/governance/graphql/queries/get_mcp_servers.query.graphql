@@ -1,0 +1,26 @@
+# @feature_category: compliance_management
+
+query getMcpServers(
+  $groupFullPath: ID
+  $projectFullPath: ID
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+) {
+  aiCatalogMcpServers(first: $first, last: $last, after: $after, before: $before) {
+    nodes {
+      id
+      name
+      description
+      url
+      blockStatus(groupFullPath: $groupFullPath, projectFullPath: $projectFullPath)
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

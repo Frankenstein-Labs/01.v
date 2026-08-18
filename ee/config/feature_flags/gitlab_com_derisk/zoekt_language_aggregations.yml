@@ -1,0 +1,10 @@
+---
+name: zoekt_language_aggregations
+description:
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/392882
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/244556
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/605457
+milestone: '19.3'
+group: group::platform insights
+type: gitlab_com_derisk
+default_enabled: false

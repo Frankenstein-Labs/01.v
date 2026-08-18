@@ -1,0 +1,13 @@
+# @feature_category: duo_agent_platform
+#import "../fragments/flow_trigger.fragment.graphql"
+
+query getAiFlowTriggers($projectPath: ID!, $ids: [AiFlowTriggerID!] = null) {
+  project(fullPath: $projectPath) {
+    id
+    aiFlowTriggers(ids: $ids) {
+      nodes {
+        ...FlowTriggerFragment
+      }
+    }
+  }
+}

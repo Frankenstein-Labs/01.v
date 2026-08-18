@@ -1,0 +1,10 @@
+---
+name: orbit_foundational_agent
+description: Controls availability of the Orbit foundational chat agent backed by the Knowledge Graph
+feature_issue_url: https://gitlab.com/groups/gitlab-org/-/work_items/21075
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/232417
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/597629
+milestone: '19.2'
+type: beta
+group: group::context-systems
+default_enabled: true

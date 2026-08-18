@@ -1,0 +1,12 @@
+mutation groupSavedReplyCreate($namespaceId: GroupID!, $name: String!, $content: String!) {
+  savedReplyMutation: groupSavedReplyCreate(
+    input: { groupId: $namespaceId, name: $name, content: $content }
+  ) {
+    errors
+    savedReply {
+      id
+      name
+      content
+    }
+  }
+}

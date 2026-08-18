@@ -1,0 +1,18 @@
+# @feature_category: continuous_delivery
+
+query cdApplicationFlow($applicationId: CdApplicationID!) {
+  organization {
+    id
+    cdApplication(id: $applicationId) {
+      id
+      name
+      applicationFlowDefinitions(first: 1) {
+        nodes {
+          id
+          version
+          definition
+        }
+      }
+    }
+  }
+}

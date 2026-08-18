@@ -1,0 +1,37 @@
+# @feature_category: team_planning
+query getNamespaceLifecycles($fullPath: ID!) {
+  namespace(fullPath: $fullPath) {
+    id
+    lifecycles {
+      nodes {
+        id
+        name
+        defaultOpenStatus {
+          id
+          name
+        }
+        defaultClosedStatus {
+          id
+          name
+        }
+        defaultDuplicateStatus {
+          id
+          name
+        }
+        workItemTypes {
+          id
+          name
+          iconName
+        }
+        statuses {
+          id
+          name
+          iconName
+          color
+          description
+          category
+        }
+      }
+    }
+  }
+}

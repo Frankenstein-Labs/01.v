@@ -1,0 +1,12 @@
+#import "../fragments/streaming_destination.fragment.graphql"
+
+mutation instanceAuditEventStreamingDestinationsCreate(
+  $input: InstanceAuditEventStreamingDestinationsCreateInput!
+) {
+  instanceAuditEventStreamingDestinationsCreate(input: $input) {
+    errors
+    externalAuditEventDestination {
+      ...StreamingDestinationFragment
+    }
+  }
+}

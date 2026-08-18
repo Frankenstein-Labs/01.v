@@ -1,0 +1,11 @@
+# @feature_category: continuous_delivery
+
+mutation cdVersionSetCreate($input: CdVersionSetCreateInput!) {
+  cdVersionSetCreate(input: $input) {
+    versionSet {
+      id
+      name
+    }
+    errors
+  }
+}

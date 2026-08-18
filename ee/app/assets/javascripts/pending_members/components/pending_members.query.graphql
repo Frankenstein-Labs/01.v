@@ -1,0 +1,27 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query pendingMembersQuery(
+  $groupPath: ID!
+  $first: Int = 10
+  $after: String
+  $last: Int = 10
+  $before: String
+) {
+  group(fullPath: $groupPath) {
+    id
+    pendingMembers(first: $first, after: $after, last: $last, before: $before) {
+      nodes {
+        id
+        email
+        invited
+        avatarUrl
+        webUrl
+        approved
+        name
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

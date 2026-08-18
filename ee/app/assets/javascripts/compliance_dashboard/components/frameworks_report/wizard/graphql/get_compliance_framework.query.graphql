@@ -1,0 +1,82 @@
+# @feature_category: compliance_management
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+query getComplianceFrameworkWithPolicies(
+  $fullPath: ID!
+  $complianceFramework: ComplianceManagementFrameworkID
+  $search: String
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+) {
+  namespace(fullPath: $fullPath) {
+    id
+    name
+    securityPolicyProject {
+      id
+      repository {
+        blobs(paths: [".gitlab/security-policies/policy.yml"]) {
+          nodes {
+            id
+            rawBlob
+          }
+        }
+      }
+    }
+    complianceFrameworks(
+      id: $complianceFramework
+      search: $search
+      before: $before
+      after: $after
+      first: $first
+      last: $last
+    ) {
+      nodes {
+        id
+        name
+        default
+        description
+        color
+        namespaceId
+        pipelineConfigurationFullPath
+        complianceRequirements {
+          nodes {
+            id
+            name
+            description
+            complianceRequirementsControls {
+              nodes {
+                id
+                name
+                controlType
+                externalControlName
+                externalUrl
+                expression
+                pingEnabled
+              }
+            }
+          }
+        }
+        projects {
+          count
+          nodes {
+            id
+            name
+            description
+            webUrl
+            visibility
+            fullPath
+            namespace {
+              id
+              fullName
+              webUrl
+            }
+          }
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

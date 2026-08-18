@@ -1,0 +1,10 @@
+# @feature_category: workflow_catalog
+mutation updateAiCatalogItemConsumer($input: AiCatalogItemConsumerUpdateInput!) {
+  aiCatalogItemConsumerUpdate(input: $input) {
+    errors
+    itemConsumer {
+      id
+      pinnedVersionPrefix
+    }
+  }
+}

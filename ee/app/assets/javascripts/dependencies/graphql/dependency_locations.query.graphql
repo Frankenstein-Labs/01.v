@@ -1,0 +1,28 @@
+# @feature_category: dependency_management
+
+query getDependencyLocations(
+  $fullPath: ID!
+  $componentVersionId: SbomComponentVersionID!
+  $search: String
+  $first: Int!
+) {
+  group(fullPath: $fullPath) {
+    id
+    dependencyLocations(componentVersionId: $componentVersionId, search: $search, first: $first) {
+      nodes {
+        occurrenceId
+        location {
+          blobPath
+          path
+          topLevel
+        }
+        hasDependencyPaths
+        project {
+          id
+          name
+          fullPath
+        }
+      }
+    }
+  }
+}

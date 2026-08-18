@@ -1,0 +1,33 @@
+# @feature_category: duo_agent_platform
+#import "~/graphql_shared/fragments/user.fragment.graphql"
+query getDuoAgentSessionsOnWorkItem($id: WorkItemID!, $first: Int = 20) {
+  workItem(id: $id) {
+    id
+    features {
+      aiSession {
+        duoWorkflows(first: $first) {
+          pageInfo {
+            hasNextPage
+          }
+          nodes {
+            id
+            title
+            status
+            humanStatus
+            createdAt
+            updatedAt
+            workflowDefinition
+            user @gl_introduced(version: "19.1.0") {
+              ...User
+            }
+            project {
+              id
+              name
+              fullPath
+            }
+          }
+        }
+      }
+    }
+  }
+}

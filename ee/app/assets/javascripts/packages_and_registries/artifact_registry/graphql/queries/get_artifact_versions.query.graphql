@@ -1,0 +1,39 @@
+# @feature_category: artifact_registry
+
+query getArtifactRegistryArtifactVersions(
+  $organizationId: OrganizationsOrganizationID!
+  $name: String!
+  $artifactId: ID!
+) {
+  organization(id: $organizationId) {
+    id
+    artifactRegistryRepository(name: $name) {
+      name
+      format
+      # `format` decides which shape the artifact renders under, and the versions read has to
+      # agree with the artifact read on that: both write one entity under the same id.
+      package(id: $artifactId) @client {
+        ... on ArtifactRegistryMavenPackage {
+          id
+          versions {
+            nodes {
+              id
+              version
+              createdAt
+            }
+          }
+        }
+        ... on ArtifactRegistryNpmPackage {
+          id
+          versions {
+            nodes {
+              id
+              version
+              createdAt
+            }
+          }
+        }
+      }
+    }
+  }
+}

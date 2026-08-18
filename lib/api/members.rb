@@ -1,0 +1,213 @@
+# frozen_string_literal: true
+
+module API
+  class Members < ::API::Base
+    include PaginationParams
+
+    before { authenticate! }
+
+    urgency :low
+
+    helpers ::API::Helpers::MembersHelpers
+
+    {
+      "group" => :groups_and_projects,
+      "project" => :groups_and_projects
+    }.each do |source_type, feature_category|
+      boundary = source_type.to_sym
+
+      params do
+        requires :id, type: String, desc: "The #{source_type} ID"
+      end
+      resource source_type.pluralize, requirements: ::API::NAMESPACE_OR_PROJECT_REQUIREMENTS do
+        desc "List all direct members of a #{source_type}" do
+          detail "Lists all direct members of a specified #{source_type} viewable by the authenticated user. Does " \
+            "not return inherited members from ancestor groups or invited groups."
+          success Entities::Member
+          is_array true
+          tags %w[members]
+        end
+        params do
+          optional :query, type: String, desc: 'A query string to search for members'
+          optional :user_ids, type: Array[Integer], coerce_with: ::API::Validations::Types::CommaSeparatedToIntegerArray.coerce, desc: 'Array of user ids to look up for membership'
+          optional :skip_users, type: Array[Integer], coerce_with: ::API::Validations::Types::CommaSeparatedToIntegerArray.coerce, desc: 'Array of user ids to be skipped for membership'
+          optional :show_seat_info, type: Boolean, desc: 'Show seat information for members'
+          use :optional_filter_params_ee
+          use :pagination
+        end
+
+        route_setting :authorization, permissions: :read_member, boundary_type: boundary
+        get ":id/members", feature_category: feature_category do
+          source = find_source(source_type, params[:id])
+
+          authorize_read_source_member!(source_type, source)
+
+          members = paginate(retrieve_members(source, params: params))
+
+          present_members members
+        end
+
+        desc "List all members of a #{source_type}" do
+          detail "Lists all members of a specified #{source_type} viewable by the authenticated user. Also returns " \
+            "inherited members from ancestor groups or invited groups. If a user is a member of this #{source_type} " \
+            "and one or more ancestor groups, only returns the highest `access_level`. Members from an invited " \
+            "group are returned if the invited group is public, the requester is a member of an invited group, " \
+            "or the requester is a member of the shared group or project."
+          success Entities::Member
+          is_array true
+          tags %w[members]
+        end
+        params do
+          optional :query, type: String, desc: 'A query string to search for members'
+          optional :user_ids, type: Array[Integer], coerce_with: ::API::Validations::Types::CommaSeparatedToIntegerArray.coerce, desc: 'Array of user ids to look up for membership'
+          optional :show_seat_info, type: Boolean, desc: 'Show seat information for members'
+          use :optional_state_filter_ee
+          use :pagination
+        end
+
+        route_setting :authorization, permissions: :read_member, boundary_type: boundary
+        get ":id/members/all", feature_category: feature_category do
+          check_rate_limit_by_user_or_ip!(:project_members_api)
+
+          source = find_source(source_type, params[:id])
+
+          authorize_read_source_member!(source_type, source)
+
+          members = paginate(retrieve_members(source, params: params, deep: true))
+
+          present_members_with_invited_private_group_accessibility(members, source)
+        end
+
+        desc "Retrieve a direct #{source_type} member" do
+          detail "Retrieves a specified member of a #{source_type}. Returns only direct members and not inherited " \
+            "members through ancestor groups."
+          success Entities::Member
+          tags %w[members]
+        end
+        params do
+          requires :user_id, type: Integer, desc: 'The user ID of the member'
+        end
+        # rubocop: disable CodeReuse/ActiveRecord
+        route_setting :authorization, permissions: :read_member, boundary_type: boundary
+        get ":id/members/:user_id", feature_category: feature_category do
+          source = find_source(source_type, params[:id])
+
+          authorize_read_source_member!(source_type, source)
+
+          members = source_members(source)
+          member = members.find_by!(user_id: params[:user_id])
+
+          present_members member
+        end
+        # rubocop: enable CodeReuse/ActiveRecord
+
+        desc "Retrieve a #{source_type} member" do
+          detail "Retrieves a specified member of a #{source_type}. Returns direct members and members inherited " \
+            "or invited through ancestor groups."
+          success Entities::Member
+          tags %w[members]
+        end
+        params do
+          requires :user_id, type: Integer, desc: 'The user ID of the member'
+        end
+        # rubocop: disable CodeReuse/ActiveRecord
+        route_setting :authorization, permissions: :read_member, boundary_type: boundary
+        get ":id/members/all/:user_id", feature_category: feature_category do
+          source = find_source(source_type, params[:id])
+
+          authorize_read_source_member!(source_type, source)
+
+          members = find_all_members(source).order(access_level: :desc)
+          member = members.find_by!(user_id: params[:user_id])
+
+          present_members_with_invited_private_group_accessibility(member, source)
+        end
+        # rubocop: enable CodeReuse/ActiveRecord
+
+        desc "Add a member to a #{source_type}" do
+          detail "Adds a member to a specified #{source_type}."
+          success Entities::Member
+          tags %w[members]
+        end
+        params do
+          requires :access_level, type: Integer, desc: 'A valid access level.' # rubocop:disable API/AccessLevelStringType -- Introduced before the cop
+          optional :user_id, types: [Integer, String], desc: 'The user ID of the new member or multiple IDs separated by commas.'
+          optional :username, type: String, desc: 'The username of the new member or multiple usernames separated by commas.'
+          optional :expires_at, type: DateTime, desc: 'Date string in the format YEAR-MONTH-DAY'
+          optional :invite_source, type: String, desc: 'Source that triggered the member creation process', default: 'members-api'
+          mutually_exclusive :user_id, :username
+          at_least_one_of :user_id, :username
+        end
+
+        route_setting :authorization, permissions: :create_member, boundary_type: boundary
+        post ":id/members", feature_category: feature_category do
+          source = find_source(source_type, params[:id])
+
+          create_service_params = params.merge(source: source)
+
+          if add_multiple_members?(params[:user_id].to_s, params[:username])
+            ::Members::CreateService.new(current_user, create_service_params).execute
+          else
+            add_single_member(create_service_params)
+          end
+        end
+
+        desc "Update a #{source_type} member" do
+          detail "Updates a specified member of a #{source_type}."
+          success Entities::Member
+          tags %w[members]
+        end
+        params do
+          requires :user_id, type: Integer, desc: 'The user ID of the new member'
+          requires :access_level, type: Integer, desc: 'A valid access level' # rubocop:disable API/AccessLevelStringType -- Introduced before the cop
+          optional :expires_at, type: DateTime, desc: 'Date string in the format YEAR-MONTH-DAY'
+          use :optional_put_params_ee
+        end
+        # rubocop: disable CodeReuse/ActiveRecord
+        route_setting :authorization, permissions: :update_member, boundary_type: boundary
+        put ":id/members/:user_id", feature_category: feature_category do
+          source = find_source(source_type, params.delete(:id))
+          member = source_members(source).find_by!(user_id: params[:user_id])
+
+          authorize_update_source_member!(source_type, member)
+
+          result = ::Members::UpdateService
+            .new(current_user, declared_params(include_missing: false).merge({ source: source }))
+            .execute(member)
+
+          present_put_membership_response(result)
+        end
+        # rubocop: enable CodeReuse/ActiveRecord
+
+        desc "Remove a member from a #{source_type}" do
+          detail "Removes a specified user from a #{source_type}. The user must be a direct member."
+          success code: 204, message: 'Resource deleted'
+          tags %w[members]
+        end
+        params do
+          requires :user_id, type: Integer, desc: 'The user ID of the member'
+          optional :skip_subresources, type: Boolean, default: false,
+            desc: 'If `true`, the member retains any direct memberships in subgroups or projects.'
+          optional :unassign_issuables, type: Boolean, default: false,
+            desc: "If `true`, unassigns the member from any issues or merge requests in the #{source_type}."
+        end
+        # rubocop: disable CodeReuse/ActiveRecord
+        route_setting :authorization, permissions: :delete_member, boundary_type: boundary
+        delete ":id/members/:user_id", feature_category: feature_category do
+          source = find_source(source_type, params[:id])
+          member = source_members(source).find_by!(user_id: params[:user_id])
+
+          check_rate_limit!(:members_delete, scope: [source, current_user])
+
+          destroy_conditionally!(member) do
+            ::Members::DestroyService.new(member, current_user: current_user,
+              skip_subresources: params[:skip_subresources], unassign_issuables: params[:unassign_issuables]).execute
+          end
+        end
+        # rubocop: enable CodeReuse/ActiveRecord
+      end
+    end
+  end
+end
+
+API::Members.prepend_mod_with('API::Members')

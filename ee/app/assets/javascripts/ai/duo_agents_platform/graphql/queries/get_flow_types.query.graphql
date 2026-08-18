@@ -1,0 +1,10 @@
+# @feature_category: duo_agent_platform
+query getFlowTypes {
+  aiCatalogItems(itemTypes: [FLOW]) {
+    nodes {
+      id
+      name
+      foundationalFlowReference
+    }
+  }
+}

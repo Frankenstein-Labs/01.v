@@ -1,0 +1,15 @@
+---
+schemaVersion: 2.2.0
+components:
+  - name: example-valid-component
+    volume:
+      size: 42Gi
+  - name: example-invalid-second-component
+    attributes:
+      gl/inject-editor: true
+    container:
+      image: quay.io/mloriedo/universal-developer-image:ubi8-dw-demo
+      endpoints: true
+commands: []
+events: {}
+variables: {}

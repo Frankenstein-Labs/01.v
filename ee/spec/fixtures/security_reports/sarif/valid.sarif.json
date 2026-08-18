@@ -1,0 +1,103 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Semgrep",
+          "version": "1.50.0",
+          "informationUri": "https://semgrep.dev",
+          "rules": [
+            {
+              "id": "sql-injection",
+              "name": "SQL Injection",
+              "shortDescription": {
+                "text": "Potential SQL injection vulnerability"
+              },
+              "fullDescription": {
+                "text": "User-controlled data is passed unsanitized to a SQL query, allowing an attacker to alter query logic."
+              },
+              "helpUri": "https://semgrep.dev/r/sql-injection",
+              "properties": {
+                "tags": [
+                  "CWE-89",
+                  "security"
+                ],
+                "security-severity": "8.5"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              }
+            },
+            {
+              "id": "xss",
+              "name": "Cross-Site Scripting",
+              "shortDescription": {
+                "text": "Potential XSS vulnerability"
+              },
+              "fullDescription": {
+                "text": "Unsanitized user input is reflected into HTML output, enabling script injection attacks."
+              },
+              "helpUri": "https://semgrep.dev/r/xss",
+              "properties": {
+                "tags": [
+                  "CWE-79"
+                ]
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "sql-injection",
+          "level": "error",
+          "message": {
+            "text": "User input is used directly in a SQL query without sanitization."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/models/user.rb"
+                },
+                "region": {
+                  "startLine": 42,
+                  "startColumn": 5,
+                  "endLine": 42,
+                  "endColumn": 50
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "xss",
+          "level": "warning",
+          "message": {
+            "text": "Unsanitized user input is rendered directly into HTML."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/views/users/show.html.erb"
+                },
+                "region": {
+                  "startLine": 10,
+                  "startColumn": 1,
+                  "endLine": 10,
+                  "endColumn": 30
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,441 @@
+---
+stage: Agent Foundations
+group: Agent Execution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see <https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments>
+description: REST API to create, start, and manage GitLab Duo Agent Platform flows.
+title: Flows API
+---
+
+{{< details >}}
+
+- Tier: Premium, Ultimate
+- Offering: GitLab.com, GitLab Self-Managed, GitLab Dedicated
+
+{{< /details >}}
+
+Use this API to create and manage [flows](../user/duo_agent_platform/flows/_index.md) in the
+[GitLab Duo Agent Platform](../user/duo_agent_platform/_index.md).
+Flows are combinations of AI agents that work together to complete developer tasks,
+such as fixing bugs, writing code, or resolving vulnerabilities.
+
+## Trigger a flow
+
+{{< details >}}
+
+- Status: Experiment
+
+{{< /details >}}
+
+Triggers and starts a new flow.
+
+```plaintext
+POST /ai/duo_workflows/workflows
+```
+
+Supported attributes:
+
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `additional_context` | array of objects | No | Additional context for the flow. Each element must be an object with at minimum a `Category` (string) and `Content` (string, serialized JSON) key. |
+| `agent_privileges` | integer array | No | Privilege IDs the agent is allowed to use. Defaults to all privileges. See [List all agent privileges](#list-all-agent-privileges). |
+| `ai_catalog_item_consumer_id` | integer | No | ID of the AI Catalog item consumer that configures which catalog item to execute. Requires `project_id`. Cannot be used with `workflow_definition`; if both are provided, `ai_catalog_item_consumer_id` takes precedence. See [Look up the consumer ID](#look-up-the-consumer-id). |
+| `ai_catalog_item_version_id` | integer | No | ID of the AI Catalog item version that sourced the flow configuration. |
+| `allow_agent_to_request_user` | boolean | No | When `true` (default), the agent may pause to ask the user questions before proceeding. When `false`, the agent runs to completion without user input. |
+| `environment` | string | No | Execution environment. One of: `ide`, `web`, `chat_partial`, `chat`, `ambient`. |
+| `goal` | string | No | Description of the task for the agent to complete. Example: `Fix the failing pipeline`. |
+| `image` | string | No | Container image to use when running the flow in a CI pipeline. Must meet the [custom image requirements](../user/duo_agent_platform/flows/execution/images.md#use-a-custom-image). Example: `registry.gitlab.com/gitlab-org/duo-workflow/custom-image:latest`. |
+| `issue_id` | integer | No | IID of the issue to associate the flow with. Requires `project_id`. |
+| `merge_request_id` | integer | No | IID of the merge request to associate the flow with. Requires `project_id`. |
+| `namespace_id` | string | No | ID or path of the namespace to associate the flow with. |
+| `pre_approved_agent_privileges` | integer array | No | Privilege IDs the agent can use without asking for user approval. Must be a subset of `agent_privileges`. |
+| `project_id` | string | No | ID or path of the project to associate the flow with. |
+| `shallow_clone` | boolean | No | Whether to use a shallow clone of the repository during execution. Default: `true`. |
+| `source_branch` | string | No | Source branch for the CI pipeline. Defaults to the project's default branch. |
+| `start_workflow` | boolean | No | When `true`, starts the flow immediately after creation. |
+| `workflow_definition` | string | No | Flow type identifier. Example: `developer/v1`. Cannot be used with `ai_catalog_item_consumer_id`; if both are provided, `ai_catalog_item_consumer_id` takes precedence. |
+| `source`                        | string | No | Where the session was triggered from in the UI. |
+
+If successful, returns [`201 Created`](rest/troubleshooting.md#status-codes) and the following response
+attributes:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `agent_privileges` | integer array | Privilege IDs assigned to the agent. |
+| `agent_privileges_names` | string array | Names corresponding to `agent_privileges`. |
+| `ai_catalog_item_version_id` | integer | ID of the AI Catalog item version. `null` if not set. |
+| `allow_agent_to_request_user` | boolean | When `true`, the agent may pause for user input. |
+| `environment` | string | Execution environment. `null` if not set. |
+| `gitlab_url` | string | Base URL of the GitLab instance. |
+| `id` | integer | ID of the flow. |
+| `image` | string | Container image for CI pipeline execution. `null` if not set. |
+| `mcp_enabled` | boolean | Whether `MCP` (Model Context Protocol) tools are enabled for this flow. |
+| `namespace_id` | integer | ID of the associated namespace. `null` if not set. |
+| `pre_approved_agent_privileges` | integer array | Privilege IDs the agent can use without asking for approval. |
+| `pre_approved_agent_privileges_names` | string array | Names corresponding to `pre_approved_agent_privileges`. |
+| `project_id` | integer | ID of the associated project. `null` if not set. |
+| `status` | string | Current flow status. One of `created`, `running`, `paused`, `finished`, `failed`, `stopped`, `input_required`, `plan_approval_required`, or `tool_call_approval_required`. |
+| `summary` | string | Short text summary of the workflow. |
+| `title` | string | Title of the session. |
+| `workflow_definition` | string | Flow type identifier. |
+| `workload` | object | Information about the workload. |
+| `workload.id` | string | ID of the workload. |
+| `workload.message` | string | Status message for the workload. |
+
+### Look up the consumer ID
+
+Before you can use `ai_catalog_item_consumer_id`, you must use the GraphQL API to retrieve the ID from the [AI Catalog](../user/duo_agent_platform/ai_catalog.md).
+The item must already be enabled for the project.
+
+```graphql
+query {
+  aiCatalogConfiguredItems(projectId: "gid://gitlab/Project/<project_id>") {
+    nodes {
+      id
+      item { name }
+    }
+  }
+}
+```
+
+The `id` field is a Global ID in the format `gid://gitlab/AiCatalogItemConsumer/<numeric_id>`.
+Use the numeric suffix as the `ai_catalog_item_consumer_id` value.
+
+Example request using a built-in flow type:
+
+```shell
+curl --request POST \
+  --header "PRIVATE-TOKEN: <your_access_token>" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "project_id": "5",
+    "goal": "Fix the failing pipeline by correcting the syntax error in .gitlab-ci.yml",
+    "workflow_definition": "developer/v1",
+    "start_workflow": true
+  }' \
+  --url "https://gitlab.example.com/api/v4/ai/duo_workflows/workflows"
+```
+
+Example request using a catalog-configured flow:
+
+```shell
+curl --request POST \
+  --header "PRIVATE-TOKEN: <your_access_token>" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "project_id": "5",
+    "goal": "Fix the failing pipeline by correcting the syntax error in .gitlab-ci.yml",
+    "ai_catalog_item_consumer_id": 12,
+    "start_workflow": true
+  }' \
+  --url "https://gitlab.example.com/api/v4/ai/duo_workflows/workflows"
+```
+
+Example response:
+
+```json
+{
+  "id": 1,
+  "project_id": 5,
+  "namespace_id": null,
+  "agent_privileges": [1, 2, 3, 4, 5, 6],
+  "agent_privileges_names": [
+    "read_write_files",
+    "read_only_gitlab",
+    "read_write_gitlab",
+    "run_commands",
+    "use_git",
+    "run_mcp_tools"
+  ],
+  "pre_approved_agent_privileges": [],
+  "pre_approved_agent_privileges_names": [],
+  "workflow_definition": "developer/v1",
+  "status": "running",
+  "allow_agent_to_request_user": true,
+  "image": null,
+  "environment": null,
+  "ai_catalog_item_version_id": null,
+  "workload": {
+    "id": "abc-123",
+    "message": "Workflow started"
+  },
+  "mcp_enabled": false,
+  "gitlab_url": "https://gitlab.example.com"
+}
+```
+
+## Register a flow callback endpoint
+
+Registers an HTTPS endpoint that receives flow lifecycle events (`flow.started`, `flow.completed`,
+and `flow.failed`). Reference the returned `id` as the `callback_hook_id` attribute when you
+[trigger a flow](#trigger-a-flow) to receive lifecycle notifications instead of polling for status.
+
+The URL and secrets are encrypted at rest and are never returned by the API after registration.
+
+Prerequisites:
+
+- You must have the Owner role for the organization.
+
+```plaintext
+POST /ai/duo_workflows/flow_callbacks
+```
+
+Supported attributes:
+
+| Attribute        | Type   | Required | Description |
+|------------------|--------|----------|-------------|
+| `url`            | string | Yes      | HTTPS URL that receives callbacks. |
+| `name`           | string | No       | A label for this endpoint. |
+| `signing_token`  | string | No       | `HMAC` signing secret in `whsec_<base64-of-32-bytes>` format, used to compute the `webhook-signature` header so you can verify payloads. Not returned. |
+| `token`          | string | No       | Shared secret sent verbatim as the `X-Gitlab-Token` header. Not returned. |
+
+If successful, returns [`201 Created`](rest/troubleshooting.md#status-codes) and the following response
+attributes:
+
+| Attribute            | Type    | Description |
+|----------------------|---------|-------------|
+| `created_at`         | string  | Date and time the endpoint was registered. |
+| `id`                 | integer | ID of the flow callback endpoint. |
+| `name`               | string  | Label for this endpoint. |
+| `signing_token_set`  | boolean | Whether a `signing_token` is set. |
+| `token_set`          | boolean | Whether a `token` is set. |
+| `url`                | string  | HTTPS URL that receives callbacks. |
+
+Example request:
+
+```shell
+curl --request POST \
+  --header "PRIVATE-TOKEN: <your_access_token>" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "url": "https://autoflow.example.com/duo/callbacks",
+    "name": "AutoFlow",
+    "signing_token": "whsec_<base64_encoded_32_byte_secret>"
+  }' \
+  --url "https://gitlab.example.com/api/v4/ai/duo_workflows/flow_callbacks"
+```
+
+Example response:
+
+```json
+{
+  "id": 1,
+  "url": "https://autoflow.example.com/duo/callbacks",
+  "name": "AutoFlow",
+  "signing_token_set": true,
+  "token_set": false,
+  "created_at": "2026-07-22T11:37:00.000Z"
+}
+```
+
+## List flow callback endpoints
+
+Lists the flow callback endpoints registered for your organization. Secrets are not returned.
+
+Prerequisites:
+
+- You must have the Owner role for the organization.
+
+```plaintext
+GET /ai/duo_workflows/flow_callbacks
+```
+
+Use the `page` and `per_page` [pagination](rest/_index.md#offset-based-pagination) parameters to
+control the pagination of results.
+
+If successful, returns [`200 OK`](rest/troubleshooting.md#status-codes) and an array of
+[flow callback endpoint](#register-a-flow-callback-endpoint) objects.
+
+Example request:
+
+```shell
+curl --request GET \
+  --header "PRIVATE-TOKEN: <your_access_token>" \
+  --url "https://gitlab.example.com/api/v4/ai/duo_workflows/flow_callbacks"
+```
+
+## Get a flow callback endpoint
+
+Returns a single registered flow callback endpoint. Secrets are not returned.
+
+Prerequisites:
+
+- You must have the Owner role for the organization.
+
+```plaintext
+GET /ai/duo_workflows/flow_callbacks/:id
+```
+
+Supported attributes:
+
+| Attribute | Type    | Required | Description |
+|-----------|---------|----------|-------------|
+| `id`      | integer | Yes      | ID of the flow callback endpoint. |
+
+If successful, returns [`200 OK`](rest/troubleshooting.md#status-codes) and a
+[flow callback endpoint](#register-a-flow-callback-endpoint) object.
+
+Example request:
+
+```shell
+curl --request GET \
+  --header "PRIVATE-TOKEN: <your_access_token>" \
+  --url "https://gitlab.example.com/api/v4/ai/duo_workflows/flow_callbacks/1"
+```
+
+## Delete a flow callback endpoint
+
+Deletes a registered flow callback endpoint so it no longer receives deliveries.
+
+Prerequisites:
+
+- You must have the Owner role for the organization.
+
+```plaintext
+DELETE /ai/duo_workflows/flow_callbacks/:id
+```
+
+Supported attributes:
+
+| Attribute | Type    | Required | Description |
+|-----------|---------|----------|-------------|
+| `id`      | integer | Yes      | ID of the flow callback endpoint. |
+
+If successful, returns [`204 No Content`](rest/troubleshooting.md#status-codes).
+
+Example request:
+
+```shell
+curl --request DELETE \
+  --header "PRIVATE-TOKEN: <your_access_token>" \
+  --url "https://gitlab.example.com/api/v4/ai/duo_workflows/flow_callbacks/1"
+```
+
+## Get workflow trace as JSONL
+
+{{< details >}}
+
+- Status: Experiment
+
+{{< /details >}}
+
+Returns the `ui_chat_log` entries of a workflow session
+as [JSON Lines](https://jsonlines.org/) (JSONL).
+Each line is a valid JSON object representing one entry from the `ui_chat_log` array.
+Use this endpoint to parse or pipe the trace into tools like `jq`.
+
+By default, the endpoint returns the complete conversation across all threads of the session,
+including messages from before any context compaction.
+Use the `thread` attribute to return a single thread instead.
+
+```plaintext
+GET /ai/duo_workflows/workflows/:workflow_id/trace.jsonl
+```
+
+Supported attributes:
+
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `workflow_id` | integer | Yes | ID of the workflow. |
+| `thread` | string | No | Which thread to return. Omit for the full trace across all threads. Use `latest` for the most recent thread only, or a thread ID for a specific thread. |
+
+If successful, returns [`200 OK`](rest/troubleshooting.md#status-codes) with:
+
+- **Content-Type**: `application/x-ndjson`
+- **Body**: One JSON object per line, each representing a `ui_chat_log` entry.
+  Returns an empty body if the workflow has no checkpoints or no `ui_chat_log` entries.
+
+Example request:
+
+```shell
+curl --header "PRIVATE-TOKEN: <your_access_token>" \
+  --url "https://gitlab.example.com/api/v4/ai/duo_workflows/workflows/1/trace.jsonl"
+```
+
+Example response (each line is a separate JSON object):
+
+```jsonl
+{"status":"success","content":"Analyze the issue","message_type":"human"}
+{"status":"success","content":"I'll start by reading the codebase.","message_type":"ai"}
+```
+
+You can pipe the output into `jq` to filter entries by type:
+
+```shell
+curl --header "PRIVATE-TOKEN: <your_access_token>" \
+  --url "https://gitlab.example.com/api/v4/ai/duo_workflows/workflows/1/trace.jsonl" \
+  | jq 'select(.message_type == "ai")'
+```
+
+## List all agent privileges
+
+Lists all available agent privileges with their IDs, names, descriptions, and whether each is enabled
+by default.
+
+```plaintext
+GET /ai/duo_workflows/workflows/agent_privileges
+```
+
+This endpoint has no supported attributes.
+
+If successful, returns [`200 OK`](rest/troubleshooting.md#status-codes) and the following response
+attributes:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `all_privileges` | array of objects | All available agent privileges. |
+| `all_privileges[].default_enabled` | boolean | Whether the privilege is enabled by default. |
+| `all_privileges[].description` | string | Human-readable description of what the privilege permits. |
+| `all_privileges[].id` | integer | Privilege ID. |
+| `all_privileges[].name` | string | Machine-readable privilege name. |
+
+Example request:
+
+```shell
+curl --header "PRIVATE-TOKEN: <your_access_token>" \
+  --url "https://gitlab.example.com/api/v4/ai/duo_workflows/workflows/agent_privileges"
+```
+
+Example response:
+
+```json
+{
+  "all_privileges": [
+    {
+      "id": 1,
+      "name": "read_write_files",
+      "description": "Allow local filesystem read/write access",
+      "default_enabled": true
+    },
+    {
+      "id": 2,
+      "name": "read_only_gitlab",
+      "description": "Allow read only access to GitLab APIs",
+      "default_enabled": true
+    },
+    {
+      "id": 3,
+      "name": "read_write_gitlab",
+      "description": "Allow write access to GitLab APIs",
+      "default_enabled": true
+    },
+    {
+      "id": 4,
+      "name": "run_commands",
+      "description": "Allow running any commands",
+      "default_enabled": true
+    },
+    {
+      "id": 5,
+      "name": "use_git",
+      "description": "Allow git commits, push and other git commands",
+      "default_enabled": true
+    },
+    {
+      "id": 6,
+      "name": "run_mcp_tools",
+      "description": "Allow running MCP tools",
+      "default_enabled": true
+    }
+  ]
+}
+```

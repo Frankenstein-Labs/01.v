@@ -1,0 +1,6 @@
+# @feature_category: team_planning
+mutation deleteIteration($id: IterationID!) {
+  iterationDelete(input: { id: $id }) {
+    errors
+  }
+}

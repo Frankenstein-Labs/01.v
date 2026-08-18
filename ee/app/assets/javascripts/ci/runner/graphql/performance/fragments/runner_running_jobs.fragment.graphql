@@ -1,0 +1,6 @@
+fragment RunnerRunningJobs on CiRunner {
+  id
+  shortSha
+  description
+  runningJobCount: jobCount(statuses: [RUNNING])
+}

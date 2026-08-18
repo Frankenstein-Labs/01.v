@@ -1,0 +1,5 @@
+fragment UsageOverviewFragment on ValueStreamDashboardCount {
+  identifier
+  count
+  recordedAt
+}

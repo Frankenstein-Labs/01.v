@@ -1,0 +1,18 @@
+# @feature_category: security_policy_management
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getSppEligibleProjects($fullPath: ID!, $search: String, $after: String, $ids: [ProjectID!]) {
+  project(fullPath: $fullPath) {
+    id
+    securityPolicyEligibleProjects(search: $search, after: $after, ids: $ids) {
+      nodes {
+        id
+        name
+        fullPath
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

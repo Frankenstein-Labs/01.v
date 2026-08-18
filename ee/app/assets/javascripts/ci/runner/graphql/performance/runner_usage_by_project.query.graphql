@@ -1,0 +1,23 @@
+query getRunnerUsageByProject(
+  $runnerType: CiRunnerType
+  $fullPath: ID
+  $fromDate: Date
+  $toDate: Date
+) {
+  runnerUsageByProject(
+    runnerType: $runnerType
+    fullPath: $fullPath
+    fromDate: $fromDate
+    toDate: $toDate
+    projectsLimit: 5
+  ) {
+    project {
+      id
+      name
+      nameWithNamespace
+      avatarUrl
+      webUrl
+    }
+    ciDuration
+  }
+}

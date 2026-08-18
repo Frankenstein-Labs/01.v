@@ -1,0 +1,28 @@
+mutation createAmazonS3Destination(
+  $fullPath: ID!
+  $name: String!
+  $accessKeyXid: String!
+  $secretAccessKey: String!
+  $awsRegion: String!
+  $bucketName: String!
+) {
+  auditEventsAmazonS3ConfigurationCreate(
+    input: {
+      groupPath: $fullPath
+      name: $name
+      accessKeyXid: $accessKeyXid
+      secretAccessKey: $secretAccessKey
+      awsRegion: $awsRegion
+      bucketName: $bucketName
+    }
+  ) {
+    errors
+    amazonS3Configuration {
+      id
+      name
+      accessKeyXid
+      awsRegion
+      bucketName
+    }
+  }
+}

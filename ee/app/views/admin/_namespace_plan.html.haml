@@ -1,0 +1,10 @@
+-# rubocop:disable CodeReuse/ActiveRecord
+- return unless ::Gitlab::Saas.feature_available?(:gitlab_com_subscriptions)
+
+.form-group.gl-form-group{ role: 'group' }
+  = f.label :plan, class: 'gl-block col-form-label'
+  = f.fields_for :gitlab_subscription do |f|
+    = f.select :hosted_plan_id, Plan.pluck(:title, :id),
+      { include_blank: _('No plan') },
+      class: 'gl-form-select custom-select', data: { testid: 'plan-dropdown' }
+-# rubocop:enable CodeReuse/ActiveRecord

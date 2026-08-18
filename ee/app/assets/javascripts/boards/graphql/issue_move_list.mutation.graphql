@@ -1,0 +1,33 @@
+#import "ee_else_ce/boards/graphql/issue.fragment.graphql"
+
+# @feature_category: portfolio_management
+mutation issueMoveListEE(
+  $projectPath: ID!
+  $iid: String!
+  $boardId: BoardID!
+  $fromListId: ID
+  $toListId: ID
+  $moveBeforeId: ID
+  $moveAfterId: ID
+  $positionInList: Int
+  $epicId: EpicID
+) {
+  issuableMoveList: issueMoveList(
+    input: {
+      projectPath: $projectPath
+      iid: $iid
+      boardId: $boardId
+      fromListId: $fromListId
+      toListId: $toListId
+      moveBeforeId: $moveBeforeId
+      moveAfterId: $moveAfterId
+      positionInList: $positionInList
+      epicId: $epicId
+    }
+  ) {
+    issuable: issue {
+      ...Issue
+    }
+    errors
+  }
+}

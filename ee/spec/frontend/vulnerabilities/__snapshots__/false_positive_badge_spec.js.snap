@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`False positive badge component should render the alert badge 1`] = `
+<div
+  class="gl-inline-block"
+>
+  <gl-badge-stub
+    icon="false-positive"
+    iconsize="md"
+    tag="span"
+    target="_self"
+    variant="warning"
+  />
+  <gl-popover-stub
+    cssclasses=""
+    placement="top"
+    target="[Function]"
+    title="False positive detected"
+  >
+    <gl-sprintf-stub
+      message="The scanner determined this vulnerability to be a false positive. Verify the evaluation before changing its status. %{linkStart}Learn more about false positive detection.%{linkEnd}"
+    />
+  </gl-popover-stub>
+</div>
+`;

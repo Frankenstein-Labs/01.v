@@ -1,0 +1,9 @@
+fragment UserDisabledForDuoUsage on User {
+  id
+  compositeIdentityEnforced
+  duoStatus {
+    disabled
+    disabledReason
+    flowTriggerEvents
+  }
+}

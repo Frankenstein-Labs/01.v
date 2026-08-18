@@ -1,0 +1,10 @@
+#import "./fragments/runner_running_jobs.fragment.graphql"
+
+query getMostActiveRunnersEE {
+  runners(type: INSTANCE_TYPE, first: 5, sort: MOST_ACTIVE_DESC) {
+    nodes {
+      ...RunnerRunningJobs
+      adminUrl
+    }
+  }
+}

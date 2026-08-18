@@ -1,0 +1,16 @@
+---
+description: A user searches project code using semantic (natural language) search via the REST API.
+internal_events: true
+action: search_code_with_semantic_search
+identifiers:
+- user
+- project
+- namespace
+product_group: global_search
+product_categories:
+- global_search
+milestone: '18.11'
+introduced_by_url: 'https://gitlab.com/gitlab-org/gitlab/-/merge_requests/227817'
+tiers:
+- premium
+- ultimate

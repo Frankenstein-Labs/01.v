@@ -1,0 +1,19 @@
+.new-project {
+  max-width: 460px;
+
+  .project-import {
+    h5 {
+      display: none;
+    }
+
+    .import-buttons {
+      @apply gl-gap-2;
+      @apply gl-flex;
+      @apply gl-flex-col;
+
+      .btn {
+        @apply gl-w-full;
+      }
+    }
+  }
+}

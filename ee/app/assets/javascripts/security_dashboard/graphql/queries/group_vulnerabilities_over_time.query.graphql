@@ -1,0 +1,38 @@
+query groupVulnerabilitiesOverTime(
+  $fullPath: ID!
+  $projectId: [ID!]
+  $reportType: [VulnerabilityReportType!]
+  $startDate: ISO8601Date!
+  $endDate: ISO8601Date!
+  $includeBySeverity: Boolean!
+  $includeByReportType: Boolean!
+  $severity: [VulnerabilitySeverity!]
+  $securityAttributesFilters: [AttributeFilterInput!]
+) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    securityMetrics(
+      projectId: $projectId
+      reportType: $reportType
+      securityAttributesFilters: $securityAttributesFilters
+    ) {
+      vulnerabilitiesOverTime(startDate: $startDate, endDate: $endDate, severity: $severity) {
+        nodes {
+          date
+          ... @include(if: $includeBySeverity) {
+            bySeverity {
+              count
+              severity
+            }
+          }
+          ... @include(if: $includeByReportType) {
+            byReportType {
+              count
+              reportType
+            }
+          }
+        }
+      }
+    }
+  }
+}

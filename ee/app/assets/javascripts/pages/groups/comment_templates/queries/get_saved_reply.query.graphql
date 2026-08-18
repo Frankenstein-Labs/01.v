@@ -1,0 +1,10 @@
+query getGroupSavedReply($path: ID!, $id: GroupsSavedReplyID!) {
+  object: group(fullPath: $path) {
+    id
+    savedReply(id: $id) {
+      id
+      name
+      content
+    }
+  }
+}

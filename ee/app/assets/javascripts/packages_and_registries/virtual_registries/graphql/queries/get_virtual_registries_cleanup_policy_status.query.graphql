@@ -1,0 +1,9 @@
+query getVirtualRegistriesCleanupPolicyStatus($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    virtualRegistriesCleanupPolicy {
+      enabled
+      nextRunAt
+    }
+  }
+}

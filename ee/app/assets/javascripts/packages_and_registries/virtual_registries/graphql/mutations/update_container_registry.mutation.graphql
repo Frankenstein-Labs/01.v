@@ -1,0 +1,12 @@
+# @feature_category: virtual_registry
+
+mutation containerVirtualRegistryUpdate($input: ContainerVirtualRegistryUpdateInput!) {
+  updateRegistry: containerVirtualRegistryUpdate(input: $input) {
+    errors
+    registry {
+      id
+      name
+      description
+    }
+  }
+}

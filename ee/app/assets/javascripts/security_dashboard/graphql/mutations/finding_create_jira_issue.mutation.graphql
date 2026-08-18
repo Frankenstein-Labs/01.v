@@ -1,0 +1,13 @@
+mutation securityFindingJiraIssueCreate($findingUuid: String!, $projectId: ProjectID!) {
+  securityFindingExternalIssueLinkCreate(
+    input: { uuid: $findingUuid, project: $projectId, linkType: CREATED, externalTracker: JIRA }
+  ) {
+    errors
+    externalIssueLink {
+      id
+      externalIssue {
+        webUrl
+      }
+    }
+  }
+}

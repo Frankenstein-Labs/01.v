@@ -1,0 +1,10 @@
+---
+name: wallet_agnostic_credits_dashboard
+description: We're introducing a new wallet agnostic GitLab Credits Dashboard
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/594747
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/228882
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/594788
+milestone: '19.0'
+group: group::utilization
+type: beta
+default_enabled: true

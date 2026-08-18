@@ -1,0 +1,102 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "bool": {
+            "minimum_should_match": 1,
+            "should": [
+              {
+                "term": {
+                  "confidential": {
+                    "_name": "filters:confidentiality:projects:non_confidential",
+                    "value": false
+                  }
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "confidential": {
+                          "_name": "filters:confidentiality:projects:confidential",
+                          "value": true
+                        }
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1,
+                  "should": [
+                    {
+                      "term": {
+                        "assignee_id": {
+                          "_name": "filters:confidentiality:projects:confidential:as_assignee",
+                          "value": __USER_ID__
+                        }
+                      }
+                    },
+                    {
+                      "bool": {
+                        "filter": [
+                          {
+                            "term": {
+                              "author_id": {
+                                "_name": "filters:confidentiality:projects:confidential:as_author",
+                                "value": __USER_ID__
+                              }
+                            }
+                          }
+                        ],
+                        "minimum_should_match": 1,
+                        "should": [
+                          {
+                            "bool": {
+                              "must_not": [
+                                {
+                                  "term": {
+                                    "namespace_visibility_level": 0
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "terms": {
+                        "_name": "filters:confidentiality:projects:private:project:member",
+                        "project_id": [
+                          __PROJECT_ID__
+                        ]
+                      }
+                    },
+                    {
+                      "bool": {
+                        "minimum_should_match": 1,
+                        "should": [
+                          {
+                            "prefix": {
+                              "traversal_ids": {
+                                "_name": "filters:confidentiality:projects:private:ancestry_filter:descendants",
+                                "value": "__NAMESPACE_ANCESTRY__"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

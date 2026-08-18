@@ -1,0 +1,10 @@
+# @feature_category: source_code_management
+mutation UpdateGroupWebBasedCommitSigning($input: GroupUpdateInput!) {
+  groupUpdate(input: $input) {
+    group {
+      id
+      webBasedCommitSigningEnabled
+    }
+    errors
+  }
+}

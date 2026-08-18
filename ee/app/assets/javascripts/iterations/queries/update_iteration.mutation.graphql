@@ -1,0 +1,14 @@
+# @feature_category: team_planning
+mutation updateIteration($input: UpdateIterationInput!) {
+  updateIteration(input: $input) {
+    iteration {
+      id
+      title
+      description
+      descriptionHtml
+      startDate
+      dueDate
+    }
+    errors
+  }
+}

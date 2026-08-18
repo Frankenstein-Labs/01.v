@@ -1,0 +1,17 @@
+query getRunnerUsage($runnerType: CiRunnerType, $fullPath: ID, $fromDate: Date, $toDate: Date) {
+  runnerUsage(
+    runnerType: $runnerType
+    fullPath: $fullPath
+    fromDate: $fromDate
+    toDate: $toDate
+    runnersLimit: 5
+  ) {
+    runner {
+      id
+      shortSha
+      description
+      adminUrl
+    }
+    ciDuration
+  }
+}

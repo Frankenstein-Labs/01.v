@@ -1,0 +1,30 @@
+# @feature_category: duo_agent_platform
+#import "../fragments/flow.fragment.graphql"
+
+query getAgentFlow($workflowId: AiDuoWorkflowsWorkflowID!) {
+  duoWorkflowWorkflows(workflowId: $workflowId) {
+    edges {
+      node {
+        ...FlowFragment
+        latestCheckpoint {
+          duoMessages {
+            content
+            correlationId
+            role
+            messageType
+            messageSubType @gl_introduced(version: "19.0.0")
+            componentName @gl_introduced(version: "19.0.0")
+            subsessionId @gl_introduced(version: "19.0.0")
+            status
+            timestamp
+            toolInfo
+          }
+        }
+        summary
+        lastExecutorLogsUrl
+        allExecutorLogsUrls @gl_introduced(version: "19.1.0")
+        createdAt
+      }
+    }
+  }
+}

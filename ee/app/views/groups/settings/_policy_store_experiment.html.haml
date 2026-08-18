@@ -1,0 +1,7 @@
+-# Owner-only access is enforced by the group settings controller (authorize_admin_group!).
+- if group.policy_store_experiment_available?
+  = f.gitlab_ui_checkbox_component :policy_store_experiment_enabled, checkbox_options: { checked: group.policy_store_experiment_enabled } do |c|
+    - c.with_label do
+      = s_('GroupSettings|Enable Policy Store experiment')
+    - c.with_help_text do
+      = s_('GroupSettings|When enabled, this group can use the experimental Policy Store. It cannot be enabled while the group has security policies configured.')

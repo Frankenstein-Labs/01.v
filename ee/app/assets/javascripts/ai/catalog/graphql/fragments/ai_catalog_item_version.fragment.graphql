@@ -1,0 +1,13 @@
+fragment BaseAiCatalogItemVersion on AiCatalogItemVersion {
+  id
+  createdAt
+  updatedAt
+  humanVersionName
+  versionName
+  createdBy {
+    id
+    name
+    username
+    webUrl
+  }
+}

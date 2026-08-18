@@ -1,0 +1,59 @@
+# @feature_category: ai_agents
+query getAgentArtifacts(
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $name: String
+  $not: DuoWorkflowSessionArtifactNegatedFilterInput
+  $startTimeAfter: Time
+  $startTimeBefore: Time
+  $projectPath: String
+  $triggeredByUserId: UserID
+  $groupFullPath: ID!
+) {
+  group(fullPath: $groupFullPath) {
+    id
+    duoWorkflowSessionArtifacts(
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      workflowCreatedAfter: $startTimeAfter
+      workflowCreatedBefore: $startTimeBefore
+      projectPath: $projectPath
+      workflowDefinition: $name
+      triggeredByUserId: $triggeredByUserId
+      not: $not
+    ) {
+      count
+      nodes {
+        id
+        workflowDefinition
+        webPath
+        downloadPath
+        auditEventsCount
+        workflowCreatedAt
+        project {
+          id
+          name
+          webPath
+          fullPath
+        }
+        triggeredBy {
+          id
+          name
+          username
+          avatarUrl
+          webPath
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+}

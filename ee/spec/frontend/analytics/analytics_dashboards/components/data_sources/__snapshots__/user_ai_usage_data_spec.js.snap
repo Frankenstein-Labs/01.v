@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`User ai usage data source when fields are not available is not empty if the field is available in any of the nodes 1`] = `
+[
+  {
+    "__typename": "AiUserMetrics",
+    "codeSuggestionAcceptedInIdeEventCount": 0,
+    "codeSuggestionShownInIdeEventCount": 0,
+    "codeSuggestionsAcceptanceRate": {
+      "denominator": 0,
+      "numerator": 0,
+    },
+    "duoCodeReviewCommentsReactedTo": 0,
+    "requestReviewDuoCodeReviewOnMrByAuthorEventCount": 0,
+    "totalEventCount": null,
+    "troubleshootJobEventCount": 0,
+    "user": {
+      "__typename": "AddOnUser",
+      "avatarUrl": "https://www.gravatar.com/avatar/3dd3516a13d37b25b66c7915ab9bedfe7b20ffaf32da3f50c3cb5ee9f3f8aba6?s=80&d=identicon",
+      "id": "gid://gitlab/User/106",
+      "lastDuoActivityOn": "2025-10-01",
+      "name": "P Dawn Turner",
+      "username": "p-user-dawn-turner-e5c194af9850",
+      "webUrl": "http://gdk.test:3001/p-user-dawn-turner-e5c194af9850",
+    },
+  },
+  {
+    "__typename": "AiUserMetrics",
+    "codeSuggestionAcceptedInIdeEventCount": 0,
+    "codeSuggestionShownInIdeEventCount": 0,
+    "codeSuggestionsAcceptanceRate": {
+      "denominator": 0,
+      "numerator": 0,
+    },
+    "duoCodeReviewCommentsReactedTo": 0,
+    "requestReviewDuoCodeReviewOnMrByAuthorEventCount": 0,
+    "totalEventCount": 0,
+    "troubleshootJobEventCount": 0,
+    "user": {
+      "__typename": "AddOnUser",
+      "avatarUrl": "https://www.gravatar.com/avatar/142fcdcab9580b9edd2b623335dde4e6559a628daea89773acf60ba419da66bb?s=80&d=identicon",
+      "id": "gid://gitlab/User/105",
+      "lastDuoActivityOn": "2025-10-04",
+      "name": "P Homer Hodkiewicz",
+      "username": "p-user-homer-hodkiewicz-e5c194af9850",
+      "webUrl": "http://gdk.test:3001/p-user-homer-hodkiewicz-e5c194af9850",
+    },
+  },
+]
+`;
+
+exports[`User ai usage data source with data available returns data and pagination information 1`] = `
+{
+  "nodes": [
+    {
+      "__typename": "AiUserMetrics",
+      "codeSuggestionAcceptedInIdeEventCount": 0,
+      "codeSuggestionShownInIdeEventCount": 0,
+      "codeSuggestionsAcceptanceRate": {
+        "denominator": 0,
+        "numerator": 0,
+      },
+      "duoCodeReviewCommentsReactedTo": 0,
+      "requestReviewDuoCodeReviewOnMrByAuthorEventCount": 0,
+      "totalEventCount": 0,
+      "troubleshootJobEventCount": 0,
+      "user": {
+        "__typename": "AddOnUser",
+        "avatarUrl": "https://www.gravatar.com/avatar/142fcdcab9580b9edd2b623335dde4e6559a628daea89773acf60ba419da66bb?s=80&d=identicon",
+        "id": "gid://gitlab/User/105",
+        "lastDuoActivityOn": "2025-10-04",
+        "name": "P Homer Hodkiewicz",
+        "username": "p-user-homer-hodkiewicz-e5c194af9850",
+        "webUrl": "http://gdk.test:3001/p-user-homer-hodkiewicz-e5c194af9850",
+      },
+    },
+    {
+      "__typename": "AiUserMetrics",
+      "codeSuggestionAcceptedInIdeEventCount": 1,
+      "codeSuggestionShownInIdeEventCount": 3,
+      "codeSuggestionsAcceptanceRate": {
+        "denominator": 3,
+        "numerator": 1,
+      },
+      "duoCodeReviewCommentsReactedTo": 8,
+      "requestReviewDuoCodeReviewOnMrByAuthorEventCount": 10,
+      "totalEventCount": 40,
+      "troubleshootJobEventCount": 3,
+      "user": {
+        "__typename": "AddOnUser",
+        "avatarUrl": "https://www.gravatar.com/avatar/3dd3516a13d37b25b66c7915ab9bedfe7b20ffaf32da3f50c3cb5ee9f3f8aba6?s=80&d=identicon",
+        "id": "gid://gitlab/User/106",
+        "lastDuoActivityOn": "2025-10-01",
+        "name": "P Dawn Turner",
+        "username": "p-user-dawn-turner-e5c194af9850",
+        "webUrl": "http://gdk.test:3001/p-user-dawn-turner-e5c194af9850",
+      },
+    },
+  ],
+  "pageInfo": {
+    "__typename": "PageInfo",
+    "endCursor": "this-is-an-end-cursor",
+    "first": 10,
+    "hasNextPage": false,
+    "hasPreviousPage": false,
+    "startCursor": "this-is-a-start-cursor",
+  },
+}
+`;

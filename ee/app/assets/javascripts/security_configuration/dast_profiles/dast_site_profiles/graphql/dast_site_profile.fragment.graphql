@@ -1,0 +1,24 @@
+fragment DastSiteProfileFragment on DastSiteProfile {
+  id
+  profileName
+  normalizedTargetUrl
+  targetUrl
+  targetType
+  editPath
+  validationStatus
+  validationStartedAt
+  referencedInSecurityPolicies
+  auth {
+    enabled
+    url
+    usernameField
+    passwordField
+    username
+    submitField
+  }
+  excludedUrls
+  requestHeaders
+  scanMethod
+  scanFilePath
+  optionalVariables
+}

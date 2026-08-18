@@ -1,0 +1,12 @@
+query getSecurityAttributesByCategory($fullPath: ID!, $categoryId: ID) {
+  group(fullPath: $fullPath) {
+    id
+    securityAttributes(categoryId: $categoryId) @client {
+      nodes {
+        id
+        name
+        color
+      }
+    }
+  }
+}

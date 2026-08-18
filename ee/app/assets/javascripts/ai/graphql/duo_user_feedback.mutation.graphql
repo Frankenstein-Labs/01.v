@@ -1,0 +1,5 @@
+mutation duoUserFeedback($input: DuoUserFeedbackInput!) {
+  duoUserFeedback(input: $input) {
+    errors
+  }
+}

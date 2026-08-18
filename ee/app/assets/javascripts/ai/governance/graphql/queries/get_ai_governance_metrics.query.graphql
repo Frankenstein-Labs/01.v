@@ -1,0 +1,46 @@
+# @feature_category: compliance_management
+query getAiGovernanceMetrics(
+  $groupFullPath: ID!
+  $projectFullPath: ID!
+  $isProject: Boolean = false
+  $timeframe: AiGovernanceMetricsTimeframe
+) {
+  group(fullPath: $groupFullPath) @skip(if: $isProject) {
+    id
+    aiGovernanceMetrics(timeframe: $timeframe) {
+      agents {
+        count
+        previousCount
+        trend {
+          count
+        }
+      }
+      sessions {
+        count
+        previousCount
+        trend {
+          count
+        }
+      }
+    }
+  }
+  project(fullPath: $projectFullPath) @include(if: $isProject) {
+    id
+    aiGovernanceMetrics(timeframe: $timeframe) {
+      agents {
+        count
+        previousCount
+        trend {
+          count
+        }
+      }
+      sessions {
+        count
+        previousCount
+        trend {
+          count
+        }
+      }
+    }
+  }
+}

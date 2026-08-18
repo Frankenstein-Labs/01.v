@@ -1,0 +1,10 @@
+---
+name: vue3_migrate_compliance_center
+description:
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/589152
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/222586
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/595766
+milestone: '18.10'
+group: group::compliance
+type: beta
+default_enabled: false

@@ -1,0 +1,91 @@
+.duo-chat-resizable {
+  // important because we're overwritting styles on data-attr set by https://github.com/nikitasnv/vue-resizable
+  // to make sure we're having the correct scroll behaviour
+  position: fixed !important;
+}
+
+.duo-chat-container .duo-chat-drawer {
+  z-index: $zindex-duo-chat;
+
+  @include gl-container-width-up(md, panel) {
+    width: $gl-drawer-width;
+  }
+}
+
+$popover-arrow-color: #c4bae2;
+
+.duo-chat-callout-popover {
+  width: $gl-spacing-scale-48;
+  z-index: $zindex-duo-callout;
+
+  &.bs-popover-bottom {
+    .arrow {
+      &::after {
+        border-bottom-color: $popover-arrow-color;
+        top: 1px;
+      }
+    }
+  }
+}
+
+.duo-chat-message pre {
+  // make sure scrims in code blocks in Duo Chat are properly positioned
+  position: initial;
+  
+  // make scrims on code blocks in Duo Chat messages conform to colors of code blocks in user theme
+  &.scrim-bottom::after, &.scrim-top::before {
+    background: linear-gradient(to bottom, #0000, var(--code-background));
+  }
+}
+
+/**
+* Start: These styles only affect Duo Chat Classic (Non-Agentic)
+*/
+.duo-chat.web-only .duo-chat-input {
+  position: relative;
+  overflow: visible;
+
+  &::after {
+    @apply gl-p-2;
+  }
+}
+
+.duo-chat.web-only .duo-chat-input-wrap {
+  min-height: 80px;
+  max-height: 240px;
+  overflow: hidden;
+
+  .duo-chat-textarea {
+    flex: 1;
+    resize: none;
+  }
+
+  &::after {
+    content: attr(data-value) ' ';
+    @apply gl-invisible;
+    @apply gl-p-4;
+    @apply gl-font-regular;
+    padding-right: 40px;
+    word-break: break-word;
+  }
+}
+/**
+* End
+*/
+
+.agentic-chat-input {
+  background: var(--gl-control-background-color-default);
+  box-shadow: inset 0 0 0 $gl-border-size-1 var(--gl-control-border-color-default);
+
+  &:focus-within {
+    @include gl-focus($color: var(--gl-control-border-color-focus));
+  }
+}
+
+.duo-chat.web-only .duo-chat-message {
+  pre code {
+    color: inherit !important;
+    background-color: transparent !important;
+  }
+}
+

@@ -1,0 +1,16 @@
+# @feature_category: team_planning
+query getNamespaceStatuses($fullPath: ID!) {
+  namespace(fullPath: $fullPath) {
+    id
+    statuses {
+      nodes {
+        id
+        name
+        iconName
+        color
+        category
+        description
+      }
+    }
+  }
+}

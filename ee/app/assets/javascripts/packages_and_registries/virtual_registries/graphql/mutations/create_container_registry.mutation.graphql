@@ -1,0 +1,12 @@
+# @feature_category: virtual_registry
+
+mutation createContainerRegistry($input: ContainerVirtualRegistryCreateInput!) {
+  createRegistry: containerVirtualRegistryCreate(input: $input) {
+    errors
+    registry {
+      id
+      name
+      description
+    }
+  }
+}

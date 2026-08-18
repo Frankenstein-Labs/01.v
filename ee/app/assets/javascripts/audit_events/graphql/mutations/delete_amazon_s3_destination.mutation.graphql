@@ -1,0 +1,5 @@
+mutation deleteAmazonS3Destination($id: AuditEventsAmazonS3ConfigurationID!) {
+  auditEventsAmazonS3ConfigurationDelete(input: { id: $id }) {
+    errors
+  }
+}

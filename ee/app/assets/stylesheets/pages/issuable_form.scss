@@ -1,0 +1,52 @@
+.labels-select-wrapper.is-embedded {
+  .labels-select-dropdown-button {
+    background-color: $white;
+    font-family: $gl-regular-font;
+    font-size: $gl-font-size;
+    line-height: $gl-line-height-16;
+    padding-top: $gl-spacing-scale-3;
+    padding-bottom: $gl-spacing-scale-3;
+    padding-left: $gl-spacing-scale-4;
+    padding-right: $gl-spacing-scale-4;
+    height: auto;
+    text-align: left;
+    border-style: none;
+    @apply gl-shadow-inner-1-gray-200;
+    @apply gl-rounded-base;
+    white-space: nowrap;
+
+    // stylelint-disable-next-line gitlab/no-gl-class
+    .gl-button-text {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    // stylelint-disable-next-line gitlab/no-gl-class
+    .gl-icon {
+      margin: 0;
+    }
+  }
+
+  .labels-select-wrapper.is-embedded {
+    left: 0;
+    @apply gl-shadow-x0-y2-b4-s0;
+
+    width: 300px !important;
+    min-height: none;
+    max-height: none;
+
+    a:not(.btn) {
+     color: inherit;
+    }
+  }
+
+  .dropdown-title {
+    padding-top: $gl-spacing-scale-2 !important;
+    padding-bottom: $gl-spacing-scale-4 !important;
+  }
+
+  .dropdown-footer .list-unstyled {
+    margin: 0;
+  }
+}

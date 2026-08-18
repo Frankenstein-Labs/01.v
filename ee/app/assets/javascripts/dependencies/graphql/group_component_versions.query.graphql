@@ -1,0 +1,16 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getGroupComponentVersions($componentName: String!, $fullPath: ID!, $after: String) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    componentVersions(componentName: $componentName, first: 50, after: $after) {
+      nodes {
+        id
+        version
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

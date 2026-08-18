@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Policy content for dependency_firewall_policy type",
+  "type": "object",
+  "required": [
+    "name",
+    "enabled",
+    "enforcement_type",
+    "rules"
+  ],
+  "properties": {
+    "name": {
+      "description": "Name of the policy",
+      "minLength": 1,
+      "maxLength": 255,
+      "type": "string"
+    },
+    "description": {
+      "description": "Specifies the longer description of the policy.",
+      "type": "string",
+      "maxLength": 1000000
+    },
+    "enabled": {
+      "description": "Whether to enforce this policy or not.",
+      "type": "boolean"
+    },
+    "enforcement_type": {
+      "description": "Specifies how this policy should be enforced. 'enforced' blocks the download when a rule matches. 'warn' allows the download but records a warning.",
+      "type": "string",
+      "enum": [
+        "enforced",
+        "warn"
+      ]
+    },
+    "rules": {
+      "type": "array",
+      "description": "Specifies rules for dependency firewall enforcement",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "license",
+              "vulnerability",
+              "malicious"
+            ],
+            "description": "Specifies the type of the rule"
+          },
+          "denied": {
+            "type": "array",
+            "description": "Entries that are denied. For 'license' rules, list of license names. For 'vulnerability' rules, a single severity threshold. For 'malicious' rules, if the package has been flagged as malicious. Mutually exclusive with 'allowed'.",
+            "minItems": 1
+          },
+          "allowed": {
+            "type": "array",
+            "description": "Entries that are allowed. For 'license' rules, list of license names. For 'vulnerability' rules, a single severity threshold. Mutually exclusive with 'denied'.",
+            "minItems": 1
+          },
+          "exceptions": {
+            "type": "array",
+            "description": "List of exceptions that bypass this rule. Each entry can specify either a package URL (PURL) or a vulnerability identifier (e.g. CVE).",
+            "items": {
+              "type": "object",
+              "properties": {
+                "purl": {
+                  "type": "string",
+                  "pattern": "^pkg:",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "description": "Package URL (PURL) format for the exception"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "description": "Vulnerability identifier (e.g. CVE) for the exception"
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "purl"
+                  ]
+                },
+                {
+                  "required": [
+                    "id"
+                  ]
+                }
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "type",
+              "denied"
+            ]
+          },
+          {
+            "required": [
+              "type",
+              "allowed"
+            ]
+          }
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "license"
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            "then": {
+              "properties": {
+                "denied": {
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "name"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "description": "The name of the license (SPDX human-readable name)"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "allowed": {
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "name"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "description": "The name of the license (SPDX human-readable name)"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "vulnerability"
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            "then": {
+              "properties": {
+                "denied": {
+                  "maxItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "severity"
+                    ],
+                    "properties": {
+                      "severity": {
+                        "type": "string",
+                        "enum": [
+                          "critical",
+                          "high",
+                          "medium",
+                          "low",
+                          "info",
+                          "unknown"
+                        ],
+                        "description": "Severity threshold. Vulnerabilities at or above this severity are denied."
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "allowed": {
+                  "maxItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "severity"
+                    ],
+                    "properties": {
+                      "severity": {
+                        "type": "string",
+                        "enum": [
+                          "critical",
+                          "high",
+                          "medium",
+                          "low",
+                          "info",
+                          "unknown"
+                        ],
+                        "description": "Severity threshold. Vulnerabilities at or below this severity are allowed."
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "malicious"
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            "then": {
+              "required": [
+                "denied"
+              ],
+              "not": {
+                "required": [
+                  "allowed"
+                ]
+              },
+              "properties": {
+                "denied": {
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "is_malicious"
+                    ],
+                    "properties": {
+                      "is_malicious": {
+                        "type": "boolean",
+                        "enum": [
+                          true
+                        ],
+                        "description": "Whether the package is flagged by the malicious packages data feed."
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "bypass_settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "access_tokens": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

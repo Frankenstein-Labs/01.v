@@ -1,0 +1,15 @@
+query groupRunnersWaitTimesEE($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    runners {
+      jobsStatistics {
+        queuedDuration {
+          p99
+          p90
+          p75
+          p50
+        }
+      }
+    }
+  }
+}

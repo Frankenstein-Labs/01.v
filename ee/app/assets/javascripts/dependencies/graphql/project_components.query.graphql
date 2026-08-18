@@ -1,0 +1,9 @@
+query getProjectComponents($name: String, $fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    components(name: $name) {
+      id
+      name
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "bool": {
+            "should": [
+              {
+                "terms": {
+                  "_name": "filters:permissions:global:issues_access_level:enabled",
+                  "issues_access_level": [
+                    20
+                  ]
+                }
+              },
+              {
+                "terms": {
+                  "_name": "filters:permissions:global:merge_requests_access_level:enabled",
+                  "merge_requests_access_level": [
+                    20
+                  ]
+                }
+              },
+              {
+                "terms": {
+                  "_name": "filters:permissions:global:repository_access_level:enabled",
+                  "repository_access_level": [
+                    20
+                  ]
+                }
+              },
+              {
+                "terms": {
+                  "_name": "filters:permissions:global:snippets_access_level:enabled",
+                  "snippets_access_level": [
+                    20
+                  ]
+                }
+              }
+            ],
+            "filter": [
+              {
+                "terms": {
+                  "_name": "filters:permissions:global:visibility_level:public",
+                  "visibility_level": [
+                    20
+                  ]
+                }
+              }
+            ],
+            "minimum_should_match": 1
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

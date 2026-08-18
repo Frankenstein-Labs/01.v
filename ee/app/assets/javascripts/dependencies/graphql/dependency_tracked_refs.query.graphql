@@ -1,0 +1,19 @@
+# @feature_category: dependency_management
+
+query getDependencyTrackedRefs(
+  $fullPath: ID!
+  $componentVersionId: SbomComponentVersionID!
+  $search: String
+  $first: Int!
+) {
+  project(fullPath: $fullPath) {
+    id
+    dependencyTrackedRefs(componentVersionId: $componentVersionId, search: $search, first: $first) {
+      nodes {
+        id
+        name
+        refType
+      }
+    }
+  }
+}

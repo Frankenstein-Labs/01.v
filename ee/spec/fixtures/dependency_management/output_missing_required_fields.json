@@ -1,0 +1,36 @@
+{
+  "dependency_updates": [
+    {
+      "new_version": "1.0"
+    },
+    {
+      "name": "valid",
+      "new_version": "2.0",
+      "previous_version": "1.0"
+    }
+  ],
+  "updated_files": [
+    {
+      "directory": "",
+      "content": "no filename",
+      "mode": null,
+      "deleted": false,
+      "binary": false
+    },
+    {
+      "name": "no directory",
+      "content": "content",
+      "mode": null,
+      "deleted": false,
+      "binary": false
+    },
+    {
+      "name": "valid.txt",
+      "directory": "/path",
+      "content": "ok",
+      "mode": null,
+      "deleted": false,
+      "binary": false
+    }
+  ]
+}

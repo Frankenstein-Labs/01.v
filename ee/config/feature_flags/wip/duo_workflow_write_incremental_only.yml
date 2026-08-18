@@ -1,0 +1,10 @@
+---
+name: duo_workflow_write_incremental_only
+description: Stop shadow-writing the legacy full checkpoint row; write only the slim header and blobs.
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/607008
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/247367
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/607029
+milestone: '19.3'
+group: group::agent execution
+type: wip
+default_enabled: false

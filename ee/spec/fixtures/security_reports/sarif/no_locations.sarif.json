@@ -1,0 +1,75 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Semgrep",
+          "version": "1.50.0",
+          "rules": [
+            {
+              "id": "rule-no-locations",
+              "shortDescription": {
+                "text": "Result with no locations key"
+              }
+            },
+            {
+              "id": "rule-logical-only",
+              "shortDescription": {
+                "text": "Result with only logical location"
+              }
+            },
+            {
+              "id": "rule-no-region",
+              "shortDescription": {
+                "text": "Result with physical location but no region"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "rule-no-locations",
+          "level": "error",
+          "message": {
+            "text": "No locations key at all — should be skipped"
+          }
+        },
+        {
+          "ruleId": "rule-logical-only",
+          "level": "warning",
+          "message": {
+            "text": "Only a logical location — should be skipped"
+          },
+          "locations": [
+            {
+              "logicalLocations": [
+                {
+                  "name": "MyClass.myMethod",
+                  "kind": "member"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "rule-no-region",
+          "level": "note",
+          "message": {
+            "text": "Physical location with no region — should be accepted with nil lines"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/models/user.rb"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

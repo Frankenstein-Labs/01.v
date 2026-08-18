@@ -1,0 +1,10 @@
+# @feature_category: team_planning
+mutation changeLifecycle($input: LifecycleAttachWorkItemTypeInput!) {
+  lifecycleAttachWorkItemType(input: $input) {
+    lifecycle {
+      id
+      name
+    }
+    errors
+  }
+}

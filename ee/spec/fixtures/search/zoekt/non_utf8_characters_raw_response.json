@@ -1,0 +1,84 @@
+{
+  "Result": {
+    "ContentBytesLoaded": 159,
+    "IndexBytesLoaded": 1006,
+    "Crashes": 0,
+    "Duration": 327833,
+    "FileCount": 1,
+    "ShardFilesConsidered": 0,
+    "FilesConsidered": 1,
+    "FilesLoaded": 1,
+    "FilesSkipped": 0,
+    "ShardsScanned": 1,
+    "ShardsSkipped": 0,
+    "ShardsSkippedFilter": 0,
+    "MatchCount": 2,
+    "NgramMatches": 4,
+    "NgramLookups": 54,
+    "Wait": 2875,
+    "MatchTreeConstruction": 151625,
+    "MatchTreeSearch": 75333,
+    "RegexpsConsidered": 1,
+    "FlushReason": 0,
+    "Files": [
+      {
+        "FileName": "t/t3901/8859-1.txt",
+        "Repository": "32",
+        "Version": "ad3d40438242a634ddf91c364e2420abcb3d5b34",
+        "Language": "Text",
+        "Branches": [
+          "HEAD"
+        ],
+        "LineMatches": [
+          {
+            "Line": "R0lUX0NPTU1JVFRFUl9OQU1FPSRHSVRfQVVUSE9SX05BTUUgJiYK",
+            "LineStart": 72,
+            "LineEnd": 111,
+            "LineNumber": 3,
+            "Before": "R0lUX0FVVEhPUl9OQU1FPSLB6e0g8/oiICYmCg==",
+            "After": "ZXhwb3J0IEdJVF9BVVRIT1JfTkFNRSBHSVRfQ09NTUlUVEVSX05BTUUK",
+            "FileName": false,
+            "Score": 501,
+            "DebugScore": "",
+            "LineFragments": [
+              {
+                "LineOffset": 0,
+                "Offset": 72,
+                "MatchLength": 18,
+                "SymbolInfo": null
+              }
+            ]
+          },
+          {
+            "Line": "ZXhwb3J0IEdJVF9BVVRIT1JfTkFNRSBHSVRfQ09NTUlUVEVSX05BTUUK",
+            "LineStart": 111,
+            "LineEnd": 153,
+            "LineNumber": 4,
+            "Before": "R0lUX0NPTU1JVFRFUl9OQU1FPSRHSVRfQVVUSE9SX05BTUUgJiYK",
+            "After": "",
+            "FileName": false,
+            "Score": 500.5,
+            "DebugScore": "",
+            "LineFragments": [
+              {
+                "LineOffset": 23,
+                "Offset": 134,
+                "MatchLength": 18,
+                "SymbolInfo": null
+              }
+            ]
+          }
+        ],
+        "Checksum": "6IT0jDa7OWw=",
+        "Score": 707.8346641615782,
+        "RepositoryID": 32
+      }
+    ],
+    "RepoURLs": {
+      "32": ""
+    },
+    "LineFragments": {
+      "32": ""
+    }
+  }
+}

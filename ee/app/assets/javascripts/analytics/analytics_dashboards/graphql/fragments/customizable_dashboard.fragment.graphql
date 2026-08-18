@@ -1,0 +1,41 @@
+fragment CustomizableDashboardFragment on CustomizableDashboardConnection {
+  nodes {
+    slug
+    title
+    description
+    userDefined
+    status
+    gridHeight @gl_introduced(version: "18.9.0")
+    errors
+    filters
+    panels {
+      nodes {
+        title
+        titleIcon @gl_introduced(version: "19.2.0")
+        tooltip @gl_introduced(version: "18.3.0") {
+          description
+          descriptionLink
+        }
+        gridAttributes
+        queryOverrides
+        visualization {
+          slug
+          type
+          options
+          data
+          errors
+        }
+        views @gl_introduced(version: "19.0.0") {
+          text
+          visualization {
+            slug
+            type
+            options
+            data
+            errors
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+fragment ExternalStatusCheckFragment on ExternalStatusCheck {
+  id
+  name
+  externalUrl
+  hmac
+}

@@ -1,0 +1,10 @@
+---
+name: orbit_user_preference
+description: Gates the per-user Orbit enable/disable preference and chat UI toggle
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/598704
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/234196
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/598922
+milestone: '19.0'
+group: group::context-systems
+type: beta
+default_enabled: true

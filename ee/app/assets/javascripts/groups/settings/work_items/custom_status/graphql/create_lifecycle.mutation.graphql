@@ -1,0 +1,11 @@
+#import "./work_item_lifecycle.fragment.graphql"
+
+# @feature_category: team_planning
+mutation LifecycleCreate($input: LifecycleCreateInput!) {
+  lifecycleCreate(input: $input) {
+    lifecycle {
+      ...WorkItemLifecycle
+    }
+    errors
+  }
+}

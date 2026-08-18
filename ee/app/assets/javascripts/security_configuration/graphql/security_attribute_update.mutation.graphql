@@ -1,0 +1,23 @@
+mutation updateSecurityAttribute(
+  $id: SecurityAttributeID!
+  $name: String!
+  $description: String
+  $color: Color
+) {
+  securityAttributeUpdate(
+    input: { id: $id, name: $name, description: $description, color: $color }
+  ) {
+    securityAttribute {
+      id
+      name
+      description
+      color
+      editableState
+      securityCategory {
+        id
+        name
+      }
+    }
+    errors
+  }
+}

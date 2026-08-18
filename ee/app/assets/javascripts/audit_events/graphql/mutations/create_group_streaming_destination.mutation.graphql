@@ -1,0 +1,19 @@
+#import "../fragments/streaming_destination.fragment.graphql"
+
+mutation groupAuditEventStreamingDestinationsCreate(
+  $input: GroupAuditEventStreamingDestinationsCreateInput!
+) {
+  groupAuditEventStreamingDestinationsCreate(input: $input) {
+    errors
+    externalAuditEventDestination {
+      ...StreamingDestinationFragment
+      namespaceFilters {
+        id
+        namespace {
+          id
+          fullPath
+        }
+      }
+    }
+  }
+}

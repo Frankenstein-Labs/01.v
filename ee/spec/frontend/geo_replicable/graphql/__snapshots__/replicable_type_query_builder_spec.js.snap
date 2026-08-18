@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildReplicableTypeQuery query fields shows correct fields when verification=false 1`] = `
+"query ($first: Int, $last: Int, $before: String!, $after: String!, $sort: GeoRegistrySort, $replicationState: ReplicationStateEnum, $verificationState: VerificationStateEnum, $ids: [DesignManagementRegistryId!]) {
+  geoNode {
+    designManagementRepositoryRegistries(
+      first: $first
+      last: $last
+      before: $before
+      after: $after
+      sort: $sort
+      replicationState: $replicationState
+      verificationState: $verificationState
+      ids: $ids
+    ) {
+      pageInfo {
+        ...PageInfo
+      }
+      count
+      nodes {
+        id
+        state
+        retryCount
+        lastSyncFailure
+        retryAt
+        lastSyncedAt
+        modelRecordId
+        verifiedAt @include(if: false)
+        verificationState @include(if: false)
+        verificationFailure @include(if: false)
+        createdAt
+      }
+    }
+  }
+}
+
+fragment PageInfo on PageInfo {
+  hasNextPage
+  hasPreviousPage
+  startCursor
+  endCursor
+}"
+`;
+
+exports[`buildReplicableTypeQuery query fields shows correct fields when verification=true 1`] = `
+"query ($first: Int, $last: Int, $before: String!, $after: String!, $sort: GeoRegistrySort, $replicationState: ReplicationStateEnum, $verificationState: VerificationStateEnum, $ids: [DesignManagementRegistryId!]) {
+  geoNode {
+    designManagementRepositoryRegistries(
+      first: $first
+      last: $last
+      before: $before
+      after: $after
+      sort: $sort
+      replicationState: $replicationState
+      verificationState: $verificationState
+      ids: $ids
+    ) {
+      pageInfo {
+        ...PageInfo
+      }
+      count
+      nodes {
+        id
+        state
+        retryCount
+        lastSyncFailure
+        retryAt
+        lastSyncedAt
+        modelRecordId
+        verifiedAt @include(if: true)
+        verificationState @include(if: true)
+        verificationFailure @include(if: true)
+        createdAt
+      }
+    }
+  }
+}
+
+fragment PageInfo on PageInfo {
+  hasNextPage
+  hasPreviousPage
+  startCursor
+  endCursor
+}"
+`;

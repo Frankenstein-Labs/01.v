@@ -1,0 +1,11 @@
+query getViolationsCount($projectPath: ID!, $iid: String!) {
+  project(fullPath: $projectPath) {
+    id
+    mergeRequest(iid: $iid) {
+      id
+      policyViolations {
+        violationsCount
+      }
+    }
+  }
+}

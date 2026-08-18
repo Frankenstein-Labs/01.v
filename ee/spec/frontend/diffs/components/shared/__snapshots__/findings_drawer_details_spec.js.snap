@@ -1,0 +1,335 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Findings Drawer Details General Rendering matches the snapshot with detected badge 1`] = `
+<ul
+  class="!gl-pb-0 gl-border-b-initial gl-list-none gl-mb-0"
+  data-testid="drawer-container"
+>
+  <li
+    class="gl-mb-4"
+    data-testid="findings-drawer-title"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Name
+      </span>
+      <span
+        data-testid="findings-drawer-item-value-prop"
+      >
+        mockedtitle
+      </span>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Status
+      </span>
+      <span
+        class="!gl-capitalize badge badge-pill badge-warning gl-badge"
+      >
+        <span
+          class="gl-badge-content"
+        >
+          detected
+        </span>
+      </span>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Description
+      </span>
+      <span
+        data-testid="findings-drawer-item-value-prop"
+      >
+        fakedesc
+      </span>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Project
+      </span>
+      <a
+        class="gl-link"
+        href="/testpath"
+      >
+        testname
+      </a>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        File
+      </span>
+      <span
+        data-testid="findings-drawer-item-value-prop"
+      />
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Identifiers
+      </span>
+      <span>
+        <a
+          class="gl-link"
+          href="https://semgrep.dev/r/gitlab.eslint.detect-disable-mustache-escape"
+        >
+          eslint.detect-disable-mustache-escape
+        </a>
+      </span>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Tool
+      </span>
+      <span
+        data-testid="findings-drawer-item-value-prop"
+      >
+        SAST
+      </span>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Engine
+      </span>
+      <span
+        data-testid="findings-drawer-item-value-prop"
+      >
+        testengine name
+      </span>
+    </p>
+  </li>
+</ul>
+`;
+
+exports[`Findings Drawer Details General Rendering matches the snapshot with dismissed badge 1`] = `
+<ul
+  class="!gl-pb-0 gl-border-b-initial gl-list-none gl-mb-0"
+  data-testid="drawer-container"
+>
+  <li
+    class="gl-mb-4"
+    data-testid="findings-drawer-title"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Name
+      </span>
+      <span
+        data-testid="findings-drawer-item-value-prop"
+      >
+        mockedtitle
+      </span>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Status
+      </span>
+      <span
+        class="!gl-capitalize badge badge-pill badge-warning gl-badge"
+      >
+        <span
+          class="gl-badge-content"
+        >
+          detected
+        </span>
+      </span>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Description
+      </span>
+      <span
+        data-testid="findings-drawer-item-value-prop"
+      >
+        fakedesc
+      </span>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Project
+      </span>
+      <a
+        class="gl-link"
+        href="/testpath"
+      >
+        testname
+      </a>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        File
+      </span>
+      <span
+        data-testid="findings-drawer-item-value-prop"
+      />
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Identifiers
+      </span>
+      <span>
+        <a
+          class="gl-link"
+          href="https://semgrep.dev/r/gitlab.eslint.detect-disable-mustache-escape"
+        >
+          eslint.detect-disable-mustache-escape
+        </a>
+      </span>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Tool
+      </span>
+      <span
+        data-testid="findings-drawer-item-value-prop"
+      >
+        SAST
+      </span>
+    </p>
+  </li>
+  <li
+    class="gl-mb-4"
+  >
+    <p
+      class="gl-leading-20"
+    >
+      <span
+        class="gl-block gl-font-bold gl-mb-1"
+        data-testid="findings-drawer-item-description"
+      >
+        Engine
+      </span>
+      <span
+        data-testid="findings-drawer-item-value-prop"
+      >
+        testengine name
+      </span>
+    </p>
+  </li>
+</ul>
+`;

@@ -1,0 +1,7 @@
+---
+name: malicious_package_detection
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/227062
+milestone: '18.11'
+type: wip
+group: group::security insights
+default_enabled: false

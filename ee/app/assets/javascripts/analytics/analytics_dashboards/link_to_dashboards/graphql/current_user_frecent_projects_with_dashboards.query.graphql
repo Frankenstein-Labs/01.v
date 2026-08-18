@@ -1,0 +1,14 @@
+query CurrentUserFrecentProjectsWithDashboards {
+  frecentProjects {
+    id
+    name
+    namespace: nameWithNamespace
+    avatarUrl
+    fullPath
+    customizableDashboards {
+      nodes {
+        slug
+      }
+    }
+  }
+}

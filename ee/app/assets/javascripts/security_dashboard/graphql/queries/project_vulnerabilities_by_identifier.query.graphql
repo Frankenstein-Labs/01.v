@@ -1,0 +1,21 @@
+# @feature_category: vulnerability_management
+query projectVulnerabilitiesByIdentifier(
+  $fullPath: ID!
+  $reportType: [VulnerabilityReportType!]
+  $severity: [VulnerabilitySeverity!]
+  $trackedRefIds: [SecurityProjectTrackedContextID!]
+) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    securityMetrics(reportType: $reportType, trackedRefIds: $trackedRefIds) {
+      vulnerabilitiesByIdentifier(severity: $severity) {
+        name
+        url
+        bySeverity {
+          count
+          severity
+        }
+      }
+    }
+  }
+}

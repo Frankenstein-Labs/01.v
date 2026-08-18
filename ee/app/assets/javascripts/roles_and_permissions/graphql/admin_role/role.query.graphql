@@ -1,0 +1,13 @@
+#import "../fragments/role.fragment.graphql"
+
+query adminMemberRole($id: MemberRoleID!) {
+  memberRole: adminMemberRole(id: $id) {
+    ...Role
+    createdAt
+    enabledPermissions {
+      nodes {
+        value
+      }
+    }
+  }
+}

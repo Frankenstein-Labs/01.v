@@ -1,0 +1,26 @@
+# @feature_category: team_planning
+
+#import "./work_item_custom_field_values.fragment.graphql"
+
+mutation workItemUpdateCustomFields(
+  $input: WorkItemUpdateInput!
+  $useWorkItemFeatures: Boolean = false
+) {
+  workItemUpdate(input: $input) {
+    workItem {
+      id
+      widgets @skip(if: $useWorkItemFeatures) {
+        ... on WorkItemWidgetCustomFields {
+          type
+          ...WorkItemCustomFieldValuesFragment
+        }
+      }
+      features @include(if: $useWorkItemFeatures) {
+        customFields {
+          ...WorkItemCustomFieldValuesFragment
+        }
+      }
+    }
+    errors
+  }
+}

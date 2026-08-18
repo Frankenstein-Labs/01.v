@@ -1,0 +1,10 @@
+#import "ee/graphql_shared/fragments/merge_request.approval_rule.fragment.graphql"
+
+query approvalRules($projectPath: ID!, $iid: String!) {
+  project(fullPath: $projectPath) {
+    id
+    mergeRequest(iid: $iid) {
+      ...MergeRequestApprovalRule
+    }
+  }
+}

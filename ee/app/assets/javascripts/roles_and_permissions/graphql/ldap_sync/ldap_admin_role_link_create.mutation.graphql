@@ -1,0 +1,12 @@
+mutation ldapAdminRoleLinkCreate(
+  $provider: String!
+  $cn: String
+  $filter: String
+  $adminMemberRoleId: MemberRoleID!
+) {
+  ldapAdminRoleLinkCreate(
+    input: { provider: $provider, cn: $cn, filter: $filter, adminMemberRoleId: $adminMemberRoleId }
+  ) {
+    errors
+  }
+}

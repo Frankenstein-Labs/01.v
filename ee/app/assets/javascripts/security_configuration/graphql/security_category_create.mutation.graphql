@@ -1,0 +1,30 @@
+mutation createSecurityCategory(
+  $namespaceId: NamespaceID!
+  $name: String!
+  $description: String
+  $multipleSelection: Boolean
+) {
+  securityCategoryCreate(
+    input: {
+      namespaceId: $namespaceId
+      name: $name
+      description: $description
+      multipleSelection: $multipleSelection
+    }
+  ) {
+    securityCategory {
+      id
+      name
+      description
+      multipleSelection
+      editableState
+      securityAttributes {
+        id
+        name
+        description
+        color
+      }
+    }
+    errors
+  }
+}

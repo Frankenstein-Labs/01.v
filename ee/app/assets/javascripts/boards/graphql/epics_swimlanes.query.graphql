@@ -1,0 +1,49 @@
+#import "./board_epic.fragment.graphql"
+
+# @feature_category: portfolio_management
+query BoardEE(
+  $fullPath: ID!
+  $boardId: BoardID!
+  $issueFilters: BoardIssueInput
+  $sort: EpicSort
+  $isGroup: Boolean = false
+  $isProject: Boolean = false
+  $after: String
+) {
+  group(fullPath: $fullPath) @include(if: $isGroup) {
+    id
+    board(id: $boardId) {
+      id
+      epics(first: 10, issueFilters: $issueFilters, sort: $sort, after: $after) {
+        nodes {
+          ...BoardEpicNode
+          userPreferences {
+            collapsed
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+  project(fullPath: $fullPath) @include(if: $isProject) {
+    id
+    board(id: $boardId) {
+      id
+      epics(first: 10, issueFilters: $issueFilters, sort: $sort, after: $after) {
+        nodes {
+          ...BoardEpicNode
+          userPreferences {
+            collapsed
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+}

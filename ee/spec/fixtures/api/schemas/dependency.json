@@ -1,0 +1,104 @@
+{
+  "type": "object",
+  "required": [
+    "occurrence_id",
+    "name"
+  ],
+  "properties": {
+    "occurrence_id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "packager": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "version": {
+      "type": "string"
+    },
+    "location": {
+      "blob_path": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "path": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "top_level": {
+        "type": "boolean"
+      },
+      "ancestors": {
+        "type": "array"
+      }
+    },
+    "has_dependency_paths": {
+      "type": "boolean"
+    },
+    "project": {
+      "type": [
+        "object"
+      ],
+      "properties": {
+        "full_path": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "project_count": {
+      "type": "integer"
+    },
+    "occurrence_count": {
+      "type": "integer"
+    },
+    "vulnerability_count": {
+      "type": "integer"
+    },
+    "malware": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "vulnerabilities": {
+      "type": "array",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string"
+        }
+      }
+    },
+    "licenses": {
+      "type": "array",
+      "properties": {
+        "spdx_identifier": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

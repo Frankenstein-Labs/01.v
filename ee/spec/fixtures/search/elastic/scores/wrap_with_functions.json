@@ -1,0 +1,40 @@
+{
+  "query": {
+    "function_score": {
+      "query": {
+        "bool": {
+          "must": [],
+          "filter": [
+            {
+              "term": {
+                "type": "project"
+              }
+            }
+          ]
+        }
+      },
+      "functions": [
+        {
+          "field_value_factor": {
+            "field": "star_count",
+            "modifier": "ln2p",
+            "missing": 0
+          }
+        },
+        {
+          "filter": {
+            "term": {
+              "forked": true
+            }
+          },
+          "weight": 0.5
+        }
+      ],
+      "score_mode": "multiply",
+      "boost_mode": "multiply"
+    }
+  },
+  "highlight": {
+    "fields": {}
+  }
+}

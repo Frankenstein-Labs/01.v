@@ -1,0 +1,36 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "bool": {
+            "should": [
+              {
+                "terms": {
+                  "_name": "filters:permissions:global:repository_access_level:enabled",
+                  "repository_access_level": [
+                    20
+                  ]
+                }
+              }
+            ],
+            "filter": [
+              {
+                "terms": {
+                  "_name": "filters:permissions:global:visibility_level:public",
+                  "visibility_level": [
+                    20
+                  ]
+                }
+              }
+            ],
+            "minimum_should_match": 1
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

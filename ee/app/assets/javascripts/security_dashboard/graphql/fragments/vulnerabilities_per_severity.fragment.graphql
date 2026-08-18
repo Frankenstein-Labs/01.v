@@ -1,0 +1,26 @@
+fragment VulnerabilitiesPerSeverity on VulnerabilitiesPerSeverity {
+  critical {
+    count
+    medianAge
+  }
+  high {
+    count
+    medianAge
+  }
+  medium {
+    count
+    medianAge
+  }
+  low {
+    count
+    medianAge
+  }
+  info {
+    count
+    medianAge
+  }
+  unknown {
+    count
+    medianAge
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "version": "15.0.6",
+  "vulnerabilities": [
+    {
+      "id": "e987fa54ff94e1d0e716814861459d2eb10bd27a0ba8ca243428669d8885ce68",
+      "description": "musl:1.1.18-r3 is affected by CVE-2017-15650",
+      "severity": "High",
+      "solution": "Upgrade musl from 1.1.18-r3 to 1.1.18-r4",
+      "location": {
+        "dependency": {
+          "package": {
+            "name": "musl"
+          },
+          "version": "1.1.18-r3"
+        },
+        "operating_system": "alpine:v3.7",
+        "image": "registry.gitlab.com/bikebilly/auto-devops-10-6/feature-branch:e7315ba964febb11bac8f5cd6ec433db8a3a1583"
+      },
+      "identifiers": [
+        {
+          "type": "cve",
+          "name": "CVE-2017-15650",
+          "value": "CVE-2017-15650",
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15650"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15650"
+        }
+      ]
+    }
+  ],
+  "remediations": [
+
+  ],
+  "scan": {
+    "scanner": {
+      "id": "trivy",
+      "name": "Trivy",
+      "url": "https://github.com/aquasecurity/trivy",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "2.1.4"
+    },
+    "analyzer": {
+      "id": "gcs",
+      "name": "GitLab Container Scanning",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "5.2.8"
+    },
+    "type": "container_scanning",
+    "status": "success",
+    "start_time": "2022-08-10T22:37:00",
+    "end_time": "2022-08-10T22:37:00"
+  }
+}

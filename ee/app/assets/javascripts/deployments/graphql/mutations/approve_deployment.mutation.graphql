@@ -1,0 +1,8 @@
+mutation approveDeployment($input: ApproveDeploymentInput!) {
+  approveDeployment(input: $input) {
+    errors
+    deploymentApproval {
+      status
+    }
+  }
+}

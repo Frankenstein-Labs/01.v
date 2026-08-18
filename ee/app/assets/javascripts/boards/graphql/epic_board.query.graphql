@@ -1,0 +1,11 @@
+#import "./epic_board.fragment.graphql"
+
+# @feature_category: portfolio_management
+query EpicBoard($fullPath: ID!, $boardId: BoardsEpicBoardID!) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    board: epicBoard(id: $boardId) {
+      ...EpicBoardFragment
+    }
+  }
+}

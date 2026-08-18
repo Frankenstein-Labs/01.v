@@ -1,0 +1,8 @@
+query getAgentCount($projectPath: ID!) {
+  project(fullPath: $projectPath) {
+    id
+    clusterAgents {
+      count
+    }
+  }
+}

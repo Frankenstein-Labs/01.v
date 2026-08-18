@@ -1,0 +1,12 @@
+query getEnabledProjectPolicies($projectPath: ID!) {
+  project(fullPath: $projectPath) {
+    id
+    approvalPolicies {
+      nodes {
+        id @gl_introduced(version: "18.11.0")
+        enabled
+        name
+      }
+    }
+  }
+}

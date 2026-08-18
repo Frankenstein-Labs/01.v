@@ -1,0 +1,10 @@
+# @feature_category: workflow_catalog
+query aiCatalogBuiltInTools {
+  aiCatalogBuiltInTools {
+    nodes {
+      id
+      title
+      description
+    }
+  }
+}

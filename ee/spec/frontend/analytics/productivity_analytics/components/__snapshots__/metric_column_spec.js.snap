@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MetricColumn component on creation matches the snapshot 1`] = `
+<div
+  class="gl-basis-1/2 gl-grow-0 gl-max-w-1/2 gl-shrink-0"
+>
+  <span
+    class="gl-text-lg time"
+  >
+    10
+    <span
+      class="gl-text-base"
+    >
+      hrs
+    </span>
+  </span>
+  <span
+    class="@md/panel:gl-hidden gl-flex gl-text-subtle gl-whitespace-pre-wrap"
+  >
+    Time from first comment to last commit
+  </span>
+</div>
+`;

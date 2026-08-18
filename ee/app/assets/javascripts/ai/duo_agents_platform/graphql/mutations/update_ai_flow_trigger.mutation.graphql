@@ -1,0 +1,7 @@
+# @feature_category: duo_agent_platform
+
+mutation updateAiFlowTrigger($input: AiFlowTriggerUpdateInput!) {
+  aiFlowTriggerUpdate(input: $input) {
+    errors
+  }
+}

@@ -1,0 +1,31 @@
+#import "~/graphql_shared/fragments/user.fragment.graphql"
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "ee/work_items/graphql/work_item_status.fragment.graphql"
+
+fragment IterationIssues on IssueConnection {
+  count
+  pageInfo {
+    ...PageInfo
+  }
+  nodes {
+    id
+    iid
+    title
+    webUrl
+    state
+    type
+    status {
+      ...WorkItemStatusFragment
+    }
+    assignees {
+      nodes {
+        ...User
+      }
+    }
+    weight
+    workItemType {
+      id
+      iconName
+    }
+  }
+}

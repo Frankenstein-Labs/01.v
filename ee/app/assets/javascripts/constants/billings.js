@@ -1,0 +1,1 @@
+export const GITLAB_CREDITS = 'GITLAB_CREDITS';

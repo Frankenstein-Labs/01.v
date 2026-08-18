@@ -1,0 +1,7 @@
+# @feature_category: workflow_catalog
+mutation deleteAiCatalogItemConsumer($id: AiCatalogItemConsumerID!) {
+  aiCatalogItemConsumerDelete(input: { id: $id }) {
+    errors
+    success
+  }
+}

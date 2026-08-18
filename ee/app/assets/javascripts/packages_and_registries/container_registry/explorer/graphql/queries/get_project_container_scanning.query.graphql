@@ -1,0 +1,20 @@
+#import "ee/security_dashboard/graphql/fragments/vulnerability_severities_count.fragment.graphql"
+
+query getProjectContainerScanning(
+  $fullPath: ID = ""
+  $securityConfigurationPath: String!
+  $reportType: [VulnerabilityReportType!]
+  $state: [VulnerabilityState!]
+  $capped: Boolean = false
+) {
+  project(fullPath: $fullPath) {
+    id
+    containerScanningForRegistry(securityConfigurationPath: $securityConfigurationPath) @client {
+      isEnabled
+      isVisible
+    }
+    vulnerabilitySeveritiesCount(reportType: $reportType, state: $state, capped: $capped) {
+      ...VulnerabilitySeveritiesCount
+    }
+  }
+}

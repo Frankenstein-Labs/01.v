@@ -1,0 +1,65 @@
+{
+  "Result": {
+    "ContentBytesLoaded": 55,
+    "IndexBytesLoaded": 2,
+    "Crashes": 0,
+    "Duration": 60833,
+    "FileCount": 1,
+    "ShardFilesConsidered": 0,
+    "FilesConsidered": 1,
+    "FilesLoaded": 1,
+    "FilesSkipped": 0,
+    "ShardsScanned": 1,
+    "ShardsSkipped": 0,
+    "ShardsSkippedFilter": 1,
+    "MatchCount": 1,
+    "NgramMatches": 1,
+    "NgramLookups": 80,
+    "Wait": 3166,
+    "MatchTreeConstruction": 27541,
+    "MatchTreeSearch": 13500,
+    "RegexpsConsidered": 0,
+    "FlushReason": 0,
+    "Files": [
+      {
+        "FileName": "test.rb",
+        "Repository": "42",
+        "Version": "89e3435e0f888d48e9a9110e546fb150f11d88a0",
+        "Language": "Ruby",
+        "Branches": [
+          "HEAD"
+        ],
+        "LineMatches": [
+          {
+            "Line": "InRlc3QgdXBkYXRlIHpvZWt0X2luZGV4ZXI6IDAuOS4xIgo=",
+            "LineStart": 11,
+            "LineEnd": 46,
+            "LineNumber": 2,
+            "Before": "Y2xhc3MgVGVzdAo=",
+            "After": "ZW5kCg==",
+            "FileName": false,
+            "Score": 1,
+            "DebugScore": "",
+            "LineFragments": [
+              {
+                "LineOffset": 7,
+                "Offset": 18,
+                "MatchLength": 10,
+                "SymbolInfo": null
+              }
+            ]
+          }
+        ],
+        "Checksum": "GkOK3bXriSA=",
+        "Score": 10,
+        "RepositoryID": 42
+      }
+    ],
+    "RepoURLs": {
+      "42": ""
+    },
+    "LineFragments": {
+      "42": ""
+    }
+  }
+}

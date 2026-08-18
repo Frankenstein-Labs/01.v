@@ -1,0 +1,11 @@
+query GroupAvatarAndParent($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    name
+    avatarUrl
+    parent {
+      id
+      fullPath
+    }
+  }
+}

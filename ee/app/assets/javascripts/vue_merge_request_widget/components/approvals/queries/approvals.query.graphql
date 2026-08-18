@@ -1,0 +1,50 @@
+#import "~/graphql_shared/fragments/user.fragment.graphql"
+
+query approvedByEE($projectPath: ID!, $iid: String!) {
+  project(fullPath: $projectPath) {
+    id
+    mergeRequestsDisableCommittersApproval
+    mergeRequest(iid: $iid) {
+      id
+      author {
+        id
+      }
+      approved
+      approvalsLeft
+      approvalsRequired
+      policiesOverridingApprovalSettings {
+        name
+        editPath
+        settings
+      }
+      approvalState {
+        invalidApproversRules {
+          id
+          name
+        }
+        rules {
+          id
+          approved
+          approvalsRequired
+          invalid
+          allowMergeWhenInvalid
+          name
+          type
+        }
+      }
+      approvedBy {
+        nodes {
+          ...User
+        }
+      }
+      committers {
+        nodes {
+          ...User
+        }
+      }
+      userPermissions {
+        canApprove
+      }
+    }
+  }
+}

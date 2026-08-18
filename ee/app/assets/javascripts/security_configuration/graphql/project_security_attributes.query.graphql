@@ -1,0 +1,17 @@
+query getProjectSecurityAttributes($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    securityAttributes {
+      nodes {
+        id
+        securityCategory {
+          id
+          name
+        }
+        name
+        description
+        color
+      }
+    }
+  }
+}

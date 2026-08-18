@@ -1,0 +1,12 @@
+# @feature_category: self-hosted_models
+
+query getDuoSettings {
+  duoSettings {
+    aiGatewayUrl
+    aiGatewayTimeoutSeconds
+    duoCoreFeaturesEnabled
+    duoCliEnabled
+    duoAgentPlatformServiceUrl
+    selfHostedDuoAgentPlatformServiceSecure
+  }
+}

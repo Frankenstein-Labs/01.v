@@ -1,0 +1,22 @@
+# @feature_category: virtual_registry
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getMavenUpstreamsSelect($groupPath: ID!, $upstreamName: String, $after: String, $first: Int) {
+  group(fullPath: $groupPath) {
+    id
+    upstreams: virtualRegistriesPackagesMavenUpstreams(
+      upstreamName: $upstreamName
+      after: $after
+      first: $first
+    ) {
+      nodes {
+        value: id
+        text: name
+        secondaryText: description
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

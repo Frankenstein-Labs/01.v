@@ -1,0 +1,8 @@
+# @feature_category: team_planning
+
+query workItemTypeIconDefinitions {
+  workItemTypeIconDefinitions {
+    name
+    label
+  }
+}

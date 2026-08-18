@@ -1,0 +1,8 @@
+# @feature_category: portfolio_management
+mutation destroyEpicBoard($id: BoardsEpicBoardID!) {
+  destroyEpicBoard(input: { id: $id }) {
+    epicBoard {
+      id
+    }
+  }
+}

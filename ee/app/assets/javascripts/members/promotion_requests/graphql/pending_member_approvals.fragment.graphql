@@ -1,0 +1,39 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+fragment pendingMemberApprovals on MemberApprovalConnection {
+  count
+  nodes {
+    user {
+      id
+      name
+      username
+      avatarUrl
+      webUrl
+      publicEmail
+      lastActivityOn
+    }
+    member {
+      id
+      accessLevel {
+        stringValue
+      }
+    }
+    requestedBy {
+      id
+      username
+      webUrl
+      name
+    }
+    newAccessLevel {
+      stringValue
+    }
+    oldAccessLevel {
+      stringValue
+    }
+    status
+    createdAt
+  }
+  pageInfo {
+    ...PageInfo
+  }
+}

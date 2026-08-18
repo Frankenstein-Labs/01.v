@@ -1,0 +1,26 @@
+# @feature_category: vulnerability_management
+query groupVulnerabilitiesByIdentifier(
+  $fullPath: ID!
+  $projectId: [ID!]
+  $reportType: [VulnerabilityReportType!]
+  $severity: [VulnerabilitySeverity!]
+  $securityAttributesFilters: [AttributeFilterInput!]
+) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    securityMetrics(
+      projectId: $projectId
+      reportType: $reportType
+      securityAttributesFilters: $securityAttributesFilters
+    ) {
+      vulnerabilitiesByIdentifier(severity: $severity) {
+        name
+        url
+        bySeverity {
+          count
+          severity
+        }
+      }
+    }
+  }
+}

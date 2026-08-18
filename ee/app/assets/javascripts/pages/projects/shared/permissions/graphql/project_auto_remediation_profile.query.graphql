@@ -1,0 +1,10 @@
+# @feature_category: software_composition_analysis
+query ProjectAutoRemediationProfile($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    securityScanProfiles {
+      id
+      scanType
+    }
+  }
+}

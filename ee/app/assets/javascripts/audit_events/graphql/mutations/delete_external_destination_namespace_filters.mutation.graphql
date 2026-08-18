@@ -1,0 +1,7 @@
+mutation deleteExternalDestinationNamespaceFilters(
+  $namespaceFilterId: AuditEventsStreamingHTTPNamespaceFilterID!
+) {
+  auditEventsStreamingHttpNamespaceFiltersDelete(input: { namespaceFilterId: $namespaceFilterId }) {
+    errors
+  }
+}

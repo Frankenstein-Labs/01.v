@@ -1,0 +1,12 @@
+query memberRolePermissions($includeDescription: Boolean = true) {
+  memberRolePermissions {
+    nodes {
+      description @include(if: $includeDescription)
+      name
+      value
+      requirements
+      enabledForGroupAccessLevels
+      enabledForProjectAccessLevels
+    }
+  }
+}

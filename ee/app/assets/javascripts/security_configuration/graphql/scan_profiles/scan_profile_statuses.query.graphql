@@ -1,0 +1,11 @@
+#import "./scan_profile_statuses.fragment.graphql"
+
+# @feature_category: security_testing_configuration
+query scanProfileStatuses($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    scanProfileStatuses @gl_introduced(version: "19.0.0") {
+      ...ScanProfileStatusesFields
+    }
+  }
+}

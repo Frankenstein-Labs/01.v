@@ -1,0 +1,8 @@
+---
+name: dw_read_blobs_list
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/249857
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/612821
+milestone: '19.3'
+type: wip
+group: group::agent execution
+default_enabled: false

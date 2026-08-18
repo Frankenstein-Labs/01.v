@@ -1,0 +1,14 @@
+# @feature_category: vulnerability_management
+query securityTrackedRefs($fullPath: ID!, $first: Int = 100, $after: String) {
+  project(fullPath: $fullPath) {
+    id
+    securityTrackedRefs(first: $first, after: $after, state: TRACKED) {
+      nodes {
+        id
+        name
+        refType
+        isDefault
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+#import "./epic_board.fragment.graphql"
+
+# @feature_category: portfolio_management
+mutation createEpicBoard($input: EpicBoardCreateInput!) {
+  epicBoardCreate(input: $input) {
+    epicBoard {
+      ...EpicBoardFragment
+    }
+    errors
+  }
+}

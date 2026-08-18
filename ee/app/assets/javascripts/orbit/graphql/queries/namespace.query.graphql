@@ -1,0 +1,12 @@
+# @feature_category: knowledge_graph
+query getOrbitNamespace($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    name
+    fullName
+    fullPath
+    avatarUrl
+    knowledgeGraphEnabled
+    knowledgeGraphAvailable
+  }
+}

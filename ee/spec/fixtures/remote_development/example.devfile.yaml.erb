@@ -1,0 +1,51 @@
+---
+schemaVersion: 2.2.0
+components:
+  - name: tooling-container
+    attributes:
+      gl/inject-editor: true
+    container:
+      image: quay.io/mloriedo/universal-developer-image:ubi8-dw-demo
+  - name: database-container
+    container:
+      image: mysql
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "my-secret-pw"
+  - name: user-defined-entrypoint-cmd-component
+    attributes:
+      overrideCommand: false
+    container:
+      image: quay.io/mloriedo/universal-developer-image:ubi8-dw-demo
+      command: ["echo"]
+      args: ["-n", "user-defined entrypoint command"]
+commands:
+  - id: user-defined-command
+    exec:
+      component: tooling-container
+      commandLine: echo 'executes postStart command in the specified workingDir'
+      workingDir: test-dir
+      hotReloadCapable: false
+  - id: main-component-command-without-working-dir
+    exec:
+      component: tooling-container
+      commandLine: echo 'executes postStart command in the projects/project_path directory'
+      hotReloadCapable: false
+  - id: db-component-command-with-working-dir
+    exec:
+      component: database-container
+      commandLine: echo 'executes postStart command in the specified workingDir'
+      workingDir: test-dir
+      hotReloadCapable: false
+  - id: db-component-command-without-working-dir
+    exec:
+      component: database-container
+      commandLine: echo 'executes postStart command in the the container's default WORKDIR'
+      hotReloadCapable: false
+events:
+  preStart: []
+  postStart:
+    - db-component-command-with-working-dir
+    - db-component-command-without-working-dir
+    - main-component-command-without-working-dir
+    - user-defined-command

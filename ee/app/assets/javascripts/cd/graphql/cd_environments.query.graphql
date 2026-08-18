@@ -1,0 +1,55 @@
+# @feature_category: continuous_delivery
+
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query cdEnvironments($search: String, $tier: CdEnvironmentTier, $first: Int, $after: String) {
+  organization {
+    id
+    cdEnvironments(search: $search, tier: $tier, first: $first, after: $after) {
+      nodes {
+        id
+        name
+        tier
+        applicationsCount
+        serviceEnvironmentHealths {
+          nodes {
+            id
+            health
+          }
+        }
+        environmentDriverBindings {
+          nodes {
+            id
+            version
+            driverConfig
+          }
+        }
+        rolloutEnvironments {
+          nodes {
+            id
+            finishedAt
+            rollout {
+              id
+              versionSet {
+                id
+                name
+              }
+              rolloutTransitions(first: 1) {
+                nodes {
+                  id
+                  principalUser {
+                    id
+                    username
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

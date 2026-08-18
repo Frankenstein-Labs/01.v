@@ -1,0 +1,43 @@
+@import 'page_bundles/mixins_and_variables_and_functions';
+
+.flow-canvas {
+  background-image: radial-gradient(circle, var(--gl-border-color-default) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@keyframes flow-stage-status-pulse {
+  0% {
+    box-shadow: 0 0 color-mix(in srgb, var(--gl-status-info-icon-color) 55%, transparent);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+
+  100% {
+    box-shadow: 0 0 transparent;
+  }
+}
+
+.flow-stage-status-pulse {
+  animation: flow-stage-status-pulse 1.4s ease-out infinite;
+
+  @include gl-prefers-reduced-motion-animation;
+}
+
+@keyframes flow-step-border-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 6px color-mix(in srgb, var(--gl-status-info-icon-color) 18%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 10px color-mix(in srgb, var(--gl-status-info-icon-color) 45%, transparent);
+  }
+}
+
+.flow-step-border-pulse {
+  animation: flow-step-border-pulse 1.6s ease-in-out infinite;
+
+  @include gl-prefers-reduced-motion-animation;
+}

@@ -1,0 +1,12 @@
+query runnersWaitTimesEE {
+  runners(type: INSTANCE_TYPE) {
+    jobsStatistics {
+      queuedDuration {
+        p99
+        p90
+        p75
+        p50
+      }
+    }
+  }
+}

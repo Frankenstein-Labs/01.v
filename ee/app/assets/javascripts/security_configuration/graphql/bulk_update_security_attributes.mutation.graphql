@@ -1,0 +1,5 @@
+mutation bulkUpdateSecurityAttributes($input: BulkUpdateSecurityAttributesInput!) {
+  bulkUpdateSecurityAttributes(input: $input) {
+    errors
+  }
+}

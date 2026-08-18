@@ -1,0 +1,8 @@
+query complianceRequirementsControls {
+  complianceRequirementControls {
+    controlExpressions {
+      id
+      name
+    }
+  }
+}

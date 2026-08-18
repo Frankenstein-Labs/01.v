@@ -1,0 +1,5 @@
+mutation ProjectSecurityExclusionDelete($input: ProjectSecurityExclusionDeleteInput!) {
+  projectSecurityExclusionDelete(input: $input) {
+    errors
+  }
+}

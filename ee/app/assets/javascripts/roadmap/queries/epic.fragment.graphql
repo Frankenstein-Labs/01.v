@@ -1,0 +1,54 @@
+fragment BaseEpic on Epic {
+  id
+  iid
+  title
+  description
+  state
+  webUrl
+  startDate
+  dueDate
+  hasChildren
+  hasChildrenWithinTimeframe
+  hasParent
+  confidential
+  blocked
+  blockedByCount
+  descendantWeightSum {
+    closedIssues
+    openedIssues
+  }
+  descendantCounts {
+    openedEpics
+    closedEpics
+    closedIssues
+    openedIssues
+  }
+  group {
+    id
+    name
+    fullName
+    fullPath
+  }
+  labels {
+    nodes {
+      id
+      title
+      description
+      color
+      textColor
+    }
+  }
+  ancestors {
+    nodes {
+      id
+    }
+  }
+  linkedWorkItems {
+    nodes {
+      linkId
+      linkType
+      workItemState
+    }
+  }
+  reference(full: true)
+}

@@ -1,0 +1,8 @@
+.duo-trials {
+  .bg-decorations {
+    @include gl-container-width-up(md, panel) {
+      background-image: url('illustrations/bg-decorations.svg');
+      background-position: top 275px right 75px;
+    }
+  }
+}

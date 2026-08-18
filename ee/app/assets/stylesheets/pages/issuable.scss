@@ -1,0 +1,27 @@
+.block {
+  &.weight {
+    // stylelint-disable-next-line gitlab/no-gl-class
+    .gl-field-error {
+      margin-top: $gl-padding-8;
+      margin-left: -6px;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.health-status {
+  line-height: $gl-line-height;
+
+  // stylelint-disable-next-line gitlab/no-gl-class
+  .gl-label-text {
+    font-weight: $gl-font-weight-bold;
+    font-size: 0.75rem;
+  }
+}
+
+.issuable-assignees {
+  a:not(.btn) {
+    color: inherit;
+  }
+}

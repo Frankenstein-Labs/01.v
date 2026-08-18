@@ -1,0 +1,14 @@
+# @feature_category: virtual_registry
+
+query getContainerUpstreamRegistries($id: VirtualRegistriesContainerUpstreamID!) {
+  upstream: virtualRegistriesContainerUpstream(id: $id) {
+    id
+    registryUpstreams {
+      id
+      registry {
+        id
+        name
+      }
+    }
+  }
+}

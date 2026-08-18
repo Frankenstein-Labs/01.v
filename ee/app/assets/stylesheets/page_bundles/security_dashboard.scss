@@ -1,0 +1,47 @@
+@import 'page_bundles/mixins_and_variables_and_functions';
+@import '../components/generic_vulnerability_report';
+
+:root {
+  /**
+   * Risk score colors
+   * Discussion: https://gitlab.com/gitlab-org/gitlab/-/issues/581121
+   * Owner: Security Risk Management: Security Insights
+   */
+  --risk-score-color-critical: var(--gl-color-red-700);
+  --risk-score-color-high: var(--gl-color-red-500);
+  --risk-score-color-medium: var(--gl-color-orange-200);
+  --risk-score-color-low: var(--gl-color-green-200);
+
+  --risk-score-tile-text-critical: var(--gl-color-neutral-0);
+  --risk-score-tile-text-high: var(--gl-color-neutral-0);
+  --risk-score-tile-text-medium: var(--gl-color-orange-800);
+  --risk-score-tile-text-low: var(--gl-color-green-800);
+
+  --risk-score-gauge-text-critical: var(--gl-color-red-700);
+  --risk-score-gauge-text-high: var(--gl-color-red-500);
+  --risk-score-gauge-text-medium: var(--gl-color-orange-500);
+  --risk-score-gauge-text-low: var(--gl-color-green-500);
+
+  // stylelint-disable-next-line gitlab/no-gl-class
+  &.gl-dark {
+    --risk-score-gauge-text-critical: var(--gl-color-red-400);
+    --risk-score-gauge-text-high: var(--gl-color-red-300);
+    --risk-score-gauge-text-medium: var(--gl-color-orange-200);
+    --risk-score-gauge-text-low: var(--gl-color-green-200);
+  }
+}
+
+@each $rating in (critical, high, medium, low) {
+  .risk-score-bg-#{$rating} {
+    background-color: var(--risk-score-color-#{$rating});
+  }
+
+  .risk-score-tile-text-#{$rating} {
+    color: var(--risk-score-tile-text-#{$rating});
+  }
+}
+
+.security-charts {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: $gl-spacing-scale-7;
+}

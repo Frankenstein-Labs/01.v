@@ -1,0 +1,10 @@
+---
+name: vue3_migrate_ai_catalog
+description: Enables Vue 3 in compatibility mode for the AI Catalog page
+feature_issue_url: https://gitlab.com/groups/gitlab-org/-/work_items/23034
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/248279
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/607834
+milestone: '19.3'
+group: group::ai catalog
+type: beta
+default_enabled: false

@@ -1,0 +1,5 @@
+mutation updateAiFeatureSetting($input: AiFeatureSettingUpdateInput!) {
+  aiFeatureSettingUpdate(input: $input) {
+    errors
+  }
+}

@@ -1,0 +1,86 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+fragment MergeRequestViolations on ComplianceViolationConnection {
+  nodes {
+    id
+    severityLevel
+    reason
+    violatingUser {
+      id
+      name
+      username
+      avatarUrl
+      webUrl
+    }
+    mergeRequest {
+      id
+      title
+      mergedAt
+      webUrl
+      author {
+        id
+        name
+        username
+        avatarUrl
+        webUrl
+      }
+      mergeUser {
+        id
+        name
+        username
+        avatarUrl
+        webUrl
+      }
+      committers {
+        nodes {
+          id
+          name
+          username
+          avatarUrl
+          webUrl
+        }
+      }
+      participants {
+        nodes {
+          id
+          name
+          username
+          avatarUrl
+          webUrl
+        }
+      }
+      approvedBy {
+        nodes {
+          id
+          name
+          username
+          avatarUrl
+          webUrl
+        }
+      }
+      ref: reference
+      fullRef: reference(full: true)
+      sourceBranch
+      sourceBranchExists
+      targetBranch
+      targetBranchExists
+      project {
+        id
+        avatarUrl
+        name
+        webUrl
+        complianceFrameworks {
+          nodes {
+            id
+            name
+            description
+            color
+          }
+        }
+      }
+    }
+  }
+  pageInfo {
+    ...PageInfo
+  }
+}

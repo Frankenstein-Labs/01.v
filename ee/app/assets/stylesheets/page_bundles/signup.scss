@@ -1,0 +1,30 @@
+@import '../../../../../app/assets/stylesheets/page_bundles/signup';
+
+body.with-system-footer {
+  .footer-container {
+    padding-bottom: $system-footer-height;
+  }
+}
+
+
+.registration-form-container {
+  max-width: 480px;
+}
+
+@media (max-width: $breakpoint-sm - 1) {
+  .registration-form {
+    .name.form-row {
+      flex-direction: column;
+
+      .col {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+    }
+  }
+
+  .registration-form-footer {
+    flex-direction: column;
+    gap: 1.5em;
+  }
+}

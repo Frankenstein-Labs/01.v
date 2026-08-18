@@ -1,0 +1,15 @@
+subscription workItemParentUpdated($workItemId: WorkItemID!) {
+  workItem: workItemUpdated(workItemId: $workItemId) {
+    id
+    widgets {
+      ... on WorkItemWidgetHierarchy {
+        type
+        parent {
+          id
+          title
+          webUrl
+        }
+      }
+    }
+  }
+}

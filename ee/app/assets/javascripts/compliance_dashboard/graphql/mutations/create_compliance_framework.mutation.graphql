@@ -1,0 +1,11 @@
+mutation createNewComplianceFramework($input: CreateComplianceFrameworkInput!) {
+  createComplianceFramework(input: $input) {
+    framework {
+      id
+      name
+      description
+      color
+    }
+    errors
+  }
+}

@@ -1,0 +1,12 @@
+---
+name: bulk_vulnerabilities_duo_workflow_api
+description: >
+  API for managing Bulk Duo Vulnerabilities workflow.
+  Supports execution lifecycle, batch processing, and cancel/resume.
+feature_issue_url: https://gitlab.com/groups/gitlab-org/-/work_items/21890
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/241147
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/603371
+milestone: '19.3'
+group: group::security insights
+type: beta
+default_enabled: false

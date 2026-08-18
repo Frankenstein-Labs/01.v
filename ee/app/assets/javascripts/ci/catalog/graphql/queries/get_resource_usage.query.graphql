@@ -1,0 +1,50 @@
+# @feature_category: pipeline_composition
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getCatalogResourceUsage(
+  $fullPath: ID!
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+  $versionIds: [CiCatalogResourcesVersionID!]
+  $componentName: String
+  $sort: CiCatalogResourceProjectUsageSort
+) {
+  ciCatalogResource(fullPath: $fullPath) {
+    id
+    webPath
+    projectComponentUsages(
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+      versionIds: $versionIds
+      componentName: $componentName
+      sort: $sort
+    ) @gl_introduced(version: "18.11.0") {
+      nodes {
+        project {
+          id
+          nameWithNamespace
+          webPath
+        }
+        componentsUsed {
+          component {
+            id
+            name
+          }
+          version {
+            id
+            name
+          }
+          lastUsedDate
+          outdated
+        }
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

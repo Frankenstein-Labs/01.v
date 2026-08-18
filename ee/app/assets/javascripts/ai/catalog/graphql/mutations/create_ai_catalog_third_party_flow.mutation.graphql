@@ -1,0 +1,11 @@
+# @feature_category: workflow_catalog
+#import "../fragments/ai_catalog_item.fragment.graphql"
+
+mutation createAiCatalogThirdPartyFlow($input: AiCatalogThirdPartyFlowCreateInput!) {
+  aiCatalogThirdPartyFlowCreate(input: $input) {
+    errors
+    item {
+      ...BaseAiCatalogItem
+    }
+  }
+}

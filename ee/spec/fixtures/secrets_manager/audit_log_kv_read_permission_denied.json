@@ -1,0 +1,60 @@
+{
+  "time": "2026-04-22T15:20:44.854619Z",
+  "type": "response",
+  "auth": {
+    "display_name": "group_437-project_135-auth-user_jwt-gitlab-user:206",
+    "policies": [
+      "default",
+      "users/direct/group_436",
+      "users/direct/group_437",
+      "users/direct/user_206",
+      "users/roles/20"
+    ],
+    "token_policies": [
+      "default",
+      "users/direct/group_436",
+      "users/direct/group_437",
+      "users/direct/user_206",
+      "users/roles/20"
+    ],
+    "policy_results": {
+      "allowed": false
+    },
+    "metadata": {
+      "correlation_id": "01KPTWF0YM9YKFY3CJ8JJX4BBA",
+      "namespace_id": "437",
+      "project_id": "135",
+      "user_id": "206"
+    },
+    "entity_id": "11c82af2-6d58-85fc-62d8-e04688f42a8e.otFgm8",
+    "token_type": "service",
+    "token_ttl": 2764800,
+    "token_issue_time": "2026-04-22T17:20:44+02:00"
+  },
+  "request": {
+    "id": "a6804bf8-6ce4-4d34-df43-4a16ac75d3f3",
+    "client_id": "11c82af2-6d58-85fc-62d8-e04688f42a8e.otFgm8",
+    "operation": "read",
+    "mount_point": "group_437/project_135/secrets/kv/",
+    "mount_type": "kv",
+    "mount_running_version": "v2.5.1+builtin.bao",
+    "mount_class": "secret",
+    "namespace": {
+      "id": "otFgm8",
+      "path": "group_437/project_135/"
+    },
+    "path": "secrets/kv/data/explicit/test_reporter_secret",
+    "remote_address": "127.0.0.1",
+    "remote_port": 62691
+  },
+  "response": {
+    "mount_point": "group_437/project_135/secrets/kv/",
+    "mount_type": "kv",
+    "mount_running_plugin_version": "v2.5.1+builtin.bao",
+    "mount_class": "secret",
+    "data": {
+      "error": "1 error occurred:\n\t* permission denied\n\n"
+    }
+  },
+  "error": "1 error occurred:\n\t* permission denied\n\n"
+}

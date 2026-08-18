@@ -1,0 +1,19 @@
+query getSecurityAttributes($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    securityCategories {
+      id
+      name
+      description
+      multipleSelection
+      editableState
+      templateType
+      securityAttributes {
+        id
+        name
+        description
+        color
+      }
+    }
+  }
+}

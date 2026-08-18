@@ -1,0 +1,38 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getComplianceFrameworksForDropdown(
+  $fullPath: ID!
+  $search: String
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $ids: [ComplianceManagementFrameworkID!] = null
+  $withCount: Boolean = false
+) {
+  namespace(fullPath: $fullPath) {
+    id
+    name
+    complianceFrameworks(
+      ids: $ids
+      search: $search
+      before: $before
+      after: $after
+      first: $first
+      last: $last
+    ) {
+      count @include(if: $withCount)
+      nodes {
+        id
+        name
+        default
+        description
+        color
+        namespaceId
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

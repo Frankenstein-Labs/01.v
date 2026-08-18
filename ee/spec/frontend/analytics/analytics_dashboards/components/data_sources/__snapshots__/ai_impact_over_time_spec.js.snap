@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AI Impact Over Time Data Source fetch setVisualizationOverrides callback for duo_agent_platform_agent_flows_users_count metric will call the setVisualizationOverrides callback with the correct settings 1`] = `
+[
+  [
+    {
+      "visualizationOptionOverrides": {
+        "description": undefined,
+        "metaIcon": "trend-up",
+        "metaText": "100.0%",
+        "metaTooltip": "Percentage change compared to the previous time period.",
+        "subtitle": "Last 30 days",
+        "tooltip": {
+          "description": "Number of users who used at least one GitLab Duo agent or flow.",
+        },
+        "variant": "success",
+      },
+    },
+  ],
+]
+`;
+
+exports[`AI Impact Over Time Data Source fetch setVisualizationOverrides callback for duo_agent_platform_chats metric will call the setVisualizationOverrides callback with the correct settings 1`] = `
+[
+  [
+    {
+      "visualizationOptionOverrides": {
+        "description": undefined,
+        "metaIcon": "trend-down",
+        "metaText": "50.0%",
+        "metaTooltip": "Percentage change compared to the previous time period.",
+        "subtitle": "Last 30 days",
+        "tooltip": {
+          "description": "Number of chat sessions in Duo Agent Platform. %{linkStart}Learn more%{linkEnd}.",
+          "descriptionLink": "/help/user/gitlab_duo_chat/agentic_chat",
+        },
+        "variant": "danger",
+      },
+    },
+  ],
+]
+`;
+
+exports[`AI Impact Over Time Data Source fetch setVisualizationOverrides callback for duo_pipelines_rate metric with pipelines data will call the setVisualizationOverrides callback with the correct settings 1`] = `
+[
+  [
+    {
+      "visualizationOptionOverrides": {
+        "description": "2/10 pipelines",
+        "metaIcon": "trend-up",
+        "metaText": "100.0%",
+        "metaTooltip": "Percentage change compared to the previous time period.",
+        "subtitle": "Last 30 days",
+        "tooltip": {
+          "description": "Percentage of CI/CD pipelines that used one or more GitLab Duo features during execution.",
+        },
+        "variant": "success",
+      },
+    },
+  ],
+]
+`;
+
+exports[`AI Impact Over Time Data Source fetch setVisualizationOverrides callback for duo_power_users_count metric will call the setVisualizationOverrides callback with the correct settings 1`] = `
+[
+  [
+    {
+      "visualizationOptionOverrides": {
+        "description": undefined,
+        "metaIcon": "trend-up",
+        "metaText": "100.0%",
+        "metaTooltip": "Percentage change compared to the previous time period.",
+        "subtitle": "Last 30 days",
+        "tooltip": {
+          "description": "Number of users that used at least three GitLab Duo features.",
+        },
+        "variant": "success",
+      },
+    },
+  ],
+]
+`;
+
+exports[`AI Impact Over Time Data Source fetch setVisualizationOverrides callback for duo_used_count metric will call the setVisualizationOverrides callback with the correct settings 1`] = `
+[
+  [
+    {
+      "visualizationOptionOverrides": {
+        "description": undefined,
+        "metaIcon": "trend-down",
+        "metaText": "50.0%",
+        "metaTooltip": "Percentage change compared to the previous time period.",
+        "subtitle": "Last 30 days",
+        "tooltip": {
+          "description": "Number of users who used at least one GitLab Duo or GitLab Duo Agent Platform feature.",
+        },
+        "variant": "danger",
+      },
+    },
+  ],
+]
+`;

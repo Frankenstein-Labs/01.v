@@ -1,0 +1,21 @@
+query frameworkCoverage($groupPath: ID!) {
+  group(fullPath: $groupPath) {
+    id
+    complianceFrameworkCoverageSummary {
+      totalProjects
+      coveredCount
+    }
+    complianceFrameworksCoverageDetails {
+      nodes {
+        coveredCount
+        id
+        framework {
+          id
+          name
+          color
+          namespaceId
+        }
+      }
+    }
+  }
+}

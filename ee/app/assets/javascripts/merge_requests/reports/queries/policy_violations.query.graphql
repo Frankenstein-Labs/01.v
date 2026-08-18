@@ -1,0 +1,60 @@
+query getPolicyViolations($projectPath: ID!, $iid: String!) {
+  project(fullPath: $projectPath) {
+    id
+    mergeRequest(iid: $iid) {
+      id
+      targetBranch
+      sourceBranch
+      headPipeline {
+        id
+        iid
+        updatedAt
+        path
+      }
+      policyBypassStatuses {
+        allowBypass
+        bypassed
+        id
+        name
+      }
+      policyViolations {
+        comparisonPipelines {
+          reportType
+          source
+          target
+        }
+        anyMergeRequest {
+          commits
+          name
+        }
+        licenseScanning {
+          dependencies
+          license
+          url
+        }
+        newScanFinding {
+          location
+          name
+          path
+          reportType
+          severity
+        }
+        policies {
+          dismissed
+          enforcementType
+          name
+          reportType
+          securityPolicyId
+          status
+        }
+        previousScanFinding {
+          location
+          name
+          path
+          reportType
+          severity
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+query getProjectDependencies(
+  $fullPath: ID!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $sort: DependencySort
+  $componentNames: [String!]
+  $componentVersions: [String!]
+  $policyViolations: [PolicyViolations!]
+  $malware: Boolean
+  $trackedRefIds: [SecurityProjectTrackedContextID!]
+) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    dependencies(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      sort: $sort
+      componentNames: $componentNames
+      componentVersions: $componentVersions
+      policyViolations: $policyViolations
+      malware: $malware
+      trackedRefIds: $trackedRefIds
+    ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      nodes {
+        id
+        name
+        componentVersion {
+          id
+          version
+        }
+        packager
+        location {
+          path
+          blobPath
+          ancestors {
+            name
+            version
+          }
+        }
+        licenses {
+          name
+          url
+          spdxIdentifier
+          policyViolations {
+            id
+            securityPolicy {
+              id
+              name
+            }
+          }
+        }
+        vulnerabilities {
+          nodes {
+            id
+            policyViolations
+          }
+        }
+        vulnerabilityCount
+        malware @gl_introduced(version: "19.1.0")
+        hasDependencyPaths
+        trackedRefsCount @gl_introduced(version: "19.2.0")
+      }
+    }
+  }
+}

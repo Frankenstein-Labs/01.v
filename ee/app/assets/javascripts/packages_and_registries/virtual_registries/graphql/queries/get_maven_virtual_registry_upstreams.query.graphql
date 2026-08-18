@@ -1,0 +1,18 @@
+# @feature_category: virtual_registry
+
+query getMavenVirtualRegistryUpstreams($id: VirtualRegistriesPackagesMavenRegistryID!) {
+  registry: virtualRegistriesPackagesMavenRegistry(id: $id) {
+    id
+    registryUpstreams {
+      id
+      position
+      upstream {
+        id
+        cacheValidityHours
+        metadataCacheValidityHours
+        name
+        url
+      }
+    }
+  }
+}

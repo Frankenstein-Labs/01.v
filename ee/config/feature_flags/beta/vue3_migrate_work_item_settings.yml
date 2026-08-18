@@ -1,0 +1,10 @@
+---
+name: vue3_migrate_work_item_settings
+description: Enables Vue 3 in compatibility mode for the work item settings pages
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/608110
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/248885
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/608350
+milestone: '19.3'
+group: group::work items
+type: beta
+default_enabled: false

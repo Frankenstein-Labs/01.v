@@ -1,0 +1,22 @@
+#import "./iteration_report.fragment.graphql"
+
+# @feature_category: team_planning
+query Iteration($fullPath: ID!, $id: ID!, $isGroup: Boolean = true) {
+  group(fullPath: $fullPath) @include(if: $isGroup) {
+    id
+    iterations(id: $id, first: 1, includeAncestors: true) {
+      nodes {
+        ...IterationReport
+      }
+    }
+  }
+
+  project(fullPath: $fullPath) @skip(if: $isGroup) {
+    id
+    iterations(id: $id, first: 1, includeAncestors: true) {
+      nodes {
+        ...IterationReport
+      }
+    }
+  }
+}

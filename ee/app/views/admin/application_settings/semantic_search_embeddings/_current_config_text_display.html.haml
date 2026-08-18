@@ -1,0 +1,17 @@
+- presenter = local_assigns.fetch(:presenter)
+
+- if presenter.current_model
+  %div{ data: { testid: 'semantic-search-display-embedding-model-current' } }
+    %h5= s_('SemanticSearch|Current model')
+    %p= embedding_model_display_name(presenter.current_model)
+- if presenter.next_model
+  %div{ data: { testid: 'semantic-search-display-embedding-model-next' } }
+    %h5= s_('SemanticSearch|Next model')
+    %p= s_('SemanticSearch|Switching to: %{model_name}') % { model_name: embedding_model_display_name(presenter.next_model) }
+- if presenter.show_chunk_strategy_text?
+  %div{ data: { testid: 'semantic-search-display-current-chunk-strategy' } }
+    %h5= s_('SemanticSearch|Chunking strategy')
+    %p.gl-mb-1= chunking_strategy_display(presenter.chunk_strategy, presenter.chunk_strategy_size)
+    %p.gl-text-subtle.gl-text-sm
+      = s_('SemanticSearch|The chunking strategy determines how code files are split into smaller pieces before being embedded. This affects how semantic search indexes and retrieves information.')
+      = s_('SemanticSearch|This cannot be changed when there is already a current model.')

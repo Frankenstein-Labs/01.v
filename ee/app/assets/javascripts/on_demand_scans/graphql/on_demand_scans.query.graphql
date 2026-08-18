@@ -1,0 +1,46 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query onDemandScans(
+  $fullPath: ID!
+  $scope: PipelineScopeEnum
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+) {
+  project(fullPath: $fullPath) {
+    id
+    pipelines(
+      source: "ondemand_dast_scan"
+      scope: $scope
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+    ) {
+      pageInfo {
+        ...PageInfo
+      }
+      nodes {
+        id
+        path
+        createdAt
+        detailedStatus {
+          id
+          detailsPath
+          text
+          group
+          icon
+        }
+        dastProfile {
+          id
+          name
+          dastSiteProfile {
+            id
+            targetUrl
+          }
+        }
+      }
+    }
+  }
+}

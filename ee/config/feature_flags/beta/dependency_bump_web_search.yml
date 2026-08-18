@@ -1,0 +1,10 @@
+---
+name: dependency_bump_web_search
+description: Enables web search capabilities for the dependency bump Duo flow.
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/604047
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/244358
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/605335
+milestone: '19.2'
+group: group::compliance
+type: beta
+default_enabled: true

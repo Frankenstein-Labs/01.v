@@ -1,0 +1,11 @@
+---
+name: block_code_suggestions_when_duo_disabled
+description: Block GitLab Duo Code Suggestions when GitLab Duo is turned off for the
+  namespace governing the request
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/606495
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/248299
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/607850
+milestone: '19.3'
+group: group::dap repository flows
+type: gitlab_com_derisk
+default_enabled: false

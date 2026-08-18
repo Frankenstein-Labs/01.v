@@ -1,0 +1,10 @@
+---
+name: code_suggestions_direct_access_cloud_connected
+description: Allow code completion direct access tokens on instances without a self-hosted AI Gateway
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/605887
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/248914
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/608480
+milestone: '19.3'
+group: group::dap repository flows
+type: gitlab_com_derisk
+default_enabled: false

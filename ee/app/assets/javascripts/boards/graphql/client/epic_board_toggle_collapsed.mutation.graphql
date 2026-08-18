@@ -1,0 +1,10 @@
+#import "../epic_board_list.fragment.graphql"
+
+# @feature_category: portfolio_management
+mutation toggleEpicListCollapsed($list: EpicBoardList!, $collapsed: Boolean!) {
+  clientToggleEpicListCollapsed(list: $list, collapsed: $collapsed) @client {
+    list {
+      ...EpicBoardListFragment
+    }
+  }
+}

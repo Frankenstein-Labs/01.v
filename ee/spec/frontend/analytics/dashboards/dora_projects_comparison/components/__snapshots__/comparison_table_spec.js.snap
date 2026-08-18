@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Comparison table with data for each table row renders each metric value 1`] = `
+[
+  {
+    "metricType": "deployment_frequency",
+    "trend": -0.5,
+    "value": 0.33,
+  },
+  {
+    "metricType": "lead_time_for_changes",
+    "trend": -0.6,
+    "value": 86400,
+  },
+  {
+    "metricType": "time_to_restore_service",
+    "trend": 0.6,
+    "value": 432000,
+  },
+  {
+    "metricType": "change_failure_rate",
+    "trend": 0.3,
+    "value": 0.4,
+  },
+]
+`;
+
+exports[`Comparison table with data for each table row renders each metric value 2`] = `
+[
+  {
+    "metricType": "deployment_frequency",
+    "trend": -0.5,
+    "value": 0.33,
+  },
+  {
+    "metricType": "lead_time_for_changes",
+    "trend": -0.6,
+    "value": 86400,
+  },
+  {
+    "metricType": "time_to_restore_service",
+    "trend": 0.6,
+    "value": 432000,
+  },
+  {
+    "metricType": "change_failure_rate",
+    "trend": 0.3,
+    "value": 0.4,
+  },
+]
+`;

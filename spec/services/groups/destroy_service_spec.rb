@@ -1,0 +1,666 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+
+RSpec.describe Groups::DestroyService, feature_category: :groups_and_projects do
+  using RSpec::Parameterized::TableSyntax
+
+  let!(:user)         { create(:user) }
+  let!(:group)        { create(:group, :deletion_scheduled) }
+  let!(:nested_group) { create(:group, parent: group) }
+  let!(:project)      { create(:project, :repository, :legacy_storage, namespace: group) }
+  let!(:notification_setting) { create(:notification_setting, source: group) }
+  let(:remove_path)  { group.path + "+#{group.id}+deleted" }
+  let(:removed_repo) { Gitlab::Git::Repository.new(project.repository_storage, remove_path, nil, nil) }
+
+  before do
+    group.add_member(user, Gitlab::Access::OWNER)
+  end
+
+  def destroy_group(group, user, async)
+    if async
+      Groups::DestroyService.new(group, user).async_execute
+    else
+      Groups::DestroyService.new(group, user).execute
+    end
+  end
+
+  shared_examples 'group destruction' do |async|
+    context 'database records', :sidekiq_might_not_need_inline do
+      before do
+        destroy_group(group, user, async)
+      end
+
+      it { expect(Group.unscoped.all).not_to include(group) }
+      it { expect(Group.unscoped.all).not_to include(nested_group) }
+      it { expect(Project.unscoped.all).not_to include(project) }
+      it { expect(NotificationSetting.unscoped.all).not_to include(notification_setting) }
+    end
+
+    context 'bot tokens', :sidekiq_inline do
+      it 'initiates group bot removal', :aggregate_failures do
+        bot = create(:user, :project_bot)
+        group.add_developer(bot)
+        create(:personal_access_token, user: bot)
+
+        destroy_group(group, user, async)
+
+        expect(
+          Users::GhostUserMigration.where(user: bot, initiator_user: user)
+        ).to be_exists
+      end
+    end
+
+    context 'mattermost team', :sidekiq_might_not_need_inline do
+      let!(:chat_team) { create(:chat_team, namespace: group) }
+
+      it 'destroys the team too' do
+        expect_next_instance_of(::Mattermost::Team) do |instance|
+          expect(instance).to receive(:destroy)
+        end
+
+        destroy_group(group, user, async)
+      end
+
+      context 'when Mattermost team removal raises Gitlab::HTTP::BlockedUrlError' do
+        before do
+          allow_next_instance_of(::Mattermost::Team) do |instance|
+            allow(instance).to receive(:destroy)
+              .and_raise(Gitlab::HTTP_V2::BlockedUrlError, 'URL is blocked: Only allowed schemes are https')
+          end
+        end
+
+        it 'still destroys the group' do
+          destroy_group(group, user, async)
+
+          expect(Group.unscoped.all).not_to include(group)
+        end
+
+        it 'logs a warning' do
+          expect(Gitlab::AppLogger).to receive(:warn).with(
+            hash_including(
+              message: "Mattermost team deletion failed, proceeding with group deletion",
+              Labkit::Fields::ERROR_TYPE => 'Gitlab::HTTP_V2::BlockedUrlError'
+            )
+          )
+
+          destroy_group(group, user, async)
+        end
+      end
+
+      context 'when Mattermost team removal raises Mattermost::ConnectionError' do
+        before do
+          stub_const('Mattermost::ConnectionError', Class.new(::Mattermost::Error))
+          allow_next_instance_of(::Mattermost::Team) do |instance|
+            allow(instance).to receive(:destroy)
+              .and_raise(::Mattermost::ConnectionError, 'connection refused')
+          end
+        end
+
+        it 'still destroys the group' do
+          destroy_group(group, user, async)
+
+          expect(Group.unscoped.all).not_to include(group)
+        end
+      end
+    end
+
+    context 'file system', :sidekiq_might_not_need_inline do
+      context 'Sidekiq inline' do
+        before do
+          # Run sidekiq immediately to check that renamed dir will be removed
+          perform_enqueued_jobs { destroy_group(group, user, async) }
+        end
+
+        it 'verifies that paths have been deleted' do
+          expect(removed_repo).not_to exist
+        end
+      end
+    end
+
+    context 'event store', :sidekiq_might_not_need_inline do
+      it 'publishes a GroupDeletedEvent' do
+        expect { destroy_group(group, user, async) }
+          .to publish_event(Groups::GroupDeletedEvent)
+            .with(
+              group_id: group.id,
+              root_namespace_id: group.root_ancestor.id
+            )
+          .and publish_event(Groups::GroupDeletedEvent)
+            .with(
+              group_id: nested_group.id,
+              root_namespace_id: nested_group.root_ancestor.id,
+              parent_namespace_id: group.id
+            )
+      end
+    end
+
+    it 'schedules removal of any associated direct transfer export uploads', :sidekiq_inline do
+      allow(::Import::BulkImports::RemoveExportUploadsService).to receive(:new).and_call_original
+      expect_next_instance_of(::Import::BulkImports::RemoveExportUploadsService) do |service|
+        expect(service).to receive(:execute)
+      end
+
+      destroy_group(group, user, async)
+    end
+  end
+
+  describe 'asynchronous delete' do
+    it_behaves_like 'group destruction', true
+
+    context 'when group state is deletion_scheduled' do
+      before do
+        group.update!(state: :deletion_scheduled)
+      end
+
+      it 'transitions the group state to deletion_in_progress' do
+        expect(group).to receive(:start_deletion!).with(transition_user: user).and_call_original
+
+        expect { destroy_group(group, user, true) }.to change { group.state }
+                                                         .from('deletion_scheduled')
+                                                         .to('deletion_in_progress')
+      end
+
+      context 'when group is already in deletion_in_progress state' do
+        before do
+          group.update!(state: :deletion_in_progress)
+        end
+
+        it 'does not call start_deletion!' do
+          expect(group).not_to receive(:start_deletion!)
+
+          destroy_group(group, user, true)
+        end
+      end
+    end
+
+    context 'Sidekiq fake' do
+      before do
+        # Don't run Sidekiq to verify that group and projects are not actually destroyed
+        Sidekiq::Testing.fake! { destroy_group(group, user, true) }
+        Sidekiq::Testing.fake! { destroy_group(nested_group, user, true) }
+      end
+
+      it 'verifies original paths and projects still exist' do
+        expect(removed_repo).not_to exist
+        expect(Project.unscoped.count).to eq(1)
+        expect(Group.unscoped.count).to eq(2)
+      end
+    end
+  end
+
+  describe 'synchronous delete' do
+    it_behaves_like 'group destruction', false
+
+    context 'when destroying the group throws an error' do
+      before do
+        allow(group).to receive(:destroy).and_raise(StandardError)
+      end
+
+      context 'when group state is deletion_scheduled' do
+        before do
+          group.update!(state: :deletion_scheduled)
+        end
+
+        it 'reschedules the deletion by transitioning state back' do
+          expect(group).to receive(:reschedule_deletion!).with(transition_user: user).and_call_original
+
+          expect { destroy_group(group, user, false) }.to raise_error(StandardError)
+          expect(group.state).to eq('deletion_scheduled')
+        end
+
+        it 'logs the rescheduling error' do
+          expect(Gitlab::AppLogger).to receive(:error).with(
+            hash_including(
+              group_id: group.id,
+              current_user: user.id,
+              error_class: StandardError,
+              message: "Rescheduling group deletion"
+            )
+          )
+
+          expect { destroy_group(group, user, false) }.to raise_error(StandardError)
+        end
+      end
+    end
+
+    context 'when group state is deletion_scheduled' do
+      before do
+        group.update!(state: :deletion_scheduled)
+      end
+
+      it 'transitions the group state to deletion_in_progress' do
+        expect(group).to receive(:start_deletion!).with(transition_user: user).and_call_original
+
+        expect { destroy_group(group, user, false) }.to change { group.state }
+          .from('deletion_scheduled')
+          .to('deletion_in_progress')
+      end
+
+      context 'when group is already in deletion_in_progress state' do
+        before do
+          group.update!(state: :deletion_in_progress)
+        end
+
+        it 'does not call start_deletion!' do
+          expect(group).not_to receive(:start_deletion!)
+
+          destroy_group(group, user, false)
+        end
+      end
+
+      context 'when deletion fails and reschedule_deletion is called' do
+        where(:group_state, :nested_group_state) do
+          :deletion_scheduled | :ancestor_inherited
+          :deletion_scheduled | :archived
+          :deletion_scheduled | :deletion_scheduled
+        end
+
+        with_them do
+          before do
+            group.update!(state: group_state)
+            nested_group.update!(state: nested_group_state)
+            allow_next_found_instance_of(Group) do |instance|
+              allow(instance).to receive(:destroy).and_raise(StandardError)
+            end
+          end
+
+          it 'restores each group to its original state before deletion started', :aggregate_failures do
+            expect { destroy_group(group, user, false) }.to raise_error(StandardError)
+
+            expect(group.reload.state).to eq(group_state.to_s)
+            expect(nested_group.reload.state).to eq(nested_group_state.to_s)
+          end
+        end
+      end
+    end
+  end
+
+  context 'projects in pending_delete' do
+    before do
+      project.pending_delete = true
+      project.save!
+    end
+
+    it_behaves_like 'group destruction', false
+  end
+
+  context 'repository removal status is taken into account' do
+    it 'raises exception' do
+      expect_next_instance_of(::Projects::DestroyService) do |destroy_service|
+        expect(destroy_service).to receive(:execute).and_return(false)
+      end
+
+      expect { destroy_group(group, user, false) }
+        .to raise_error(described_class::DestroyError, "Project #{project.id} can't be deleted")
+    end
+  end
+
+  context 'when group owner is blocked' do
+    before do
+      user.block!
+    end
+
+    it 'returns a more descriptive error message' do
+      expect { destroy_group(group, user, false) }
+        .to raise_error(described_class::DestroyError, "You can't delete this group because you're blocked.")
+    end
+  end
+
+  context 'when user does not have authorization to delete the group' do
+    let(:unauthorized_user) { create(:user) }
+
+    it 'returns an unauthorized error response and does not mark deletion in progress' do
+      expect(group).not_to be_member(unauthorized_user)
+
+      result = destroy_group(group, unauthorized_user, false)
+
+      expect(result).to eq(described_class::UnauthorizedError)
+      expect(group.reload).not_to be_deletion_in_progress
+      expect(group).not_to be_deletion_scheduled
+    end
+
+    it 'returns an unauthorized error response for async_execute' do
+      expect(group).not_to be_member(unauthorized_user)
+
+      result = destroy_group(group, unauthorized_user, true)
+
+      expect(result).to eq(described_class::UnauthorizedError)
+      expect(group.reload).not_to be_deletion_in_progress
+    end
+  end
+
+  describe 'repository removal' do
+    before do
+      destroy_group(group, user, false)
+    end
+
+    context 'legacy storage' do
+      let!(:project) { create(:project, :legacy_storage, :empty_repo, namespace: group) }
+
+      it 'removes repository' do
+        expect(project.repository.raw).not_to exist
+      end
+    end
+
+    context 'hashed storage' do
+      let!(:project) { create(:project, :empty_repo, namespace: group) }
+
+      it 'removes repository' do
+        expect(project.repository.raw).not_to exist
+      end
+    end
+  end
+
+  describe 'authorization updates', :sidekiq_inline do
+    context 'for solo groups' do
+      context 'group is deleted' do
+        shared_examples 'updates project authorization' do
+          it 'updates project authorization' do
+            expect { destroy_group(group, user, false) }.to(
+              change { user.can?(:read_project, project) }.from(true).to(false))
+          end
+        end
+
+        it_behaves_like 'updates project authorization'
+
+        it 'does not make use of a specific service to update project_authorizations records' do
+          expect(AuthorizedProjectUpdate::ProjectAccessChangedService).not_to receive(:new)
+
+          destroy_group(group, user, false)
+        end
+      end
+    end
+
+    context 'for shared groups across different hierarchies' do
+      let(:group1) { create(:group, :private) }
+      let(:group2) { create(:group, :private) }
+
+      let(:group1_user) { create(:user) }
+      let(:group2_user) { create(:user) }
+
+      before do
+        group1.add_member(group1_user, Gitlab::Access::OWNER)
+        group2.add_member(group2_user, Gitlab::Access::OWNER)
+      end
+
+      context 'when a project is shared' do
+        # group1
+        #  `- group1_project
+        # group2
+        #  `- group1_project (via project_group_link)
+        let!(:group1_project) { create(:project, :private, group: group1) }
+
+        before do
+          create(:project_group_link, project: group1_project, group: group2)
+        end
+
+        context 'and the invited group is destroyed' do
+          shared_examples 'updates project authorizations so users of the destroyed group no longer have access' do
+            it 'updates project authorizations so users of the destroyed group no longer have access',
+              :aggregate_failures do
+              expect(group1_user.can?(:read_project, group1_project)).to be(true)
+              expect(group2_user.can?(:read_project, group1_project)).to be(true)
+
+              destroy_group(group2, group2_user, false)
+
+              expect(group1_user.can?(:read_project, group1_project)).to be(true)
+              expect(group2_user.can?(:read_project, group1_project)).to be(false)
+            end
+          end
+
+          context 'when user has direct access to the project' do
+            before do
+              group1_project.add_guest(group2_user)
+            end
+
+            it 'retains the user\'s direct access to the project' do
+              expect(group2_user.can?(:read_project, group1_project)).to be(true)
+              expect(group1_project.team.human_max_access(group2_user.id)).to eq('Developer')
+
+              destroy_group(group2, group2_user, false)
+
+              expect(group2_user.can?(:read_project, group1_project)).to be(true)
+              expect(group1_project.team.human_max_access(group2_user.id)).to eq('Guest')
+            end
+          end
+
+          it_behaves_like 'updates project authorizations so users of the destroyed group no longer have access'
+
+          it 'calls the service to update project authorizations only with necessary project ids' do
+            expect(AuthorizedProjectUpdate::ProjectAccessChangedService)
+              .to receive(:new).with(array_including(group1_project.id)).and_call_original
+
+            destroy_group(group2, group2_user, false)
+          end
+
+          it 'logs the project-based project_authorizations refresh' do
+            allow(Gitlab::AppLogger).to receive(:info).and_call_original
+            expect(Gitlab::AppLogger).to receive(:info).with(
+              hash_including(
+                message: "Refreshing project_authorizations for projects previously shared with destroyed group",
+                group_id: group2.id,
+                user_ids_count: 0,
+                project_ids_count: a_value > 0
+              )
+            ).and_call_original
+
+            destroy_group(group2, group2_user, false)
+          end
+        end
+
+        context 'and the group is shared with another group' do
+          # group1
+          #  `- group1_project
+          # group2
+          #  `- group1_project (via project_group_link)
+          # group3
+          #  `- group1_project (via project_group_link between group1 and group2)
+          #
+          # group3 is invited to group2, and thus has access to group1_project
+          # via group2's share link. When group2 is deleted, we need to make
+          # sure that group3's access to group1_project is also removed.
+          let(:group3) { create(:group, :private) }
+          let(:group3_user) { create(:user) }
+
+          before do
+            group3.add_member(group3_user, Gitlab::Access::OWNER)
+
+            create(:group_group_link, shared_group: group2, shared_with_group: group3)
+            group3.refresh_members_authorized_projects
+          end
+
+          shared_examples 'updates project authorizations so group2 and group3 users no longer have access' do
+            it 'updates project authorizations so group2 and group3 users no longer have access', :aggregate_failures do
+              expect(group1_user.can?(:read_project, group1_project)).to be(true)
+              expect(group2_user.can?(:read_project, group1_project)).to be(true)
+              expect(group3_user.can?(:read_project, group1_project)).to be(true)
+
+              destroy_group(group2, group2_user, false)
+
+              expect(group1_user.can?(:read_project, group1_project)).to be(true)
+              expect(group2_user.can?(:read_project, group1_project)).to be(false)
+              expect(group3_user.can?(:read_project, group1_project)).to be(false)
+            end
+          end
+
+          it_behaves_like 'updates project authorizations so group2 and group3 users no longer have access'
+
+          it 'calls the service to update project authorizations only with necessary project ids' do
+            expect(AuthorizedProjectUpdate::ProjectAccessChangedService)
+              .to receive(:new).with(array_including(group1_project.id)).and_call_original
+
+            destroy_group(group2, group2_user, false)
+          end
+        end
+      end
+
+      context 'when a group is shared with a group' do
+        # group2 (shared group)
+        #  `- group2_project
+        # group1 (invited group / shared_with group)
+        #  `- group2_project (via group_group_link)
+        let!(:group2_project) { create(:project, :private, group: group2) }
+
+        before do
+          create(:group_group_link, shared_group: group2, shared_with_group: group1)
+          group1.refresh_members_authorized_projects
+        end
+
+        context 'and the shared group is deleted' do
+          shared_examples 'updates project authorizations since the project has been deleted with the group' do
+            it 'updates project authorizations since the project has been deleted with the group',
+              :aggregate_failures do
+              expect(group1_user.can?(:read_project, group2_project)).to be(true)
+              expect(group2_user.can?(:read_project, group2_project)).to be(true)
+
+              destroy_group(group2, group2_user, false)
+
+              expect(group1_user.can?(:read_project, group2_project)).to be(false)
+              expect(group2_user.can?(:read_project, group2_project)).to be(false)
+            end
+          end
+
+          it_behaves_like 'updates project authorizations since the project has been deleted with the group'
+
+          it 'does not call the service to update project authorizations' do
+            expect(AuthorizedProjectUpdate::ProjectAccessChangedService).not_to receive(:new)
+
+            destroy_group(group2, group2_user, false)
+          end
+        end
+
+        # group2 (shared group)
+        #  `- group2_project
+        #  `- group2_subgroup
+        #       `- group2_subgroup_project
+        # group1 (invited group / shared_with group)
+        #  `- group2_project (via group_group_link)
+        #  `- group2_subgroup_project (via group_group_link)
+        context 'the shared_with group is deleted' do
+          let!(:group2_subgroup) { create(:group, :private, parent: group2) }
+          let!(:group2_subgroup_project) { create(:project, :private, group: group2_subgroup) }
+
+          shared_examples 'updates project authorizations so users of both groups lose access' do
+            it 'updates project authorizations so users of both groups lose access', :aggregate_failures do
+              expect(group1_user.can?(:read_project, group2_project)).to be(true)
+              expect(group2_user.can?(:read_project, group2_project)).to be(true)
+              expect(group1_user.can?(:read_project, group2_subgroup_project)).to be(true)
+              expect(group2_user.can?(:read_project, group2_subgroup_project)).to be(true)
+
+              destroy_group(group1, group1_user, false)
+
+              expect(group1_user.can?(:read_project, group2_project)).to be(false)
+              expect(group2_user.can?(:read_project, group2_project)).to be(true)
+              expect(group1_user.can?(:read_project, group2_subgroup_project)).to be(false)
+              expect(group2_user.can?(:read_project, group2_subgroup_project)).to be(true)
+            end
+          end
+
+          context 'when user has direct access to the shared group' do
+            before do
+              group2.add_guest(group1_user)
+            end
+
+            it 'retains the user\'s direct access to the shared group\'s projects' do
+              expect(group1_user.can?(:read_project, group2_project)).to be(true)
+              expect(group1_user.can?(:read_project, group2_subgroup_project)).to be(true)
+              expect(group2_project.team.human_max_access(group1_user.id)).to eq('Developer')
+              expect(group2_subgroup_project.team.human_max_access(group1_user.id)).to eq('Developer')
+
+              destroy_group(group1, group1_user, false)
+
+              expect(group1_user.can?(:read_project, group2_project)).to be(true)
+              expect(group1_user.can?(:read_project, group2_subgroup_project)).to be(true)
+              expect(group2_project.team.human_max_access(group1_user.id)).to eq('Guest')
+              expect(group2_subgroup_project.team.human_max_access(group1_user.id)).to eq('Guest')
+            end
+          end
+
+          it_behaves_like 'updates project authorizations so users of both groups lose access'
+
+          it 'calls the service to update project authorizations only with necessary project ids' do
+            expect(AuthorizedProjectUpdate::ProjectAccessChangedService)
+              .to receive(:new).with(array_including(group2_project.id, group2_subgroup_project.id)).and_call_original
+
+            destroy_group(group1, group1_user, false)
+          end
+
+          it 'collects descendant project ids via the GIN-indexed containment path' do
+            service = described_class.new(group1, group1_user)
+            project_ids = nil
+
+            recorder = ActiveRecord::QueryRecorder.new do
+              project_ids = service.send(:obtain_project_ids_for_authorization_refresh)
+            end
+
+            expect(project_ids).to include(group2_project.id, group2_subgroup_project.id)
+            expect(recorder.log).to include(a_string_matching(/traversal_ids @>/))
+            expect(recorder.log).not_to include(a_string_matching(/next_traversal_ids_sibling/))
+          end
+        end
+      end
+    end
+
+    # shared_group
+    #  `- project
+    #  `- shared_with_group
+    #       `- project (via group_group_link)
+    context 'for shared groups in the same group hierarchy' do
+      let(:shared_group) { group }
+      let(:shared_with_group) { nested_group }
+      let!(:shared_with_group_user) { create(:user) }
+
+      before do
+        shared_with_group.add_member(shared_with_group_user, Gitlab::Access::MAINTAINER)
+
+        create(:group_group_link, shared_group: shared_group, shared_with_group: shared_with_group)
+        shared_with_group.refresh_members_authorized_projects
+      end
+
+      context 'the shared group is deleted' do
+        shared_examples 'updates project authorization' do
+          it 'updates project authorization' do
+            expect { destroy_group(shared_group, user, false) }.to(
+              change { shared_with_group_user.can?(:read_project, project) }.from(true).to(false))
+          end
+        end
+
+        it_behaves_like 'updates project authorization'
+
+        it 'does not make use of a specific service to update project authorizations' do
+          # The shared_group's own projects are deleted before its children are recursively
+          # destroyed. By the time shared_with_group (nested_group) processes its share links,
+          # shared_group has no remaining projects, so the affected project IDs set is empty
+          # and no refresh service is called.
+          expect(AuthorizedProjectUpdate::ProjectAccessChangedService).not_to receive(:new)
+
+          destroy_group(shared_group, user, false)
+        end
+      end
+
+      context 'the shared_with group is deleted' do
+        shared_examples 'updates project authorization' do
+          it 'updates project authorization', :aggregate_failures do
+            expect(user.can?(:read_project, project)).to be(true)
+            expect(shared_with_group_user.can?(:read_project, project)).to be(true)
+
+            destroy_group(shared_with_group, user, false)
+
+            expect(user.can?(:read_project, project)).to be(true)
+            expect(shared_with_group_user.can?(:read_project, project)).to be(false)
+          end
+        end
+
+        it_behaves_like 'updates project authorization'
+
+        it 'makes use of a specific service to update project authorizations' do
+          expect(AuthorizedProjectUpdate::ProjectAccessChangedService)
+            .to receive(:new).with(array_including(project.id)).and_call_original
+
+          destroy_group(shared_with_group, user, false)
+        end
+      end
+    end
+  end
+end

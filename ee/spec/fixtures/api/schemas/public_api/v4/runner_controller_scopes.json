@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "required": [
+    "instance_level_scopings",
+    "runner_level_scopings"
+  ],
+  "properties": {
+    "instance_level_scopings": {
+      "type": "array",
+      "items": {
+        "$ref": "runner_controller_instance_level_scoping.json"
+      }
+    },
+    "runner_level_scopings": {
+      "type": "array",
+      "items": {
+        "$ref": "runner_controller_runner_level_scoping.json"
+      }
+    }
+  },
+  "additionalProperties": false
+}

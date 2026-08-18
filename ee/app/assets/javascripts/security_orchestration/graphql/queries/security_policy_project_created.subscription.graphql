@@ -1,0 +1,14 @@
+subscription getSecurityPolicyProject($fullPath: String!) {
+  securityPolicyProjectCreated(fullPath: $fullPath) {
+    project {
+      name
+      fullPath
+      id
+      branch: repository {
+        rootRef
+      }
+    }
+    status
+    errors
+  }
+}

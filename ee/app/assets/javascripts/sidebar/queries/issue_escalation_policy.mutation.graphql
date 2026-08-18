@@ -1,0 +1,20 @@
+#import "./escalation_policy.fragment.graphql"
+
+mutation issueEscalationPolicyMutation(
+  $fullPath: ID!
+  $iid: String!
+  $attributeId: IncidentManagementEscalationPolicyID
+) {
+  issuableSetAttribute: issueSetEscalationPolicy(
+    input: { projectPath: $fullPath, iid: $iid, escalationPolicyId: $attributeId }
+  ) {
+    errors
+    issuable: issue {
+      id
+      attribute: escalationPolicy {
+        ...EscalationPolicyFragment
+      }
+      escalationStatus
+    }
+  }
+}

@@ -1,0 +1,210 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DevopsAdoptionOverviewChart chart tooltip displays the tooltip information correctly 1`] = `
+<div>
+  <h4>
+    Adoption over time
+  </h4>
+  <div
+    bars="[object Object],[object Object],[object Object]"
+    custom-palette="#b14f18,#0090b1,#4e7f0e"
+    group-by="January"
+    option="[object Object]"
+    presentation="tiled"
+    responsive="true"
+    x-axis-title=""
+    x-axis-type="category"
+    y-axis-title="Total number of features adopted"
+  >
+    Jan
+    <div
+      class="gl-mb-3"
+    >
+      <div
+        class="gl-font-bold"
+      >
+        Dev
+      </div>
+      <div
+        class="gl-flex gl-flex-col gl-gap-2"
+      >
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              name="Approvals"
+            />
+            Approvals
+          </div>
+        </div>
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              name="Code owners"
+            />
+            Code owners
+          </div>
+        </div>
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              name="Issues"
+            />
+            Issues
+          </div>
+        </div>
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              enabled="true"
+              name="MRs"
+            />
+            MRs
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="gl-mb-3"
+    >
+      <div
+        class="gl-font-bold"
+      >
+        Sec
+      </div>
+      <div
+        class="gl-flex gl-flex-col gl-gap-2"
+      >
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              enabled="true"
+              name="DAST"
+            />
+            DAST
+          </div>
+        </div>
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              enabled="true"
+              name="Dependency Scanning"
+            />
+            Dependency Scanning
+          </div>
+        </div>
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              enabled="true"
+              name="Fuzz Testing"
+            />
+            Fuzz Testing
+          </div>
+        </div>
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              enabled="true"
+              name="SAST"
+            />
+            SAST
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div
+        class="gl-font-bold"
+      >
+        Ops
+      </div>
+      <div
+        class="gl-flex gl-flex-col gl-gap-2"
+      >
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              enabled="true"
+              name="Deploys"
+            />
+            Deploys
+          </div>
+        </div>
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              name="Pipelines"
+            />
+            Pipelines
+          </div>
+        </div>
+        <div>
+          <div
+            class="gl-flex"
+          >
+            <devops-adoption-table-cell-flag-stub
+              class="gl-mr-3"
+              enabled="true"
+              name="Runners"
+            />
+            Runners
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DevopsAdoptionOverviewChart default state computes the correct series data 1`] = `
+[
+  {
+    "data": [
+      1,
+    ],
+    "name": "Dev",
+  },
+  {
+    "data": [
+      4,
+    ],
+    "name": "Sec",
+  },
+  {
+    "data": [
+      2,
+    ],
+    "name": "Ops",
+  },
+]
+`;

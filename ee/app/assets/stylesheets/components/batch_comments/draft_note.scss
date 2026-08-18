@@ -1,0 +1,53 @@
+.draft-note {
+  .note-header-info {
+    padding: $gl-spacing-scale-2 $gl-spacing-scale-3;
+  }
+
+  .timeline-content {
+    background-color: var(--timeline-entry-draft-note-background-color) !important;
+    padding: $gl-spacing-scale-2 $gl-spacing-scale-3;
+    margin-left: $gl-spacing-scale-8;
+    @apply gl-rounded-lg;
+  }
+}
+
+.draft-note-referenced-commands p {
+  margin: 0;
+}
+
+
+// Draft notes on diffs on both tabs; draft notes on regular replies on overview tab
+
+.diff-content,
+.card {
+  .draft-note .timeline-content {
+    margin-left: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .draft-note:last-of-type .timeline-content {
+    @apply gl-border-b;
+  }
+}
+
+
+// Draft notes on diffs on changes tab
+
+.files {
+  .draft-note {
+    margin: 0 -1px;
+
+    .timeline-entry-inner {
+      border: 1px solid $orange-400 !important;
+    }
+
+    .timeline-content {
+      border-radius: 0;
+    }
+
+    .timeline-avatar {
+      margin: $gl-spacing-scale-3 0 0 $gl-spacing-scale-5;
+    }
+  }
+}

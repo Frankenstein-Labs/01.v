@@ -1,0 +1,44 @@
+# @feature_category: continuous_delivery
+
+query cdService($id: CdServiceID!) {
+  organization {
+    id
+    cdService(id: $id) {
+      id
+      name
+      serviceEnvironmentHealths {
+        nodes {
+          id
+          health
+          environment {
+            id
+            name
+            tier
+          }
+          deployedVersions(first: 1) {
+            nodes {
+              id
+              name
+            }
+          }
+        }
+      }
+      lastDeployedAt
+      artifactSources {
+        nodes {
+          id
+          sourceRef
+          versions {
+            nodes {
+              id
+              name
+              digest
+              reference
+              createdAt
+            }
+          }
+        }
+      }
+    }
+  }
+}

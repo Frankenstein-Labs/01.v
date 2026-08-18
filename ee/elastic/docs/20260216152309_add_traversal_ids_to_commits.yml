@@ -1,0 +1,8 @@
+---
+name: AddTraversalIdsToCommits
+version: '20260216152309'
+description: Adds the traversal_ids field to commits index mapping
+group: group::global search
+milestone: '18.10'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/223651
+obsolete: false

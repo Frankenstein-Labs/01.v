@@ -1,0 +1,50 @@
+{
+  "success": true,
+  "completed": true,
+  "updated_files": [
+    {
+      "name": "Gemfile",
+      "directory": "/",
+      "content": "# frozen_string_literal: true\n\nsource \"https://rubygems.org\"\n\ngem \"rack\", \"~> 3.2\"\ngem \"rake\", \"~> 13.3\"\ngem \"rspec\", \"~> 3.10\"\n",
+      "mode": null,
+      "deleted": false,
+      "binary": false
+    },
+    {
+      "name": "Gemfile.lock",
+      "directory": "/",
+      "content": "GEM\n  remote: https://rubygems.org/\n  specs:\n    diff-lcs (1.6.2)\n    rack (3.2.5)\n    rake (13.3.1)\n    rspec (3.10.0)\n      rspec-core (~> 3.10.0)\n      rspec-expectations (~> 3.10.0)\n      rspec-mocks (~> 3.10.0)\n    rspec-core (3.10.2)\n      rspec-support (~> 3.10.0)\n    rspec-expectations (3.10.2)\n      diff-lcs (>= 1.2.0, < 2.0)\n      rspec-support (~> 3.10.0)\n    rspec-mocks (3.10.3)\n      diff-lcs (>= 1.2.0, < 2.0)\n      rspec-support (~> 3.10.0)\n    rspec-support (3.10.3)\n\nPLATFORMS\n  ruby\n  x86_64-linux-gnu\n\nDEPENDENCIES\n  rack (~> 3.2)\n  rake (~> 13.3)\n  rspec (~> 3.10)\n\nBUNDLED WITH\n   2.7.2\n",
+      "mode": null,
+      "deleted": false,
+      "binary": false
+    }
+  ],
+  "dependency_updates": [
+    {
+      "name": "rack",
+      "previous_version": "2.0.9",
+      "new_version": "3.2.5",
+      "directory": "/",
+      "security_update": false,
+      "update_reason": "version_update",
+      "package_manager": "bundler"
+    },
+    {
+      "name": "rake",
+      "previous_version": "13.0.1",
+      "new_version": "13.3.1",
+      "directory": "/",
+      "security_update": false,
+      "update_reason": "version_update",
+      "package_manager": "bundler"
+    }
+  ],
+  "summary": {
+    "total_updates": 2,
+    "security_updates": 0,
+    "files_updated": 2,
+    "directories_processed": 1,
+    "errors_count": 0
+  },
+  "errors": []
+}

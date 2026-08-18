@@ -1,0 +1,15 @@
+#import "./fragments/runner_running_jobs.fragment.graphql"
+
+query getGroupMostActiveRunnersEE($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    runners(first: 5, type: GROUP_TYPE, membership: DIRECT, sort: MOST_ACTIVE_DESC) {
+      edges {
+        webUrl
+        node {
+          ...RunnerRunningJobs
+        }
+      }
+    }
+  }
+}

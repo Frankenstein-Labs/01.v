@@ -1,0 +1,33 @@
+query projectVulnerabilitiesOverTime(
+  $fullPath: ID!
+  $reportType: [VulnerabilityReportType!]
+  $startDate: ISO8601Date!
+  $endDate: ISO8601Date!
+  $includeBySeverity: Boolean!
+  $includeByReportType: Boolean!
+  $severity: [VulnerabilitySeverity!]
+  $trackedRefIds: [SecurityProjectTrackedContextID!]
+) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    securityMetrics(reportType: $reportType, trackedRefIds: $trackedRefIds) {
+      vulnerabilitiesOverTime(startDate: $startDate, endDate: $endDate, severity: $severity) {
+        nodes {
+          date
+          ... @include(if: $includeBySeverity) {
+            bySeverity {
+              count
+              severity
+            }
+          }
+          ... @include(if: $includeByReportType) {
+            byReportType {
+              count
+              reportType
+            }
+          }
+        }
+      }
+    }
+  }
+}

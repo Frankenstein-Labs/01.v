@@ -1,0 +1,10 @@
+---
+name: agentic_foundational_flow_tool
+description: Adds support for starting foundational flows from Agentic Chat
+feature_issue_url: https://gitlab.com/groups/gitlab-org/-/work_items/20484
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/226456
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/593769
+milestone: '19.0'
+group: group::duo chat
+type: beta
+default_enabled: true

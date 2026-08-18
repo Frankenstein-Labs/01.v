@@ -1,0 +1,50 @@
+# @feature_category: consumables_cost_management
+
+# Filter-scoped query. Dashboard-level fields (`enabled`, `isOutdatedClient`)
+# and the billing-period total come from `get_billing_period_usage` instead.
+#
+# NOTE: `selfCreditsUsage` is resolved by a local (client-side) resolver with
+# mocked data until the backend field lands (gitlab-org/gitlab#605987).
+query getUserCreditsUsage(
+  $namespacePath: ID
+  $startDate: ISO8601Date
+  $endDate: ISO8601Date
+  $flowTypes: [String!]
+) {
+  selfCreditsUsage(
+    namespacePath: $namespacePath
+    startDate: $startDate
+    endDate: $endDate
+    flowTypes: $flowTypes
+  ) @client {
+    startDate
+    endDate
+
+    creditsUsed
+    dailyAverage
+
+    dailyUsage {
+      date
+      creditsUsed
+    }
+
+    products {
+      id
+      title
+      flowTypes {
+        id
+        title
+      }
+    }
+
+    usedFlowTypes {
+      id
+      title
+    }
+
+    blockedStatus {
+      blocked
+      capType
+    }
+  }
+}

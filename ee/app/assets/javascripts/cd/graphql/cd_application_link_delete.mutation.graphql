@@ -1,0 +1,7 @@
+# @feature_category: continuous_delivery
+
+mutation cdApplicationLinkDelete($input: CdApplicationLinkDeleteInput!) {
+  cdApplicationLinkDelete(input: $input) {
+    errors
+  }
+}

@@ -1,0 +1,7 @@
+fragment MergeTrainCarIndex on MergeRequest {
+  id
+  mergeTrainCar {
+    id
+    index
+  }
+}

@@ -1,0 +1,15 @@
+# @feature_category: workflow_catalog
+query aiCatalogMcpTools {
+  aiCatalogMcpTools {
+    nodes {
+      name
+      title
+      description
+      icons {
+        src
+        mimeType
+        theme
+      }
+    }
+  }
+}

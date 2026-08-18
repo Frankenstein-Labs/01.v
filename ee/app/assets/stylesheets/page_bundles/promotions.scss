@@ -1,0 +1,38 @@
+@import 'page_bundles/mixins_and_variables_and_functions';
+
+.user-callout.promotion-callout {
+  margin: 20px 0 0;
+}
+
+.promotion-issue-sidebar {
+  .promotion-issue-sidebar-message {
+    padding: $gl-padding-top;
+
+    .dropdown-title {
+      margin: 0 0 10px;
+    }
+
+    .btn + .btn {
+      margin-top: $gl-padding-4;
+    }
+  }
+
+  .btn {
+    padding: $gl-vert-padding $gl-btn-padding;
+    @apply gl-rounded-base;
+    display: block;
+    line-height: $line-height-base;
+  }
+
+  .right-sidebar & .btn-link {
+    display: inline;
+    color: $blue-600;
+    background-color: transparent;
+    padding: 0;
+
+    &:hover {
+      background-color: transparent;
+      color: $blue-800;
+    }
+  }
+}

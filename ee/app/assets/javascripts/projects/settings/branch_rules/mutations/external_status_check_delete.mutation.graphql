@@ -1,0 +1,8 @@
+mutation deleteStatusCheck(
+  $id: MergeRequestsExternalStatusCheckID!
+  $branchRuleId: ProjectsBranchRuleID!
+) {
+  branchRuleExternalStatusCheckDestroy(input: { id: $id, branchRuleId: $branchRuleId }) {
+    errors
+  }
+}

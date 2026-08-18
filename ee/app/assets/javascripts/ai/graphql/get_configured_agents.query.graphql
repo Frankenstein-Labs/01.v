@@ -1,0 +1,49 @@
+query getConfiguredAgents(
+  $projectId: ProjectID
+  $groupId: GroupID
+  $includeFoundationalConsumers: Boolean
+  $first: Int
+  $after: String
+) {
+  aiCatalogConfiguredItems(
+    projectId: $projectId
+    groupId: $groupId
+    itemTypes: [AGENT]
+    includeFoundationalConsumers: $includeFoundationalConsumers
+    first: $first
+    after: $after
+  ) {
+    nodes {
+      id
+      pinnedVersionPrefix
+      pinnedItemVersion {
+        id
+        versionName
+        ... on AiCatalogAgentVersion {
+          tools {
+            nodes {
+              id
+              name
+            }
+          }
+          mcpTools
+        }
+      }
+      item {
+        id
+        name
+        description
+        itemType
+        foundational
+        latestVersion {
+          id
+          versionName
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

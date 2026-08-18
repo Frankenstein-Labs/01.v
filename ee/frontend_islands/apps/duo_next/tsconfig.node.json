@@ -1,0 +1,7 @@
+{
+  "extends": "@frontend-islands/tsconfig/tsconfig.node.json",
+  "include": [
+    "vite.config.ts",
+    "vitest.config.ts"
+  ]
+}

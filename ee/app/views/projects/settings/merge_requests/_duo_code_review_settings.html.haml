@@ -1,0 +1,20 @@
+- return unless @project.duo_features_enabled
+- available = @project.auto_duo_code_review_settings_available?
+
+= render ::Layouts::SettingsSectionComponent.new(s_('DuoCodeReview|GitLab Duo Code Review'),
+  id: 'merge-request-duo-code-review-settings',
+  options: { class: 'merge-requests-feature' }) do |c|
+  - c.with_body do
+    = gitlab_ui_form_for @project, url: project_settings_merge_requests_path(@project), authenticity_token: true do |f|
+      .form-group
+        = f.fields_for :project_setting do |settings|
+          = settings.gitlab_ui_checkbox_component :auto_duo_code_review_enabled,
+            s_('ProjectSettings|Enable automatic reviews by GitLab Duo'),
+            checkbox_options: { disabled: !available } do |c|
+            - c.with_help_text do
+              - if available
+                = s_('ProjectSettings|GitLab Duo reviews new merge requests immediately, unless they are drafts or contain no changes.')
+              - else
+                - docs_link = link_to('', help_page_path('user/duo_agent_platform/flows/foundational_flows/code_review.md'), target: '_blank', rel: 'noopener noreferrer')
+                = safe_format(s_('DuoCodeReview|Requires the Code Review foundational flow to be enabled. %{link_start}Learn how to enable foundational flows%{link_end}.'), tag_pair(docs_link, :link_start, :link_end))
+      = f.submit _('Save changes'), pajamas_button: true

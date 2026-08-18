@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MergeRequestTable component matches the snapshot 1`] = `
+<div
+  class="mr-table"
+>
+  <div
+    class="card"
+  >
+    <div
+      class="!gl-border-b-0 card-header gl-bg-transparent gl-font-bold"
+      role="table"
+    >
+      <div
+        class="@md/panel:gl-border-b-0 gl-border-1 gl-border-b gl-border-b-solid gl-border-none gl-flex gl-py-0 gl-responsive-table-row table-row-header"
+        role="row"
+      >
+        <div
+          class="@md/panel:gl-flex gl-border-none gl-hidden gl-px-0 section-50 table-section"
+          role="rowheader"
+        >
+          Title
+        </div>
+        <div
+          class="!gl-border-none gl-px-0 section-50 table-section"
+          role="rowheader"
+        >
+          <div
+            class="gl-flex"
+          >
+            <span
+              class="@md/panel:gl-flex gl-basis-1/2 gl-grow-0 gl-hidden gl-max-w-1/2 gl-shrink-0"
+            >
+              Time to merge
+            </span>
+            <gl-collapsible-listbox-stub
+              block="true"
+              category="primary"
+              class="gl-basis-1/2 gl-grow-0 gl-max-w-1/2 gl-shrink-0"
+              fluidwidth="true"
+              headertext=""
+              icon=""
+              ischeckcentered="true"
+              items="[object Object],[object Object],[object Object]"
+              noresultstext="No results found"
+              placement="bottom-end"
+              positioningstrategy="absolute"
+              resetbuttonlabel=""
+              searchplaceholder="Search"
+              selected="time_to_last_commit"
+              showselectallbuttonlabel=""
+              size="medium"
+              sronlyresultslabel="[Function]"
+              toggleclass="dropdown-menu-toggle !gl-w-full"
+              toggletext="Time from first comment to last commit"
+              variant="default"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="!gl-py-0 card-body"
+    >
+      <merge-request-table-row-stub
+        mergerequest="[object Object]"
+        metriclabel="Time from first comment to last commit"
+        metrictype="time_to_last_commit"
+      />
+      <merge-request-table-row-stub
+        mergerequest="[object Object]"
+        metriclabel="Time from first comment to last commit"
+        metrictype="time_to_last_commit"
+      />
+    </div>
+  </div>
+</div>
+`;

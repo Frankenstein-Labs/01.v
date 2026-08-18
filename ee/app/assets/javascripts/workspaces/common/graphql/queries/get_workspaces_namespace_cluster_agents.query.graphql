@@ -1,0 +1,18 @@
+query getWorkspacesNamespaceClusterAgents($namespace: ID!) {
+  namespaceAgents: namespace(fullPath: $namespace) {
+    id
+    workspacesClusterAgents(filter: AVAILABLE) {
+      nodes {
+        id
+        name
+        project {
+          id
+          nameWithNamespace
+        }
+        workspacesAgentConfig {
+          id
+        }
+      }
+    }
+  }
+}

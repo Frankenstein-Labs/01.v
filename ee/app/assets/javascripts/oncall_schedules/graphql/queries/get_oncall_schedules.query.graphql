@@ -1,0 +1,18 @@
+query getOncallSchedulesWithRotations($projectPath: ID!) {
+  project(fullPath: $projectPath) {
+    id
+    incidentManagementOncallSchedules {
+      nodes {
+        iid
+        name
+        description
+        timezone
+        rotations {
+          nodes {
+            id
+          }
+        }
+      }
+    }
+  }
+}

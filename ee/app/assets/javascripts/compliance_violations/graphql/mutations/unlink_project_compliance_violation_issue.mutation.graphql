@@ -1,0 +1,22 @@
+mutation unlinkProjectComplianceViolationIssue(
+  $input: UnlinkProjectComplianceViolationIssueInput!
+) {
+  unlinkProjectComplianceViolationIssue(input: $input) {
+    clientMutationId
+    errors
+    violation {
+      id
+      issues {
+        nodes {
+          id
+          iid
+          reference
+          referencePath: reference(full: true)
+          state
+          title
+          webUrl
+        }
+      }
+    }
+  }
+}

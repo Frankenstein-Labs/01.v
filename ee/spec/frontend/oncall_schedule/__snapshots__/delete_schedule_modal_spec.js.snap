@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DeleteScheduleModal renders delete schedule modal layout 1`] = `
+<div
+  data-testid="delete-schedule-modal-37"
+>
+  <gl-sprintf-stub
+    message="Are you sure you want to delete the "%{deleteSchedule}" schedule? This action cannot be undone."
+  />
+  <div
+    class="gl-mt-5"
+  >
+    Any escalation rules that are using this schedule will also be deleted.
+  </div>
+</div>
+`;

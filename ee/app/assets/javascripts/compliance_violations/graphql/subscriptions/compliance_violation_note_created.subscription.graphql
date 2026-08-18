@@ -1,0 +1,16 @@
+# @feature_category: compliance_management
+#import "../fragments/compliance_violation_note.fragment.graphql"
+
+subscription complianceViolationNoteCreated($noteableId: NoteableID) {
+  workItemNoteCreated(noteableId: $noteableId) {
+    ...ComplianceViolationNote
+    discussion {
+      id
+      notes {
+        nodes {
+          ...ComplianceViolationNote
+        }
+      }
+    }
+  }
+}

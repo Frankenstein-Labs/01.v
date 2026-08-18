@@ -1,0 +1,17 @@
+mutation replicableTypeBulkUpdate(
+  $action: GeoRegistriesBulkAction!
+  $registryClass: GeoRegistryClass!
+  $replicationState: ReplicationStateEnum
+  $verificationState: VerificationStateEnum
+) {
+  geoRegistriesBulkUpdate(
+    input: {
+      action: $action
+      registryClass: $registryClass
+      replicationState: $replicationState
+      verificationState: $verificationState
+    }
+  ) {
+    errors
+  }
+}

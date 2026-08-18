@@ -1,0 +1,10 @@
+#import "../fragments/compliance_violation_note.fragment.graphql"
+
+mutation updateComplianceViolationNote($input: UpdateNoteInput!) {
+  updateNote(input: $input) {
+    note {
+      ...ComplianceViolationNote
+    }
+    errors
+  }
+}

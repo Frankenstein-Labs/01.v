@@ -1,0 +1,17 @@
+query namespaceCustomFieldNames($fullPath: ID!, $active: Boolean!) {
+  namespace(fullPath: $fullPath) {
+    id
+    customFields(active: $active) {
+      count
+      nodes {
+        id
+        name
+        fieldType
+        workItemTypes {
+          id
+          name
+        }
+      }
+    }
+  }
+}

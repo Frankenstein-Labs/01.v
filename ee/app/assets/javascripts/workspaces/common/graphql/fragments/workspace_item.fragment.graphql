@@ -1,0 +1,13 @@
+fragment WorkspaceItem on Workspace {
+  id
+  name
+  namespace
+  projectId
+  desiredState
+  actualState
+  url
+  devfileRef
+  devfilePath
+  devfileWebUrl
+  createdAt
+}

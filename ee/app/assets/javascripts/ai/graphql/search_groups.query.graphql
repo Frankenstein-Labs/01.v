@@ -1,0 +1,9 @@
+query searchGroups($search: String!, $topLevelOnly: Boolean, $parentPath: ID) {
+  groups(search: $search, topLevelOnly: $topLevelOnly, parentPath: $parentPath) {
+    nodes {
+      id
+      name
+      fullPath
+    }
+  }
+}

@@ -1,0 +1,19 @@
+@import 'page_bundles/mixins_and_variables_and_functions';
+
+.issues-analytics-wrapper {
+  @include gl-container-width-up(sm, panel) {
+    padding-left: $gl-sidebar-padding;
+  }
+
+  .issue-title {
+    max-width: px-to-rem($issuable-title-max-width);
+  }
+
+  .milestone-title {
+    max-width: px-to-rem($milestone-title-max-width);
+  }
+}
+
+.issues-analytics-chart-loader {
+  min-height: 420px;
+}

@@ -1,0 +1,10 @@
+---
+name: agentic_manual_retry_for_duo_chat_responses
+description: Enable the manual retry button on assistant responses in GitLab Duo Agentic Chat
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/587828
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/237062
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/601522
+milestone: '19.1'
+group: group::duo chat
+type: gitlab_com_derisk
+default_enabled: false

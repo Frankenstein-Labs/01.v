@@ -1,0 +1,21 @@
+{
+  "name": "@frontend-islands/vite-config",
+  "version": "0.1.0",
+  "description": "Shared Vite configuration for Frontend Islands projects",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "build:prod": "echo skip",
+    "build": "echo skip"
+  },
+  "peerDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "vite": "^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tailwindcss/vite": {
+      "optional": true
+    }
+  }
+}

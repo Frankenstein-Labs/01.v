@@ -1,0 +1,85 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+
+RSpec.describe 'Updating an approval_rule', feature_category: :source_code_management do
+  include GraphqlHelpers
+
+  let_it_be(:project) { create(:project, :repository) }
+  let_it_be(:current_user) { create(:user, maintainer_of: project) }
+  let_it_be(:merge_request) { create(:merge_request, source_project: project) }
+  let_it_be(:users) { create_list(:user, 3, maintainer_of: project) }
+  let_it_be(:extra_users) { create_list(:user, 2, maintainer_of: project) }
+  let_it_be(:rule) do
+    create(:approval_merge_request_rule, name: "test-rule", merge_request: merge_request, approvals_required: 1)
+  end
+
+  def mutation(vars = input, mr = merge_request)
+    variables = vars.reverse_merge(project_path: mr.project.full_path, iid: mr.iid.to_s, approval_rule_id: rule.id,
+      approvals_required: 1, name: "test-rule", user_ids: users.pluck(:id).map!(&:to_s))
+
+    graphql_mutation(:merge_request_update_approval_rule, variables, <<-QL.strip_heredoc)
+        errors
+    QL
+  end
+
+  def mutation_response
+    graphql_mutation_response(:merge_request_update_approval_rule)
+  end
+
+  it_behaves_like 'authorizing granular token permissions for GraphQL', :update_approval_rule do
+    let(:user) { current_user }
+    let(:boundary_object) { project }
+    let(:mutation) do
+      variables = {
+        project_path: merge_request.project.full_path,
+        iid: merge_request.iid.to_s,
+        approval_rule_id: rule.id,
+        approvals_required: 1,
+        name: "test-rule",
+        user_ids: users.pluck(:id).map!(&:to_s)
+      }
+      graphql_mutation(:merge_request_update_approval_rule, variables, 'errors')
+    end
+
+    let(:request) { post_graphql_mutation(mutation, token: { personal_access_token: pat }) }
+  end
+
+  context "with approvals_required" do
+    let(:input) { { approvals_required: 2 } }
+
+    it 'sets two required approvals to merge request rule' do
+      post_graphql_mutation(mutation(input), current_user: current_user)
+
+      expect(response).to have_gitlab_http_status(:success)
+      expect(rule.reload.approvals_required).to eq(2)
+    end
+  end
+
+  context 'with users already assigned' do
+    let(:input) { { user_ids: (users + extra_users).pluck(:id).map!(&:to_s) } }
+
+    it 'adds extra users' do
+      post_graphql_mutation(mutation(input), current_user: current_user)
+
+      expect(response).to have_gitlab_http_status(:success)
+      expect(rule.users).to match_array(users + extra_users)
+    end
+  end
+
+  context 'with remove_hidden_groups' do
+    let(:private_accessible_group) { create(:group, :private) }
+    let(:private_inaccessible_group) { create(:group, :private) }
+    let(:input) { { group_ids: [private_accessible_group.id.to_s], remove_hidden_groups: true } }
+
+    it 'removes inaccessible groups' do
+      rule.groups = [private_accessible_group, private_inaccessible_group]
+      private_accessible_group.add_guest(current_user)
+
+      post_graphql_mutation(mutation(input), current_user: current_user)
+
+      expect(response).to have_gitlab_http_status(:success)
+      expect(rule.reload.groups).to match_array([private_accessible_group])
+    end
+  end
+end

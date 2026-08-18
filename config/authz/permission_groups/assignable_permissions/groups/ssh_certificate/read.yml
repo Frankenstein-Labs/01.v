@@ -1,0 +1,9 @@
+---
+name: read_ssh_certificate
+description: Grants the ability to read SSH certificates
+boundaries:
+  - group
+available_for:
+  - granular_access_token
+permissions:
+  - read_ssh_certificate

@@ -1,0 +1,74 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "bool": {
+            "should": [
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "bool": {
+                        "_name": "filters:confidentiality:notes:not_on_issue_or_not_confidential",
+                        "should": [
+                          {
+                            "bool": {
+                              "_name": "filters:confidentiality:notes:not_on_issue",
+                              "must_not": [
+                                {
+                                  "exists": {
+                                    "field": "issue"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "term": {
+                              "issue.confidential": {
+                                "_name": "filters:confidentiality:notes:non_confidential_issue",
+                                "value": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "bool": {
+                        "_name": "filters:confidentiality:notes:not_confidential",
+                        "should": [
+                          {
+                            "bool": {
+                              "must_not": [
+                                {
+                                  "exists": {
+                                    "field": "confidential"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "term": {
+                              "confidential": false
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "minimum_should_match": 1
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

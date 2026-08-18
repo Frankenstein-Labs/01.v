@@ -1,0 +1,1165 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Metric table for the change_failure_rate table row when the data is loaded renders the metric values 1`] = `
+[
+  "20.0%",
+  "40.0%",
+  "60.0%",
+  "20.0%",
+  "40.0%",
+  "60.0%",
+]
+`;
+
+exports[`Metric table for the change_failure_rate table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      20,
+    ],
+    [
+      "Aug 1 – 31",
+      40,
+    ],
+    [
+      "Sep 1 – 30",
+      60,
+    ],
+    [
+      "Oct 1 – 31",
+      20,
+    ],
+    [
+      "Nov 1 – 30",
+      40,
+    ],
+  ],
+  "tooltipLabel": "%",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the code_suggestions_acceptance_rate table row when the data is loaded renders the metric values 1`] = `
+[
+  "40.0% 2/5",
+  "40.0% 4/10",
+  "40.0% 6/15",
+  "40.0% 8/20",
+  "40.0% 10/25",
+  "40.0% 12/30",
+]
+`;
+
+exports[`Metric table for the code_suggestions_acceptance_rate table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      40,
+    ],
+    [
+      "Aug 1 – 31",
+      40,
+    ],
+    [
+      "Sep 1 – 30",
+      40,
+    ],
+    [
+      "Oct 1 – 31",
+      40,
+    ],
+    [
+      "Nov 1 – 30",
+      40,
+    ],
+  ],
+  "tooltipLabel": "%",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the code_suggestions_users_count table row renders the correct metric values and tooltips pre- and post-release 1`] = `
+[
+  "5 The usage data may be incomplete due to backend calculations starting after upgrade to GitLab 16.11. For more information, see epic 12978.",
+  "10 The usage data may be incomplete due to backend calculations starting after upgrade to GitLab 16.11. For more information, see epic 12978.",
+  "15",
+  "20",
+  "25",
+  "30",
+]
+`;
+
+exports[`Metric table for the code_suggestions_users_count table row when the data is loaded renders the metric values 1`] = `
+[
+  "5 The usage data may be incomplete due to backend calculations starting after upgrade to GitLab 16.11. For more information, see epic 12978.",
+  "10 The usage data may be incomplete due to backend calculations starting after upgrade to GitLab 16.11. For more information, see epic 12978.",
+  "15 The usage data may be incomplete due to backend calculations starting after upgrade to GitLab 16.11. For more information, see epic 12978.",
+  "20 The usage data may be incomplete due to backend calculations starting after upgrade to GitLab 16.11. For more information, see epic 12978.",
+  "25 The usage data may be incomplete due to backend calculations starting after upgrade to GitLab 16.11. For more information, see epic 12978.",
+  "30 The usage data may be incomplete due to backend calculations starting after upgrade to GitLab 16.11. For more information, see epic 12978.",
+]
+`;
+
+exports[`Metric table for the code_suggestions_users_count table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      5,
+    ],
+    [
+      "Aug 1 – 31",
+      10,
+    ],
+    [
+      "Sep 1 – 30",
+      15,
+    ],
+    [
+      "Oct 1 – 31",
+      20,
+    ],
+    [
+      "Nov 1 – 30",
+      25,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the contributor_count table row when the data is loaded renders the metric values 1`] = `
+[
+  "4",
+  "4",
+  "4",
+  "4",
+  "4",
+  "4",
+]
+`;
+
+exports[`Metric table for the contributor_count table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      4,
+    ],
+    [
+      "Aug 1 – 31",
+      4,
+    ],
+    [
+      "Sep 1 – 30",
+      4,
+    ],
+    [
+      "Oct 1 – 31",
+      4,
+    ],
+    [
+      "Nov 1 – 30",
+      4,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the cycle_time table row when the data is loaded renders the metric values 1`] = `
+[
+  "1.0 d",
+  "2.0 d",
+  "4.0 d",
+  "1.0 d",
+  "2.0 d",
+  "4.0 d",
+]
+`;
+
+exports[`Metric table for the cycle_time table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      1,
+    ],
+    [
+      "Aug 1 – 31",
+      2,
+    ],
+    [
+      "Sep 1 – 30",
+      4,
+    ],
+    [
+      "Oct 1 – 31",
+      1,
+    ],
+    [
+      "Nov 1 – 30",
+      2,
+    ],
+  ],
+  "tooltipLabel": "days",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the deployment_frequency table row when the data is loaded renders the metric values 1`] = `
+[
+  "10.0/d",
+  "20.0/d",
+  "40.0/d",
+  "10.0/d",
+  "20.0/d",
+  "40.0/d",
+]
+`;
+
+exports[`Metric table for the deployment_frequency table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      10,
+    ],
+    [
+      "Aug 1 – 31",
+      20,
+    ],
+    [
+      "Sep 1 – 30",
+      40,
+    ],
+    [
+      "Oct 1 – 31",
+      10,
+    ],
+    [
+      "Nov 1 – 30",
+      20,
+    ],
+  ],
+  "tooltipLabel": "/day",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the deploys table row when the data is loaded renders the metric values 1`] = `
+[
+  "5",
+  "10",
+  "20",
+  "5",
+  "10",
+  "20",
+]
+`;
+
+exports[`Metric table for the deploys table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      5,
+    ],
+    [
+      "Aug 1 – 31",
+      10,
+    ],
+    [
+      "Sep 1 – 30",
+      20,
+    ],
+    [
+      "Oct 1 – 31",
+      5,
+    ],
+    [
+      "Nov 1 – 30",
+      10,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the duo_agent_platform_chats table row renders the correct metric values and tooltips pre- and post-release 1`] = `
+[
+  "25 Data available after upgrade to GitLab 18.7. Learn more.",
+  "50 Data available after upgrade to GitLab 18.7. Learn more.",
+  "75 Data available after upgrade to GitLab 18.7. Learn more.",
+  "100 Data available after upgrade to GitLab 18.7. Learn more.",
+  "125 Data available after upgrade to GitLab 18.7. Learn more.",
+  "150 Data available after upgrade to GitLab 18.7. Learn more.",
+]
+`;
+
+exports[`Metric table for the duo_agent_platform_chats table row when the data is loaded renders the metric values 1`] = `
+[
+  "25 Data available after upgrade to GitLab 18.7. Learn more.",
+  "50 Data available after upgrade to GitLab 18.7. Learn more.",
+  "75 Data available after upgrade to GitLab 18.7. Learn more.",
+  "100 Data available after upgrade to GitLab 18.7. Learn more.",
+  "125 Data available after upgrade to GitLab 18.7. Learn more.",
+  "150 Data available after upgrade to GitLab 18.7. Learn more.",
+]
+`;
+
+exports[`Metric table for the duo_agent_platform_chats table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      25,
+    ],
+    [
+      "Aug 1 – 31",
+      50,
+    ],
+    [
+      "Sep 1 – 30",
+      75,
+    ],
+    [
+      "Oct 1 – 31",
+      100,
+    ],
+    [
+      "Nov 1 – 30",
+      125,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the duo_agent_platform_flows table row renders the correct metric values and tooltips pre- and post-release 1`] = `
+[
+  "25 Data available after upgrade to GitLab 18.7. Learn more.",
+  "50 Data available after upgrade to GitLab 18.7. Learn more.",
+  "75 Data available after upgrade to GitLab 18.7. Learn more.",
+  "100 Data available after upgrade to GitLab 18.7. Learn more.",
+  "125 Data available after upgrade to GitLab 18.7. Learn more.",
+  "150 Data available after upgrade to GitLab 18.7. Learn more.",
+]
+`;
+
+exports[`Metric table for the duo_agent_platform_flows table row when the data is loaded renders the metric values 1`] = `
+[
+  "25 Data available after upgrade to GitLab 18.7. Learn more.",
+  "50 Data available after upgrade to GitLab 18.7. Learn more.",
+  "75 Data available after upgrade to GitLab 18.7. Learn more.",
+  "100 Data available after upgrade to GitLab 18.7. Learn more.",
+  "125 Data available after upgrade to GitLab 18.7. Learn more.",
+  "150 Data available after upgrade to GitLab 18.7. Learn more.",
+]
+`;
+
+exports[`Metric table for the duo_agent_platform_flows table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      25,
+    ],
+    [
+      "Aug 1 – 31",
+      50,
+    ],
+    [
+      "Sep 1 – 30",
+      75,
+    ],
+    [
+      "Oct 1 – 31",
+      100,
+    ],
+    [
+      "Nov 1 – 30",
+      125,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the duo_chat_users_count table row when the data is loaded renders the metric values 1`] = `
+[
+  "5",
+  "10",
+  "15",
+  "20",
+  "25",
+  "30",
+]
+`;
+
+exports[`Metric table for the duo_chat_users_count table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      5,
+    ],
+    [
+      "Aug 1 – 31",
+      10,
+    ],
+    [
+      "Sep 1 – 30",
+      15,
+    ],
+    [
+      "Oct 1 – 31",
+      20,
+    ],
+    [
+      "Nov 1 – 30",
+      25,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the duo_rca_users_count table row renders the correct metric values and tooltips pre- and post-release 1`] = `
+[
+  "4 Data available after upgrade to GitLab 18.0. Learn more.",
+  "8 Data available after upgrade to GitLab 18.0. Learn more.",
+  "12",
+  "16",
+  "20",
+  "24",
+]
+`;
+
+exports[`Metric table for the duo_rca_users_count table row when the data is loaded renders the metric values 1`] = `
+[
+  "4 Data available after upgrade to GitLab 18.0. Learn more.",
+  "8 Data available after upgrade to GitLab 18.0. Learn more.",
+  "12 Data available after upgrade to GitLab 18.0. Learn more.",
+  "16 Data available after upgrade to GitLab 18.0. Learn more.",
+  "20 Data available after upgrade to GitLab 18.0. Learn more.",
+  "24 Data available after upgrade to GitLab 18.0. Learn more.",
+]
+`;
+
+exports[`Metric table for the duo_rca_users_count table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      4,
+    ],
+    [
+      "Aug 1 – 31",
+      8,
+    ],
+    [
+      "Sep 1 – 30",
+      12,
+    ],
+    [
+      "Oct 1 – 31",
+      16,
+    ],
+    [
+      "Nov 1 – 30",
+      20,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the duo_review_comment_count table row when the data is loaded renders the metric values 1`] = `
+[
+  "100 Data available after upgrade to GitLab 18.3. Learn more.",
+  "200 Data available after upgrade to GitLab 18.3. Learn more.",
+  "300 Data available after upgrade to GitLab 18.3. Learn more.",
+  "400 Data available after upgrade to GitLab 18.3. Learn more.",
+  "500 Data available after upgrade to GitLab 18.3. Learn more.",
+  "600 Data available after upgrade to GitLab 18.3. Learn more.",
+]
+`;
+
+exports[`Metric table for the duo_review_comment_count table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      100,
+    ],
+    [
+      "Aug 1 – 31",
+      200,
+    ],
+    [
+      "Sep 1 – 30",
+      300,
+    ],
+    [
+      "Oct 1 – 31",
+      400,
+    ],
+    [
+      "Nov 1 – 30",
+      500,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the duo_review_requests_count table row when the data is loaded renders the metric values 1`] = `
+[
+  "200 Data available after upgrade to GitLab 18.3. Learn more.",
+  "400 Data available after upgrade to GitLab 18.3. Learn more.",
+  "600 Data available after upgrade to GitLab 18.3. Learn more.",
+  "800 Data available after upgrade to GitLab 18.3. Learn more.",
+  "1,000 Data available after upgrade to GitLab 18.3. Learn more.",
+  "1,200 Data available after upgrade to GitLab 18.3. Learn more.",
+]
+`;
+
+exports[`Metric table for the duo_review_requests_count table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      200,
+    ],
+    [
+      "Aug 1 – 31",
+      400,
+    ],
+    [
+      "Sep 1 – 30",
+      600,
+    ],
+    [
+      "Oct 1 – 31",
+      800,
+    ],
+    [
+      "Nov 1 – 30",
+      1000,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the duo_used_count table row when the data is loaded renders the metric values 1`] = `
+[
+  "3",
+  "6",
+  "9",
+  "12",
+  "15",
+  "18",
+]
+`;
+
+exports[`Metric table for the duo_used_count table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      3,
+    ],
+    [
+      "Aug 1 – 31",
+      6,
+    ],
+    [
+      "Sep 1 – 30",
+      9,
+    ],
+    [
+      "Oct 1 – 31",
+      12,
+    ],
+    [
+      "Nov 1 – 30",
+      15,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the issues table row when the data is loaded renders the metric values 1`] = `
+[
+  "1",
+  "2",
+  "4",
+  "1",
+  "2",
+  "4",
+]
+`;
+
+exports[`Metric table for the issues table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      1,
+    ],
+    [
+      "Aug 1 – 31",
+      2,
+    ],
+    [
+      "Sep 1 – 30",
+      4,
+    ],
+    [
+      "Oct 1 – 31",
+      1,
+    ],
+    [
+      "Nov 1 – 30",
+      2,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the issues_completed table row when the data is loaded renders the metric values 1`] = `
+[
+  "5",
+  "10",
+  "20",
+  "5",
+  "10",
+  "20",
+]
+`;
+
+exports[`Metric table for the issues_completed table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      5,
+    ],
+    [
+      "Aug 1 – 31",
+      10,
+    ],
+    [
+      "Sep 1 – 30",
+      20,
+    ],
+    [
+      "Oct 1 – 31",
+      5,
+    ],
+    [
+      "Nov 1 – 30",
+      10,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the lead_time table row when the data is loaded renders the metric values 1`] = `
+[
+  "1.0 d",
+  "2.0 d",
+  "4.0 d",
+  "1.0 d",
+  "2.0 d",
+  "4.0 d",
+]
+`;
+
+exports[`Metric table for the lead_time table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      1,
+    ],
+    [
+      "Aug 1 – 31",
+      2,
+    ],
+    [
+      "Sep 1 – 30",
+      4,
+    ],
+    [
+      "Oct 1 – 31",
+      1,
+    ],
+    [
+      "Nov 1 – 30",
+      2,
+    ],
+  ],
+  "tooltipLabel": "days",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the lead_time_for_changes table row when the data is loaded renders the metric values 1`] = `
+[
+  "1.2 d",
+  "2.3 d",
+  "4.6 d",
+  "1.2 d",
+  "2.3 d",
+  "4.6 d",
+]
+`;
+
+exports[`Metric table for the lead_time_for_changes table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      1.2,
+    ],
+    [
+      "Aug 1 – 31",
+      2.3,
+    ],
+    [
+      "Sep 1 – 30",
+      4.6,
+    ],
+    [
+      "Oct 1 – 31",
+      1.2,
+    ],
+    [
+      "Nov 1 – 30",
+      2.3,
+    ],
+  ],
+  "tooltipLabel": "days",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the median_time_to_merge table row when the data is loaded renders the metric values 1`] = `
+[
+  "0.1 d",
+  "0.2 d",
+  "0.3 d",
+  "0.3 d",
+  "0.2 d",
+  "0.1 d",
+]
+`;
+
+exports[`Metric table for the median_time_to_merge table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      0.1,
+    ],
+    [
+      "Aug 1 – 31",
+      0.2,
+    ],
+    [
+      "Sep 1 – 30",
+      0.3,
+    ],
+    [
+      "Oct 1 – 31",
+      0.3,
+    ],
+    [
+      "Nov 1 – 30",
+      0.2,
+    ],
+  ],
+  "tooltipLabel": "days",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the merge_request_throughput table row when the data is loaded renders the metric values 1`] = `
+[
+  "10",
+  "10",
+  "10",
+  "10",
+  "10",
+  "10",
+]
+`;
+
+exports[`Metric table for the merge_request_throughput table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      10,
+    ],
+    [
+      "Aug 1 – 31",
+      10,
+    ],
+    [
+      "Sep 1 – 30",
+      10,
+    ],
+    [
+      "Oct 1 – 31",
+      10,
+    ],
+    [
+      "Nov 1 – 30",
+      10,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the pipeline_count table row when the data is loaded renders the metric values 1`] = `
+[
+  "387",
+  "37",
+  "27",
+  "95",
+  "75",
+  "100",
+]
+`;
+
+exports[`Metric table for the pipeline_count table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      387,
+    ],
+    [
+      "Aug 1 – 31",
+      37,
+    ],
+    [
+      "Sep 1 – 30",
+      27,
+    ],
+    [
+      "Oct 1 – 31",
+      95,
+    ],
+    [
+      "Nov 1 – 30",
+      75,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the pipeline_duration_median table row when the data is loaded renders the metric values 1`] = `
+[
+  "2.5 m",
+  "2.0 m",
+  "2.8 m",
+  "1.5 m",
+  "4.2 m",
+  "1.7 m",
+]
+`;
+
+exports[`Metric table for the pipeline_duration_median table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      2.5,
+    ],
+    [
+      "Aug 1 – 31",
+      2,
+    ],
+    [
+      "Sep 1 – 30",
+      2.8,
+    ],
+    [
+      "Oct 1 – 31",
+      1.5,
+    ],
+    [
+      "Nov 1 – 30",
+      4.2,
+    ],
+  ],
+  "tooltipLabel": "minutes",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the pipeline_failed_rate table row when the data is loaded renders the metric values 1`] = `
+[
+  "45.2% 175/387",
+  "40.5% 15/37",
+  "18.5% 5/27",
+  "10.5% 10/95",
+  "20.0% 15/75",
+  "25.0% 25/100",
+]
+`;
+
+exports[`Metric table for the pipeline_failed_rate table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      45.2,
+    ],
+    [
+      "Aug 1 – 31",
+      40.5,
+    ],
+    [
+      "Sep 1 – 30",
+      18.5,
+    ],
+    [
+      "Oct 1 – 31",
+      10.5,
+    ],
+    [
+      "Nov 1 – 30",
+      20,
+    ],
+  ],
+  "tooltipLabel": "%",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the pipeline_other_rate table row when the data is loaded renders the metric values 1`] = `
+[
+  "6.4% 25/387",
+  "21.6% 8/37",
+  "3.7% 1/27",
+  "3.1% 3/95",
+  "2.6% 2/75",
+  "25.0% 25/100",
+]
+`;
+
+exports[`Metric table for the pipeline_other_rate table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      6.4,
+    ],
+    [
+      "Aug 1 – 31",
+      21.6,
+    ],
+    [
+      "Sep 1 – 30",
+      3.7,
+    ],
+    [
+      "Oct 1 – 31",
+      3.1,
+    ],
+    [
+      "Nov 1 – 30",
+      2.6,
+    ],
+  ],
+  "tooltipLabel": "%",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the pipeline_success_rate table row when the data is loaded renders the metric values 1`] = `
+[
+  "38.5% 149/387",
+  "132.4% 49/37",
+  "37.0% 10/27",
+  "63.1% 60/95",
+  "24.0% 18/75",
+  "50.0% 50/100",
+]
+`;
+
+exports[`Metric table for the pipeline_success_rate table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      38.5,
+    ],
+    [
+      "Aug 1 – 31",
+      132.4,
+    ],
+    [
+      "Sep 1 – 30",
+      37,
+    ],
+    [
+      "Oct 1 – 31",
+      63.1,
+    ],
+    [
+      "Nov 1 – 30",
+      24,
+    ],
+  ],
+  "tooltipLabel": "%",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the time_to_restore_service table row when the data is loaded renders the metric values 1`] = `
+[
+  "1.2 d",
+  "2.3 d",
+  "4.6 d",
+  "1.2 d",
+  "2.3 d",
+  "4.6 d",
+]
+`;
+
+exports[`Metric table for the time_to_restore_service table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      1.2,
+    ],
+    [
+      "Aug 1 – 31",
+      2.3,
+    ],
+    [
+      "Sep 1 – 30",
+      4.6,
+    ],
+    [
+      "Oct 1 – 31",
+      1.2,
+    ],
+    [
+      "Nov 1 – 30",
+      2.3,
+    ],
+  ],
+  "tooltipLabel": "days",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the vulnerability_critical table row when the data is loaded renders the metric values 1`] = `
+[
+  "40",
+  "20",
+  "10",
+  "40",
+  "20",
+  "10",
+]
+`;
+
+exports[`Metric table for the vulnerability_critical table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      40,
+    ],
+    [
+      "Aug 1 – 31",
+      20,
+    ],
+    [
+      "Sep 1 – 30",
+      10,
+    ],
+    [
+      "Oct 1 – 31",
+      40,
+    ],
+    [
+      "Nov 1 – 30",
+      20,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;
+
+exports[`Metric table for the vulnerability_high table row when the data is loaded renders the metric values 1`] = `
+[
+  "40",
+  "20",
+  "10",
+  "40",
+  "20",
+  "10",
+]
+`;
+
+exports[`Metric table for the vulnerability_high table row when the data is loaded renders the sparkline chart with expected props 1`] = `
+{
+  "data": [
+    [
+      "Jul 1 – 31",
+      40,
+    ],
+    [
+      "Aug 1 – 31",
+      20,
+    ],
+    [
+      "Sep 1 – 30",
+      10,
+    ],
+    [
+      "Oct 1 – 31",
+      40,
+    ],
+    [
+      "Nov 1 – 30",
+      20,
+    ],
+  ],
+  "tooltipLabel": "",
+  "trendStyle": "NONE",
+}
+`;

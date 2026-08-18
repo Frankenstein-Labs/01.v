@@ -1,0 +1,13 @@
+---
+description: Create Duo Pro lead failure
+internal_events: true
+action: duo_pro_lead_creation_failure
+identifiers:
+  - namespace
+  - user
+product_group: acquisition
+milestone: '16.10'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/146059
+tiers:
+  - premium
+  - ultimate

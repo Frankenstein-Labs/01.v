@@ -1,0 +1,17 @@
+fragment MergeTrainPosition on MergeRequest {
+  id
+  project {
+    id
+    mergeTrains {
+      nodes {
+        cars {
+          count
+        }
+      }
+    }
+  }
+  mergeTrainCar {
+    id
+    index
+  }
+}

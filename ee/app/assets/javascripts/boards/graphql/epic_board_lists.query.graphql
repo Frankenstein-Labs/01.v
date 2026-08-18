@@ -1,0 +1,22 @@
+#import "./epic_board_list.fragment.graphql"
+
+# @feature_category: portfolio_management
+query boardListEpics(
+  $fullPath: ID!
+  $boardId: BoardsEpicBoardID!
+  $listId: BoardsEpicListID
+  $filters: EpicFilters
+) {
+  group(fullPath: $fullPath) {
+    id
+    board: epicBoard(id: $boardId) {
+      id
+      hideBacklogList
+      lists(epicFilters: $filters, id: $listId) {
+        nodes {
+          ...EpicBoardListFragment
+        }
+      }
+    }
+  }
+}

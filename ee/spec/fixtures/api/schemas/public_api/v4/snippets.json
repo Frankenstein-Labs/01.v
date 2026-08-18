@@ -1,0 +1,54 @@
+{
+  "type": "array",
+  "allOf": [
+    {
+      "$ref": "../../../../../../../spec/fixtures/api/schemas/public_api/v4/snippets.json"
+    },
+    {
+      "items": {
+        "properties": {
+          "author": {
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "public_email": {
+                "type": ["string", "null"]
+              },
+              "id": {
+                "type": "integer"
+              },
+              "state": {
+                "type": "string"
+              },
+              "locked": {
+                "type": "boolean"
+              },
+              "avatar_url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "web_url": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "username",
+              "state",
+              "locked",
+              "avatar_url",
+              "web_url"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  ]
+}

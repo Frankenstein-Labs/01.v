@@ -1,0 +1,22 @@
+query complianceFrameworksInNamespace($fullPath: ID!) {
+  namespace(fullPath: $fullPath) {
+    id
+    name
+    complianceFrameworks(first: 100) {
+      nodes {
+        id
+        name
+        description
+        color
+        default
+        complianceRequirements(first: 100) {
+          nodes {
+            id
+            name
+            description
+          }
+        }
+      }
+    }
+  }
+}

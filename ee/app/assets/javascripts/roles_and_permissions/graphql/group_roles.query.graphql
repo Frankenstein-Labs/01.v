@@ -1,0 +1,17 @@
+#import "./fragments/role.fragment.graphql"
+
+query getGroupRoles($fullPath: ID!, $includeCustomRoles: Boolean!) {
+  group(fullPath: $fullPath) {
+    id
+    standardRoles {
+      nodes {
+        ...Role
+      }
+    }
+    memberRoles @include(if: $includeCustomRoles) {
+      nodes {
+        ...Role
+      }
+    }
+  }
+}

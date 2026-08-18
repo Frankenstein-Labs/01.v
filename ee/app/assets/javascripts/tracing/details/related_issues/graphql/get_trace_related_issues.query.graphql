@@ -1,0 +1,14 @@
+#import "ee/graphql_shared/fragments/related_issue.fragment.graphql"
+
+query getTraceRelatedIssues($projectFullPath: ID!, $traceId: String!) {
+  project(fullPath: $projectFullPath) {
+    id
+    observabilityTracesLinks(traceIdentifier: $traceId) {
+      nodes {
+        issue {
+          ...RelatedIssue
+        }
+      }
+    }
+  }
+}

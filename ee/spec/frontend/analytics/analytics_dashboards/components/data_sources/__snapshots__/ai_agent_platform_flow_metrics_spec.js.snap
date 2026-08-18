@@ -1,0 +1,381 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AI Agent platform flow metrics data source applies correct sorting for (sortBy: medianExecutionTime, sortDesc: false) 1`] = `
+[
+  {
+    "completionRate": 95.1,
+    "flowType": "CUSTOM_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 0,
+    },
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 88.3,
+    "flowType": "TOOL_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 14.166666666666666,
+    },
+    "sessionsCount": 203,
+    "usersCount": 48,
+  },
+  {
+    "completionRate": 92.5,
+    "flowType": "AGENT_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 20.833333333333332,
+    },
+    "sessionsCount": 145,
+    "usersCount": 32,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "BONUS_FLOW",
+    "medianExecutionTime": null,
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+]
+`;
+
+exports[`AI Agent platform flow metrics data source applies correct sorting for (sortBy: medianExecutionTime, sortDesc: true) 1`] = `
+[
+  {
+    "completionRate": 92.5,
+    "flowType": "AGENT_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 20.833333333333332,
+    },
+    "sessionsCount": 145,
+    "usersCount": 32,
+  },
+  {
+    "completionRate": 88.3,
+    "flowType": "TOOL_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 14.166666666666666,
+    },
+    "sessionsCount": 203,
+    "usersCount": 48,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "CUSTOM_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 0,
+    },
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "BONUS_FLOW",
+    "medianExecutionTime": null,
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+]
+`;
+
+exports[`AI Agent platform flow metrics data source applies correct sorting for (sortBy: sessionsCount, sortDesc: false) 1`] = `
+[
+  {
+    "completionRate": 95.1,
+    "flowType": "CUSTOM_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 0,
+    },
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "BONUS_FLOW",
+    "medianExecutionTime": null,
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 92.5,
+    "flowType": "AGENT_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 20.833333333333332,
+    },
+    "sessionsCount": 145,
+    "usersCount": 32,
+  },
+  {
+    "completionRate": 88.3,
+    "flowType": "TOOL_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 14.166666666666666,
+    },
+    "sessionsCount": 203,
+    "usersCount": 48,
+  },
+]
+`;
+
+exports[`AI Agent platform flow metrics data source applies correct sorting for (sortBy: sessionsCount, sortDesc: true) 1`] = `
+[
+  {
+    "completionRate": 88.3,
+    "flowType": "TOOL_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 14.166666666666666,
+    },
+    "sessionsCount": 203,
+    "usersCount": 48,
+  },
+  {
+    "completionRate": 92.5,
+    "flowType": "AGENT_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 20.833333333333332,
+    },
+    "sessionsCount": 145,
+    "usersCount": 32,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "CUSTOM_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 0,
+    },
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "BONUS_FLOW",
+    "medianExecutionTime": null,
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+]
+`;
+
+exports[`AI Agent platform flow metrics data source applies correct sorting for (sortBy: usersCount, sortDesc: false) 1`] = `
+[
+  {
+    "completionRate": 95.1,
+    "flowType": "CUSTOM_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 0,
+    },
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "BONUS_FLOW",
+    "medianExecutionTime": null,
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 92.5,
+    "flowType": "AGENT_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 20.833333333333332,
+    },
+    "sessionsCount": 145,
+    "usersCount": 32,
+  },
+  {
+    "completionRate": 88.3,
+    "flowType": "TOOL_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 14.166666666666666,
+    },
+    "sessionsCount": 203,
+    "usersCount": 48,
+  },
+]
+`;
+
+exports[`AI Agent platform flow metrics data source applies correct sorting for (sortBy: usersCount, sortDesc: true) 1`] = `
+[
+  {
+    "completionRate": 88.3,
+    "flowType": "TOOL_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 14.166666666666666,
+    },
+    "sessionsCount": 203,
+    "usersCount": 48,
+  },
+  {
+    "completionRate": 92.5,
+    "flowType": "AGENT_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 20.833333333333332,
+    },
+    "sessionsCount": 145,
+    "usersCount": 32,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "CUSTOM_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 0,
+    },
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "BONUS_FLOW",
+    "medianExecutionTime": null,
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+]
+`;
+
+exports[`AI Agent platform flow metrics data source correctly applies default sorting query parameters when available 1`] = `
+[
+  {
+    "completionRate": 95.1,
+    "flowType": "CUSTOM_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 0,
+    },
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "BONUS_FLOW",
+    "medianExecutionTime": null,
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 92.5,
+    "flowType": "AGENT_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 20.833333333333332,
+    },
+    "sessionsCount": 145,
+    "usersCount": 32,
+  },
+  {
+    "completionRate": 88.3,
+    "flowType": "TOOL_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 14.166666666666666,
+    },
+    "sessionsCount": 203,
+    "usersCount": 48,
+  },
+]
+`;
+
+exports[`AI Agent platform flow metrics data source ignores sorting when the fields are excluded 1`] = `
+[
+  {
+    "completionRate": 92.5,
+    "flowType": "AGENT_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 20.833333333333332,
+    },
+    "sessionsCount": 145,
+    "usersCount": 32,
+  },
+  {
+    "completionRate": 88.3,
+    "flowType": "TOOL_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 14.166666666666666,
+    },
+    "sessionsCount": 203,
+    "usersCount": 48,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "CUSTOM_FLOW",
+    "medianExecutionTime": {
+      "fractionDigits": 1,
+      "value": 0,
+    },
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+  {
+    "completionRate": 95.1,
+    "flowType": "BONUS_FLOW",
+    "medianExecutionTime": null,
+    "sessionsCount": 87,
+    "usersCount": 19,
+  },
+]
+`;
+
+exports[`AI Agent platform flow metrics data source returns the flow metrics as nodes on success 1`] = `
+{
+  "nodes": [
+    {
+      "completionRate": 92.5,
+      "flowType": "AGENT_FLOW",
+      "medianExecutionTime": {
+        "fractionDigits": 1,
+        "value": 20.833333333333332,
+      },
+      "sessionsCount": 145,
+      "usersCount": 32,
+    },
+    {
+      "completionRate": 88.3,
+      "flowType": "TOOL_FLOW",
+      "medianExecutionTime": {
+        "fractionDigits": 1,
+        "value": 14.166666666666666,
+      },
+      "sessionsCount": 203,
+      "usersCount": 48,
+    },
+    {
+      "completionRate": 95.1,
+      "flowType": "CUSTOM_FLOW",
+      "medianExecutionTime": {
+        "fractionDigits": 1,
+        "value": 0,
+      },
+      "sessionsCount": 87,
+      "usersCount": 19,
+    },
+    {
+      "completionRate": 95.1,
+      "flowType": "BONUS_FLOW",
+      "medianExecutionTime": null,
+      "sessionsCount": 87,
+      "usersCount": 19,
+    },
+  ],
+}
+`;

@@ -1,0 +1,10 @@
+mutation workspaceUpdate($input: WorkspaceUpdateInput!) {
+  workspaceUpdate(input: $input) {
+    workspace {
+      id
+      actualState
+      desiredState
+    }
+    errors
+  }
+}

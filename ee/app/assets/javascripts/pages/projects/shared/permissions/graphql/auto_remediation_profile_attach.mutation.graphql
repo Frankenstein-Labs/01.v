@@ -1,0 +1,7 @@
+# @feature_category: software_composition_analysis
+mutation AutoRemediationProfileAttach($input: SecurityScanProfileAttachInput!) {
+  securityScanProfileAttach(input: $input) {
+    clientMutationId
+    errors
+  }
+}

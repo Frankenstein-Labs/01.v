@@ -1,0 +1,25 @@
+# @feature_category: team_planning
+query groupCustomFields($fullPath: ID!, $active: Boolean!) {
+  group(fullPath: $fullPath) {
+    id
+    customFields(active: $active) {
+      count
+      nodes {
+        id
+        name
+        fieldType
+        active
+        createdAt
+        updatedAt
+        selectOptions {
+          id
+          value
+        }
+        workItemTypes {
+          id
+          name
+        }
+      }
+    }
+  }
+}

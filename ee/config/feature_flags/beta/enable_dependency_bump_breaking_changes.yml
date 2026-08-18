@@ -1,0 +1,10 @@
+---
+name: enable_dependency_bump_breaking_changes
+description: Enable Agentic Breaking Change Resolution
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/603392
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/241435
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/604558
+milestone: '19.2'
+group: group::compliance
+type: beta
+default_enabled: true

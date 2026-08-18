@@ -1,0 +1,17 @@
+# @feature_category: portfolio_management
+query EpicUsers($fullPath: ID!, $search: String) {
+  group(fullPath: $fullPath) {
+    id
+    groupMembers(relations: [DIRECT, DESCENDANTS, INHERITED], search: $search) {
+      nodes {
+        id
+        user {
+          id
+          name
+          username
+          avatarUrl
+        }
+      }
+    }
+  }
+}

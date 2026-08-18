@@ -1,0 +1,33 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getMavenUpstreams(
+  $groupPath: ID!
+  $upstreamName: String
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  group(fullPath: $groupPath) {
+    id
+    upstreams: virtualRegistriesPackagesMavenUpstreams(
+      upstreamName: $upstreamName
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
+      nodes {
+        id
+        cacheValidityHours
+        metadataCacheValidityHours
+        name
+        url
+        registriesCount
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

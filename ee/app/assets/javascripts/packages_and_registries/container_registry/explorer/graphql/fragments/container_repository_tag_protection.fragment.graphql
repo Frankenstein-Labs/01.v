@@ -1,0 +1,5 @@
+fragment ContainerRepositoryTagProtection on ContainerProtectionAccessLevel {
+  minimumAccessLevelForPush
+  minimumAccessLevelForDelete
+  immutable
+}

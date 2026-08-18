@@ -1,0 +1,135 @@
+@import 'framework/variables';
+// Merge request diff grid layout modifications for inline code quality diff
+// These grid templates build off of their equivalents in app/.../diffs.scss
+// to expand the column only when the .with-inline-findings class is applied
+.diff-grid.with-inline-findings {
+  .diff-grid-right {
+    grid-template-columns: 50px 8px 20px 1fr;
+  }
+
+  .inline-findings-list {
+    margin-left: 50%;
+
+    li {
+      border-left: 0;
+    }
+  }
+
+  &.inline-diff-view {
+    .inline-findings-list {
+      margin-left: 6.2rem;
+    }
+
+    .diff-grid-left {
+      grid-template-columns: 50px 50px 8px 20px 1fr;
+    }
+  }
+
+  .more-count {
+    @include avatar-counter(50%);
+    width: $default-icon-size;
+    height: $default-icon-size;
+  }
+
+  .inline-findings-transition-container .inline-findings-severity-icon {
+    @for $i from 1 through 4 {
+      $z-index: 100;
+      $x-pos: 10px;
+      &:nth-child(#{$i}) {
+        // moving children behind first element
+        z-index: $z-index + $i * -1;
+        transform: translateX((($i * $x-pos)));
+      }
+    }
+  }
+
+  .more-count,
+  .inline-findings-severity-icon {
+    filter: drop-shadow(0 1px 0.5px #fff) drop-shadow(1px 0 0.5px #fff) drop-shadow(0 -1px 0.5px #fff) drop-shadow(-1px 0 0.5px #fff);
+  }
+
+  .more-count-copy-dropdown {
+    line-height: 0.11;
+  }
+
+  .inline-findings-transition-container {
+    // These are composite classes for use with Vue Transition
+    // https://vuejs.org/guide/built-ins/transition
+    .more-count-enter,
+    .more-count-leave-to {
+      &.more-count {
+        opacity: 0;
+        transform: translateX(0);
+      }
+    }
+
+    .more-count-enter-to,
+    .more-count-leave {
+      &.more-count {
+        // Each icon is 10px per $x-pos above, we currently only ever show 3 additional icons
+        // See `codequalityCountThreshold` in  `code_quality_gutter-icon.vue`
+        transform: translateX(30px);
+      }
+    }
+
+    .icons-enter-to,
+    .icons-leave {
+      &.inline-findings-severity-icon {
+        @for $i from 1 through 4 {
+          $x-pos: 10px;
+          &:nth-child(#{$i}) {
+            transform: translateX((($i * $x-pos)));
+          }
+        }
+      }
+    }
+
+    .more-count {
+      // Each icon is 10px per $x-pos above, we currently only ever show 3 additional icons
+      // See `codequalityCountThreshold` in  `inline_findings_gutter-icon.vue` or `inline_findings_gutter_icon_dropdown.vue`
+      transform: translateX(30px);
+      z-index: 3;
+      transition: opacity 0.1s, transform 0.2s;
+    }
+
+    .icons-enter,
+    .icons-leave-to {
+      &.inline-findings-severity-icon {
+        opacity: 0;
+        transform: translateX(0);
+      }
+    }
+
+    .inline-findings-severity-icon {
+      transition: opacity 0.1s, transform 0.2s;
+    }
+
+  }
+}
+
+.findings-drawer {
+  .drawer-heading-severity {
+    text-transform: capitalize;
+  }
+
+  .findings-drawer-nav-button {
+    top: -1px;
+  }
+}
+
+.findings-dropdown {
+  font-family: $regular-font;
+
+  .findings-dropdown-truncate {
+    max-width: 19rem;
+  }
+
+  // stylelint-disable-next-line gitlab/no-gl-class
+  .gl-truncate-end {
+    white-space: nowrap !important;
+  }
+}
+
+.findings-dropdown-width {
+  width: 23rem;
+}

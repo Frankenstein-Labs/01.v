@@ -1,0 +1,27 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getDescendantGroups(
+  $rootNamespacePath: ID!
+  $search: String
+  $after: String
+  $withCount: Boolean = false
+) {
+  group(fullPath: $rootNamespacePath) {
+    avatarUrl
+    id
+    fullName
+    fullPath
+    descendantGroups(search: $search, after: $after) {
+      count @include(if: $withCount)
+      nodes {
+        avatarUrl
+        id
+        fullName
+        fullPath
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

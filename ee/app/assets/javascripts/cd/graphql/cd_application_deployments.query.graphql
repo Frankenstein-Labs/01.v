@@ -1,0 +1,60 @@
+# @feature_category: continuous_delivery
+
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query cdApplicationDeployments(
+  $id: CdApplicationID!
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+  $search: String
+  $statuses: [CdRolloutStatus!]
+) {
+  organization {
+    id
+    cdApplication(id: $id) {
+      id
+      environments {
+        nodes {
+          id
+          name
+          tier
+        }
+      }
+      rollouts(
+        first: $first
+        after: $after
+        last: $last
+        before: $before
+        search: $search
+        statuses: $statuses
+      ) {
+        nodes {
+          id
+          iid
+          state
+          createdAt
+          versionSet {
+            id
+            name
+          }
+          rolloutEnvironments {
+            nodes {
+              id
+              state
+              environment {
+                id
+                name
+                tier
+              }
+            }
+          }
+        }
+        pageInfo {
+          ...PageInfo
+        }
+      }
+    }
+  }
+}

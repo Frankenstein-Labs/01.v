@@ -1,0 +1,15 @@
+fragment DependencyFirewallRuleActivityFields on DependencyFirewallRuleActivity {
+  id
+  ruleType
+  policyName
+  mode
+  enabled
+  activityCount
+  lastModified {
+    at
+    by {
+      id
+      name
+    }
+  }
+}

@@ -1,0 +1,28 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+fragment ProjectComplianceStandardsAdherence on ComplianceStandardsAdherenceConnection {
+  nodes {
+    id
+    updatedAt
+    status
+    checkName
+    standard
+    project {
+      id
+      name
+      webUrl
+      complianceFrameworks {
+        nodes {
+          id
+          name
+          description
+          color
+          default
+        }
+      }
+    }
+  }
+  pageInfo {
+    ...PageInfo
+  }
+}

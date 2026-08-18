@@ -1,0 +1,10 @@
+mutation refreshSecurityFindingTokenStatus($securityFindingUuid: String!) {
+  refreshSecurityFindingTokenStatus(input: { securityFindingUuid: $securityFindingUuid }) {
+    errors
+    findingTokenStatus {
+      id
+      status
+      lastVerifiedAt
+    }
+  }
+}

@@ -1,0 +1,12 @@
+# @feature_category: virtual_registry
+
+mutation containerVirtualRegistryUpstreamCreate(
+  $registryId: VirtualRegistriesContainerRegistryID!
+  $upstreamId: VirtualRegistriesContainerUpstreamID!
+) {
+  upstreamCreate: containerVirtualRegistryUpstreamCreate(
+    input: { registryId: $registryId, upstreamId: $upstreamId }
+  ) {
+    errors
+  }
+}

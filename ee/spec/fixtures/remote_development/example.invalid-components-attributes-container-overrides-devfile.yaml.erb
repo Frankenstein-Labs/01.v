@@ -1,0 +1,15 @@
+---
+schemaVersion: 2.2.0
+components:
+  - name: tooling-container
+    attributes:
+      gl/inject-editor: true
+      container-overrides:
+        securityContext:
+          runAsUser: 1001
+          runAsGroup: 1001
+    container:
+      image: quay.io/mloriedo/universal-developer-image:ubi8-dw-demo
+commands: []
+events: {}
+variables: {}

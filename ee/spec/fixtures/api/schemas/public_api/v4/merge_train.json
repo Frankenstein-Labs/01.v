@@ -1,0 +1,55 @@
+{
+  "type": "object",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "merge_request": {
+      "$ref": "../../../../../../../spec/fixtures/api/schemas/public_api/v4/merge_request_simple.json"
+    },
+    "user": {
+      "$ref": "../../../../../../../spec/fixtures/api/schemas/public_api/v4/user/basic.json"
+    },
+    "pipeline": {
+      "anyOf": [
+        {
+          "$ref": "../../../../../../../spec/fixtures/api/schemas/public_api/v4/pipeline.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "target_branch": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "merged_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "duration": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,31 @@
+# @feature_category: vulnerability_management
+query enabledScans($fullPath: ID!, $pipelineIid: ID!) {
+  project(fullPath: $fullPath) {
+    id
+    pipeline(iid: $pipelineIid) {
+      id
+      enabledSecurityScans {
+        ready
+        apiFuzzing
+        clusterImageScanning
+        containerScanning
+        coverageFuzzing
+        dast
+        dependencyScanning
+        sast
+        secretDetection
+      }
+      enabledPartialSecurityScans {
+        ready
+        apiFuzzing
+        clusterImageScanning
+        containerScanning
+        coverageFuzzing
+        dast
+        dependencyScanning
+        sast
+        secretDetection
+      }
+    }
+  }
+}

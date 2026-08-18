@@ -1,0 +1,8 @@
+mutation addPipelineSubscription($input: ProjectSubscriptionCreateInput!) {
+  projectSubscriptionCreate(input: $input) {
+    subscription {
+      id
+    }
+    errors
+  }
+}

@@ -1,0 +1,10 @@
+---
+name: knowledge_graph_infra
+description: Gates Knowledge Graph infrastructure (event store subscriptions, internal and admin APIs)
+feature_issue_url: https://gitlab.com/groups/gitlab-org/-/epics/19744
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/225960
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/issues/605998
+milestone: '18.10'
+group: group::context-systems
+type: ops
+default_enabled: true

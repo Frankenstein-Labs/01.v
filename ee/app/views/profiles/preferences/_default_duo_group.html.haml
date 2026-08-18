@@ -1,0 +1,17 @@
+- return unless can?(current_user, :assign_default_duo_group)
+
+.form-group.gl-mt-5.gl-mb-6
+  = f.label :duo_default_namespace_id, class: 'label-bold' do
+    = s_('Preferences|Default GitLab Duo namespace')
+  - candidates = current_user.user_preference.duo_default_namespace_candidates
+  - if candidates.any?
+    = f.collection_select :duo_default_namespace_id,
+      candidates, :id, :name,
+      { prompt: s_('Preferences|Select a default Duo namespace...'), selected: current_user.user_preference.duo_default_namespace_with_fallback&.id },
+      class: 'gl-form-select custom-select gl-form-input-xl gl-block'
+    .form-text.gl-text-subtle
+      = s_('Preferences|If you are assigned a GitLab Duo seat in multiple namespaces, you must select a default namespace.')
+  - else
+    = f.text_field :duo_default_namespace_id, class: 'gl-form-input form-control gl-md-form-input-lg', readonly: true, value: s_('Profiles|No eligible namespaces available')
+    .form-text.gl-text-subtle
+      = s_("Profiles|You don't have access to any namespaces eligible for GitLab Duo.")

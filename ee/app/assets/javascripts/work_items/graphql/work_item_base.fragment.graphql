@@ -1,0 +1,6 @@
+#import "~/work_items/graphql/work_item_base.fragment.graphql"
+
+fragment WorkItemBaseEE on WorkItem {
+  ...WorkItemBase
+  promotedToEpicUrl
+}

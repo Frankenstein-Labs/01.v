@@ -1,0 +1,32 @@
+# @feature_category: vulnerability_management
+query groupTotalRiskScore(
+  $fullPath: ID!
+  $projectId: [ID!]
+  $includeByDefault: Boolean!
+  $includeByProject: Boolean!
+  $first: Int!
+  $securityAttributesFilters: [AttributeFilterInput!]
+) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    securityMetrics(projectId: $projectId, securityAttributesFilters: $securityAttributesFilters) {
+      riskScore {
+        projectCount
+        score @include(if: $includeByDefault)
+        ... @include(if: $includeByProject) {
+          byProject(first: $first) {
+            nodes {
+              rating
+              score
+              project {
+                id
+                name
+                fullPath
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

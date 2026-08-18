@@ -1,0 +1,8 @@
+query getAddOnPurchases($namespaceId: NamespaceID) {
+  addOnPurchases(namespaceId: $namespaceId) {
+    id
+    name
+    assignedQuantity
+    purchasedQuantity
+  }
+}

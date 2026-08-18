@@ -1,0 +1,36 @@
+# @feature_category: artifact_registry
+
+# `name` stays selected whatever else the page renders: graphql/cache_config.js keys
+# ArtifactRegistryRepository on it, so the cache cannot normalize the entity without it.
+query getArtifactRegistryRepositoryDetail(
+  $organizationId: OrganizationsOrganizationID!
+  $name: String!
+) {
+  organization(id: $organizationId) {
+    id
+    artifactRegistryRepository(name: $name) {
+      name
+      format
+      kind
+      visibility
+      description
+      artifactsCount @client
+      downloadsCount
+      sizeBytes
+      createdAt @client
+      lastUpdatedAt
+      createdBy @client {
+        id
+        name
+        avatarUrl
+        webPath
+      }
+      updatedBy @client {
+        id
+        name
+        avatarUrl
+        webPath
+      }
+    }
+  }
+}

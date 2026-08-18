@@ -1,0 +1,30 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getSppLinkedPGroupsChildrenProjects(
+  $ids: [ID!]
+  $search: String = ""
+  $after: String = ""
+  $withCount: Boolean = false
+) {
+  groups(ids: $ids) {
+    nodes {
+      id
+      name
+      fullPath
+      projects(includeSubgroups: true, first: 100, search: $search, after: $after) {
+        count @include(if: $withCount)
+        nodes {
+          name
+          id
+          fullPath
+          group {
+            id
+          }
+        }
+        pageInfo {
+          ...PageInfo
+        }
+      }
+    }
+  }
+}

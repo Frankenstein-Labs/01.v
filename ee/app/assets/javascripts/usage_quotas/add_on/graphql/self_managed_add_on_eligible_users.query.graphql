@@ -1,0 +1,48 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getSelfManagedAddOnEligibleUsers(
+  $addOnType: GitlabSubscriptionsAddOnType!
+  $addOnPurchaseIds: [GitlabSubscriptionsAddOnPurchaseID!]!
+  $search: String
+  $sort: GitlabSubscriptionsUserSort!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $filterByAssignedSeat: String
+) {
+  selfManagedAddOnEligibleUsers(
+    addOnType: $addOnType
+    addOnPurchaseIds: $addOnPurchaseIds
+    search: $search
+    sort: $sort
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    filterByAssignedSeat: $filterByAssignedSeat
+  ) {
+    nodes {
+      id
+      username
+      name
+      maxRole @client
+      publicEmail
+      avatarUrl
+      webUrl
+      lastActivityOn
+      lastDuoActivityOn
+      addOnAssignments(addOnPurchaseIds: $addOnPurchaseIds) {
+        nodes {
+          # eslint-disable-next-line @graphql-eslint/require-selections
+          addOnPurchase {
+            name
+          }
+        }
+      }
+    }
+    pageInfo {
+      ...PageInfo
+    }
+  }
+}

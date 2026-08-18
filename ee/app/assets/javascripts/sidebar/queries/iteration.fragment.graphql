@@ -1,0 +1,11 @@
+fragment IterationFragment on Iteration {
+  id
+  title
+  startDate
+  dueDate
+  webUrl
+  iterationCadence {
+    id
+    title
+  }
+}

@@ -1,0 +1,8 @@
+# @feature_category: self-hosted_models
+mutation aiModelSelectionNamespaceModelAllowlistUpdate(
+  $input: AiModelSelectionNamespaceModelAllowlistUpdateInput!
+) {
+  aiModelSelectionNamespaceModelAllowlistUpdate(input: $input) {
+    errors
+  }
+}

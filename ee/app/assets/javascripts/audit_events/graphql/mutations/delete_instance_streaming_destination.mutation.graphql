@@ -1,0 +1,5 @@
+mutation deleteInstanceDestination($id: AuditEventsInstanceExternalStreamingDestinationID!) {
+  instanceAuditEventStreamingDestinationsDelete(input: { id: $id }) {
+    errors
+  }
+}

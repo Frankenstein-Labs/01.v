@@ -1,0 +1,10 @@
+query adminMemberRolePermissions($includeDescription: Boolean = true) {
+  memberRolePermissions: adminMemberRolePermissions {
+    nodes {
+      description @include(if: $includeDescription)
+      name
+      value
+      requirements
+    }
+  }
+}

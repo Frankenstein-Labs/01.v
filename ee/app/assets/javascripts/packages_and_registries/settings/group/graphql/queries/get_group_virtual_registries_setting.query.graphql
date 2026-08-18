@@ -1,0 +1,8 @@
+query getGroupVirtualRegistriesSetting($fullPath: ID!) {
+  group(fullPath: $fullPath) {
+    id
+    virtualRegistriesSetting {
+      enabled
+    }
+  }
+}

@@ -1,0 +1,38 @@
+#import "./iteration_issues.fragment.graphql"
+
+# @feature_category: team_planning
+query IterationIssues(
+  $fullPath: ID!
+  $id: ID!
+  $isGroup: Boolean = true
+  $beforeCursor: String = ""
+  $afterCursor: String = ""
+  $firstPageSize: Int
+  $lastPageSize: Int
+) {
+  group(fullPath: $fullPath) @include(if: $isGroup) {
+    id
+    issues(
+      iterationId: [$id]
+      before: $beforeCursor
+      after: $afterCursor
+      first: $firstPageSize
+      last: $lastPageSize
+      includeSubgroups: true
+    ) {
+      ...IterationIssues
+    }
+  }
+  project(fullPath: $fullPath) @skip(if: $isGroup) {
+    id
+    issues(
+      iterationId: [$id]
+      before: $beforeCursor
+      after: $afterCursor
+      first: $firstPageSize
+      last: $lastPageSize
+    ) {
+      ...IterationIssues
+    }
+  }
+}

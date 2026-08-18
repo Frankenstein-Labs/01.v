@@ -1,0 +1,10 @@
+mutation updateProjectComplianceViolation($input: UpdateProjectComplianceViolationInput!) {
+  updateProjectComplianceViolation(input: $input) {
+    clientMutationId
+    errors
+    complianceViolation {
+      id
+      status
+    }
+  }
+}

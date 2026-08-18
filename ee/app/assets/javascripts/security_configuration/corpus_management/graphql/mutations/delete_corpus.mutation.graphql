@@ -1,0 +1,5 @@
+mutation deleteCorpus($input: DestroyPackageInput!) {
+  destroyPackage(input: $input) {
+    errors
+  }
+}

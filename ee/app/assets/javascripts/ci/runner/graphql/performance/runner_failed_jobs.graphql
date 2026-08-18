@@ -1,0 +1,47 @@
+query getRunnerFailedJobsEE(
+  $runnerTypes: [CiRunnerType!] = [INSTANCE_TYPE]
+  $failureReason: CiJobFailureReason = RUNNER_SYSTEM_FAILURE
+  $logLastLineCount: Int = 2
+  $first: Int = 2
+) {
+  jobs(
+    first: $first
+    statuses: [FAILED]
+    runnerTypes: $runnerTypes
+    failureReason: $failureReason
+  ) {
+    nodes {
+      id
+      runner {
+        id
+        shortSha
+        description
+        adminUrl
+      }
+      finishedAt
+      detailedStatus {
+        id
+        detailsPath
+        group
+        icon
+        label
+        text
+        tooltip
+        action {
+          id
+          buttonTitle
+          icon
+          method
+          path
+          title
+        }
+      }
+      trace {
+        htmlSummary(lastLines: $logLastLineCount)
+      }
+      userPermissions {
+        readBuild
+      }
+    }
+  }
+}

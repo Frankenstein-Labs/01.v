@@ -1,0 +1,6 @@
+- return unless ::License.feature_available?(:remote_development)
+
+%li.gl-dropdown-item
+  = link_to workspace_path_with_params(project_path: @merge_request.source_project.full_path, ref: @merge_request.source_branch), target: '_blank', class: 'dropdown-item', data: { testid: 'open-in-workspace-button', event_tracking: 'click_new_workspace_button', event_label: "#{controller_name}:#{action_name}" } do
+    .gl-dropdown-item-text-wrapper
+      = _('Open in Workspace')

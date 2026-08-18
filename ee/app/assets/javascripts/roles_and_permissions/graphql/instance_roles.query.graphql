@@ -1,0 +1,19 @@
+#import "./fragments/role.fragment.graphql"
+
+query getInstanceRoles($includeCustomRoles: Boolean!) {
+  standardRoles {
+    nodes {
+      ...Role
+    }
+  }
+  memberRoles @include(if: $includeCustomRoles) {
+    nodes {
+      ...Role
+    }
+  }
+  adminMemberRoles @include(if: $includeCustomRoles) {
+    nodes {
+      ...Role
+    }
+  }
+}

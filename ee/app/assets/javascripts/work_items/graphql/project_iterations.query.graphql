@@ -1,0 +1,14 @@
+#import "ee/sidebar/queries/iteration.fragment.graphql"
+
+# @feature_category: team_planning
+query issueIterationsAliasedProject($fullPath: ID!, $title: String, $state: IterationState) {
+  namespace: project(fullPath: $fullPath) {
+    id
+    attributes: iterations(search: $title, in: [TITLE, CADENCE_TITLE], state: $state) {
+      nodes {
+        ...IterationFragment
+        state
+      }
+    }
+  }
+}

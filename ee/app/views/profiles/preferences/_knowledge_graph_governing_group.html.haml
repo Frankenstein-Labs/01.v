@@ -1,0 +1,11 @@
+- return unless @knowledge_graph_governing_namespace_candidates
+
+.form-group.gl-mt-5.gl-mb-6
+  = f.label :knowledge_graph_governing_namespace_id, class: 'label-bold' do
+    = s_('Preferences|Billable Orbit namespace')
+  = f.collection_select :knowledge_graph_governing_namespace_id,
+    @knowledge_graph_governing_namespace_candidates, :id, :name,
+    { prompt: s_('Preferences|Select a billable Orbit namespace...'), selected: @knowledge_graph_governing_namespace_id },
+    class: 'gl-form-select custom-select gl-form-input-xl gl-block'
+  .form-text.gl-text-subtle
+    = s_('Preferences|MCP and API calls to Orbit require a namespace to assign usage to.')

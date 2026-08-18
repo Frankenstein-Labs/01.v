@@ -1,0 +1,10 @@
+fragment MemberRoles on MemberRoleConnection {
+  nodes {
+    baseAccessLevel {
+      integerValue
+    }
+    id
+    name
+    description
+  }
+}

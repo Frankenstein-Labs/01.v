@@ -1,0 +1,97 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "../fragments/vulnerability_location.fragment.graphql"
+
+query pipelineFindings(
+  $fullPath: ID!
+  $pipelineId: ID!
+  $first: Int
+  $last: Int
+  $before: String
+  $after: String
+  $severity: [String!]
+  $reportType: [String!]
+  $scanner: [String!]
+  $state: [VulnerabilityState!]
+  $sort: PipelineSecurityReportFindingSort
+  $vetEnabled: Boolean = false
+) {
+  project(fullPath: $fullPath) {
+    id
+    pipeline(iid: $pipelineId) {
+      id
+      securityReportFindings(
+        before: $before
+        after: $after
+        first: $first
+        last: $last
+        severity: $severity
+        reportType: $reportType
+        scanner: $scanner
+        state: $state
+        sort: $sort
+      ) {
+        nodes {
+          # This query is used by vulnerability_list_graphql.vue, which expects an id property for
+          # the bulk select feature.
+          id: uuid
+          # Removed in https://gitlab.com/gitlab-org/gitlab/-/merge_requests/119055
+          name: title
+          aiResolutionAvailable
+          aiResolutionEnabled
+          description
+          falsePositive @include(if: $vetEnabled)
+          identifiers {
+            externalType
+            name
+          }
+          reportType
+          scanner {
+            id
+            vendor
+          }
+          state
+          dismissalReason
+          severity
+          findingTokenStatus {
+            id
+            status
+          }
+          solution
+          location {
+            ...VulnerabilityLocation
+          }
+          issueLinks {
+            nodes {
+              id
+              issue {
+                id
+                iid
+                webUrl
+                webPath
+                title
+                state
+              }
+            }
+          }
+          vulnerability {
+            id
+            externalIssueLinks {
+              nodes {
+                id
+                issue: externalIssue {
+                  webUrl
+                  externalTracker
+                  title
+                  iid: relativeReference
+                }
+              }
+            }
+          }
+        }
+        pageInfo {
+          ...PageInfo
+        }
+      }
+    }
+  }
+}

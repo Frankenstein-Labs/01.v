@@ -1,0 +1,17 @@
+query getAiMessagesWithThread($threadId: AiConversationThreadID!) {
+  aiMessages(threadId: $threadId) {
+    nodes {
+      id
+      requestId
+      content
+      contentHtml
+      errors
+      role
+      timestamp
+      extras {
+        sources
+        hasFeedback
+      }
+    }
+  }
+}

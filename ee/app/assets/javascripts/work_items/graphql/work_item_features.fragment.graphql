@@ -1,0 +1,61 @@
+#import "~/work_items/graphql/base_work_item_features.fragment.graphql"
+#import "ee/work_items/list/graphql/work_item_feature_status.fragment.graphql"
+#import "ee/work_items/graphql/work_item_custom_field_values.fragment.graphql"
+
+fragment WorkItemFeatures on WorkItemFeatures {
+  ...BaseWorkItemFeatures
+  startAndDueDate {
+    type
+    dueDate
+    startDate
+    rollUp
+    isFixed
+  }
+  healthStatus {
+    healthStatus
+    rolledUpHealthStatus {
+      count
+      healthStatus
+    }
+  }
+  weight {
+    weight
+    rolledUpWeight
+    rolledUpCompletedWeight
+  }
+  color {
+    color
+    textColor
+  }
+  progress {
+    progress
+    updatedAt
+  }
+  linkedItems {
+    blockedByCount
+    blockingCount
+  }
+  iteration {
+    iteration {
+      id
+      title
+      startDate
+      dueDate
+      webUrl
+      iterationCadence {
+        id
+        title
+      }
+    }
+  }
+  status {
+    ...WorkItemFeatureStatus
+  }
+  agentPlan {
+    content
+    contentHtml
+  }
+  customFields {
+    ...WorkItemCustomFieldValuesFragment
+  }
+}

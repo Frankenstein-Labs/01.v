@@ -1,0 +1,11 @@
+# @feature_category: compliance_management
+query complianceFrameworkTemplates {
+  complianceFrameworkTemplates {
+    id
+    templateVersion
+    name
+    description
+    color
+    json
+  }
+}

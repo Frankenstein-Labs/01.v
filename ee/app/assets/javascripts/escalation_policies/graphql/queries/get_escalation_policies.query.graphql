@@ -1,0 +1,12 @@
+#import "../fragments/escalation_policy.fragment.graphql"
+
+query getEscalationPolicies($projectPath: ID!) {
+  project(fullPath: $projectPath) {
+    id
+    incidentManagementEscalationPolicies {
+      nodes {
+        ...EscalationPolicy
+      }
+    }
+  }
+}

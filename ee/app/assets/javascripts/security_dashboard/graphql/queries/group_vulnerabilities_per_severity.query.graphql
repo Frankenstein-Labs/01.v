@@ -1,0 +1,21 @@
+#import "../fragments/vulnerabilities_per_severity.fragment.graphql"
+
+query groupVulnerabilitiesPerSeverity(
+  $fullPath: ID!
+  $projectId: [ID!]
+  $reportType: [VulnerabilityReportType!]
+  $securityAttributesFilters: [AttributeFilterInput!]
+) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    securityMetrics(
+      projectId: $projectId
+      reportType: $reportType
+      securityAttributesFilters: $securityAttributesFilters
+    ) {
+      vulnerabilitiesPerSeverity {
+        ...VulnerabilitiesPerSeverity
+      }
+    }
+  }
+}

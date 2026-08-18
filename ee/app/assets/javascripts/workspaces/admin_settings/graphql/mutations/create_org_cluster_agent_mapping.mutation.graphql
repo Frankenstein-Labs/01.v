@@ -1,0 +1,7 @@
+mutation createOrganizationClusterAgentMapping(
+  $input: OrganizationCreateClusterAgentMappingInput!
+) {
+  organizationCreateClusterAgentMapping(input: $input) {
+    errors
+  }
+}

@@ -1,0 +1,530 @@
+<script>
+import { defineAsyncComponent } from 'vue';
+import {
+  GlAvatar,
+  GlIcon,
+  GlDisclosureDropdown,
+  GlDisclosureDropdownGroup,
+  GlDisclosureDropdownItem,
+  GlButton,
+  GlToggle,
+  GlModalDirective,
+  GlTooltipDirective,
+} from '@gitlab/ui';
+import UserMenuUpgradeSubscription from 'ee_component/super_sidebar/components/user_menu_upgrade_subscription.vue';
+import SafeHtml from '~/vue_shared/directives/safe_html';
+import glFeatureFlagsMixin from '~/vue_shared/mixins/gl_feature_flags_mixin';
+import { s__, __, sprintf } from '~/locale';
+import Tracking from '~/tracking';
+import { SET_STATUS_MODAL_ID } from '~/set_status_modal/constants';
+import axios from '~/lib/utils/axios_utils';
+import { visitUrl, refreshCurrentPage } from '~/lib/utils/url_utility';
+import { setGitlabNext } from '~/lib/utils/gitlab_next';
+import * as Sentry from '~/sentry/sentry_browser_wrapper';
+import { logError } from '~/lib/logger';
+import GitlabExperiment from '~/experimentation/components/gitlab_experiment.vue';
+import { isExperimentVariant } from '~/experimentation/utils';
+import WhatsNewForYouMenuItem from '~/whats_new/components/whats_new_for_you_menu_item.vue';
+import {
+  adminImpersonationPath,
+  adminRootPath,
+  destroyAdminSessionPath,
+  newAdminSessionPath,
+} from '~/lib/utils/path_helpers/instance_admin';
+import { profilePreferencesPath } from '~/lib/utils/path_helpers/profile';
+import { destroyUserSessionPath } from '~/lib/utils/path_helpers/routes';
+import { userPath } from '~/lib/utils/path_helpers/user';
+import { userSettingsProfilePath } from '~/lib/utils/path_helpers/user_settings';
+import { USER_MENU_TRACKING_DEFAULTS } from '../constants';
+import UserMenuProfileItem from './user_menu_profile_item.vue';
+import UserCounts from './user_counts.vue';
+
+const WHATS_NEW_EXPERIMENT = 'whats_new_placement';
+const WHATS_NEW_PLACEMENT = 'profile_menu';
+
+export default {
+  name: 'UserMenu',
+  SET_STATUS_MODAL_ID,
+  WHATS_NEW_EXPERIMENT,
+  // "GitLab Next" is a proper noun, so it is intentionally not translated
+  GITLAB_NEXT_LABEL: 'GitLab Next',
+  i18n: {
+    setStatus: s__('SetStatusModal|Set status'),
+    editStatus: s__('SetStatusModal|Edit status'),
+    editProfile: s__('CurrentUser|Edit profile'),
+    preferences: s__('CurrentUser|Preferences'),
+    buyPipelineMinutes: s__('CurrentUser|Buy compute minutes'),
+    oneOfGroupsRunningOutOfPipelineMinutes: s__('CurrentUser|One of your groups is running out'),
+
+    adminArea: s__('Navigation|Admin'),
+    enterAdminMode: s__('CurrentUser|Enter Admin Mode'),
+    leaveAdminMode: s__('CurrentUser|Leave Admin Mode'),
+    stopImpersonating: __('Stop impersonating'),
+    signOut: __('Sign out'),
+  },
+  components: {
+    GlAvatar,
+    GlIcon,
+    GlDisclosureDropdown,
+    GlDisclosureDropdownGroup,
+    GlDisclosureDropdownItem,
+    GlButton,
+    GitlabExperiment,
+    GlToggle,
+    UserCounts,
+    UserMenuProfileItem,
+    UserMenuUpgradeSubscription,
+    WhatsNewForYouMenuItem,
+    SetStatusModal: defineAsyncComponent(
+      () =>
+        import(
+          /* webpackChunkName: 'statusModalBundle' */ '~/set_status_modal/set_status_modal_wrapper.vue'
+        ),
+    ),
+  },
+  directives: {
+    SafeHtml,
+    GlModal: GlModalDirective,
+    GlTooltip: GlTooltipDirective,
+  },
+  mixins: [Tracking.mixin({ experiment: WHATS_NEW_EXPERIMENT }), glFeatureFlagsMixin()],
+  inject: ['isImpersonating', 'isSaas'],
+  props: {
+    data: {
+      required: true,
+      type: Object,
+    },
+  },
+  data() {
+    return {
+      setStatusModalReady: false,
+      updatedAvatarUrl: null,
+    };
+  },
+  computed: {
+    avatarUrl() {
+      return this.updatedAvatarUrl || this.data.avatar_url;
+    },
+    toggleText() {
+      return sprintf(__('%{user} user’s menu'), { user: this.data.name });
+    },
+    isAdmin() {
+      return this.data?.admin_mode?.user_is_admin;
+    },
+    adminLinkItem() {
+      return {
+        text: this.$options.i18n.adminArea,
+        href: adminRootPath(),
+      };
+    },
+    statusLabel() {
+      const { busy, customized } = this.data.status;
+      return busy || customized ? this.$options.i18n.editStatus : this.$options.i18n.setStatus;
+    },
+    statusItem() {
+      return {
+        text: this.statusLabel,
+        extraAttrs: {
+          ...USER_MENU_TRACKING_DEFAULTS,
+          'data-track-label': 'user_edit_status',
+        },
+      };
+    },
+
+    editProfileItem() {
+      return {
+        text: this.$options.i18n.editProfile,
+        href: userSettingsProfilePath(),
+        extraAttrs: {
+          'data-testid': 'edit-profile-link',
+          ...USER_MENU_TRACKING_DEFAULTS,
+          'data-track-label': 'user_edit_profile',
+        },
+      };
+    },
+    preferencesItem() {
+      return {
+        text: this.$options.i18n.preferences,
+        href: profilePreferencesPath(),
+        extraAttrs: {
+          ...USER_MENU_TRACKING_DEFAULTS,
+          'data-track-label': 'user_preferences',
+        },
+      };
+    },
+    addBuyPipelineMinutesMenuItem() {
+      return this.data.pipeline_minutes?.show_buy_pipeline_minutes;
+    },
+    buyPipelineMinutesItem() {
+      return {
+        text: this.$options.i18n.buyPipelineMinutes,
+        warningText: this.$options.i18n.oneOfGroupsRunningOutOfPipelineMinutes,
+        href: this.data.pipeline_minutes?.buy_pipeline_minutes_path,
+        extraAttrs: {
+          ...USER_MENU_TRACKING_DEFAULTS,
+          'data-track-label': 'buy_pipeline_minutes',
+        },
+      };
+    },
+    isOnGitlabNext() {
+      return Boolean(this.data.gitlab_com_and_canary);
+    },
+    showGitlabNextItem() {
+      return this.isSaas;
+    },
+    gitlabNextTrackingAttrs() {
+      return {
+        ...USER_MENU_TRACKING_DEFAULTS,
+        'data-track-action': 'toggle',
+        'data-track-label': this.isOnGitlabNext ? 'leave_canary' : 'switch_to_canary',
+      };
+    },
+    enterAdminModeItem() {
+      return {
+        text: this.$options.i18n.enterAdminMode,
+        href: newAdminSessionPath(),
+        extraAttrs: {
+          ...USER_MENU_TRACKING_DEFAULTS,
+          'data-track-label': 'enter_admin_mode',
+        },
+      };
+    },
+    leaveAdminModeItem() {
+      return {
+        text: this.$options.i18n.leaveAdminMode,
+        href: destroyAdminSessionPath(),
+        extraAttrs: {
+          ...USER_MENU_TRACKING_DEFAULTS,
+          'data-track-label': 'leave_admin_mode',
+          'data-method': 'post',
+        },
+      };
+    },
+    signOutItem() {
+      return {
+        text: this.$options.i18n.signOut,
+        href: destroyUserSessionPath(),
+        extraAttrs: {
+          'data-method': 'post',
+          'data-testid': 'sign-out-link',
+          class: 'sign-out-link',
+        },
+      };
+    },
+    statusModalData() {
+      if (!this.data?.status?.can_update) {
+        return null;
+      }
+
+      const { busy, customized } = this.data.status;
+
+      if (!busy && !customized) {
+        return {};
+      }
+      const { emoji, message, availability, clear_after: clearAfter } = this.data.status;
+
+      return {
+        'current-emoji': emoji || '',
+        'current-message': message || '',
+        'current-availability': availability || '',
+        'current-clear-status-after': clearAfter || '',
+      };
+    },
+    showAdminButton() {
+      return (
+        this.isAdmin &&
+        (!this.data.admin_mode.admin_mode_feature_enabled || this.data.admin_mode.admin_mode_active)
+      );
+    },
+    showEnterAdminModeItem() {
+      return (
+        this.data.admin_mode.user_is_admin &&
+        this.data.admin_mode.admin_mode_feature_enabled &&
+        !this.data.admin_mode.admin_mode_active
+      );
+    },
+    showLeaveAdminModeItem() {
+      return (
+        this.data.admin_mode.user_is_admin &&
+        this.data.admin_mode.admin_mode_feature_enabled &&
+        this.data.admin_mode.admin_mode_active
+      );
+    },
+    showNotificationDot() {
+      return this.data.pipeline_minutes?.show_notification_dot;
+    },
+    hasEmoji() {
+      return this.data?.status?.emoji;
+    },
+  },
+  mounted() {
+    document.addEventListener('userAvatar:update', this.updateAvatar);
+  },
+  unmounted() {
+    document.removeEventListener('userAvatar:update', this.updateAvatar);
+  },
+  methods: {
+    adminImpersonationPath,
+    userPath,
+    updateAvatar(event) {
+      this.updatedAvatarUrl = event.detail?.url;
+    },
+    onShow() {
+      this.initBuyCIMinsCallout();
+      if (this.data.display_whats_new && isExperimentVariant(WHATS_NEW_EXPERIMENT, 'candidate')) {
+        this.track('render_whats_new_for_you_menu_item', { property: WHATS_NEW_PLACEMENT });
+      }
+    },
+    openStatusModal() {
+      this.setStatusModalReady = true;
+      this.$refs.userDropdown.close();
+    },
+    initBuyCIMinsCallout() {
+      const el = this.$refs?.buyPipelineMinutesNotificationCallout?.$el;
+      el?.addEventListener('click', this.onBuyCIMinutesItemClick);
+    },
+    async onBuyCIMinutesItemClick(event) {
+      /* NOTE: We're not sure this event is tracked by anyone
+       * whether it stays will depend on the outcome of this discussion:
+       * https://gitlab.com/gitlab-org/gitlab/-/issues/402713#note_1343072135
+       */
+      const {
+        'track-action': trackAction,
+        'track-label': label,
+        'track-property': property,
+      } = this.data.pipeline_minutes.tracking_attrs;
+      this.track(trackAction, { label, property });
+
+      // Proceed to the URL if the notification dot is not shown
+      if (!this.showNotificationDot) return;
+
+      event.preventDefault();
+      const href = this.data.pipeline_minutes?.buy_pipeline_minutes_path;
+      const featureId = this.data.pipeline_minutes.callout_attrs.feature_id;
+      const dismissEndpoint = this.data.pipeline_minutes.callout_attrs.dismiss_endpoint;
+
+      try {
+        // dismiss the notification dot Callout
+        await axios.post(dismissEndpoint, { feature_name: featureId });
+      } catch (error) {
+        logError(error);
+        // Override gon.feature_category as this code loads on all pages
+        Sentry.captureException(error, { tags: { feature_category: 'navigation' } });
+      } finally {
+        // visit the URL whether the callout notification is dismissed or not
+        visitUrl(href);
+      }
+    },
+    toggleGitlabNext(enabled) {
+      setGitlabNext(enabled);
+      refreshCurrentPage();
+    },
+    trackSignOut() {
+      this.track(USER_MENU_TRACKING_DEFAULTS['data-track-action'], {
+        label: 'user_sign_out',
+        property: USER_MENU_TRACKING_DEFAULTS['data-track-property'],
+      });
+    },
+  },
+};
+</script>
+
+<template>
+  <div class="gl-flex gl-rounded-[1rem]">
+    <gl-button
+      v-if="isImpersonating"
+      v-gl-tooltip.bottom
+      :href="adminImpersonationPath()"
+      :title="$options.i18n.stopImpersonating"
+      :aria-label="$options.i18n.stopImpersonating"
+      icon="incognito"
+      class="-gl-mr-7 !gl-rounded-full !gl-bg-neutral-200 !gl-pl-3 !gl-pr-8 dark:!gl-bg-alpha-light-24"
+      category="tertiary"
+      data-method="delete"
+      data-testid="stop-impersonation-btn"
+    />
+
+    <gl-disclosure-dropdown
+      ref="userDropdown"
+      class="super-sidebar-user-dropdown gl-relative"
+      data-testid="user-dropdown"
+      :auto-close="false"
+      @shown="onShow"
+    >
+      <template #toggle>
+        <gl-button
+          category="tertiary"
+          class="gl-relative !gl-rounded-full !gl-border-none !gl-px-0"
+          :href="userPath(data.username)"
+          data-testid="user-menu-toggle"
+          data-track-action="click_dropdown"
+          data-track-label="user_profile_menu"
+          data-track-property="nav_core_menu"
+          @click.exact.prevent
+        >
+          <span class="gl-sr-only">{{ toggleText }}</span>
+          <gl-avatar
+            :size="32"
+            :entity-name="data.name"
+            :src="avatarUrl"
+            aria-hidden="true"
+            data-testid="user-avatar-content"
+          />
+          <span
+            v-if="showNotificationDot"
+            class="notification-dot-warning"
+            data-testid="buy-pipeline-minutes-notification-dot"
+            v-bind="data.pipeline_minutes.notification_dot_attrs"
+          >
+          </span>
+        </gl-button>
+
+        <div
+          v-if="hasEmoji"
+          class="gl-absolute -gl-bottom-1 -gl-right-1 gl-flex gl-h-5 gl-w-5 gl-cursor-pointer gl-items-center gl-justify-center gl-rounded-full gl-bg-neutral-0 gl-text-sm gl-shadow-sm"
+          :title="data.status.message"
+        >
+          <gl-emoji :data-name="data.status.emoji" class="gl-pointer-events-none gl-text-[9px]" />
+        </div>
+      </template>
+
+      <gl-disclosure-dropdown-group>
+        <user-menu-profile-item :user="data" />
+      </gl-disclosure-dropdown-group>
+
+      <gl-disclosure-dropdown-item
+        class="gl-border-t gl-flex gl-pt-2 md:gl-hidden"
+        data-testid="user-counts-item"
+      >
+        <user-counts :sidebar-data="data" class="gl-w-full" />
+      </gl-disclosure-dropdown-item>
+
+      <gl-disclosure-dropdown-group bordered>
+        <gl-disclosure-dropdown-item
+          v-if="statusModalData"
+          v-gl-modal="$options.SET_STATUS_MODAL_ID"
+          :item="statusItem"
+          data-testid="status-item"
+          @action="openStatusModal"
+        >
+          <template #list-item>
+            <gl-icon name="slight-smile" variant="subtle" class="gl-mr-2" />
+            <span>{{ statusLabel }}</span>
+          </template>
+        </gl-disclosure-dropdown-item>
+
+        <gl-disclosure-dropdown-item :item="editProfileItem" data-testid="edit-profile-item">
+          <template #list-item>
+            <gl-icon name="profile" variant="subtle" class="gl-mr-2" />
+            <span>{{ $options.i18n.editProfile }}</span>
+          </template>
+        </gl-disclosure-dropdown-item>
+
+        <gl-disclosure-dropdown-item :item="preferencesItem" data-testid="preferences-item">
+          <template #list-item>
+            <gl-icon name="preferences" variant="subtle" class="gl-mr-2" />
+            <span>{{ $options.i18n.preferences }}</span>
+          </template>
+        </gl-disclosure-dropdown-item>
+
+        <gl-disclosure-dropdown-item
+          v-if="showAdminButton"
+          :item="adminLinkItem"
+          class="xl:gl-hidden"
+          data-testid="admin-link"
+        >
+          <template #list-item>
+            <gl-icon name="admin" variant="subtle" class="gl-mr-2" />
+            <span>{{ $options.i18n.adminArea }}</span>
+          </template>
+        </gl-disclosure-dropdown-item>
+
+        <gl-disclosure-dropdown-item
+          v-if="showEnterAdminModeItem"
+          :item="enterAdminModeItem"
+          data-testid="enter-admin-mode-item"
+        >
+          <template #list-item>
+            <gl-icon name="lock" variant="subtle" class="gl-mr-2" />
+            <span>{{ $options.i18n.enterAdminMode }}</span>
+          </template>
+        </gl-disclosure-dropdown-item>
+        <gl-disclosure-dropdown-item
+          v-if="showLeaveAdminModeItem"
+          :item="leaveAdminModeItem"
+          data-testid="leave-admin-mode-item"
+        >
+          <template #list-item>
+            <gl-icon name="lock-open" variant="subtle" class="gl-mr-2" />
+            <span>{{ $options.i18n.leaveAdminMode }}</span>
+          </template>
+        </gl-disclosure-dropdown-item>
+      </gl-disclosure-dropdown-group>
+
+      <user-menu-upgrade-subscription v-if="data.upgrade_link" :upgrade-link="data.upgrade_link" />
+
+      <gitlab-experiment :name="$options.WHATS_NEW_EXPERIMENT">
+        <template #candidate>
+          <whats-new-for-you-menu-item
+            :sidebar-data="data"
+            placement="profile_menu"
+            icon="compass"
+            @action="$refs.userDropdown.close()"
+          />
+        </template>
+      </gitlab-experiment>
+
+      <gl-disclosure-dropdown-group v-if="addBuyPipelineMinutesMenuItem" bordered>
+        <gl-disclosure-dropdown-item
+          v-if="addBuyPipelineMinutesMenuItem"
+          ref="buyPipelineMinutesNotificationCallout"
+          :item="buyPipelineMinutesItem"
+          data-testid="buy-pipeline-minutes-item"
+        >
+          <template #list-item>
+            <gl-icon name="credit-card" variant="subtle" class="gl-mr-2" />
+            <span>{{ buyPipelineMinutesItem.text }}</span>
+            <span
+              v-if="data.pipeline_minutes.show_with_subtext"
+              class="gl-block gl-pt-2 gl-text-sm gl-text-warning"
+              >{{ buyPipelineMinutesItem.warningText }}</span
+            >
+          </template>
+        </gl-disclosure-dropdown-item>
+      </gl-disclosure-dropdown-group>
+
+      <gl-disclosure-dropdown-group v-if="showGitlabNextItem" bordered>
+        <gl-disclosure-dropdown-item data-testid="gitlab-next-item">
+          <template #list-item>
+            <span class="gl-flex gl-items-center">
+              <gl-icon name="trigger-source" variant="subtle" class="gl-mr-3" />
+              <span class="gl-grow">{{ $options.GITLAB_NEXT_LABEL }}</span>
+              <gl-toggle
+                :value="isOnGitlabNext"
+                :label="$options.GITLAB_NEXT_LABEL"
+                label-position="hidden"
+                data-testid="gitlab-next-toggle"
+                v-bind="gitlabNextTrackingAttrs"
+                @change="toggleGitlabNext"
+              />
+            </span>
+          </template>
+        </gl-disclosure-dropdown-item>
+      </gl-disclosure-dropdown-group>
+
+      <gl-disclosure-dropdown-group bordered data-testid="sign-out-group" @action="trackSignOut">
+        <gl-disclosure-dropdown-item :item="signOutItem">
+          <template #list-item>
+            <gl-icon name="power" variant="subtle" class="gl-mr-2" />
+            <span>{{ $options.i18n.signOut }}</span>
+          </template>
+        </gl-disclosure-dropdown-item>
+      </gl-disclosure-dropdown-group>
+    </gl-disclosure-dropdown>
+    <set-status-modal
+      v-if="setStatusModalReady"
+      default-emoji="speech_balloon"
+      v-bind="statusModalData"
+    />
+  </div>
+</template>

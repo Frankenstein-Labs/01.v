@@ -1,0 +1,9 @@
+# @feature_category: knowledge_graph
+mutation orbitSettingsUpdate($input: UserPreferencesUpdateInput!) {
+  userPreferencesUpdate(input: $input) {
+    userPreferences {
+      orbitSettings
+    }
+    errors
+  }
+}

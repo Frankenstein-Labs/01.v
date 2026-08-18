@@ -1,0 +1,276 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EscalationPolicy renders a policy with rules 1`] = `
+<div>
+  <div
+    class="gl-card gl-mt-5"
+  >
+    <div
+      class="gl-card-header gl-py-3"
+    >
+      <div
+        class="gl-flex gl-items-center"
+      >
+        <gl-button-stub
+          accessibledisabled="true"
+          aria-label="Collapse"
+          buttontextclasses=""
+          category="tertiary"
+          class="!gl-p-0 gl-mr-2"
+          icon=""
+          size="medium"
+          tag="button"
+          title="Collapse"
+          type="button"
+          variant="default"
+        >
+          <gl-icon-stub
+            name="chevron-lg-down"
+            size="12"
+            variant="current"
+          />
+        </gl-button-stub>
+        <h3
+          class="gl-font-bold gl-m-0 gl-text-lg"
+        >
+          Escalation policy
+        </h3>
+        <gl-button-group-stub
+          class="gl-ml-auto"
+        >
+          <gl-button-stub
+            accessibledisabled="true"
+            aria-label="Edit escalation policy"
+            buttontextclasses=""
+            category="primary"
+            icon="pencil"
+            role="button"
+            size="medium"
+            tabindex="0"
+            tag="button"
+            title="Edit escalation policy"
+            type="button"
+            variant="default"
+          />
+          <gl-button-stub
+            accessibledisabled="true"
+            aria-label="Delete escalation policy"
+            buttontextclasses=""
+            category="primary"
+            icon="remove"
+            role="button"
+            size="medium"
+            tabindex="0"
+            tag="button"
+            title="Delete escalation policy"
+            type="button"
+            variant="default"
+          />
+        </gl-button-group-stub>
+      </div>
+    </div>
+    <div
+      class="gl-card-body gl-p-0"
+    >
+      <gl-collapse-stub
+        tag="div"
+        visible="true"
+      >
+        <div
+          class="gl-p-5"
+        >
+          <p
+            class="gl-mb-5 gl-text-subtle"
+          >
+            Description 1 lives here
+          </p>
+          <div
+            class="gl-border-1 gl-border-default gl-border-solid gl-p-5 gl-rounded-base"
+          >
+            <div
+              class="escalation-rule-row gl-flex gl-items-center gl-mb-5"
+            >
+              <span
+                class="@md/panel:gl-w-full rule-condition"
+              >
+                <gl-icon-stub
+                  class="gl-mr-3"
+                  name="clock"
+                  size="16"
+                  variant="current"
+                />
+                IF alert is not acknowledged in
+                <span
+                  class="gl-font-bold"
+                >
+                  1 mins
+                </span>
+              </span>
+              <span
+                class="@lg/panel:gl-block gl-bg-gray-900 gl-hidden gl-min-w-7 gl-mx-5 gl-relative gl-shrink-0 right-arrow"
+                style="width: 4%;"
+              >
+                <i
+                  class="gl-absolute gl-border-solid gl-p-1 right-arrow-head"
+                />
+              </span>
+              <span
+                class="gl-flex gl-items-center gl-min-w-0"
+              >
+                <span
+                  class="gl-truncate"
+                  title=" THEN email on-call user in schedule Schedule to fill in"
+                >
+                  <gl-icon-stub
+                    class="gl-mr-3"
+                    name="notifications"
+                    size="16"
+                    variant="current"
+                  />
+                  THEN email on-call user in schedule
+                  <span
+                    class="gl-font-bold"
+                  >
+                    Schedule to fill in
+                  </span>
+                </span>
+              </span>
+            </div>
+            <div
+              class="escalation-rule-row gl-flex gl-items-center gl-mb-5"
+            >
+              <span
+                class="@md/panel:gl-w-full rule-condition"
+              >
+                <gl-icon-stub
+                  class="gl-mr-3"
+                  name="clock"
+                  size="16"
+                  variant="current"
+                />
+                IF alert is not resolved in
+                <span
+                  class="gl-font-bold"
+                >
+                  2 mins
+                </span>
+              </span>
+              <span
+                class="@lg/panel:gl-block gl-bg-gray-900 gl-hidden gl-min-w-7 gl-mx-5 gl-relative gl-shrink-0 right-arrow"
+                style="width: 8%;"
+              >
+                <i
+                  class="gl-absolute gl-border-solid gl-p-1 right-arrow-head"
+                />
+              </span>
+              <span
+                class="gl-flex gl-items-center gl-min-w-0"
+              >
+                <span
+                  class="gl-truncate"
+                  title=" THEN email user Lena"
+                >
+                  <gl-icon-stub
+                    class="gl-mr-3"
+                    name="notifications"
+                    size="16"
+                    variant="current"
+                  />
+                  THEN email user
+                  <gl-token-stub
+                    class="gl-text-white"
+                    removelabel="Remove"
+                    style="background-color: rgb(97, 122, 226);"
+                    variant="default"
+                    viewonly="true"
+                  >
+                    <gl-avatar-stub
+                      alt="avatar"
+                      entityid="0"
+                      entityname=""
+                      shape="circle"
+                      size="16"
+                      src="avatar.com/lena.png"
+                    />
+                    Lena
+                  </gl-token-stub>
+                </span>
+              </span>
+            </div>
+            <div
+              class="escalation-rule-row gl-flex gl-items-center"
+            >
+              <span
+                class="@md/panel:gl-w-full rule-condition"
+              >
+                <gl-icon-stub
+                  class="gl-mr-3"
+                  name="clock"
+                  size="16"
+                  variant="current"
+                />
+                IF alert is not resolved in
+                <span
+                  class="gl-font-bold"
+                >
+                  4 mins
+                </span>
+              </span>
+              <span
+                class="@lg/panel:gl-block gl-bg-gray-900 gl-hidden gl-min-w-7 gl-mx-5 gl-relative gl-shrink-0 right-arrow"
+                style="width: 12%;"
+              >
+                <i
+                  class="gl-absolute gl-border-solid gl-p-1 right-arrow-head"
+                />
+              </span>
+              <span
+                class="gl-flex gl-items-center gl-min-w-0"
+              >
+                <span
+                  class="gl-truncate"
+                  title=" THEN email user Tim"
+                >
+                  <gl-icon-stub
+                    class="gl-mr-3"
+                    name="notifications"
+                    size="16"
+                    variant="current"
+                  />
+                  THEN email user
+                  <gl-token-stub
+                    class="gl-text-white"
+                    removelabel="Remove"
+                    style="background-color: rgb(201, 93, 46);"
+                    variant="default"
+                    viewonly="true"
+                  >
+                    <gl-avatar-stub
+                      alt="avatar"
+                      entityid="0"
+                      entityname=""
+                      shape="circle"
+                      size="16"
+                      src="avatar.com/tim.png"
+                    />
+                    Tim
+                  </gl-token-stub>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </gl-collapse-stub>
+    </div>
+  </div>
+  <delete-escalation-policy-modal-stub
+    escalationpolicy="[object Object]"
+    modalid="deleteEscalationPolicyModal-37"
+  />
+  <edit-escalation-policy-modal-stub
+    escalationpolicy="[object Object]"
+    iseditmode="true"
+    modalid="editEscalationPolicyModal-37"
+  />
+</div>
+`;

@@ -1,0 +1,10 @@
+fragment MergeTrainCarCount on Project {
+  id
+  mergeTrains(targetBranches: $targetBranches) {
+    nodes {
+      cars {
+        count
+      }
+    }
+  }
+}

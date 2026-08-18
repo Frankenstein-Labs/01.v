@@ -1,0 +1,5 @@
+mutation deleteSelfHostedModel($input: AiSelfHostedModelDeleteInput!) {
+  aiSelfHostedModelDelete(input: $input) {
+    errors
+  }
+}

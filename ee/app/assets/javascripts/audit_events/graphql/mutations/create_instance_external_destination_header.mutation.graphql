@@ -1,0 +1,17 @@
+#import "../fragments/audit_event_streaming_instance_header.fragment.graphql"
+
+mutation createInstanceExternalDestinationHeader(
+  $destinationId: AuditEventsInstanceExternalAuditEventDestinationID!
+  $key: String!
+  $value: String!
+  $active: Boolean!
+) {
+  auditEventsStreamingInstanceHeadersCreate(
+    input: { destinationId: $destinationId, key: $key, value: $value, active: $active }
+  ) {
+    errors
+    header {
+      ...AuditEventStreamingHeaderFragment
+    }
+  }
+}

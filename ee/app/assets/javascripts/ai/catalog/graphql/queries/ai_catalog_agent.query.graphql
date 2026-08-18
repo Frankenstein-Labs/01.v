@@ -1,0 +1,71 @@
+# @feature_category: workflow_catalog
+#import "../fragments/ai_catalog_item.fragment.graphql"
+#import "../fragments/ai_catalog_agent_version.fragment.graphql"
+#import "../fragments/ai_catalog_third_party_flow_version.fragment.graphql"
+#import "../fragments/service_account.fragment.graphql"
+
+query aiCatalogAgent(
+  $id: AiCatalogItemID!
+  $showSoftDeleted: Boolean
+  $projectId: ProjectID!
+  $hasProject: Boolean = false
+  $groupId: GroupID!
+  $hasGroup: Boolean = false
+) {
+  aiCatalogItem(id: $id, showSoftDeleted: $showSoftDeleted) {
+    ...BaseAiCatalogItem
+    isEnabledInManagedByProject
+    project {
+      id
+      name
+      nameWithNamespace
+      webUrl
+      rootGroup @gl_introduced(version: "18.6.0") {
+        id
+        fullName
+        fullPath
+      }
+    }
+    latestVersion {
+      ...BaseAiCatalogAgentVersion
+      ...BaseAiCatalogThirdPartyFlowVersion
+    }
+    configurationForProject(projectId: $projectId) @include(if: $hasProject) {
+      id
+      enabled
+      flowTrigger {
+        id
+        eventTypes
+        filter
+        user {
+          ...BaseServiceAccount
+        }
+      }
+      pinnedItemVersion {
+        ...BaseAiCatalogAgentVersion
+        ...BaseAiCatalogThirdPartyFlowVersion
+      }
+      userPermissions {
+        adminAiCatalogItemConsumer
+      }
+    }
+    configurationForGroup(groupId: $groupId) @include(if: $hasGroup) {
+      id
+      enabled
+      serviceAccount {
+        ...BaseServiceAccount
+      }
+      group {
+        id
+        duoSettingsPath
+      }
+      pinnedItemVersion {
+        ...BaseAiCatalogAgentVersion
+        ...BaseAiCatalogThirdPartyFlowVersion
+      }
+      userPermissions {
+        adminAiCatalogItemConsumer
+      }
+    }
+  }
+}

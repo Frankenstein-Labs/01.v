@@ -1,0 +1,5 @@
+title,type,description
+Invalid issue,ISSUE!!!,desc
+Invalid requirement,requirement🔨,desc
+Nonexistent type,nonsense??,desc
+Not project level type,Epic,desc

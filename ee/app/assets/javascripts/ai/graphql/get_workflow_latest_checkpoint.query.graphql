@@ -1,0 +1,35 @@
+query getWorkflowLatestCheckpoint($workflowId: AiDuoWorkflowsWorkflowID!) {
+  duoWorkflowWorkflows(workflowId: $workflowId) {
+    nodes {
+      id
+      status
+      aiCatalogItemVersionId
+      workflowDefinition
+      archived
+      stalled
+      webSearchEnabled
+      latestCheckpoint {
+        workflowGoal
+        workflowStatus
+        errors
+        duoMessages {
+          content
+          messageType
+          messageSubType
+          status
+          toolInfo
+          timestamp
+          correlationId
+          messageId
+          role
+          additionalContext {
+            category
+            id
+            content
+            metadata
+          }
+        }
+      }
+    }
+  }
+}

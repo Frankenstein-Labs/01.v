@@ -1,0 +1,84 @@
+# @feature_category: security_testing_configuration
+query NamespaceSecurityProjects(
+  $fullPath: ID!
+  $projectsFirst: Int
+  $projectsAfter: String
+  $projectsLast: Int
+  $projectsBefore: String
+  $search: String
+  $namespaceId: NamespaceID!
+  $vulnerabilityCountFilters: [VulnerabilityCountFilterInput!]
+  $securityAnalyzerFilters: [AnalyzerFilterInput!]
+  $attributeFilters: [AttributeFilterInput!]
+  $hasScanners: Boolean
+  $hasFailedOrWarning: Boolean
+  $hasStale: Boolean
+  $canReadAttributes: Boolean!
+) {
+  group(fullPath: $fullPath) {
+    id
+  }
+  namespaceSecurityProjects(
+    namespaceId: $namespaceId
+    vulnerabilityCountFilters: $vulnerabilityCountFilters
+    securityAnalyzerFilters: $securityAnalyzerFilters
+    attributeFilters: $attributeFilters
+    hasScanners: $hasScanners
+    hasFailedOrWarning: $hasFailedOrWarning
+    hasStale: $hasStale
+    first: $projectsFirst
+    after: $projectsAfter
+    last: $projectsLast
+    before: $projectsBefore
+    search: $search
+    includeSubgroups: true
+  ) {
+    edges {
+      node {
+        __typename
+        id
+        name
+        path
+        fullPath
+        avatarUrl
+        webUrl
+        updatedAt
+        containerScanningForRegistryEnabled
+        vulnerabilityStatistic {
+          critical
+          high
+          low
+          info
+          medium
+          unknown
+          updatedAt
+        }
+        analyzerStatuses {
+          status
+          analyzerType
+          lastCall
+          buildId
+          updatedAt
+        }
+        securityAttributes @include(if: $canReadAttributes) {
+          nodes {
+            id
+            securityCategory {
+              id
+              name
+            }
+            name
+            description
+            color
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+      hasPreviousPage
+      startCursor
+    }
+  }
+}

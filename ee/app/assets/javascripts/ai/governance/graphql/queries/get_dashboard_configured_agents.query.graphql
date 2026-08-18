@@ -1,0 +1,24 @@
+# @feature_category: workflow_catalog
+query getDashboardConfiguredAgents(
+  $itemTypes: [AiCatalogItemType!]
+  $groupId: GroupID
+  $projectId: ProjectID
+  $first: Int
+) {
+  aiCatalogConfiguredItems(
+    itemTypes: $itemTypes
+    groupId: $groupId
+    projectId: $projectId
+    first: $first
+  ) {
+    nodes {
+      id
+      item {
+        id
+        name
+        itemType
+        description
+      }
+    }
+  }
+}

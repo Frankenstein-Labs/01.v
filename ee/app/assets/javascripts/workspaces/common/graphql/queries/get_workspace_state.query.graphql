@@ -1,0 +1,7 @@
+query getWorkspaceState($id: RemoteDevelopmentWorkspaceID!) {
+  workspace(id: $id) {
+    id
+    name
+    actualState
+  }
+}

@@ -1,0 +1,52 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "../fragments/ai_user_metric_item.fragment.graphql"
+
+query getUserAiUserMetrics(
+  $fullPath: ID!
+  $startDate: Date!
+  $endDate: Date!
+  $before: String
+  $after: String
+  $last: Int
+  $first: Int
+  $sort: AiUserMetricsSort
+) {
+  group(fullPath: $fullPath) {
+    id
+    aiUserMetrics(
+      startDate: $startDate
+      endDate: $endDate
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      sort: $sort
+    ) {
+      nodes {
+        ...AiUserMetricItem
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+  project(fullPath: $fullPath) {
+    id
+    aiUserMetrics(
+      startDate: $startDate
+      endDate: $endDate
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      sort: $sort
+    ) {
+      nodes {
+        ...AiUserMetricItem
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

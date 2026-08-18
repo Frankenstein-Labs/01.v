@@ -1,0 +1,45 @@
+# @feature_category: duo_agent_platform
+#import "../fragments/flow.fragment.graphql"
+
+query getAgentFlows(
+  $projectPath: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $search: String
+  $sort: DuoWorkflowsWorkflowSort
+  $statusGroup: DuoWorkflowStatusGroup
+  $type: String
+  $excludeTypes: [String!]
+  $updatedAfter: ISO8601DateTime
+) {
+  project(fullPath: $projectPath) {
+    id
+    duoWorkflowWorkflows(
+      projectPath: $projectPath
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+      search: $search
+      sort: $sort
+      statusGroup: $statusGroup
+      type: $type
+      excludeTypes: $excludeTypes
+      updatedAfter: $updatedAfter
+    ) {
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      edges {
+        node {
+          ...FlowFragment
+        }
+      }
+    }
+  }
+}

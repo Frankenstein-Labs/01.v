@@ -1,0 +1,19 @@
+---
+description: User highlights an entity type by clicking it in the Orbit explorer legend
+internal_events: true
+action: click_orbit_highlight_legend_type
+identifiers:
+- user
+- namespace
+- project
+additional_properties:
+  label:
+    description: The entity type highlighted from the legend (e.g., "project", "user", "mergerequest").
+product_group: knowledge_graph
+product_categories:
+- knowledge_graph
+milestone: '19.1'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/237283
+tiers:
+- premium
+- ultimate

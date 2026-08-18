@@ -1,0 +1,5 @@
+query getProjectId($fullPath: ID!) {
+  project(fullPath: $fullPath) {
+    id
+  }
+}

@@ -1,0 +1,5 @@
+mutation createPolicyProjectAsync($fullPath: String!) {
+  securityPolicyProjectCreateAsync(input: { fullPath: $fullPath }) {
+    errors
+  }
+}

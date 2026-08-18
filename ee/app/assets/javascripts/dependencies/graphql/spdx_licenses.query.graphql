@@ -1,0 +1,8 @@
+# @feature_category: dependency_management
+query getSpdxLicenses {
+  spdxLicenses {
+    name
+    spdxIdentifier
+    url
+  }
+}

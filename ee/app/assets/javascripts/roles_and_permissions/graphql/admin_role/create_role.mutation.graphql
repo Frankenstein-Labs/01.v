@@ -1,0 +1,11 @@
+mutation createAdminMemberRole(
+  $name: String!
+  $description: String!
+  $permissions: [MemberRoleAdminPermission!]!
+) {
+  memberRoleCreate: memberRoleAdminCreate(
+    input: { name: $name, description: $description, permissions: $permissions }
+  ) {
+    errors
+  }
+}

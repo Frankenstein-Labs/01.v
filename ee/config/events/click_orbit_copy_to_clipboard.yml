@@ -1,0 +1,19 @@
+---
+description: User clicks a copy-to-clipboard button in the Orbit Get Started section (CLI install command or MCP endpoint URL)
+internal_events: true
+action: click_orbit_copy_to_clipboard
+identifiers:
+- user
+- namespace
+- project
+additional_properties:
+  label:
+    description: Which copy button was clicked. One of "CLI" or "MCP".
+product_group: knowledge_graph
+product_categories:
+- knowledge_graph
+milestone: '19.1'
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/237283
+tiers:
+- premium
+- ultimate

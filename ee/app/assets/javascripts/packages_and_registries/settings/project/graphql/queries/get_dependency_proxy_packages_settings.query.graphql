@@ -1,0 +1,10 @@
+#import "../fragments/dependency_proxy_packages_settings.fragment.graphql"
+
+query getDependencyProxyPackagesSettings($projectPath: ID!) {
+  project(fullPath: $projectPath) {
+    id
+    dependencyProxyPackagesSetting {
+      ...DependencyProxyPackagesSettingFields
+    }
+  }
+}

@@ -1,0 +1,27 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "ee/security_configuration/dast_profiles/dast_scanner_profiles/graphql/dast_scanner_profile.fragment.graphql"
+
+query DastScannerProfiles(
+  $fullPath: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  project(fullPath: $fullPath) {
+    id
+    scannerProfiles: dastScannerProfiles(
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
+      pageInfo {
+        ...PageInfo
+      }
+      nodes {
+        ...DastScannerProfileFragment
+      }
+    }
+  }
+}

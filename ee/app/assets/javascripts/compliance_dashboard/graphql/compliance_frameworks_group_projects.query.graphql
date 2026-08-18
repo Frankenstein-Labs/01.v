@@ -1,0 +1,45 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+#import "./compliance_frameworks_project.fragment.graphql"
+
+query complianceFrameworksGroupProjects(
+  $groupPath: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $project: String
+  $ids: [ID!]
+  $includeArchived: Boolean
+  $archivedOnly: Boolean
+  $frameworks: [ComplianceManagementFrameworkID!]!
+  $frameworksNot: [ComplianceManagementFrameworkID!]!
+  $presenceFilter: ComplianceFrameworkPresenceFilter
+) {
+  group(fullPath: $groupPath) {
+    id
+    projects(
+      includeSubgroups: true
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      search: $project
+      ids: $ids
+      sort: FULL_PATH_ASC
+      includeArchived: $includeArchived
+      archivedOnly: $archivedOnly
+      complianceFrameworkFilters: {
+        ids: $frameworks
+        not: { ids: $frameworksNot }
+        presenceFilter: $presenceFilter
+      }
+    ) {
+      nodes {
+        ...ComplianceFrameworksProjectFragment
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

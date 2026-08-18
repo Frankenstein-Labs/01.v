@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Project Header matches the snapshot 1`] = `
+<div
+  class="gl-border-1 gl-border-b-solid gl-border-default gl-flex gl-items-center gl-justify-between gl-mb-5 gl-pb-3 gl-text-subtle"
+>
+  <div
+    class="gl-flex gl-items-center"
+  >
+    <project-avatar-stub
+      class="gl-mr-3"
+      projectavatarurl="/namespace-avatar"
+      projectid="1"
+      projectname="hello"
+      size="24"
+    />
+    <gl-link-stub
+      class="gl-mr-3 gl-text-subtle"
+      data-testid="namespace-link"
+      href="/hello"
+    >
+      hello
+    </gl-link-stub>
+    <span
+      class="gl-mr-3"
+    >
+      &gt;
+    </span>
+    <project-avatar-stub
+      class="gl-mr-3"
+      projectavatarurl="/project-avatar"
+      projectid="2"
+      projectname="world"
+      size="24"
+    />
+    <gl-link-stub
+      class="gl-mr-3 gl-text-subtle"
+      data-testid="project-link"
+    >
+      world
+    </gl-link-stub>
+  </div>
+  <div
+    class="gl-flex"
+  >
+    <gl-disclosure-dropdown-stub
+      autoclose="true"
+      category="primary"
+      class="gl-text-subtle"
+      icon="ellipsis_v"
+      items=""
+      nocaret="true"
+      placement="bottom-start"
+      positioningstrategy="absolute"
+      size="medium"
+      textsronly="true"
+      title="More actions"
+      toggleclass="gl-flex gl-items-center !gl-px-3 gl-bg-transparent !gl-shadow-none"
+      toggleid="dropdown-toggle-btn-1"
+      toggletext="More actions"
+      variant="default"
+    >
+      <gl-disclosure-dropdown-item-stub
+        data-testid="remove-project-button"
+        variant="danger"
+      >
+        Remove
+      </gl-disclosure-dropdown-item-stub>
+    </gl-disclosure-dropdown-stub>
+  </div>
+</div>
+`;

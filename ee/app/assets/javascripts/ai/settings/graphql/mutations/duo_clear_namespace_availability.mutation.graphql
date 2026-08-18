@@ -1,0 +1,9 @@
+# @feature_category: ai_abstraction_layer
+
+mutation duoClearNamespaceAvailability($groupId: GroupID!) {
+  adminClearDuoAvailability(input: { groupId: $groupId }) {
+    availability
+    adminLocked
+    errors
+  }
+}

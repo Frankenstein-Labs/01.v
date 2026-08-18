@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "required": [
+    "runner_id",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "runner_id": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

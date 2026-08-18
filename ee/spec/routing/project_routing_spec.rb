@@ -1,0 +1,140 @@
+# frozen_string_literal: true
+
+require "spec_helper"
+
+RSpec.describe 'EE-specific project routing' do
+  before do
+    allow(Project).to receive(:find_by_full_path).with('gitlab/gitlabhq', any_args).and_return(true)
+  end
+
+  describe Projects::RequirementsManagement::RequirementsController, 'routing', type: :routing do
+    it "to #index" do
+      expect(get("/gitlab/gitlabhq/-/requirements_management/requirements")).to route_to('projects/requirements_management/requirements#index', namespace_id: 'gitlab', project_id: 'gitlabhq')
+    end
+  end
+
+  # project_vulnerability_feedback  GET    /:project_id/vulnerability_feedback(.:format)     projects/vulnerability_feedback#index
+  #                                 POST   /:project_id/vulnerability_feedback(.:format)     projects/vulnerability_feedback#create
+  # project_vulnerability_feedback  DELETE /:project_id/vulnerability_feedback/:id(.:format) projects/vulnerability_feedback#destroy
+  describe Projects::VulnerabilityFeedbackController, 'routing', type: :routing do
+    it "to #index" do
+      expect(get("/gitlab/gitlabhq/-/vulnerability_feedback")).to route_to('projects/vulnerability_feedback#index', namespace_id: 'gitlab', project_id: 'gitlabhq')
+    end
+
+    it "to #create" do
+      expect(post("/gitlab/gitlabhq/-/vulnerability_feedback")).to route_to('projects/vulnerability_feedback#create', namespace_id: 'gitlab', project_id: 'gitlabhq')
+    end
+
+    it "to #destroy" do
+      expect(delete("/gitlab/gitlabhq/-/vulnerability_feedback/1")).to route_to('projects/vulnerability_feedback#destroy', namespace_id: 'gitlab', project_id: 'gitlabhq', id: '1')
+    end
+
+    describe 'legacy routing' do
+      it_behaves_like 'redirecting a legacy path', "/gitlab/gitlabhq/vulnerability_feedback", "/gitlab/gitlabhq/-/vulnerability_feedback"
+    end
+  end
+
+  # security_namespace_project_pipeline GET /:project_id/pipelines/:id/security(.:format)
+  describe Projects::PipelinesController, 'routing' do
+    it 'to #security' do
+      expect(get('/gitlab/gitlabhq/-/pipelines/12/security')).to route_to('projects/pipelines#security', namespace_id: 'gitlab', project_id: 'gitlabhq', id: '12')
+    end
+  end
+
+  describe Projects::AutocompleteSourcesController, 'routing' do
+    it "to #epics" do
+      expect(get("/gitlab/gitlabhq/-/autocomplete_sources/epics")).to route_to("projects/autocomplete_sources#epics", namespace_id: 'gitlab', project_id: 'gitlabhq')
+    end
+  end
+
+  describe Projects::ProtectedEnvironmentsController, 'routing' do
+    describe 'legacy routing' do
+      it_behaves_like 'redirecting a legacy path', "/gitlab/gitlabhq/protected_environments", "/gitlab/gitlabhq/-/protected_environments"
+    end
+  end
+
+  describe Projects::AuditEventsController, 'routing' do
+    describe 'legacy routing' do
+      it_behaves_like 'redirecting a legacy path', "/gitlab/gitlabhq/audit_events", "/gitlab/gitlabhq/-/audit_events"
+    end
+  end
+
+  describe Projects::Integrations::Jira::IssuesController, 'routing', type: :routing do
+    it "to #index" do
+      expect(get("/gitlab/gitlabhq/-/integrations/jira/issues")).to route_to('projects/integrations/jira/issues#index', namespace_id: 'gitlab', project_id: 'gitlabhq')
+    end
+  end
+
+  describe Projects::Security::PoliciesController, 'routing' do
+    where(:id) do
+      %w[test.1.2 test-policy test:policy]
+    end
+
+    it "to #new" do
+      expect(get("/gitlab/gitlabhq/-/security/policies/new")).to route_to('projects/security/policies#new', namespace_id: 'gitlab', project_id: 'gitlabhq')
+    end
+
+    it 'to #index' do
+      expect(get('/gitlab/gitlabhq/-/security/policies')).to route_to('projects/security/policies#index', namespace_id: 'gitlab', project_id: 'gitlabhq')
+    end
+
+    with_them do
+      it 'to #edit' do
+        expect(get("/gitlab/gitlabhq/-/security/policies/#{id}/edit")).to route_to('projects/security/policies#edit', namespace_id: 'gitlab', project_id: 'gitlabhq', id: id)
+      end
+    end
+  end
+
+  describe Projects::TargetBranchRulesController, 'routing' do
+    it "to #index" do
+      expect(get("/gitlab/gitlabhq/-/target_branch_rules")).to route_to('projects/target_branch_rules#index', namespace_id: 'gitlab', project_id: 'gitlabhq')
+    end
+
+    it "to #create" do
+      expect(post("/gitlab/gitlabhq/-/target_branch_rules")).to route_to('projects/target_branch_rules#create', namespace_id: 'gitlab', project_id: 'gitlabhq')
+    end
+
+    it "to #destroy" do
+      expect(delete("/gitlab/gitlabhq/-/target_branch_rules/1")).to route_to('projects/target_branch_rules#destroy', namespace_id: 'gitlab', project_id: 'gitlabhq', id: '1')
+    end
+  end
+
+  describe Projects::Settings::ServiceAccountsController, 'routing', type: :routing do
+    it "to #index" do
+      expect(get("/gitlab/gitlabhq/-/settings/service_accounts")).to route_to(
+        'projects/settings/service_accounts#index',
+        namespace_id: 'gitlab',
+        project_id: 'gitlabhq'
+      )
+    end
+  end
+
+  describe 'duo agents platform', feature_category: :duo_agent_platform do
+    it 'routes mcp-servers to duo_agents_platform#show' do
+      expect(get('/gitlab/gitlabhq/-/automate/mcp-servers')).to route_to(
+        'projects/duo_agents_platform#show',
+        namespace_id: 'gitlab',
+        project_id: 'gitlabhq',
+        vueroute: 'mcp-servers'
+      )
+    end
+
+    it 'routes agent-sessions to duo_agents_platform#show' do
+      expect(get('/gitlab/gitlabhq/-/automate/agent-sessions')).to route_to(
+        'projects/duo_agents_platform#show',
+        namespace_id: 'gitlab',
+        project_id: 'gitlabhq',
+        vueroute: 'agent-sessions'
+      )
+    end
+
+    it 'routes agent-sessions/:id to duo_agents_platform#show' do
+      expect(get('/gitlab/gitlabhq/-/automate/agent-sessions/1')).to route_to(
+        'projects/duo_agents_platform#show',
+        namespace_id: 'gitlab',
+        project_id: 'gitlabhq',
+        vueroute: 'agent-sessions/1'
+      )
+    end
+  end
+end

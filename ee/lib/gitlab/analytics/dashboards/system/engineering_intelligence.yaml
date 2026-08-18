@@ -1,0 +1,326 @@
+---
+title: Engineering Intelligence
+description: Track engineering velocity, pipeline health, and AI-assisted development.
+version: '2'
+status: experiment
+panels: []
+views:
+- title: Overview
+  panels:
+  - title: "Total Code Suggestions (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: stat
+            mode: analytics
+            query: type = CodeSuggestion and group = "gitlab-org" and timestamp >= -30d
+            metrics: totalCount as "Total"
+    gridAttributes:
+      yPos: 0
+      xPos: 0
+      width: 3
+      height: 1
+  - title: "Code Suggestion Acceptance Rate (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: stat
+            mode: analytics
+            query: type = CodeSuggestion and group = "gitlab-org" and timestamp >= -30d
+            metrics: acceptanceRate as "Acceptance Rate"
+    gridAttributes:
+      yPos: 0
+      xPos: 3
+      width: 3
+      height: 1
+  - title: "Total Pipelines (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: stat
+            mode: analytics
+            query: type = Pipeline and group = "gitlab-org" and finished >= -30d
+            metrics: totalCount as "Total"
+    gridAttributes:
+      yPos: 0
+      xPos: 6
+      width: 3
+      height: 1
+  - title: "Pipeline Success Rate (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: stat
+            mode: analytics
+            query: type = Pipeline and group = "gitlab-org" and finished >= -30d
+            metrics: successRate as "Success Rate"
+    gridAttributes:
+      yPos: 0
+      xPos: 9
+      width: 3
+      height: 1
+  - title: "Code Suggestions usage trend (90d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: lineChart
+            mode: analytics
+            query: type = CodeSuggestion and group = "gitlab-org" and timestamp >= -90d
+            dimensions: timestamp as "Date"
+            metrics: totalCount as "Total", acceptedCount as "Accepted"
+    gridAttributes:
+      yPos: 1
+      xPos: 0
+      width: 12
+      height: 4
+  - title: "Code Suggestions by user (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: table
+            mode: analytics
+            query: type = CodeSuggestion and group = "gitlab-org" and timestamp >= -30d
+            dimensions: user as "User"
+            metrics: totalCount as "Total", acceptedCount as "Accepted", acceptanceRate as "Acceptance Rate"
+            sort: totalCount desc
+            limit: 10
+    gridAttributes:
+      yPos: 5
+      xPos: 0
+      width: 12
+      height: 3
+- title: AI Impact
+  panels:
+  - title: "Code Suggestions by language (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: columnChart
+            mode: analytics
+            query: type = CodeSuggestion and group = "gitlab-org" and timestamp >= -30d
+            dimensions: language as "Language"
+            metrics: totalCount as "Total", acceptanceRate as "Acceptance Rate"
+            sort: totalCount desc
+    gridAttributes:
+      yPos: 0
+      xPos: 0
+      width: 6
+      height: 4
+  - title: "Code Suggestions by IDE (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: columnChart
+            mode: analytics
+            query: type = CodeSuggestion and group = "gitlab-org" and timestamp >= -30d
+            dimensions: ideName as "IDE"
+            metrics: totalCount as "Total"
+            sort: totalCount desc
+    gridAttributes:
+      yPos: 0
+      xPos: 6
+      width: 6
+      height: 4
+- title: DORA & Delivery
+  panels:
+  - title: "Pipeline health overview (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: table
+            mode: analytics
+            query: type = Pipeline and group = "gitlab-org" and finished >= -30d
+            metrics: totalCount as "Total", successRate as "Success Rate", failureRate as "Failure Rate", canceledRate as "Canceled Rate", durationQuantile as "p95 Duration (s)"
+    gridAttributes:
+      yPos: 0
+      xPos: 0
+      width: 12
+      height: 3
+  - title: "Pipeline outcomes by ref (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: columnChart
+            mode: analytics
+            query: type = Pipeline and group = "gitlab-org" and finished >= -30d
+            dimensions: ref as "Ref"
+            metrics: totalCount as "Total", successRate as "Success Rate", failureRate as "Failure Rate"
+            sort: totalCount desc
+            limit: 10
+    gridAttributes:
+      yPos: 3
+      xPos: 0
+      width: 6
+      height: 4
+  - title: "Pipeline duration trend (90d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: lineChart
+            mode: analytics
+            query: type = Pipeline and group = "gitlab-org" and finished >= -90d
+            dimensions: finished as "Week"
+            metrics: totalCount as "Total", durationQuantile as "p95 Duration (s)"
+    gridAttributes:
+      yPos: 3
+      xPos: 6
+      width: 6
+      height: 4
+  - title: "Pipeline outcomes by status (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: columnChart
+            mode: analytics
+            query: type = Pipeline and group = "gitlab-org" and finished >= -30d
+            dimensions: status as "Status"
+            metrics: totalCount as "Total"
+            sort: totalCount desc
+    gridAttributes:
+      yPos: 7
+      xPos: 0
+      width: 12
+      height: 4
+  - title: "Pipeline outcomes by source (30d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: table
+            mode: analytics
+            query: type = Pipeline and group = "gitlab-org" and finished >= -30d
+            dimensions: source as "Source"
+            metrics: totalCount as "Total", successRate as "Success Rate", failureRate as "Failure Rate"
+            sort: totalCount desc
+    gridAttributes:
+      yPos: 11
+      xPos: 0
+      width: 12
+      height: 3
+  - title: "Pipeline status distribution over time (90d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: columnChart
+            mode: analytics
+            query: type = Pipeline and group = "gitlab-org" and finished >= -90d
+            dimensions: finished as "Week", status as "Status"
+            metrics: totalCount as "Total"
+    gridAttributes:
+      yPos: 14
+      xPos: 0
+      width: 12
+      height: 4
+- title: Team Health
+  panels:
+  - title: "Recently merged merge requests"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: table
+            query: type = MergeRequest and group = "gitlab-org" and state = merged
+            fields: title, author, mergedAt, labels
+            sort: mergedAt desc
+            limit: 10
+    gridAttributes:
+      yPos: 0
+      xPos: 0
+      width: 6
+      height: 3
+  - title: "Open merge requests by age"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: table
+            query: type = MergeRequest and group = "gitlab-org" and state = opened
+            fields: title, author, assignee, createdAt, labels
+            sort: createdAt asc
+            limit: 10
+    gridAttributes:
+      yPos: 0
+      xPos: 6
+      width: 6
+      height: 3
+- title: Code Quality
+  panels:
+  - title: "Code Suggestions acceptance rate trend (90d)"
+    visualization:
+      type: Glql
+      options: {}
+      data:
+        type: glql
+        query:
+          glql: |
+            display: lineChart
+            mode: analytics
+            query: type = CodeSuggestion and group = "gitlab-org" and timestamp >= -90d
+            dimensions: timestamp as "Date"
+            metrics: acceptanceRate as "Acceptance Rate"
+    gridAttributes:
+      yPos: 0
+      xPos: 0
+      width: 12
+      height: 4

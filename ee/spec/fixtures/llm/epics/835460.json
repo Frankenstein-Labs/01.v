@@ -1,0 +1,158 @@
+{
+  "data": {
+    "id": 835460,
+    "group_id": 9970,
+    "author_id": 3860200,
+    "assignee_id": null,
+    "iid": 10694,
+    "updated_by_id": 3860200,
+    "last_edited_by_id": null,
+    "lock_version": 1,
+    "start_date": "2023-05-18",
+    "end_date": "2023-08-17",
+    "last_edited_at": null,
+    "created_at": "2023-05-24 10:02:12 UTC",
+    "updated_at": "2023-10-24 13:56:16 UTC",
+    "title": "Work items permission adjustments",
+    "description": "We have observed differences between permission checks for users with guest access to issues vs work items. This epic will track the issues to solve them.",
+    "start_date_sourcing_milestone_id": 2969659,
+    "due_date_sourcing_milestone_id": 2969682,
+    "start_date_fixed": null,
+    "due_date_fixed": null,
+    "start_date_is_fixed": false,
+    "due_date_is_fixed": false,
+    "closed_by_id": null,
+    "closed_at": null,
+    "parent_id": null,
+    "relative_position": null,
+    "state_id": 1,
+    "start_date_sourcing_epic_id": null,
+    "due_date_sourcing_epic_id": null,
+    "confidential": false,
+    "color": "#1068bf",
+    "total_opened_issue_weight": 0,
+    "total_closed_issue_weight": 8,
+    "total_opened_issue_count": 0,
+    "total_closed_issue_count": 5
+  },
+  "author": {
+    "id": 3860200,
+    "username": "egrieff",
+    "name": "Eugenia Grieff"
+  },
+  "labels": [
+    {
+      "id": 10690700,
+      "title": "group::product planning",
+      "color": "#A8D695",
+      "project_id": null,
+      "created_at": "2019-05-22 19:55:52 UTC",
+      "updated_at": "2020-10-16 19:33:41 UTC",
+      "template": false,
+      "description": "Issues belonging to the Product Planning group of the Plan stage of the DevOps lifecycle. See https://about.gitlab.com/handbook/product/product-categories/#product-planning-group",
+      "type": "GroupLabel",
+      "group_id": 9970,
+      "lock_on_merge": false
+    },
+    {
+      "id": 2278648,
+      "title": "type::bug",
+      "color": "#CC0000",
+      "project_id": null,
+      "created_at": "2017-07-07 20:20:34 UTC",
+      "updated_at": "2021-10-27 09:36:49 UTC",
+      "template": false,
+      "description": "Issues that report undesirable or incorrect behavior. See https://about.gitlab.com/handbook/engineering/metrics/#work-type-classification",
+      "type": "GroupLabel",
+      "group_id": 9970,
+      "lock_on_merge": false
+    },
+    {
+      "id": 25541419,
+      "title": "work items",
+      "color": "#428BCA",
+      "project_id": null,
+      "created_at": "2022-06-13 14:41:30 UTC",
+      "updated_at": "2022-06-13 14:41:30 UTC",
+      "template": false,
+      "description": "Related to the Work Items feature",
+      "type": "GroupLabel",
+      "group_id": 9970,
+      "lock_on_merge": false
+    }
+  ],
+  "start_date_sourcing_milestone": {
+    "id": 2969659,
+    "title": "16.1",
+    "project_id": null,
+    "description": "",
+    "due_date": "2023-06-17",
+    "created_at": "2023-02-01 16:02:12 UTC",
+    "updated_at": "2023-02-01 16:02:12 UTC",
+    "state": "active",
+    "iid": 88,
+    "start_date": "2023-05-18",
+    "group_id": 9970,
+    "lock_version": 0
+  },
+  "due_date_sourcing_milestone": {
+    "id": 2969682,
+    "title": "16.3",
+    "project_id": null,
+    "description": "",
+    "due_date": "2023-08-17",
+    "created_at": "2023-02-01 16:03:42 UTC",
+    "updated_at": "2023-02-01 16:03:42 UTC",
+    "state": "active",
+    "iid": 90,
+    "start_date": "2023-07-18",
+    "group_id": 9970,
+    "lock_version": 0
+  },
+  "notes": [
+    {
+      "note": "@amandarueda FYI I've created this epic to group issues related to WI bugs involving permissions for guest users. \n\nThe last 3 are related to https://gitlab.com/gitlab-org/gitlab/-/issues/407174, so I'm holding assigning a weight until we agree on a resolution. Let me know if anything else is missing :pray:\n\n---\nETA: After https://gitlab.com/gitlab-org/gitlab/-/issues/407174 was resolved I updated labels and proposals.\n\n@ramistry Do you mind assigning a weight for https://gitlab.com/gitlab-org/gitlab/-/issues/412830 and https://gitlab.com/gitlab-org/gitlab/-/issues/412829, please?\n\nAlso, I'm not sure if https://gitlab.com/gitlab-org/gitlab/-/issues/412831 requires a new mutation so I left the ~backend label for now, but maybe you can check if the proposal is applicable. :pray:",
+      "noteable_type": "Epic",
+      "author_id": 3860200,
+      "created_at": "2023-05-24 10:11:29 UTC",
+      "updated_at": "2023-05-24 16:29:56 UTC",
+      "project_id": null,
+      "attachment": null,
+      "line_code": null,
+      "commit_id": null,
+      "noteable_id": 835460,
+      "st_diff": null,
+      "system": false,
+      "updated_by_id": 3860200,
+      "type": null,
+      "position": null,
+      "original_position": null,
+      "resolved_at": null,
+      "resolved_by_id": null,
+      "discussion_id": "37b8672383a3328f9a96a077149e8b793af45464",
+      "change_position": null,
+      "resolved_by_push": null,
+      "review_id": null,
+      "confidential": null,
+      "last_edited_at": "2023-05-24 15:58:36 UTC",
+      "internal": false,
+      "id": 1403219449,
+      "namespace_id": null
+    }
+  ],
+  "note_authors": [
+    {
+      "id": 3860200,
+      "username": "egrieff",
+      "name": "Eugenia Grieff"
+    }
+  ],
+  "namespace_hierarchy": [
+    {
+      "id": 9970,
+      "name": "GitLab.org",
+      "path": "gitlab-org",
+      "type": "Group"
+    }
+  ]
+}

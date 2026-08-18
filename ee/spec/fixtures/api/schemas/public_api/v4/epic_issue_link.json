@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties" : {
+    "id": { "type": "integer" },
+    "relative_position": { "type": "integer" },
+    "issue": { "type": "object" },
+    "epic": {
+       "allOf": [
+        { "$ref": "./epic.json" }
+      ]
+    },
+    "issue": {
+       "allOf": [
+        { "$ref": "../../../../../../../spec/fixtures/api/schemas/public_api/v4/issue.json" },
+          {
+            "properties": {
+              "weight": { "type": ["integer", "null"] }
+            }
+          }
+        ]
+     }
+  },
+  "required" : [ "id", "epic", "issue", "relative_position" ],
+  "additionalProperties": false
+}

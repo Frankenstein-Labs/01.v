@@ -1,0 +1,8 @@
+fragment ScanProfileFields on ScanProfileType {
+  id
+  name
+  description
+  scanType
+  gitlabRecommended
+  triggers
+}

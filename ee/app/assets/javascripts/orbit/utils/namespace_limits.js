@@ -1,0 +1,1 @@
+export const ENABLED_MEMBER_NAMESPACES_LIMIT = 50;

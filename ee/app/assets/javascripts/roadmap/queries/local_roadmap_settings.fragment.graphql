@@ -1,0 +1,14 @@
+fragment LocalSettings on LocalRoadmapSettings {
+  sortedBy
+  bufferSize
+  epicsState
+  timeframe
+  timeframeRangeType
+  progressTracking
+  milestonesType
+  isShowingMilestones
+  isShowingLabels
+  presetType
+  isProgressTrackingActive
+  filterParams
+}

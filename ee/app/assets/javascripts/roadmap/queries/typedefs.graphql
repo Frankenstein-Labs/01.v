@@ -1,0 +1,38 @@
+type LocalRoadmapSettings {
+  filterParams: String
+  sortedBy: String
+  bufferSize: Int
+  epicsState: String
+  timeframe: [Date]
+  timeframeRangeType: String
+  progressTracking: String
+  milestonesType: String
+  isShowingMilestones: Boolean
+  isShowingLabels: Boolean
+  presetType: String
+  isProgressTrackingActive: Boolean
+}
+
+input LocalRoadmapSettingsInput {
+  filterParams: String
+
+  sortedBy: String
+  bufferSize: Int
+  epicsState: String
+  timeframe: [Date]
+  timeframeRangeType: String
+  progressTracking: String
+  milestonesType: String
+  isShowingMilestones: Boolean
+  isShowingLabels: Boolean
+  presetType: String
+  isProgressTrackingActive: Boolean
+}
+
+extend type Query {
+  localRoadmapSettings: LocalRoadmapSettings
+}
+
+extend type Mutation {
+  updateLocalRoadmapSettings(input: LocalRoadmapSettingsInput!): LocalRoadmapSettings
+}

@@ -1,0 +1,6 @@
+#import "ee_else_ce/graphql_shared/fragments/user_disabled_for_duo_usage.fragment.graphql"
+
+fragment AutocompleteUserStatus on AutocompletedUser {
+  id
+  ...UserDisabledForDuoUsage
+}

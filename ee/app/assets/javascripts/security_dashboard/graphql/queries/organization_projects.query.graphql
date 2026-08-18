@@ -1,0 +1,18 @@
+# @feature_category: vulnerability_management
+query organizationProjects($search: String, $pageSize: Int, $after: String) {
+  organization {
+    id
+    projects(search: $search, first: $pageSize, after: $after, archived: EXCLUDE) {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+}

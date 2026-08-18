@@ -1,0 +1,10 @@
+# @feature_category: virtual_registry
+
+query getContainerUpstreamsCount($groupPath: ID!, $upstreamName: String) {
+  group(fullPath: $groupPath) {
+    id
+    upstreams: virtualRegistriesContainerUpstreams(upstreamName: $upstreamName) {
+      count
+    }
+  }
+}

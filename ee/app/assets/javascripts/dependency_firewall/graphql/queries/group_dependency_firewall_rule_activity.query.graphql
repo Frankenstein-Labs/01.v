@@ -1,0 +1,19 @@
+# @feature_category: dependency_firewall
+#import "../fragments/dependency_firewall_rule_activity.fragment.graphql"
+
+query getGroupDependencyFirewallRuleActivity($fullPath: ID!, $from: Date) {
+  dependencyFirewall: group(fullPath: $fullPath) {
+    id
+    dependencyFirewallActivitySummary(from: $from) {
+      blocked
+      warned
+      totalTriggers
+      activeRules
+      blockingRules
+      warningRules
+    }
+    dependencyFirewallRuleActivity(from: $from) {
+      ...DependencyFirewallRuleActivityFields
+    }
+  }
+}

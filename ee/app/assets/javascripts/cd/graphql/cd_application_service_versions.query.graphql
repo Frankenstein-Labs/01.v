@@ -1,0 +1,54 @@
+# @feature_category: continuous_delivery
+
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query cdApplicationServiceVersions(
+  $applicationId: CdApplicationID!
+  $first: Int
+  $after: String
+  $last: Int
+  $before: String
+) {
+  organization {
+    id
+    cdApplication(id: $applicationId) {
+      id
+      services(first: $first, after: $after, last: $last, before: $before) {
+        nodes {
+          id
+          name
+          artifactSources {
+            nodes {
+              id
+              sourceRef
+              versions {
+                nodes {
+                  id
+                  name
+                  createdAt
+                }
+              }
+            }
+          }
+        }
+        pageInfo {
+          ...PageInfo
+        }
+      }
+      versionSets(first: 1) {
+        nodes {
+          id
+          versionSetEntries {
+            nodes {
+              id
+              version {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

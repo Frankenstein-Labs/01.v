@@ -1,0 +1,44 @@
+# @feature_category: workflow_catalog
+#import "../fragments/ai_catalog_item.fragment.graphql"
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query aiCatalogCustomAndFoundationalItems(
+  $itemTypes: [AiCatalogItemType!]
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+  $search: String
+  $sort: AiCatalogItemsSort
+) {
+  aiCatalogCustomAndFoundationalItems(
+    itemTypes: $itemTypes
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+    search: $search
+    sort: $sort
+  ) {
+    nodes {
+      __typename
+      ... on AiCatalogItem {
+        ...BaseAiCatalogItem
+        project {
+          id
+          nameWithNamespace
+        }
+      }
+      ... on AiFoundationalChatAgent {
+        id
+        reference
+        name
+        description
+        avatarUrl
+      }
+    }
+    pageInfo {
+      ...PageInfo
+    }
+  }
+}

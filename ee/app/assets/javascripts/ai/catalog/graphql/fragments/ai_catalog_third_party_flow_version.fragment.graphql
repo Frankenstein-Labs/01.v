@@ -1,0 +1,6 @@
+#import "./ai_catalog_item_version.fragment.graphql"
+
+fragment BaseAiCatalogThirdPartyFlowVersion on AiCatalogThirdPartyFlowVersion {
+  ...BaseAiCatalogItemVersion
+  definition
+}

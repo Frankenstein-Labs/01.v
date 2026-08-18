@@ -1,0 +1,9 @@
+mutation testSelfHostedModelConnection($input: AiSelfHostedModelConnectionCheckInput!) {
+  aiSelfHostedModelConnectionCheck(input: $input) {
+    result {
+      success
+      message
+      errors
+    }
+  }
+}

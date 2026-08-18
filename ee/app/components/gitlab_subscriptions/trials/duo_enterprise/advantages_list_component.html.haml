@@ -1,0 +1,11 @@
+.gl-col-span-6{ class: "@md/panel:gl-row-span-2 @md/panel:gl-col-span-3 @md/panel:gl-py-13", data: { testid: 'trial-reassurances-column' } }
+  .gl-mb-6.gl-text-left.gl-text-neutral-50
+    = s_('DuoEnterpriseTrial|GitLab Duo Enterprise is your end-to-end AI partner for faster, more secure software development.')
+
+  %ul.gl-pl-0.gl-mb-6.gl-pl-0.gl-mb-6x.gl-text-neutral-50
+    - advantages.each do |advantage|
+      %li.gl-flex.gl-mb-3{ data: { testid: 'advantage-item' } }
+        %span.gl-mr-3= sprite_icon 'check-circle', css_class: 'gl-icon gl-fill-icon-success'
+        = advantage
+  .gl-mt-5.gl-text-sm.gl-text-neutral-50
+    = s_('DuoEnterpriseTrial|GitLab Duo Enterprise is only available for purchase for Ultimate customers.')

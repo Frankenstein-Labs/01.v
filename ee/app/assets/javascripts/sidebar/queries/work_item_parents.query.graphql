@@ -1,0 +1,33 @@
+query issueParents(
+  $fullPath: ID!
+  $title: String
+  $state: IssuableState
+  $in: [IssuableSearchableField!]
+  $iidStartsWith: String
+  $types: [IssueType!]
+) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    attributes: workItems(
+      search: $title
+      iid: $iidStartsWith
+      in: $in
+      state: $state
+      types: $types
+      includeAncestors: true
+      includeDescendants: false
+    ) {
+      nodes {
+        id
+        iid
+        title
+        webUrl
+        state
+        workItemType {
+          id
+          name
+        }
+      }
+    }
+  }
+}

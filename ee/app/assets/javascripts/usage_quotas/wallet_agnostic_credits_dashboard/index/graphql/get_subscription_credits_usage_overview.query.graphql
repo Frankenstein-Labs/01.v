@@ -1,0 +1,75 @@
+# @feature_category: consumables_cost_management
+
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getSubscriptionCreditsUsageOverview(
+  $namespacePath: ID
+  $startDate: ISO8601Date
+  $endDate: ISO8601Date
+  $usersListFirst: Int
+  $usersListLast: Int
+  $usersListAfter: String
+  $usersListBefore: String
+  $usersListSort: GitlabSubscriptionUsageUserSort
+  $flowTypes: [String!]
+) {
+  subscriptionUsage(
+    namespacePath: $namespacePath # SaaS subscription root group
+    startDate: $startDate
+    endDate: $endDate
+    flowTypes: $flowTypes
+  ) {
+    enabled
+    isOutdatedClient
+
+    startDate
+    endDate
+
+    creditsUsed
+    dailyAverage
+
+    dailyUsage @gl_introduced(version: "18.11.0") {
+      creditsUsed
+      date
+    }
+
+    usersUsage {
+      totalActiveUsers
+
+      users(
+        first: $usersListFirst
+        last: $usersListLast
+        after: $usersListAfter
+        before: $usersListBefore
+        sort: $usersListSort
+      ) {
+        nodes {
+          id
+          name
+          username
+          avatarUrl
+          entityType @gl_introduced(version: "19.0.0")
+          usage @gl_introduced(version: "19.0.0") {
+            totalCreditsUsed
+          }
+          blockedStatus {
+            blocked
+          }
+        }
+        pageInfo {
+          ...PageInfo
+        }
+      }
+    }
+
+    products {
+      id
+      title
+      creditsUsed
+      flowTypes {
+        id
+        title
+      }
+    }
+  }
+}

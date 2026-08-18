@@ -1,0 +1,16 @@
+query getPastLicenseHistory {
+  licenseHistoryEntries {
+    nodes {
+      id
+      type
+      plan
+      name
+      email
+      company
+      usersInLicenseCount
+      startsAt
+      expiresAt
+      activatedAt
+    }
+  }
+}

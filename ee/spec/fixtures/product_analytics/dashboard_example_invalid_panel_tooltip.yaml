@@ -1,0 +1,14 @@
+---
+title: Dashboard Example With Invalid Panel Tooltip
+description: This dashboard has an invalid panel tooltip
+panels:
+  - title: Invalid panel tooltip
+    tooltip:
+      description: 'I am an invalid panel tooltip. Learn more.'
+      descriptionLink: 'https://example.com'
+    gridAttributes:
+      yPos: 4
+      xPos: 1
+      width: 12
+      height: 2
+    visualization: cube_line_chart

@@ -1,0 +1,106 @@
+#import "../fragments/branch_rules.fragment.graphql"
+
+query getBranchRulesDetailsEE($projectPath: ID!, $buildMissing: Boolean = false) {
+  project(fullPath: $projectPath) {
+    id
+    group {
+      id
+    }
+    branchRules(buildMissing: $buildMissing) {
+      nodes {
+        name
+        id
+        isGroupLevel
+        branchProtection {
+          isGroupLevel
+          allowForcePush
+          codeOwnerApprovalRequired
+          mergeAccessLevels {
+            edges {
+              node {
+                accessLevel
+                accessLevelDescription
+                memberRole {
+                  id
+                  name
+                }
+                group {
+                  id
+                  name
+                  avatarUrl
+                  webUrl
+                }
+                user {
+                  id
+                  name
+                  username
+                  avatarUrl
+                  webUrl
+                }
+              }
+            }
+          }
+          modificationBlockedByPolicy
+          protectedFromPushBySecurityPolicy
+          warnModificationBlockedByPolicy @gl_introduced(version: "18.8.0")
+          warnProtectedFromPushBySecurityPolicy @gl_introduced(version: "18.8.0")
+          pushAccessLevels {
+            edges {
+              node {
+                accessLevel
+                accessLevelDescription
+                memberRole {
+                  id
+                  name
+                }
+                group {
+                  id
+                  name
+                  avatarUrl
+                  webUrl
+                }
+                user {
+                  id
+                  name
+                  avatarUrl
+                  webUrl
+                  username
+                }
+                deployKey {
+                  id
+                  title
+                  user {
+                    name
+                  }
+                }
+              }
+            }
+          }
+        }
+        approvalRules {
+          nodes {
+            id
+            name
+            type
+            approvalsRequired
+            eligibleApprovers {
+              nodes {
+                id
+                name
+                username
+                webUrl
+                avatarUrl
+              }
+            }
+          }
+        }
+        externalStatusChecks {
+          nodes {
+            ...ExternalStatusCheckFragment
+          }
+        }
+        matchingBranchesCount
+      }
+    }
+  }
+}

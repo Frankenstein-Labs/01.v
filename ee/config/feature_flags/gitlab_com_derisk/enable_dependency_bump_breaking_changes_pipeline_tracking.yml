@@ -1,0 +1,10 @@
+---
+name: enable_dependency_bump_breaking_changes_pipeline_tracking
+description: Short lived flag for enabling metrics tracking for dependency bump breaking changes
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/604832
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/246152
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/611977
+milestone: '19.3'
+group: group::compliance
+type: gitlab_com_derisk
+default_enabled: false

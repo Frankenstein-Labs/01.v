@@ -1,0 +1,114 @@
+query SubgroupsAndProjects(
+  $fullPath: ID!
+  $subgroupsFirst: Int
+  $subgroupsAfter: String
+  $subgroupsLast: Int
+  $subgroupsBefore: String
+  $projectsFirst: Int
+  $projectsAfter: String
+  $projectsLast: Int
+  $projectsBefore: String
+  $canReadAttributes: Boolean!
+) {
+  group(fullPath: $fullPath) {
+    id
+    descendantGroups(
+      archived: false
+      includeParentDescendants: false
+      first: $subgroupsFirst
+      after: $subgroupsAfter
+      last: $subgroupsLast
+      before: $subgroupsBefore
+    ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      nodes {
+        __typename
+        id
+        name
+        descendantGroupsCount
+        projectsCount
+        path
+        fullPath
+        avatarUrl
+        webUrl
+        updatedAt
+        analyzerStatuses {
+          success
+          failure
+          notConfigured
+          stale
+          analyzerType
+          updatedAt
+        }
+        vulnerabilityNamespaceStatistic {
+          critical
+          high
+          low
+          info
+          medium
+          unknown
+          updatedAt
+        }
+      }
+    }
+    projects(
+      first: $projectsFirst
+      after: $projectsAfter
+      last: $projectsLast
+      before: $projectsBefore
+      includeSubgroups: false
+      includeArchived: false
+    ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      nodes {
+        __typename
+        id
+        name
+        path
+        fullPath
+        avatarUrl
+        webUrl
+        updatedAt
+        containerScanningForRegistryEnabled
+        vulnerabilityStatistic {
+          critical
+          high
+          low
+          info
+          medium
+          unknown
+          updatedAt
+        }
+        analyzerStatuses {
+          status
+          analyzerType
+          lastCall
+          buildId
+          updatedAt
+        }
+        securityAttributes @include(if: $canReadAttributes) {
+          nodes {
+            id
+            securityCategory {
+              id
+              name
+            }
+            name
+            description
+            color
+          }
+        }
+      }
+    }
+  }
+}

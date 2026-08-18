@@ -1,0 +1,23 @@
+mutation chat(
+  $question: String!
+  $resourceId: AiModelID!
+  $clientSubscriptionId: String
+  $projectId: ProjectID
+  $currentFileContext: AiCurrentFileInput
+  $conversationType: AiConversationsThreadsConversationType
+  $threadId: AiConversationThreadID
+) {
+  aiAction(
+    input: {
+      chat: { resourceId: $resourceId, content: $question, currentFile: $currentFileContext }
+      projectId: $projectId
+      clientSubscriptionId: $clientSubscriptionId
+      conversationType: $conversationType
+      threadId: $threadId
+    }
+  ) {
+    requestId
+    errors
+    threadId
+  }
+}

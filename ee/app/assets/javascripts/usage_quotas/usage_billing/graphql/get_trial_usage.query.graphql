@@ -1,0 +1,14 @@
+# @feature_category: subscription_management
+query getTrialUsage($namespacePath: ID) {
+  trialUsage(namespacePath: $namespacePath) {
+    activeTrial {
+      startDate
+      endDate
+    }
+
+    usersUsage {
+      creditsUsed
+      totalUsersUsingCredits
+    }
+  }
+}

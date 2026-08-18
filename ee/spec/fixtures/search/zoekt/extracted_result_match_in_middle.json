@@ -1,0 +1,38 @@
+{
+  "0": [
+    {
+      "path": "test.rb",
+      "project_id": 42,
+      "chunks": [
+        {
+          "match_count_in_chunk": 1,
+          "lines": [
+            {
+              "line_number": 1,
+              "text": "class Test",
+              "highlights": null
+            },
+            {
+              "line_number": 2,
+              "text": "\"test update zoekt_indexer: 0.9.1\"\n",
+              "highlights": [
+                [
+                  7,
+                  16
+                ]
+              ]
+            },
+            {
+              "line_number": 3,
+              "text": "end",
+              "highlights": null
+            }
+          ]
+        }
+      ],
+      "match_count_total": 1,
+      "match_count": 1,
+      "language": "Ruby"
+    }
+  ]
+}

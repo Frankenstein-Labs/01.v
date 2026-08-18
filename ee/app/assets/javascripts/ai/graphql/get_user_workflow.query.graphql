@@ -1,0 +1,15 @@
+query getUserWorkflows($type: String, $first: Int, $environment: WorkflowEnvironment) {
+  duoWorkflowWorkflows(type: $type, first: $first, environment: $environment) {
+    edges {
+      node {
+        id
+        lastUpdatedAt: updatedAt
+        title: goal
+        aiCatalogItemVersionId
+        agentName @gl_introduced(version: "18.9.0")
+        archived
+        stalled
+      }
+    }
+  }
+}

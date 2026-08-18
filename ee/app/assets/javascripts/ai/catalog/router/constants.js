@@ -1,0 +1,16 @@
+export const AI_CATALOG_INDEX_ROUTE = 'ai-catalog';
+export const AI_CATALOG_AGENTS_ROUTE = 'ai-catalog-agents';
+export const AI_CATALOG_AGENTS_SHOW_ROUTE = 'ai-catalog-agents-show';
+export const AI_CATALOG_AGENTS_EDIT_ROUTE = 'ai-catalog-agents-edit';
+export const AI_CATALOG_AGENTS_NEW_ROUTE = 'ai-catalog-agents-new';
+export const AI_CATALOG_AGENTS_DUPLICATE_ROUTE = 'ai-catalog-agents-duplicate';
+export const AI_CATALOG_FOUNDATIONAL_AGENTS_SHOW_ROUTE = 'ai-catalog-foundational-agents-show';
+export const AI_CATALOG_FLOWS_ROUTE = 'ai-catalog-flows';
+export const AI_CATALOG_FLOWS_SHOW_ROUTE = 'ai-catalog-flows-show';
+export const AI_CATALOG_FLOWS_EDIT_ROUTE = 'ai-catalog-flows-edit';
+export const AI_CATALOG_FLOWS_NEW_ROUTE = 'ai-catalog-flows-new';
+export const AI_CATALOG_FLOWS_DUPLICATE_ROUTE = 'ai-catalog-flows-duplicate';
+export const AI_CATALOG_MCP_SERVERS_ROUTE = 'ai-catalog-mcp-servers';
+export const AI_CATALOG_MCP_SERVERS_SHOW_ROUTE = 'ai-catalog-mcp-servers-show';
+export const AI_CATALOG_MCP_SERVERS_NEW_ROUTE = 'ai-catalog-mcp-servers-new';
+export const AI_CATALOG_MCP_SERVERS_EDIT_ROUTE = 'ai-catalog-mcp-servers-edit';

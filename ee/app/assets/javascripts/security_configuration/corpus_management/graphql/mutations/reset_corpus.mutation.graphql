@@ -1,0 +1,5 @@
+mutation resetCorpus($projectPath: ID!) {
+  resetCorpus(projectPath: $projectPath) @client {
+    errors
+  }
+}

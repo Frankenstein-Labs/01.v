@@ -1,0 +1,14 @@
+# @feature_category: ai_agents
+
+query getAgentArtifactsProjects($fullPath: ID!, $search: String) {
+  group(fullPath: $fullPath) {
+    id
+    projects(includeSubgroups: true, search: $search) {
+      nodes {
+        id
+        name
+        fullPath
+      }
+    }
+  }
+}

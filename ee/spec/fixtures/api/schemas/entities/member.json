@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../../../../../../spec/fixtures/api/schemas/entities/member.json"
+    },
+    {
+      "required": [
+        "using_license",
+        "group_sso",
+        "group_managed_account",
+        "can_override",
+        "is_overridden",
+        "enterprise_user_of_this_group"
+      ],
+      "properties": {
+        "using_license": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "group_sso": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "group_managed_account": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "can_override": {
+          "type": [
+            "boolean"
+          ]
+        },
+        "is_overridden": {
+          "type": [
+            "boolean"
+          ]
+        },
+        "enterprise_user_of_this_group": {
+          "type": [
+            "boolean"
+          ]
+        }
+      }
+    }
+  ]
+}

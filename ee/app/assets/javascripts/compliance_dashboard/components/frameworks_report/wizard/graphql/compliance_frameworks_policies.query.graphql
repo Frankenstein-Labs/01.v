@@ -1,0 +1,27 @@
+# @feature_category: compliance_management
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query complianceFrameworkPolicies(
+  $fullPath: ID!
+  $complianceFramework: ComplianceManagementFrameworkID
+  $after: String
+) {
+  namespace(fullPath: $fullPath) {
+    id
+    complianceFrameworks(id: $complianceFramework) {
+      nodes {
+        id
+        name
+        securityPolicies(after: $after) @gl_introduced(version: "19.0.0") {
+          nodes {
+            name
+            type
+          }
+          pageInfo {
+            ...PageInfo
+          }
+        }
+      }
+    }
+  }
+}

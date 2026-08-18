@@ -1,0 +1,36 @@
+#import "./policy_scope_attributes.fragment.graphql"
+
+fragment PolicyScopeList on PolicyScope {
+  complianceFrameworks(first: 25) {
+    nodes {
+      id
+      name
+      color
+      description
+      editPath
+    }
+  }
+  excludingPersonalProjects
+  excludingProjects(first: 25) {
+    nodes {
+      id
+      name
+      fullPath
+    }
+  }
+  includingProjects(first: 25) {
+    nodes {
+      id
+      name
+      fullPath
+    }
+  }
+  includingGroups(first: 25) {
+    nodes {
+      id
+      name
+      fullPath
+    }
+  }
+  ...PolicyScopeAttributes @include(if: $includeAttributeScopes)
+}

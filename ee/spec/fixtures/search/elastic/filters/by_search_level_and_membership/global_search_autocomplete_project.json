@@ -1,0 +1,19 @@
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "bool": {
+            "should": [
+              { "terms": { "_name": "filters:permissions:global:project:member", "project_id": [PROJECT_ID] } }
+            ],
+            "minimum_should_match": 1
+          }
+        }
+      ],
+      "must_not": [],
+      "must": [],
+      "should": []
+    }
+  }
+}

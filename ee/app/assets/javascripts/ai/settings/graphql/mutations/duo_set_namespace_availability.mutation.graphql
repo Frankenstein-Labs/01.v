@@ -1,0 +1,25 @@
+# @feature_category: ai_abstraction_layer
+
+mutation duoSetNamespaceAvailability(
+  $groupId: GroupID!
+  $availability: DuoAvailability!
+  $clearDescendants: Boolean = false
+) {
+  adminSetDuoAvailability(
+    input: { groupId: $groupId, availability: $availability, clearDescendants: $clearDescendants }
+  ) {
+    availability
+    adminLocked
+    conflictingAncestor {
+      id
+      fullPath
+    }
+    affectedAdminLockedDescendants {
+      nodes {
+        id
+        fullPath
+      }
+    }
+    errors
+  }
+}

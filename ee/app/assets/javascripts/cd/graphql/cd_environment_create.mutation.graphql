@@ -1,0 +1,19 @@
+# @feature_category: continuous_delivery
+
+mutation cdEnvironmentCreate($input: CdEnvironmentCreateInput!) {
+  cdEnvironmentCreate(input: $input) {
+    environment {
+      id
+      name
+      tier
+      environmentDriverBindings {
+        nodes {
+          id
+          version
+          driverConfig
+        }
+      }
+    }
+    errors
+  }
+}

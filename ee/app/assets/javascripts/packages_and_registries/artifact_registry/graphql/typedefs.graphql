@@ -1,0 +1,106 @@
+# `extend`, because redeclaring a type the schema already owns fails the Apollo schema build.
+extend type ArtifactRegistryRepository {
+  artifactsCount: String!
+  createdAt: String!
+  createdBy: UserCore
+  updatedBy: UserCore
+  images(first: Int, last: Int, before: String, after: String): ArtifactRegistryImageConnection
+  packages(first: Int, last: Int, before: String, after: String): ArtifactRegistryPackageConnection
+  image(id: ID!): ArtifactRegistryImage
+  package(id: ID!): ArtifactRegistryPackage
+}
+
+type ArtifactRegistry {
+  handle: String!
+  status: String!
+  createdAt: String!
+}
+
+type ArtifactRegistryImage {
+  id: ID!
+  name: String!
+}
+
+type ArtifactRegistryVersion {
+  id: ID!
+  version: String!
+  createdAt: String!
+}
+
+type ArtifactRegistryMavenPackage {
+  id: ID!
+  groupId: String!
+  artifactId: String!
+  versions(first: Int, last: Int, before: String, after: String): ArtifactRegistryVersionConnection
+}
+
+type ArtifactRegistryNpmPackage {
+  id: ID!
+  name: String!
+  scope: String
+  versionsCount: Int!
+  versions(first: Int, last: Int, before: String, after: String): ArtifactRegistryVersionConnection
+}
+
+union ArtifactRegistryPackage = ArtifactRegistryMavenPackage | ArtifactRegistryNpmPackage
+
+type ArtifactRegistryImageConnection {
+  nodes: [ArtifactRegistryImage!]!
+  pageInfo: PageInfo!
+}
+
+type ArtifactRegistryPackageConnection {
+  nodes: [ArtifactRegistryPackage!]!
+  pageInfo: PageInfo!
+}
+
+type ArtifactRegistryVersionConnection {
+  nodes: [ArtifactRegistryVersion!]!
+  pageInfo: PageInfo!
+}
+
+type LocalArtifactRegistryActivatePayload {
+  registry: ArtifactRegistry
+  errors: [String!]!
+}
+
+input LocalArtifactRegistryActivateInput {
+  organizationId: OrganizationsOrganizationID!
+  handle: String!
+}
+
+# The condition mutations take the organization and nothing else: Artifact Registry
+# derives the namespace from it, and the condition is not parameterized.
+type LocalArtifactRegistryDisablePayload {
+  registry: ArtifactRegistry
+  errors: [String!]!
+}
+
+input LocalArtifactRegistryDisableInput {
+  organizationId: OrganizationsOrganizationID!
+}
+
+type LocalArtifactRegistryEnablePayload {
+  registry: ArtifactRegistry
+  errors: [String!]!
+}
+
+input LocalArtifactRegistryEnableInput {
+  organizationId: OrganizationsOrganizationID!
+}
+
+extend type Organization {
+  artifactRegistry: ArtifactRegistry
+}
+
+extend type Mutation {
+  artifactRegistryActivate(
+    input: LocalArtifactRegistryActivateInput!
+  ): LocalArtifactRegistryActivatePayload
+  artifactRegistryDisable(
+    input: LocalArtifactRegistryDisableInput!
+  ): LocalArtifactRegistryDisablePayload
+  artifactRegistryEnable(
+    input: LocalArtifactRegistryEnableInput!
+  ): LocalArtifactRegistryEnablePayload
+}

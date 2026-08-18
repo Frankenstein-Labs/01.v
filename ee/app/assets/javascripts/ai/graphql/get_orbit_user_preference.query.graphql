@@ -1,0 +1,10 @@
+# @feature_category: duo_agent_platform
+
+query GetOrbitUserPreference {
+  currentUser {
+    id
+    userPreferences {
+      orbitSettings
+    }
+  }
+}

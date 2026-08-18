@@ -1,0 +1,202 @@
+{
+  "0": [
+    {
+      "path": "test/spec/events_spec.js",
+      "language": "JavaScript",
+      "project_id": 7,
+      "chunks": [
+        {
+          "match_count_in_chunk": 2,
+          "lines": [
+            {
+              "highlights": null,
+              "line_number": 37,
+              "text": "      window.anotherDiv = document.createElement('div');"
+            },
+            {
+              "highlights": [
+                [
+                  13,
+                  17
+                ]
+              ],
+              "line_number": 38,
+              "text": "      window.innerDiv = document.createElement('div');"
+            },
+            {
+              "highlights": [
+                [
+                  41,
+                  45
+                ]
+              ],
+              "line_number": 39,
+              "text": "      window.outerDiv.appendChild(window.innerDiv);"
+            },
+            {
+              "highlights": null,
+              "line_number": 40,
+              "text": "      document.body.appendChild(window.outerDiv);"
+            }
+          ]
+        },
+        {
+          "match_count_in_chunk": 1,
+          "lines": [
+            {
+              "highlights": null,
+              "line_number": 46,
+              "text": "      window.outerDiv = null;"
+            },
+            {
+              "highlights": [
+                [
+                  13,
+                  17
+                ]
+              ],
+              "line_number": 47,
+              "text": "      window.innerDiv = null;"
+            },
+            {
+              "highlights": null,
+              "line_number": 48,
+              "text": "      Component.teardownAll();"
+            }
+          ]
+        },
+        {
+          "match_count_in_chunk": 1,
+          "lines": [
+            {
+              "highlights": null,
+              "line_number": 51,
+              "text": "    it('bubbles native events between components', function () {"
+            },
+            {
+              "highlights": [
+                [
+                  56,
+                  60
+                ]
+              ],
+              "line_number": 52,
+              "text": "      var instance1 = (new Component).initialize(window.innerDiv);"
+            },
+            {
+              "highlights": null,
+              "line_number": 53,
+              "text": "      var instance2 = (new Component).initialize(window.outerDiv);"
+            }
+          ]
+        }
+      ],
+      "match_count_total": 11,
+      "match_count": 4
+    },
+    {
+      "path": "test/spec/instance_spec.js",
+      "language": "JavaScript",
+      "project_id": 7,
+      "chunks": [
+        {
+          "match_count_in_chunk": 3,
+          "lines": [
+            {
+              "highlights": null,
+              "line_number": 49,
+              "text": "      window.outerDiv = document.createElement('div');"
+            },
+            {
+              "highlights": [
+                [
+                  13,
+                  17
+                ]
+              ],
+              "line_number": 50,
+              "text": "      window.innerDiv = document.createElement('div');"
+            },
+            {
+              "highlights": [
+                [
+                  41,
+                  45
+                ]
+              ],
+              "line_number": 51,
+              "text": "      window.outerDiv.className = window.innerDiv.className = \"test-node\";"
+            },
+            {
+              "highlights": [
+                [
+                  41,
+                  45
+                ]
+              ],
+              "line_number": 52,
+              "text": "      window.outerDiv.appendChild(window.innerDiv);"
+            },
+            {
+              "highlights": null,
+              "line_number": 53,
+              "text": "      document.body.appendChild(window.outerDiv);"
+            }
+          ]
+        },
+        {
+          "match_count_in_chunk": 1,
+          "lines": [
+            {
+              "highlights": null,
+              "line_number": 57,
+              "text": "      window.outerDiv = null;"
+            },
+            {
+              "highlights": [
+                [
+                  13,
+                  17
+                ]
+              ],
+              "line_number": 58,
+              "text": "      window.innerDiv = null;"
+            },
+            {
+              "highlights": null,
+              "line_number": 59,
+              "text": "      Component.teardownAll();"
+            }
+          ]
+        },
+        {
+          "match_count_in_chunk": 1,
+          "lines": [
+            {
+              "highlights": null,
+              "line_number": 93,
+              "text": "      expect(registry.findInstanceInfoByNode(window.outerDiv)).toBeTruthy();"
+            },
+            {
+              "highlights": [
+                [
+                  52,
+                  56
+                ]
+              ],
+              "line_number": 94,
+              "text": "      expect(registry.findInstanceInfoByNode(window.innerDiv)).toBeTruthy();"
+            },
+            {
+              "highlights": null,
+              "line_number": 95,
+              "text": "    });"
+            }
+          ]
+        }
+      ],
+      "match_count_total": 5,
+      "match_count": 5
+    }
+  ]
+}

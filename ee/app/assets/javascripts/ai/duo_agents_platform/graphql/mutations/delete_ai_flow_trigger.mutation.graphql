@@ -1,0 +1,7 @@
+# @feature_category: duo_agent_platform
+
+mutation deleteAiFlowTrigger($id: AiFlowTriggerID!) {
+  aiFlowTriggerDelete(input: { id: $id }) {
+    errors
+  }
+}

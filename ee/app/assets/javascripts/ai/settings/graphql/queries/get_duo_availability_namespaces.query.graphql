@@ -1,0 +1,42 @@
+# @feature_category: ai_abstraction_layer
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+query getDuoAvailabilityNamespaces(
+  $parentId: GroupID
+  $includeDescendants: Boolean
+  $adminLocked: Boolean
+  $duoAvailability: [DuoAvailability!]
+  $search: String
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  adminDuoAvailabilityNamespaces(
+    parentId: $parentId
+    includeDescendants: $includeDescendants
+    adminLocked: $adminLocked
+    duoAvailability: $duoAvailability
+    search: $search
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    nodes {
+      id
+      name
+      fullPath
+      duoAvailability
+      inheritedValue
+      adminLocked
+      lockedByAncestor {
+        id
+        fullPath
+      }
+    }
+    pageInfo {
+      ...PageInfo
+    }
+  }
+}

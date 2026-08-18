@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "./epic.json"
+    },
+    {
+      "properties": {
+        "epic_comments": {
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "epic_comments"
+      ]
+    }
+  ]
+}

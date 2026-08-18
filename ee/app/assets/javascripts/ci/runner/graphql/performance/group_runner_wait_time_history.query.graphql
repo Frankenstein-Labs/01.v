@@ -1,0 +1,14 @@
+query groupRunnerWaitTimeHistory($fullPath: ID!, $fromTime: Time, $toTime: Time) {
+  group(fullPath: $fullPath) {
+    id
+    ciQueueingHistory(fromTime: $fromTime, toTime: $toTime) {
+      timeSeries {
+        time
+        p99
+        p90
+        p75
+        p50
+      }
+    }
+  }
+}

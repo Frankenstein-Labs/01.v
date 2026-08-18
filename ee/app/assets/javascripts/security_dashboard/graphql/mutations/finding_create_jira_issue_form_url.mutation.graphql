@@ -1,0 +1,6 @@
+mutation securityFindingJiraIssueFormUrlCreate($findingUuid: String!, $projectId: ProjectID!) {
+  securityFindingJiraIssueFormUrlCreate(input: { uuid: $findingUuid, project: $projectId }) {
+    errors
+    jiraIssueFormUrl
+  }
+}

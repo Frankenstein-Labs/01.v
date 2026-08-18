@@ -1,0 +1,31 @@
+mutation createAiDuoWorkflow(
+  $projectId: ProjectID
+  $namespaceId: NamespaceID
+  $goal: String!
+  $workflowDefinition: String!
+  $agentPrivileges: [Int!]
+  $preApprovedAgentPrivileges: [Int!]
+  $allowAgentToRequestUser: Boolean
+  $aiCatalogItemVersionId: AiCatalogItemVersionID
+  $webSearchEnabled: Boolean
+) {
+  aiDuoWorkflowCreate(
+    input: {
+      projectId: $projectId
+      namespaceId: $namespaceId
+      environment: WEB
+      goal: $goal
+      workflowDefinition: $workflowDefinition
+      agentPrivileges: $agentPrivileges
+      preApprovedAgentPrivileges: $preApprovedAgentPrivileges
+      allowAgentToRequestUser: $allowAgentToRequestUser
+      aiCatalogItemVersionId: $aiCatalogItemVersionId
+      webSearchEnabled: $webSearchEnabled
+    }
+  ) {
+    workflow {
+      id
+    }
+    errors
+  }
+}

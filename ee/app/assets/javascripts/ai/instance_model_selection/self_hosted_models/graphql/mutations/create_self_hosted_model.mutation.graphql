@@ -1,0 +1,5 @@
+mutation createSelfHostedModel($input: AiSelfHostedModelCreateInput!) {
+  aiSelfHostedModelCreate(input: $input) {
+    errors
+  }
+}

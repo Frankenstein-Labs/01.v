@@ -1,0 +1,8 @@
+seconds_to_convert: 'invalid string'
+steps:
+  - name: view_page_1
+    target: '/page1.html'
+    action: 'pageview'
+  - name: view_page_2
+    target: '/page2.html'
+    action: 'pageview'

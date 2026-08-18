@@ -1,0 +1,14 @@
+fragment SpepTestRun on PolicyScheduleTestRun {
+  id
+  state
+  completed
+  startedAt
+  finishedAt
+  duration
+  errorMessage
+  project {
+    id
+    fullPath
+    name
+  }
+}

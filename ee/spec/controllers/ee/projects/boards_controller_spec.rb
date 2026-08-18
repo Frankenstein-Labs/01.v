@@ -1,0 +1,19 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+
+RSpec.describe Projects::BoardsController, feature_category: :planning_views do
+  let_it_be(:project) { create(:project) }
+  let_it_be(:user)    { create(:user, maintainer_of: project) }
+
+  before do
+    sign_in(user)
+  end
+
+  describe 'GET index' do
+    it_behaves_like 'pushes wip limits to frontend' do
+      let(:parent) { project }
+      let(:params) { { namespace_id: parent.namespace, project_id: parent } }
+    end
+  end
+end

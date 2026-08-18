@@ -1,0 +1,82 @@
+$right-sidebar-policies-width: 350px;
+
+.security-policies-alert {
+  top: $calc-application-header-height;
+  z-index: 1;
+}
+
+.security-policies-popover-content-height {
+  height: 12rem;
+}
+
+.security-policies-textarea-min-height {
+  min-height: 200px;
+}
+
+.security-policies-license-modal-min-height {
+  min-height: 700px;
+}
+
+.security-policies-variables-modal-min-height {
+  min-height: 500px;
+}
+
+.security-policies-approver-max-width {
+  max-width: 330px;
+}
+
+.security-policies-exceptions-modal-height {
+  min-height: 380px;
+}
+
+
+.security-policies-bg-subtle {
+  @apply gl-bg-subtle;
+}
+
+.security-policies {
+  grid-template-areas: 'content sidebar';
+  grid-template-columns: 1fr $right-sidebar-policies-width;
+  grid-gap: $gl-spacing-scale-5;
+
+  @include gl-container-width-up(lg, panel) {
+    grid-gap: 0 $gl-spacing-scale-7;
+  }
+}
+
+.security-policies-split-view {
+  grid-template-areas: 'content sidebar';
+  grid-template-columns: 1fr 1fr;
+}
+
+.security-policies-content,
+.security-policies-actions {
+  grid-area: content;
+  grid-row: auto;
+}
+
+.security-policies-actions-sidebar {
+  grid-area: sidebar;
+  grid-row: auto;
+}
+
+.security-policies-sidebar {
+  grid-area: sidebar;
+}
+
+.security-policies-drag-handle {
+  width: 16px !important;
+}
+
+.security-policies-drag-handle:hover {
+  @apply gl-bg-strong;
+}
+
+.security-policies-drag-handle.is-dragging {
+  @apply gl-bg-strong;
+}
+
+.security-policies-drag-thumbnail {
+  height: 40px !important;
+  width: 16px !important;
+}

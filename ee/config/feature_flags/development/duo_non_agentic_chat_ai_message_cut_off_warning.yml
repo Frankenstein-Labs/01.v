@@ -1,0 +1,10 @@
+---
+name: duo_non_agentic_chat_ai_message_cut_off_warning
+description: Appends a warning to non-agentic Duo Chat responses when the stream is cut off without a finish_reason
+feature_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/583882
+introduced_by_url: https://gitlab.com/gitlab-org/gitlab/-/merge_requests/234238
+rollout_issue_url: https://gitlab.com/gitlab-org/gitlab/-/work_items/598963
+milestone: '19.0'
+group: group::duo chat
+type: development
+default_enabled: false

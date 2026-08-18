@@ -1,0 +1,30 @@
+#import "~/graphql_shared/fragments/user.fragment.graphql"
+
+fragment ComplianceViolationNote on Note {
+  id
+  body
+  bodyHtml
+  createdAt
+  lastEditedAt
+  lastEditedBy {
+    ...User
+  }
+  system
+  internal
+  systemNoteIconName
+  author {
+    ...User
+  }
+  discussion {
+    id
+  }
+  awardEmoji {
+    nodes {
+      name
+      user {
+        id
+        name
+      }
+    }
+  }
+}

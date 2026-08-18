@@ -1,0 +1,31 @@
+#import "~/graphql_shared/fragments/page_info.fragment.graphql"
+
+# @feature_category: team_planning
+query groupIterationCadences(
+  $fullPath: ID!
+  $beforeCursor: String = ""
+  $afterCursor: String = ""
+  $firstPageSize: Int
+  $lastPageSize: Int
+) {
+  namespace: group(fullPath: $fullPath) {
+    id
+    iterationCadences(
+      includeAncestorGroups: true
+      before: $beforeCursor
+      after: $afterCursor
+      first: $firstPageSize
+      last: $lastPageSize
+    ) {
+      nodes {
+        id
+        title
+        durationInWeeks
+        automatic
+      }
+      pageInfo {
+        ...PageInfo
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{ "cve_id": "CVE-2020-1234",  "epss_score": 0.5, "is_known_exploit": false }
+{ "cve_id": "CVE-2021-12345", "epss_score": 0.6, "is_known_exploit": true  }
+{ "cve_id": "CVE-2022-12345", "epss_score": 0.4 }
+{ "epss_score": 0.2 }

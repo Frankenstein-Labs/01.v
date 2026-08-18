@@ -1,0 +1,11 @@
+# @feature_category: vulnerability_management
+query projectTotalRiskScore($fullPath: ID!, $trackedRefIds: [SecurityProjectTrackedContextID!]) {
+  project(fullPath: $fullPath) {
+    id
+    securityMetrics(trackedRefIds: $trackedRefIds) {
+      riskScore {
+        score
+      }
+    }
+  }
+}

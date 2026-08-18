@@ -1,0 +1,14 @@
+export const TYPENAME_AI_CATALOG_ITEM = 'Ai::Catalog::Item';
+export const TYPENAME_AI_FLOW_TRIGGER = 'Ai::FlowTrigger';
+export const TYPENAME_CD_APPLICATION = 'Cd::Application';
+export const TYPENAME_CD_SERVICE = 'Cd::Service';
+export const TYPENAME_CD_VERSION_SET = 'Cd::VersionSet';
+export const TYPENAME_CUSTOM_FIELD = 'Issuables::CustomField';
+export const TYPENAME_CUSTOM_FIELD_SELECT_OPTION = 'Issuables::CustomFieldSelectOption';
+export const TYPENAME_GROUPS_SAVED_REPLY = 'Groups::SavedReply';
+export const TYPENAME_PROJECTS_SAVED_REPLY = 'Projects::SavedReply';
+export const TYPENAME_SBOM_COMPONENT_VERSION = 'Sbom::ComponentVersion';
+export const TYPENAME_SBOM_OCCURRENCE = 'Sbom::Occurrence';
+export const TYPENAME_AI_SELF_HOSTED_MODEL = 'Ai::SelfHostedModel';
+export const TYPENAME_SECURITY_ATTRIBUTE = 'Security::Attribute';
+export const TYPENAME_SECURITY_PROJECT_TRACKED_CONTEXT = 'Security::ProjectTrackedContext';

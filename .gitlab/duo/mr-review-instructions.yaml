@@ -1,0 +1,1608 @@
+---
+# Custom instructions for GitLab Duo Code Review
+# Based on GitLab's official code review guidelines
+
+# References:
+# - Code Review Guidelines: https://docs.gitlab.com/development/code_review/
+# - Database Review Guidelines: https://docs.gitlab.com/development/database_review/
+# - Developer Guide: https://docs.gitlab.com/operator/developer/guide/
+# - Contributing Guide: https://docs.gitlab.com/development/contributing/
+# - Documentation Guide: https://docs.gitlab.com/development/documentation/styleguide/
+# - Field Standardisation in Observability: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/observability_field_standardisation/
+# - Pajamas Design System: https://design.gitlab.com/
+# - Cells Development Guidelines: https://docs.gitlab.com/development/cells/
+
+
+# This file defines custom review criteria that will be applied to specific files
+# during merge request reviews. Instructions are grouped by name and can target
+# multiple file patterns using glob syntax.
+instructions:
+  - name: General Standards
+    fileFilters:
+      - "**/*"
+    instructions: |
+      1. Ensure you use inclusive language where applicable, e.g. prefer `allowlist` over `whitelist`
+      2. Verify CE/EE code separation:
+         - Code in CE (outside `ee/` directory) should not directly reference EE modules or classes
+         - EE extensions should use `prepend_mod` pattern in CE files
+         - If CE code needs EE-aware behavior, use `prepend_mod` hooks or `Gitlab.ee?` guards
+         - Flag direct references to `EE::` namespaced classes in CE code
+         - This prevents FOSS build failures
+         - Reference: https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/ee_features.md
+  - name: Ruby Code Quality
+    fileFilters:
+      - "**/*.rb"
+      - "!spec/**/*"
+    instructions: |
+      1. Check for N+1 queries - ensure use of `includes()`, `preload()`, or `eager_load()` when accessing associations
+      2. Ensure `update_all`, `delete_all`, `destroy_all` have proper conditions
+      3. Ensure authorization checks in controller actions and API endpoints
+      4. Ensure input validation for user-provided parameters
+      5. Ensure no information disclosure in error responses
+      6. Ensure all modified or new queries are flagged as needing a database reviewer
+      7. Ensure all ActiveRecord scope changes (new scopes, modified scopes, or scope deletions) are flagged as needing a database reviewer
+      8. For ActiveRecord scope changes, verify:
+         - The scope includes appropriate indexes for filtered columns
+         - The scope avoids expensive operations like subqueries on large tables
+         - Default scopes are avoided unless absolutely necessary (they can cause unexpected query behavior)
+      9. Ensure all modified or new queries have both raw SQL and query plans documented in the merge request description
+      10. Analyze query plans for common pitfalls in the merge request description:
+        - Sequential scans on large tables
+        - Nested loops with large datasets
+        - Missing or inefficient index usage
+        - High-cost operations
+        - Unexpected sort operations
+        - Verify the query returns expected records (not zero rows)
+        - Check that maximum query execution time is under 100ms
+        - Ensure the query plan reflects the complete query as executed by the database, including all chained scopes, pagination, ordering, and any other modifiers - not a partial or simplified version of the query
+      11. Flag comments that only describe what code does (e.g., "# Loop through users") rather than why. Suggest removing these comments and using better naming or method extraction instead
+      12. For ActiveRecord callbacks (before_validation, before_save, after_save, etc.):
+          - Verify callbacks only modify data on the current model, not associated records
+          - Question if callback logic should be in a service layer instead
+          - Ask: "Why use this callback instead of explicit method calls in the service/controller?"
+          - Flag callbacks that have side effects (external API calls, updating other records, complex business logic)
+          - Flag bulk operations on associated records in callbacks (performance concern as associations grow)
+          - Acceptable uses: data normalization on current model only (trimming whitespace, setting defaults)
+          - Reference: https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/backend/ruby_style_guide.md#avoid-activerecord-callbacks
+      13. To exclude records already loaded in memory, prefer `collection.excluding(record)` (alias `without`) over a hand-written `where.not(id: record)`.
+          - Do not pass a relation to `excluding`; for query results use `where.not(id: relation)`, which runs as a single subquery.
+          - Reference: https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/backend/ruby_style_guide.md#prefer-excluding-for-records-already-loaded-in-memory
+
+  - name: Database Migrations
+    fileFilters:
+      - "db/migrate/**/*.rb"
+      - "db/post_migrate/**/*.rb"
+      - "ee/db/geo/migrate/**/*.rb"
+      - "lib/gitlab/background_migration/**/*.rb"
+      - "db/docs/**/*.yml"
+      - "ee/db/docs/**/*.yml"
+    instructions: |
+      1. Ensure migrations are reversible (add explicit down method for complex operations)
+      2. Ensure bulk operations use batched migrations
+      3. Use post-migrations for time-consuming operations
+      5. Ensure column removals were ignored in previous release
+      7. Ask: "Have you triggered the db:gitlabcom-database-testing pipeline?"
+      8. For migrations that modify the database schema:
+         - Ensure db/structure.sql is updated to reflect the changes
+      9. For creating new tables, views or dropping existing tables/views:
+          - Ensure the Database Dictionary is updated to reflect the changes
+          - Remind: "When creating tables/views or dropping tables/views, make sure to update the Database Dictionary to maintain accurate documentation of the database schema"
+      10. For column additions with foreign keys to pre-existing tables (not created in the current merge request):
+         - Check if an index exists or is being added for the foreign key column
+         - Ask: "What is the current size of this table, and what is the projected size after adding this column? Tables cannot exceed 50 GB total size (including all indexes and column data) after adding a new column with a foreign key on GitLab.com."
+         - Remind: "If this table exceeds or will exceed the size limit, you can request an exemption by filing an issue with the Database Frameworks Team: https://docs.gitlab.com/development/database/large_tables_limitations/#requesting-an-exception"
+         - Ask: "Are you following the guidelines for adding foreign keys to existing tables to avoid downtime and migration failures? See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/database/foreign_keys.md#avoiding-downtime-and-migration-failures"
+      11. For column additions without foreign keys to pre-existing tables (not created in the current merge request):
+          - Ask: "What is the current size of this table, and what is the projected size after adding this column? Tables cannot exceed 100 GB total size (including all indexes and column data) after adding a new column on GitLab.com."
+          - Remind: "If this table exceeds or will exceed the size limit, you can request an exemption by filing an issue with the Database Frameworks Team: https://docs.gitlab.com/development/database/large_tables_limitations/#requesting-an-exception"
+      12. For new tables created in the current merge request that contain foreign key columns:
+          - Ensure indexes are created for all foreign key columns
+          - Check if each foreign key column in this new table has a corresponding index
+      13. For new tables created in the current merge request:
+          - Check if columns are ordered optimally for space efficiency:
+            - Group fixed-width columns together in descending size order (8-byte types first, then 4-byte, etc.)
+            - Place variable-width columns (text, varchar, arrays, json, jsonb) at the end
+          - Ask: "Have you ordered the columns to minimize space usage by grouping fixed-width columns together and placing variable-width columns at the end?"
+          - Ask: "What is the expected data retention policy for this table? (e.g., time_decay, user_lifecycle, indefinite_with_justification, transient)"
+          - Ask: "What is the growth driver for this table? (e.g., per-user, per-project, per-pipeline, per-event)"
+          - Remind: "Proper column ordering can significantly reduce storage requirements at scale. See: https://docs.gitlab.com/development/database/ordering_table_columns/"
+      14. For migrations that drop or replace an index:
+          - Remind: "Before removing an index, verify queries can use other existing indexes efficiently. Confirm the index is unused on GitLab.com and Self-Managed."
+          - Suggest: "For investigating index usage you can start by gathering all the metadata available for the index. For GitLab.com, you can view index usage data in [Grafana](https://dashboards.gitlab.net/goto/TsYVxcBHR?orgId=1)"
+          - Ask: "Are you following the guidelines for dropping unused indexes? See: https://docs.gitlab.com/development/database/adding_database_indexes/#dropping-unused-indexes"
+      15. For migrations that add indexes:
+          - Ask: "Have you reviewed existing indexes on this table for redundancy or consolidation opportunities before adding a new one?"
+          - If the index is temporary (e.g., to support a backfill or data migration), ask: "Do you have a plan for removing this index after the backfill or when the migration is complete? Include a follow-up issue or post-migration to drop it."
+          - Remind: "Redundant and orphaned indexes increase storage overhead, degrade write performance, and contribute to LockManager LWLock contention: a known bottleneck on high-traffic tables where PostgreSQL's fast-path lock slots (limited to 16 per backend) are exhausted, forcing expensive shared-memory lock table lookups. See: https://gitlab.com/groups/gitlab-org/-/epics/11543 and https://docs.gitlab.com/development/database/adding_database_indexes/#some-tables-should-not-have-any-more-indexes"
+      16. Cells – sharding keys on new tables:
+          - For new tables in `db/migrate/**` or `db/post_migrate/**`, verify the table has a sharding key column and a foreign key to its sharding root, or is explicitly classified as cell-local in the Database Dictionary.
+      17. Cells – Database Dictionary (`db/docs/**/*.yml`):
+          - Verify new entries set `gitlab_schema` to one of the approved Cells-aware schemas (`gitlab_main_org`, `gitlab_main_cell_local`, `gitlab_main_cell_setting`, `gitlab_main_user`, `gitlab_ci`, `gitlab_ci_cell_local`, `gitlab_shared_org`, `gitlab_shared_cell_local`).
+          - Flag use of the deprecated `gitlab_main` schema for new tables.
+          - For `gitlab_main_org` and `gitlab_ci` tables, verify `sharding_key` is set.
+          - For cell-local tables, verify the table holds non-customer data and is not referenced by foreign keys from organization tables.
+          - For `gitlab_shared_org` and `gitlab_shared_cell_local` tables:
+            - Verify the model inherits from `Gitlab::Database::SharedModel`.
+            - Flag use of auto-incrementing integer primary keys. These tables live across multiple decomposed databases, so sequence-based IDs can collide.
+            - Remind: "Use a composite primary key or a UUID primary key so rows remain unique across the decomposed databases."
+      18. Cells – unique constraints across cells:
+          - Flag global `UNIQUE` indexes on customer-data tables that do not include the sharding key.
+          - Remind: "Scope unique indexes to include the sharding key. For attributes that must be globally unique across organizations, use the Claim service."
+      - Reference: https://docs.gitlab.com/development/cells/
+
+  - name: Cells Architecture
+    fileFilters:
+      - "app/models/**/*.rb"
+      - "ee/app/models/**/*.rb"
+      - "app/workers/**/*.rb"
+      - "ee/app/workers/**/*.rb"
+      - "app/services/**/*.rb"
+      - "ee/app/services/**/*.rb"
+      - "app/controllers/**/*.rb"
+      - "ee/app/controllers/**/*.rb"
+      - "lib/api/**/*.rb"
+      - "ee/lib/api/**/*.rb"
+      - "!spec/**/*"
+      - "!ee/spec/**/*"
+    instructions: |
+      Cells compatibility is a first-class development requirement for the
+      GitLab monolith. Cells applies to GitLab.com only; GitLab Self-Managed
+      and GitLab Dedicated run as a single cell.
+
+      1. Org-scoped compute:
+         - Flag new Sidekiq workers or web/API request paths that operate across multiple Organizations.
+         - Ask: "Can this worker or request be scoped to a single Organization? Cross-organization compute is only acceptable for recurring, idempotent cron jobs."
+      2. Cross-organization isolation controls:
+         - For features that enforce isolation between Organizations on the same cell, verify the control accounts for the Organization's isolation choice. Do not assume all Organizations on the same cell are isolated.
+      3. Sharding keys on new models:
+         - For new ActiveRecord models in `app/models/**` or `ee/app/models/**` that store customer data, verify the model defines a sharding key (`organization_id`, `project_id`, `namespace_id`, or another approved root).
+         - Ask: "What is the sharding key for this model, and which sharding root does it point to?"
+      4. No new customer-owned resources outside an Organization:
+         - Flag new top-level customer-data models that do not belong to an Organization, Group, Project, or User scoped under an Organization.
+         - Ask: "Which Organization owns this resource? Resources outside an Organization cannot be migrated when an Organization moves cells."
+      5. Migratability and ambiguous ownership:
+         - Flag models where row ownership cannot be traced to a single Organization through its sharding key.
+         - Ask: "If this Organization moves to another cell, how is this row migrated? Is ownership unambiguous from the schema?"
+      6. Static reference data:
+         - For new ActiveRecord models that represent a fixed, known set of reference rows (for example, plan types, severity levels, status categories), prefer `ActiveRecord::FixedItemsModel::Model` over a database-backed table with an auto-incrementing primary key.
+         - Remind: "Auto-incrementing IDs are assigned per cell and are not globally consistent. Hard-coded fixed items keep IDs stable across cells so foreign references remain valid after migration."
+      - Reference: https://docs.gitlab.com/development/cells/
+      - Reference: https://docs.gitlab.com/development/organization/sharding/
+      - Reference: https://docs.gitlab.com/development/contributing/merge_request_workflow/#definition-of-done
+
+  - name: Sidekiq Worker Compatibility
+    fileFilters:
+      - "app/workers/**/*.rb"
+      - "ee/app/workers/**/*.rb"
+      - "app/controllers/**/*.rb"
+      - "ee/app/controllers/**/*.rb"
+      - "app/services/**/*.rb"
+      - "ee/app/services/**/*.rb"
+      - "lib/api/**/*.rb"
+      - "ee/lib/api/**/*.rb"
+      - "app/graphql/**/*.rb"
+      - "ee/app/graphql/**/*.rb"
+      - "!spec/**/*"
+      - "!ee/spec/**/*"
+    instructions: |
+      On GitLab.com, Sidekiq runs only on the regional cluster and is not part of the
+      canary stage, while the web/API fleet (canary and zonal clusters) deploys separately.
+      During a deployment there is a window where web/API nodes already schedule a job but the
+      Sidekiq fleet has not yet been updated. A job can therefore be enqueued by one version
+      and executed by another, so worker changes must be backward and forward compatible
+      across the versions that coexist during a rollout.
+
+      1. **New worker scheduled without a feature flag**:
+         - When this MR adds a new Sidekiq worker class (a new file under `app/workers/**` or
+           `ee/app/workers/**`) and also schedules it from a web/API request path
+           (`perform_async`, `perform_in`, `perform_at`, `bulk_perform_async`,
+           `bulk_perform_in`, `perform_bulk` called from a controller, service, API, or
+           GraphQL resolver/mutation), verify the scheduling is controlled by a feature flag.
+         - Ask: "Is the scheduling of this new worker gated behind a feature flag that will be
+           enabled only after the deploy introducing the worker has fully rolled out to Sidekiq?
+           Without it, web/API can enqueue the job before Sidekiq knows the class and the job
+           will fail or sit unprocessed until the full production deployment completes."
+         - Note: a feature flag elsewhere in the MR does not count unless it actually wraps the
+           enqueue call. Re-enqueues from within another worker are not a concern here.
+      2. **Changing arguments of an existing worker**:
+         - When the `perform` signature of an existing worker changes (arguments added,
+           removed, or reordered), verify the change is backward and forward compatible.
+         - Ask: "Will an old Sidekiq node be able to process a job enqueued with the new
+           arguments, and a new node a job enqueued with the old arguments? If not, split this
+           across releases (add with a default, then use, then remove the default)."
+      3. **Removing or renaming a worker**:
+         - When a worker class is removed or renamed, do not remove it while its queue may
+           still hold jobs. Drain the queue, verify it is empty, and confirm removal is safe
+           first; leaving enqueued jobs with no worker to process them is not acceptable.
+         - Ask: "Has this worker's queue been drained and verified empty? Keep the old class
+           able to process queued jobs for at least one release, then remove it only once the
+           queue is confirmed empty."
+      - Reference: https://docs.gitlab.com/development/sidekiq/compatibility_across_updates/
+      - Reference: https://docs.gitlab.com/development/feature_flags/
+
+  # >>> generated: authentication — gitlab-ai-principles-distiller (from .ai/principles/manifest.yml; do not edit)
+  # distilled_at_sha: 18bec1426aecafc1e6f6e47896f845e2690b2bf8
+  # source_checksum: 4f4508ed3a4c3e52
+  - name: Authentication & Authorization Security
+    fileFilters:
+      # Controllers / entry points
+      - "app/controllers/sessions_controller.rb"
+      - "app/controllers/passwords_controller.rb"
+      - "app/controllers/omniauth_callbacks_controller.rb"
+      - "app/controllers/oauth/**/*.rb"
+      - "app/controllers/concerns/authenticates_with_two_factor*.rb"
+      - "app/controllers/concerns/sessionless_authentication.rb"
+      - "app/controllers/concerns/enforces_*authentication*.rb"
+      - "app/controllers/concerns/access_tokens_actions.rb"
+      - "app/controllers/admin/sessions_controller.rb"
+      - "app/controllers/admin/impersonation_tokens_controller.rb"
+      - "app/controllers/user_settings/passwords_controller.rb"
+      - "app/controllers/user_settings/personal_access_tokens_controller.rb"
+      - "app/controllers/**/access_tokens_controller.rb"
+      - "app/controllers/profiles/two_factor_auths_controller.rb"
+
+      # Models / token primitives
+      - "app/models/authn/**/*.rb"
+      - "app/models/personal_access_token.rb"
+      - "app/models/oauth_access_token.rb"
+      - "app/models/oauth_access_grant.rb"
+      - "app/models/webauthn_registration.rb"
+      - "app/models/concerns/token_authenticatable.rb"
+      - "app/models/concerns/encrypted_user_password.rb"
+      - "app/models/ability.rb"
+
+      # Services
+      - "app/services/authn/**/*.rb"
+      - "app/services/users/email_verification/**/*.rb"
+      - "app/services/webauthn/**/*.rb"
+      - "app/services/access_token_validation_service.rb"
+      - "app/services/personal_access_tokens/**/*.rb"
+      - "app/services/group_access_tokens/**/*.rb"
+      - "app/services/project_access_tokens/**/*.rb"
+      - "app/services/resource_access_tokens/**/*.rb"
+
+      # Workers
+      - "app/workers/authn/**/*.rb"
+
+      # Auth-relevant policies, initializers, libs
+      - "app/policies/personal_access_token_policy.rb"
+      - "app/policies/global_policy.rb"
+      - "app/policies/user_policy.rb"
+      - "app/policies/authz/**/*.rb"
+      - "config/initializers/8_devise.rb"
+      - "config/initializers/warden.rb"
+      - "config/initializers/doorkeeper*.rb"
+      - "config/initializers/omniauth.rb"
+      - "config/initializers/webauthn.rb"
+      - "lib/api/api_guard.rb"
+      - "lib/api/personal_access_tokens.rb"
+      - "lib/api/personal_access_tokens/**/*.rb"
+      - "lib/api/helpers/personal_access_tokens_helpers.rb"
+      - "lib/api/entities/*token*.rb"
+      - "lib/authn/**/*.rb"
+      - "lib/gitlab/auth/**/*.rb"
+
+      # EE equivalents
+      - "ee/app/controllers/concerns/ee/authenticates_with_two_factor.rb"
+      - "ee/app/controllers/ee/ldap/**/*.rb"
+      - "ee/app/controllers/ee/omniauth_callbacks_controller.rb"
+      - "ee/app/controllers/ee/passwords_controller.rb"
+      - "ee/app/controllers/ee/user_settings/personal_access_tokens_controller.rb"
+      - "ee/app/controllers/groups/ldaps_controller.rb"
+      - "ee/app/controllers/groups/omniauth_callbacks_controller.rb"
+      - "ee/app/controllers/groups/two_factor_auths_controller.rb"
+      - "ee/app/controllers/oauth/**/*.rb"
+      - "ee/app/controllers/omniauth_kerberos_controller.rb"
+      - "ee/app/controllers/smartcard_controller.rb"
+      - "ee/app/controllers/**/service_accounts_controller.rb"
+      - "ee/app/finders/auth/**/*.rb"
+      - "ee/app/finders/authn/**/*.rb"
+      - "ee/app/models/authn/**/*.rb"
+      - "ee/app/models/authz/**/*.rb"
+      - "ee/app/models/ee/personal_access_token.rb"
+      - "ee/app/services/authz/**/*.rb"
+      - "ee/app/services/ee/personal_access_tokens/**/*.rb"
+      - "ee/app/services/namespaces/service_accounts/**/*.rb"
+      - "ee/app/services/users/service_accounts/**/*.rb"
+      - "ee/app/services/security/token_revocation_service.rb"
+      - "ee/app/policies/authz/**/*.rb"
+      - "ee/lib/authn/**/*.rb"
+      - "ee/lib/gitlab/auth/**/*.rb"
+      - "ee/lib/api/scim/**/*.rb"
+    instructions: |
+      ### Request Flow and Token Resolution
+
+      - DO NOT change the token resolution order in `AuthFinders` (`lib/gitlab/auth/auth_finders.rb`); deploy tokens, bearer tokens, job tokens, and sessions are checked in a specific priority — reordering can cause one token type to shadow another.
+      - DO NOT implement custom API authentication; use `API::APIGuard` (`lib/api/api_guard.rb`).
+      - DO NOT hand-roll JWT or token parsing; use `Authn::IamService::JwtValidationService`.
+      - DO NOT use `lib/gitlab/auth/request_authenticator.rb` for access control; it is for `Rack::Attack` and logging only.
+      - Use `check_rate_limit!` for rate limiting on token creation and verification endpoints.
+
+      ### Token Prefixes and Storage
+
+      - Use token prefixes to identify token types: `glpat-` (PAT), `gldt-` (deploy token), `glcbt-` (CI job token), `gloas-` (OAuth application secret).
+      - DO NOT create ad-hoc token columns or manual hashing; use the `TokenAuthenticatable` concern with `add_authentication_token_field`.
+      - DO NOT add new token types with `insecure: true` storage strategy; use `digest: true` for SHA-256 or `encrypted: :required` for AES-256-GCM encryption at rest.
+      - Default to expiration on new token types; DO NOT allow token creation without an expiration unless explicitly required.
+      - DO NOT accept tokens via URL query parameters in new endpoints; use the `PRIVATE-TOKEN` header for PATs or `Authorization: Bearer` for OAuth.
+      - Compare token equality using a constant-time function (`ActiveSupport::SecurityUtils.secure_compare`) to defend against timing attacks.
+
+      ### Sessions and Sign-In
+
+      - DO NOT create parallel session stores; use Devise combined with `ActiveSession`.
+      - Use `Rack::Attack` (`config/initializers/rack_attack.rb`) for login throttling.
+      - Use `Gitlab::ApplicationRateLimiter` for feature-level rate limits (for example, token creation, password resets).
+      - Ensure every endpoint that validates a credential (password, token, 2FA code, recovery code) is rate-limited; rate-limit keying must include the credential subject (login or user) when feasible, not only the source IP — per-IP-only throttles that reset on success are bypassable via credential stuffing.
+      - Regenerate the session ID on any privilege change: sign-in, 2FA pass, password change, admin-mode entry — defends against session fixation.
+
+      ### Access Tokens
+
+      - DO NOT change token expiration logic during rotation; token rotation must preserve the original expiration policy (past incidents: rotating a PAT altered service account expiration dates and group membership expiration).
+      - When blocking a user, verify all active tokens are invalidated across all subsystems (past incident: blocked user PATs continued to mint valid container registry JWTs).
+
+      ### CI Job Tokens
+
+      - DO NOT store CI job tokens in plaintext or compare them with string equality; they are JWTs signed with RSA.
+      - DO NOT extend CI job token lifetime beyond the job duration; they are scoped to a specific pipeline job and expire with the job.
+
+      ### OAuth and OIDC
+
+      - DO NOT add new OIDC claims without considering data exposure; each claim is included in ID tokens visible to the requesting application.
+      - DO NOT log, expose, or rotate the OIDC signing key (`openid_connect_signing_key`) without coordinating with the infrastructure team; it is stored in Rails credentials.
+      - Always create OAuth tokens with an expiration; keep the expiration as short as possible.
+      - DO NOT implement custom OAuth flows; use OmniAuth strategies for external providers and Doorkeeper for the provider side.
+      - Use PKCE when GitLab acts as an OAuth client.
+
+      ### SAML
+
+      - When modifying `extern_uid` through the API, set `trusted_extern_uid` to `false`; the base OAuth login class (`lib/gitlab/auth/o_auth/user.rb`) checks `trusted_extern_uid?` before resolving the user — when overriding user lookup in a subclass, verify the override also checks this flag.
+      - Validate SAML `RelayState` parameters before using them as redirect targets (past incident: open redirect via unvalidated RelayState in SAML Single Logout).
+      - Validate the XML signature on every SAML response and verify the signed element is the assertion being trusted — defends against XML signature wrapping (past incident: [#486565](https://gitlab.com/gitlab-org/gitlab/-/issues/486565) — unauthenticated SAML sign-in bypass).
+
+      ### Identity Linking and extern_uid
+
+      - DO NOT update `extern_uid` without setting `trusted_extern_uid` to `false`; unverified `extern_uid` changes can enable account takeover.
+      - When overriding user lookup in OAuth subclasses (for example, `GroupSaml::User`), verify the override checks `trusted_extern_uid?`; the base class checks this but overrides can bypass it.
+      - DO NOT resolve users solely by `extern_uid` without verifying the identity is trusted (`trusted_extern_uid?`).
+
+      ### Two-Factor Authentication
+
+      - Sanitize login parameters (username, email) before authentication (past incident: whitespace in login parameter bypassed WebAuthn 2FA — [#585333](https://gitlab.com/gitlab-org/gitlab/-/work_items/585333)).
+      - When a passkey or 2FA device is deleted, invalidate all sessions that were authenticated with that credential.
+      - DO NOT allow `read_api` or other limited-scope tokens to bypass sudo mode or elevated authentication requirements.
+
+      ### Password Management
+
+      - Use `InternalRedirect#sanitize_redirect` or `safe_redirect_path` to validate all user-supplied redirect targets in password reset flows; DO NOT pass raw parameters to `redirect_to` — always provide a fallback: `redirect_to sanitize_redirect(params[:redirect]) || root_path`.
+      - Ensure password reset tokens are single-use, short-lived, and invalidated on successful use; successful reset must invalidate all other active sessions for the user.
+      - Ensure the password reset endpoint validates that the email parameter is a single string value and rejects any request where it is provided as an array or other non-string type (past incident: [#436084](https://gitlab.com/gitlab-org/gitlab/-/issues/436084) — account takeover via password reset).
+      - Ensure sign-in failure and password-reset responses do not differ between "user exists, wrong credential" and "user does not exist" — use the same response body and the same timing to defend against account enumeration.
+
+      ### Shared Infrastructure and Logging
+
+      - DO NOT change the return type or nil-vs-value semantics of authentication methods without auditing all callers.
+      - Verify all authentication flows still work when modifying shared infrastructure (web, API, OAuth, SAML entry points all share authentication code).
+      - DO NOT log token values, password values, or session IDs — this includes error messages, audit events, structured logs, and backtraces.
+      - When modifying user blocking, banning, or deactivation, verify the blocked state is checked at the point of use, not only at login; tokens, sessions, and API access must all respect the blocked state.
+      - When adding a new authentication path or token type, verify it respects the `user.blocked?` check.
+      - DO NOT pass raw user-supplied parameters to `redirect_to`; use `InternalRedirect#sanitize_redirect` or `safe_redirect_path` — redirect helpers return `nil` for invalid targets, so always provide a fallback.
+
+      ### Composite Identity
+
+      - Use composite identity for any AI-generated activity on the GitLab platform that performs write actions.
+      - Ensure the service account used for composite identity has `composite_identity_enforced: true` (must be configured programmatically — not available in the UI).
+      - Ensure the OAuth application used for composite identity enables the dynamic scope `user:*` (must be configured programmatically — not available in the UI).
+      - DO NOT use the standard authorization code flow (browser consent) for composite identity service accounts; service accounts are bot users that cannot sign in interactively.
+      - Ensure composite identity OAuth token scopes include the concrete dynamic scope `user:$ID` for the human user who originated the AI request, plus any required base scopes (for example, `api`).
+      - Always use `Gitlab::Auth::Identity.resolve_composite_identity_actor(current_user)` to resolve the actor for any write operation; DO NOT determine the composite identity context manually.
+      - Use the actor returned by `resolve_composite_identity_actor` wherever authorship is set (notes, issues/MRs, commits, pipeline user context).
+      - Understand attribution context: OAuth/CI flows tag `:authentication` context (service account is attributed); web/assignment flows tag `:permission_check` context (human is attributed) — DO NOT override this context manually. In the `:authentication` context, audit events store `author_name` as `<service account name> on behalf of @<human username>` truncated to 255 characters, and record `human_author_id`, `human_author_name`, and `human_author_username` in event `details`; in the `:permission_check` context the human remains the author and no `human_author_*` keys are added (GitLab 19.3 and later).
+
+      ### Feature Flags
+
+      - Use `group: group::authentication` for authentication feature flags.
+      - Reference: doc/development/authentication.md
+      - Reference: doc/development/ai_features/composite_identity.md
+  # <<< end generated: authentication
+
+  # Review-only heuristics that are deliberately NOT fenced: they encode
+  # reviewer experience and weakness-class cross-references that are not in the
+  # distilled SSOT, so they must live outside the generated region to survive
+  # regeneration.
+  - name: Authentication Review Heuristics
+    fileFilters:
+      # Policy weakening (broadened roles, relaxed conditions) can happen in
+      # any policy file, so watch them all — matching the product-wide
+      # spec/policies globs that Authentication Test Quality already uses.
+      - "app/policies/**/*.rb"
+      - "ee/app/policies/**/*.rb"
+      - "app/models/ability.rb"
+      - "app/controllers/concerns/enforces_*authentication*.rb"
+      - "app/controllers/concerns/authenticates_with_two_factor*.rb"
+      - "app/controllers/concerns/sessionless_authentication.rb"
+      - "app/controllers/oauth/**/*.rb"
+      - "lib/authn/**/*.rb"
+      - "lib/gitlab/auth/**/*.rb"
+      - "ee/lib/authn/**/*.rb"
+      - "ee/lib/gitlab/auth/**/*.rb"
+    instructions: |
+      Review-only heuristics for authentication and authorization changes. These
+      are not distilled from SSOT docs; they encode reviewer experience and map
+      changes to known weakness classes. Only comment on a clear violation.
+
+      1. **Flag policy weakening.** Treat these diff patterns as suspect and ask
+         for explicit justification:
+         - removing or relaxing an `Ability.allowed?` check;
+         - broadening a policy rule's permitted role or condition;
+         - removing a `before_action :authenticate_user!` or `:authenticate_admin!`;
+         - flipping a `feature_category` away from `authentication`/`authorization`
+           (this silently drops CODEOWNERS enforcement by the auth team);
+         - deleting or skipping specs that assert a rejected or forbidden path.
+
+      2. **Name the weakness class for existing rules.** When reviewing the related
+         auth code, cross-reference the CWE so the author can look it up:
+         - Logging a token, password, or session-ID value → CWE-532 (information
+           exposure through log files).
+         - Sign-in, password-reset, or 2FA responses that differ between "user
+           exists, wrong credential" and "no such user" in body, status, or timing
+           → CWE-203 (observable discrepancy enabling account enumeration; past
+           incident: #436084 — password-reset account takeover).
+
+  # >>> generated: authentication-testing — gitlab-ai-principles-distiller (from .ai/principles/manifest.yml; do not edit)
+  # distilled_at_sha: 0bc240cb0e70d2bba500cca6317a5c7e9e06605e
+  # source_checksum: 8160d7d4525f6096
+  - name: Authentication Test Quality
+    fileFilters:
+      - "spec/controllers/sessions_controller_spec.rb"
+      - "spec/controllers/passwords_controller_spec.rb"
+      - "spec/controllers/omniauth_callbacks_controller_spec.rb"
+      - "spec/controllers/oauth/**/*_spec.rb"
+      - "spec/controllers/concerns/authenticates_with_two_factor*_spec.rb"
+      - "spec/controllers/admin/sessions_controller_spec.rb"
+      - "spec/controllers/admin/impersonation_tokens_controller_spec.rb"
+      - "spec/controllers/user_settings/**/*_spec.rb"
+      - "spec/controllers/profiles/two_factor_auths_controller_spec.rb"
+      - "spec/models/authn/**/*_spec.rb"
+      - "spec/models/personal_access_token_spec.rb"
+      - "spec/models/oauth_access_*_spec.rb"
+      - "spec/models/webauthn_registration_spec.rb"
+      - "spec/models/concerns/token_authenticatable_spec.rb"
+      - "spec/services/authn/**/*_spec.rb"
+      - "spec/services/users/email_verification/**/*_spec.rb"
+      - "spec/services/webauthn/**/*_spec.rb"
+      - "spec/services/personal_access_tokens/**/*_spec.rb"
+      - "spec/services/group_access_tokens/**/*_spec.rb"
+      - "spec/services/project_access_tokens/**/*_spec.rb"
+      - "spec/services/resource_access_tokens/**/*_spec.rb"
+      - "spec/workers/authn/**/*_spec.rb"
+      - "spec/policies/**/*_spec.rb"
+      - "spec/lib/authn/**/*_spec.rb"
+      - "spec/lib/gitlab/auth/**/*_spec.rb"
+      - "spec/lib/api/entities/*token*_spec.rb"
+      - "spec/requests/api/api_guard_spec.rb"
+      - "spec/requests/api/admin/token_spec.rb"
+      - "spec/requests/api/deploy_tokens_spec.rb"
+      - "spec/requests/api/doorkeeper_access_spec.rb"
+      - "spec/requests/api/oauth_tokens_spec.rb"
+      - "spec/requests/api/personal_access_tokens_spec.rb"
+      - "spec/requests/api/personal_access_tokens/**/*_spec.rb"
+      - "spec/requests/api/resource_access_tokens_spec.rb"
+      - "spec/requests/api/resource_access_tokens/**/*_spec.rb"
+      - "spec/requests/api/group_service_accounts_spec.rb"
+      - "spec/requests/api/project_service_accounts_spec.rb"
+      - "spec/requests/api/service_accounts_spec.rb"
+      - "spec/requests/api/graphql/authz/**/*_spec.rb"
+      - "spec/requests/api/graphql/mutations/users/personal_access_tokens/**/*_spec.rb"
+      - "ee/spec/controllers/**/passwords_controller_spec.rb"
+      - "ee/spec/controllers/**/omniauth_callbacks_controller_spec.rb"
+      - "ee/spec/controllers/**/two_factor_auths_controller_spec.rb"
+      - "ee/spec/controllers/**/service_accounts_controller_spec.rb"
+      - "ee/spec/controllers/smartcard_controller_spec.rb"
+      - "ee/spec/lib/authn/**/*_spec.rb"
+      - "ee/spec/lib/gitlab/auth/**/*_spec.rb"
+      - "ee/spec/policies/**/*_spec.rb"
+      - "ee/spec/services/authz/**/*_spec.rb"
+      - "ee/spec/services/ee/personal_access_tokens/**/*_spec.rb"
+      - "ee/spec/services/namespaces/service_accounts/**/*_spec.rb"
+      - "ee/spec/services/users/service_accounts/**/*_spec.rb"
+    instructions: |
+      ### Token Edge Cases
+
+      - Specs for endpoints that accept tokens should cover expired tokens, malformed tokens, revoked tokens, wrong-scope tokens, and (where applicable) replay.
+      - Reference patterns: `spec/lib/gitlab/auth/auth_finders_spec.rb` and `spec/requests/api/api_guard_spec.rb`.
+
+      ### Authorization Actor Matrix
+
+      - Specs for controllers, API endpoints, or policies with authorization checks should exercise the full actor matrix: authorized user (allowed), unauthorized user (forbidden), anonymous user (redirect or 401), and admin user where the role affects behavior. Do not only test the "everything works" case.
+
+      ### Admin Mode Activation
+
+      - Use the `:enable_admin_mode` RSpec metadata tag to activate admin mode in specs; DO NOT use `enable_admin_mode!(admin, use_ui: true)` — it is slow and introduces a race condition where the mode-activation request may not complete before the next action runs.
+
+      ### Auth-Stubbing Red Flags
+
+      - Flag specs that stub the auth layer in ways that hide regressions:
+        - `allow_any_instance_of(...).to receive(:current_user).and_return(...)` to short-circuit auth.
+        - `allow(Ability).to receive(:allowed?).and_return(true)` (or `false`) to bypass the policy framework.
+        - Stubbing `sign_in` without using the Devise/Warden test helpers.
+      - Use real users and real policies in auth specs; stub only external dependencies (for example, IAM service HTTP calls).
+      - Safe to stub (do not flag): external HTTP calls (`IamService` client, OAuth provider callbacks); Sidekiq workers in unrelated specs; time helpers (`travel_to`, `freeze_time`); feature flag state (`stub_feature_flags`); application settings (`stub_application_setting`); file and storage clients (`Fog`, `CarrierWave`, GCS/S3 doubles).
+
+      ### Rate-Limit Specs
+
+      - When a change adds or modifies a rate limit (`check_rate_limit!`, `Gitlab::ApplicationRateLimiter`), verify a spec covers (a) the limit fires after N attempts, and (b) the limit key includes the credential subject, not only the IP.
+      - Use `spec/support/shared_examples/controllers/rate_limited_endpoint_shared_examples.rb` if a shared example applies.
+
+      ### Narrow Token Scopes in Specs
+
+      - When a spec creates a PAT, OAuth token, or job token, use the narrowest scope sufficient. A spec that uses `:api` scope to test a `:read_user`-protected endpoint can mask a scope-enforcement bug. Prefer `create(:personal_access_token, scopes: [:read_user])` when the endpoint requires only read access.
+      - Reference: doc/development/testing_guide/best_practices.md
+  # <<< end generated: authentication-testing
+
+  # >>> generated: documentation — gitlab-ai-principles-distiller (from .ai/principles/manifest.yml; do not edit)
+  # distilled_at_sha: 3941b843c30927ec6cea3e9caa43c88e5f930cb6
+  # source_checksum: aa7fcd5a891ab119
+  - name: Documentation
+    fileFilters:
+      - "doc/**/*.md"
+    instructions: |
+      ### Voice and Tone
+
+      - Write in US English with US grammar.
+      - Use active voice instead of passive voice; use passive only when the subject is awkward (e.g., "The report is exported").
+      - Write from the customer perspective; DO NOT use "allows you to" or "enables you to" — address the user directly with "you".
+      - DO NOT use marketing phrases like "save you time and money", or words like "easily" or "simply".
+      - DO NOT write about the document itself (e.g., "This page shows..."); get straight to the point.
+      - Use contractions for a friendly tone, but DO NOT use contractions to emphasize a negative, with proper nouns as the subject, in reference documentation, or in error messages.
+      - DO NOT use possessives (`'s`) for product or organization names (e.g., use "the Docker CLI", not "Docker's CLI").
+
+      ### Language and Grammar
+
+      - Spell out acronyms on first use per page; DO NOT spell them out more than once.
+      - DO NOT make acronyms plural with an apostrophe (use `APIs`, not `API's`).
+      - Spell out zero through nine; use numerals for 10 and above.
+      - Use `month day, year` format for dates and `AM`/`PM` for times.
+      - DO NOT use semicolons (`;`), en dashes (`–`), or em dashes (`—`); use separate sentences or commas instead.
+      - DO NOT use typographer's ("curly") quotation marks; use straight quotes.
+      - Use serial (Oxford) commas before the final "and" or "or" in lists of three or more items.
+      - DO NOT use Latin abbreviations like `e.g.` or `i.e.`.
+      - Avoid ellipses; where unavoidable (for example, in a code block or CLI response) use three periods with no space (`...`).
+      - DO NOT use the `&hellip;` HTML entity or the `&#8230;` HTML code; they break how code blocks render.
+      - DO NOT include ellipses when documenting UI text (use `Search or go to`, not `Search or go to...`).
+      - DO NOT use `-ing` words, ambiguous pronouns like "it", or phrases that hide the subject like "there is"/"there are".
+      - Break up noun strings (e.g., use "custom settings for project integrations", not "project integration custom settings").
+
+      ### Capitalization
+
+      - Use sentence case for topic titles and table headers.
+      - Keep feature names lowercase unless they are listed as exceptions in markdownlint or the word list.
+      - Capitalize GitLab product tiers (e.g., GitLab Free, GitLab Ultimate), third-party product names, and methodology names.
+      - DO NOT match capitalization from the Features page or `features.yml` by default.
+      - Use the same capitalization as displayed in the UI when referring to UI elements; exception: use sentence case for UI text that is all uppercase.
+
+      ### Fake Data and Tokens
+
+      - DO NOT use real usernames, email addresses, or tokens in documentation.
+      - Use diverse or non-gendered names (e.g., `Sidney Jones`, `Zhang Wei`) and `example.com` email addresses.
+      - Use `example.com` for generic domains and `gitlab.example.com` for self-managed references.
+      - Use only the approved fake token values from the token table in the style guide.
+
+      ### Markdown and Formatting
+
+      - DO NOT add an `H1` heading in Markdown; use the `title` metadata attribute instead.
+      - DO NOT skip heading levels (e.g., `##` directly to `####`).
+      - DO NOT use heading levels greater than `H5`; move content to a new page instead.
+      - DO NOT use bold text in topic titles.
+      - Leave one blank line before and after headings, paragraphs, lists, and code blocks.
+      - Use dashes (`-`) for unordered lists, not asterisks (`*`).
+      - Start every ordered list item with `1.`.
+      - Use two spaces per indentation level for unordered lists; three spaces for ordered lists.
+      - DO NOT use HTML in Markdown unless no Markdown equivalent exists, the content is reviewed by a technical writer, and the need is urgent.
+      - Any `<a>` tags created with HTML must use absolute URLs as `href` attributes.
+      - Use inline links, not reference-style links.
+      - Start each new sentence on a new line. Split long lines at approximately 100 characters; DO NOT split links across lines. Try to avoid splitting lines between logical word groupings; keep them together on the same line.
+      - Use `<!-- -->` HTML comments for author notes; DO NOT use comments to hide documentation.
+
+      ### Text Formatting
+
+      - Use **bold** only for UI elements with visible labels and navigation paths; DO NOT use bold for keywords or emphasis.
+      - Use inline code (backticks) for user input, filenames, configuration parameters, keywords, API/HTTP methods, HTTP status codes, and short error messages.
+      - Use code blocks for CLI/cURL commands and multi-line inputs/outputs; add a syntax name for highlighting.
+      - Use `<kbd>` tags for keyboard commands; spell out full key names (except `Alt`); DO NOT use spaces between `<kbd>` tags in combinations.
+      - DO NOT use italics for emphasis in product documentation.
+      - Use `<` and `>` to denote placeholder text in code blocks.
+
+      ### Lists
+
+      - Make all list items parallel (same grammatical structure).
+      - Start all list items with a capital letter.
+      - DO NOT end list items with a period unless the item is a complete sentence.
+      - DO NOT use bold formatting to define keywords or concepts in a list; use bold only for UI element labels.
+      - Use ordered lists for sequential steps; use unordered lists for non-sequential items.
+      - Add a colon (`:`) after the introductory phrase before a list.
+      - DO NOT use list items to complete an introductory phrase (e.g., "You can do this by: - Copying..."); rewrite as a full sentence introducing the list.
+
+      ### Tables
+
+      - DO NOT leave table cells empty; use **None** for cells with no meaningful value.
+      - Make the header row and delimiter row the same length; DO NOT use shortened delimiters like `|-|-|-|`.
+      - Use sentence case for table headers.
+      - Place the `Description` column as the right-most column when possible.
+      - DO NOT realign an entire table when only changing a few rows (to keep diffs readable).
+      - Use `{{< no >}}` and `{{< yes >}}` shortcodes for feature availability tables; DO NOT use these in API docs or inline text.
+      - Use `<sup>` tags for table footnotes; place footnotes below the table under `**Footnotes**:` as an ordered list.
+
+      ### Links
+
+      - DO NOT duplicate links on the same page.
+      - DO NOT use links in headings.
+      - DO NOT hard-wrap lines within a link.
+      - Use relative file paths for links within the same repository; use full URLs for links to other repositories or non-doc files.
+      - Link to a specific commit (permalink) when linking to specific lines of code, not to a branch.
+      - Use descriptive link text; DO NOT use "here", "this page", or "this documentation" as link text.
+      - Use the pattern `For more information, see [link text](link.md)` or `To [DO THIS], see [link text](link.md)`.
+      - DO NOT use "Learn more about...", "To read more...", or append "page" or "documentation" after the link text.
+      - When linking to an issue, include the issue number in the link text (e.g., `[issue 12345](link)`); DO NOT use the pound sign (`issue #12345`).
+      - DO NOT link to confidential issues, internal handbook pages, or permission-restricted features directly; put such links in backticks and note the access requirement.
+      - Limit links to external documentation and handbook pages; weigh customer benefit against maintenance cost.
+      - DO NOT link to the `/development` directory from any other directory within the GitLab repository.
+
+      ### Images and Screenshots
+
+      - Resize wide or tall screenshots (width ≤ 1000 px, height ≤ 500 px); compress all PNG images to 100 KB or less on disk.
+      - Use descriptive lowercase filenames; append the GitLab version in the format `_vX_Y` (e.g., `pipelines_v11_1.png`).
+      - Place images in an `img/` subdirectory alongside the `.md` file.
+      - Use PNG format; DO NOT use JPEG for screenshots.
+      - DO NOT delete image files when removing references from English docs (localized docs may still use them).
+      - DO NOT use animated GIFs; use static screenshots with callouts or link to a short video instead.
+      - Write alt text that describes the context of the image (≤ 155 characters); DO NOT use phrases like "Image of" or strings of keywords.
+      - Use an empty alt tag (`alt=""`) for purely decorative images rather than omitting the tag.
+      - Add callout arrows in `#EE2604` red at 3 pt line width to emphasize areas in screenshots.
+      - DO NOT link to externally-hosted images; download and store them in the appropriate `img/` directory.
+
+      ### Diagrams
+
+      - Prefer Mermaid for diagrams; use Draw.io for complex layouts where Mermaid produces unclear results.
+      - Add `accTitle` and `accDescr` accessibility fields immediately after the diagram type declaration in Mermaid.
+      - DO NOT use color alone to differentiate diagram elements (must work in both light and dark modes).
+      - DO NOT include links in diagrams (not testable by link checkers).
+      - Keep diagrams simple; use rectangles for processes, diamonds for decisions, solid lines for direct relationships, dotted lines for indirect relationships.
+      - Save Draw.io diagrams with the `.drawio.svg` extension and include the diagram definition in the SVG file by selecting **Include a copy of my diagram** on export.
+
+      ### Alert Boxes and Special Elements
+
+      - Use alert boxes sparingly; DO NOT place two alert boxes consecutively.
+      - Use `> [!note]`, `> [!warning]`, `> [!flag]`, and `> [!disclaimer]` for alert types.
+      - DO NOT use blockquotes in product documentation; use code blocks, alert boxes, or plain text instead.
+      - Use the guide shortcode for tutorials only; DO NOT use a guide inside a guide.
+      - Build tab sets with the `{{< tabs >}}` and `{{< tab title="..." >}}` shortcodes, and put only paragraphs, lists, alert boxes, and code blocks inside a tab; DO NOT nest version history bullets, topic headings, HTML, or other tabs inside one. Keep tab titles brief, parallel, and capitalized.
+      - Use collapsible panels only on GitLab Duo pages in the availability details section; DO NOT use them for other content.
+      - Use cards only on top-level landing pages where cards are the only content.
+      - DO NOT use Markdown emoji format (`:smile:`); use GitLab SVG icons instead.
+      - When using SVG icons, place the icon after the label text in parentheses (e.g., `Select **Edit** ({{< icon name="pencil" >}})`).
+      - Use glossary tooltips only for the first occurrence of a GitLab-specific term or unfamiliar term on a page; DO NOT use them for common terms, every instance of a term, or as a replacement for acronyms. Limit to five to ten tooltips per page.
+
+      ### Videos and Demos
+
+      - DO NOT upload videos to product repositories; link or embed them instead.
+      - Embed only videos from the official GitLab YouTube channel; link to videos from other sources.
+      - Include the video publication date as a comment below every video link or embed.
+      - Include a `<div class="video-fallback">` fallback for embedded videos.
+      - Use `www.youtube-nocookie.com` in the `src` of embedded video iframes to enable Privacy Enhanced Mode.
+      - Follow the same guidelines for click-through demo links as for videos.
+
+      ### Navigation and UI References
+
+      - Write navigation steps as location then action (e.g., "From the **Visibility** dropdown list, select **Public**").
+      - Use **left sidebar** instead of "the Explore menu" or "the Your work sidebar".
+      - Bold all UI element names; DO NOT bold the `>` separator in navigation paths.
+      - Place punctuation outside bold tags unless the punctuation is part of the UI element itself.
+      - Start optional steps with "Optional." followed by a period.
+      - Start recommended steps with "Recommended." followed by a period.
+      - Use "Complete the fields" to summarize multiple self-explanatory fields in a single task step rather than documenting each field individually.
+
+      ### Metadata
+
+      - Include `stage`, `group`, `info`, and `title` front matter on every documentation page.
+      - Use the `title` metadata attribute to set the page H1; DO NOT add a Markdown `# H1` heading.
+      - Add `gitlab_dedicated: no` (or `yes`) metadata when a page's GitLab Dedicated availability differs from its GitLab Self-Managed availability.
+      - Add `availability_details: no` metadata on pages that purposely omit availability details.
+      - Add `ignore_in_report: true` metadata to keep a page out of the global navigation; it excludes the page from the technical writing team's navigation report so the page is not prompted for a `navigation.yaml` entry.
+      - Add a `description` metadata tag on top-level pages and REST API resource pages; start the description with an active verb for top-level pages.
+
+      ### Product Availability Details
+
+      - Place availability details (`{{< details >}}` shortcode) at the top of the page (after front matter) when they apply to the whole page, or under the applicable section heading when they apply to a specific section.
+      - Include tier (`Free, Premium, Ultimate` or subset), add-on (for GitLab Duo features only), offering (`GitLab.com`, `GitLab Self-Managed`, `GitLab Dedicated`, `GitLab Dedicated for Government`), and status (`Beta`, `Experiment`, or `Limited availability`) as applicable; DO NOT add a status entry for generally available features.
+      - For GitLab Agent Platform features available on the Free tier, link to the GitLab Credits page in the tier entry (e.g., `[Free](../subscriptions/gitlab_credits.md#for-the-free-tier), Premium, Ultimate`).
+      - DO NOT add availability details to tutorials, tier-comparison pages, `/development` pages, or `/solutions` pages.
+      - DO NOT repeat tier, offering, or status in a subheading's badge when it matches the parent topic's badge.
+      - Place history notes (`{{< history >}}` shortcode) after the details block and immediately after the heading; start each entry with `-` and link to the related issue, MR, or epic when possible.
+      - Remove history items and inline version references that refer to unsupported GitLab versions (current major version and two previous major versions are supported); when a new major version is about to be released, create removal MRs in advance but merge them only during that milestone.
+      - For tools released on their own schedule (e.g., editor extensions, CLI tools), include both the GitLab version and the tool version in history entries with a link to the tool's release page; nest tool version entries under the related instance history item when both change together, or use `during the GitLab X.Y release` phrasing when the change is tool-only.
+      - For GitLab Duo features available with self-hosted models, use the `{{< collapsible title="Model information" >}}` shortcode; DO NOT state that a feature is unavailable on self-hosted models unless necessary, and if you must, use "Not available on GitLab Duo with self-hosted models" without a link.
+      - When documenting LLMs used by a GitLab Duo feature, include a link to the LLM and use separate entries for code generation vs. code completion or Amazon Q when they differ.
+
+      ### Deprecations and Removals
+
+      - When deprecating a feature, add `(deprecated)` after the title, add a `> [!warning]` alert stating when it was deprecated and when it will be removed, and wrap the content in `<!--- start_remove The following content will be removed on remove_date: 'YYYY-MM-DD' -->` and `<!--- end_remove -->` HTML comments (set `remove_date` to three months after the planned removal release).
+      - When removing a feature, change `(deprecated)` to `(removed)` in the title, remove all content except the deprecation/removal statement, set `remove_date` in metadata to three months after the removal release, and set `redirect_to` to a relevant replacement page.
+      - After removing a page, edit `navigation.yaml` in `docs-gitlab-com` to remove the page's entry from the global navigation, update any links in the [Deprecations and Removals](https://docs.gitlab.com/update/deprecations/) YAML files, and run `bin/rake gitlab:docs:compile_deprecations`.
+      - DO NOT follow the standard deprecation process for features that are not generally available; delete the content outright instead.
+      - For features no longer actively developed but not deprecated, add a note under the topic title stating the feature is not under active development but community contributions are welcome.
+
+      ### Documentation Workflow
+
+      - Include documentation in the same MR as the feature code whenever possible; DO NOT merge a feature that exposes UI, API endpoints, or user-facing behaviour without accompanying documentation.
+      - Ensure AI-generated documentation is reviewed by a Technical Writer and passes a Vale lint check before submission.
+      - Delete documentation added prematurely rather than hiding it with HTML comments; add a link to the original MR in the removal MR.
+      - When moving content to a new location and editing it in the same MR, use separate commits (first commit moves only, subsequent commits edit).
+      - DO NOT promise to deliver features in a future release; instead reference the proposing issue (e.g., "Support for improvements is proposed in [issue 12345](link)").
+      - Assign the technical writer as a reviewer directly on the MR (not just pinged) before the code maintainer review; documentation reviews must not block merging.
+      - When a post-merge technical writer review is required, create an issue using the [Doc Review description template](https://gitlab.com/gitlab-org/gitlab/-/issues/new?description_template=Doc%20Review) and link it to the merged MR.
+      - Name documentation-only branches in `omnibus-gitlab`, `charts/gitlab`, or `gitlab-operator` starting with `docs/`, `docs-`, or ending with `-docs` to trigger shorter pipelines.
+
+      ### Common Mistakes - Repetition
+
+      - Do not restate information already covered earlier in the same page or in a linked topic
+      - Each section should add new information. Do not summarize what was just explained
+      - Avoid restating the title or introduction in the first paragraph
+
+      ### Common Mistakes - Scope
+
+      - Do not create a new page for a single concept, term, or procedure step
+
+      ### Common Mistakes - Accuracy
+
+      - Only include information you can ground in the existing codebase, linked documentation, or content already on the page
+      - Do not speculate or infer how a feature works
+      - Do not invent command syntax, API parameters, or UI element names
+
+      ### Screenshot Guidelines
+
+      - Resize wide or tall screenshots
+      - Compress size on disk to 100 KB or less
+      - Use descriptive lowercase filenames with underscores instead of hyphens
+      - Filenames should include the major and minor version of GitLab in the format `_v18_6`
+
+      ### Content Guidelines
+
+      - Avoid writing about the document itself; get straight to the point instead of using phrases like "This page shows"
+      - Do not promise work in future milestones; instead say work is being proposed
+      - Avoid blockquotes
+      - When linking to GitLab issues, include the GitLab issue number in the link text
+      - Start optional steps with "Optional."
+
+      ### Word List
+
+      - Follow the GitLab Documentation recommended word list for consistent terminology
+      - Reference: doc/development/documentation/styleguide/_index.md
+      - Reference: doc/development/documentation/workflow.md
+      - Reference: doc/development/documentation/styleguide/availability_details.md
+      - Reference: doc/development/documentation/styleguide/deprecations_and_removals.md
+      - Reference: doc/development/documentation/metadata.md
+  # <<< end generated: documentation
+
+  # >>> generated: documentation-api — gitlab-ai-principles-distiller (from .ai/principles/manifest.yml; do not edit)
+  # distilled_at_sha: e2c2d99ca92022373f943f7b13d7697d7cffa9ce
+  # source_checksum: 68dd734ecfa7b3dd
+  - name: API documentation
+    fileFilters:
+      - "doc/api/**/*.md"
+    instructions: |
+      ### REST API — Page Setup
+
+      - After adding a new API documentation page, add an entry in the global navigation (`api_resources.md` and the global nav).
+      - Set the `description` front matter to start with "REST API to", use action verbs, avoid words ending in -ing, keep it under 100 characters, and end with a period.
+      - Include a block with the HTTP method and request path (always starting with `/`) at the top of each operation topic.
+      - Include a detailed description of request attributes, a detailed description of response attributes, a cURL example, and a JSON response body example for every operation.
+
+      ### REST API — OpenAPI Definition
+
+      - Run `bin/rake gitlab:openapi:v3:generate` when modifying API Markdown or code to update the OpenAPI definition (checked by the `static-analysis` CI/CD job for commits that modify API code or documentation).
+      - Verify the OpenAPI definition is up to date by running `bin/rake gitlab:openapi:v3:check_docs` before merging.
+
+      ### REST API — History and Deprecations
+
+      - Add history notes to describe new or updated API calls; include feature flag information in history when the API or attribute is behind a feature flag.
+      - To deprecate an attribute: add a history note, add inline deprecation text to the attribute's table row (e.g. `[Deprecated](link) in GitLab 14.7. Use \`widget_id\` instead.`), and update the REST API deprecations page for wide announcement.
+
+      ### REST API — Operation Titles and Descriptions
+
+      - Start operation titles with a verb: use `List all` for `GET` (multiple), `Retrieve` or `Download` for `GET` (single), `Create` or `Add` for `POST`, `Update` or `Replace` for `PUT`, `Update` or `Modify` for `PATCH`, and `Delete` for `DELETE`.
+      - Write the first sentence of an operation description to broadly repeat the title (e.g. `List all project access tokens.`).
+      - Start the API introduction with `Use this API to {verb} + [{feature}](link)` and link to related UI documentation.
+
+      ### REST API — Request Attributes
+
+      - List path attributes first, then required attributes, then sort remaining attributes alphabetically in request attribute tables.
+      - Place attribute names in backtick code blocks in all attribute tables.
+      - Document tier and offering restrictions (e.g. `GitLab Self-Managed, Premium and Ultimate only.`) in the attribute description; combine tier and offering information when possible.
+      - For conditionally required attributes, use the format `Required if \`attribute1\` is \`true\`.` in the description and set the Required column to `Conditional`.
+
+      ### REST API — Response Attributes
+
+      - Sort response attribute tables alphabetically.
+      - Use dot notation for sub-attributes of objects or arrays (e.g. `project.name` or `projects[].name`).
+      - Start the response description with `If successful, returns [\`<status_code>\`](rest/troubleshooting.md#status-codes) and the following response attributes:`.
+
+      ### REST API — cURL Examples
+
+      - Always put `--request <METHOD>` first in cURL commands, including for `GET`.
+      - Use long option names (`--header` instead of `-H`, `--url` instead of `-u`) in all cURL examples (linted by `scripts/lint-doc.sh`).
+      - Declare URLs with `--url` and wrap the URL in double quotes.
+      - Use `https://gitlab.example.com/api/v4/` as the endpoint and `<your_access_token>` as the personal access token placeholder.
+      - Use `--data-urlencode` for data containing special characters (Markdown, regex, quotes, ampersands); use `--data` for plain alphanumeric data.
+      - DO NOT use real user information, real URLs, or real tokens in cURL examples.
+      - Use `%20` for spaces and `%2F` for slashes when escaping special characters in URLs.
+      - Pass arrays by repeating the parameter with `[]` suffix (e.g. `--data "skip_users[]=<id>"`).
+
+      ### GraphQL — Example Pages
+
+      - Create dedicated GraphQL example pages as `.md` files in `doc/api/graphql/` with a functional name (e.g. `import_from_specific_location.md`).
+      - Include front matter with `stage`, `group`, `info`, and `title`; add a `details` shortcode block listing tier and offering.
+      - After merging the main MR, open a second MR against the `docs-gitlab-com` repository to add the new page to the global navigation under the `GraphQL` section in `navigation.yaml`; DO NOT merge the nav MR before the content MR is live on `docs.gitlab.com`.
+      - Reference: doc/development/documentation/restful_api_styleguide.md
+      - Reference: doc/development/documentation/graphql_styleguide.md
+  # <<< end generated: documentation-api
+
+  # >>> generated: testing-rspec — gitlab-ai-principles-distiller (from .ai/principles/manifest.yml; do not edit)
+  # distilled_at_sha: 3941b843c30927ec6cea3e9caa43c88e5f930cb6
+  # source_checksum: 262735e36a66c191
+  - name: RSpec
+    fileFilters:
+      - "spec/**/*_spec.rb"
+      - "ee/spec/**/*_spec.rb"
+      - "!spec/migrations/db/**/*_spec.rb"
+      - "!ee/spec/migrations/db/**/*.rb"
+      - "!ee/db/geo/migrate/**/*.rb"
+      - "!ee/db/geo/post_migrate/**/*.rb"
+    instructions: |
+      ### Test Levels and Placement
+
+      - Place unit tests in the corresponding `spec/` subdirectory matching the source path (for example, `app/models/` → `spec/models/`, `app/services/` → `spec/services/`, `lib/` → `spec/lib/`).
+      - Place feature (system) specs in `spec/features/`; name files `ROLE_ACTION_spec.rb` (for example, `user_changes_password_spec.rb`).
+      - Place EE-specific specs under `ee/spec/` following the same structure.
+      - Prefer request specs over controller specs; use request specs for API endpoints (GitLab is transitioning away from controller specs).
+      - DO NOT write a system/feature test when the behavior can be fully covered by unit or integration tests; use the lowest effective test level.
+      - Use system tests only when: the component is small, internal object/database state must be verified, and it cannot be tested at a lower level.
+      - DO NOT add `:js` to a feature spec unless the test genuinely requires JavaScript reactivity in the browser (headless browser is significantly slower).
+
+      ### General RSpec Guidelines
+
+      - Use a single, top-level `RSpec.describe ClassName` block.
+      - Use `.method` to describe class methods and `#method` to describe instance methods.
+      - Use `context` to test branching logic (enforced by the `RSpec/AvoidConditionalStatements` RuboCop cop).
+      - Prefer table-based tests over multiple `context` blocks that differ only in their `let` values.
+      - Follow the Four-Phase Test pattern, using newlines to separate phases.
+      - Use `Gitlab.config.gitlab.host` rather than hard-coding `'localhost'`; use `example.com` / `gitlab.example.com` for literal URLs in tests.
+      - DO NOT assert against the absolute value of a sequence-generated attribute (IDs, IIDs, access levels); use `non_existing_record_id` / `non_existing_record_iid` / `non_existing_record_access_level` when you need a non-existent ID.
+      - DO NOT use `expect_any_instance_of` or `allow_any_instance_of` in RSpec.
+      - DO NOT supply the `:each` argument to hooks — it's the default.
+      - Prefer `before`/`after` hooks scoped to `:context` over `:all`.
+      - Use a Capybara matcher such as `find('.js-foo')` before calling `evaluate_script` or `execute_script` on an element, to ensure the element exists.
+      - Treat `evaluate_script` and `execute_script` as point-in-time reads that do not wait: assert a visible outcome or use `wait_for` before reading state with a script, and retrieve related values in a single `evaluate_script` call so they describe the same browser state.
+      - Use `focus: true` to isolate parts of the specs you want to run.
+      - Use `:aggregate_failures` when there is more than one expectation in a test.
+      - Use `specify` rather than `it do` for empty test description blocks that are self-explanatory.
+      - Set feature category metadata on every RSpec example (see the feature categorization guide).
+      - Verify a new test fails in the expected way before asserting it passes — invert the condition or remove the behavior under test to confirm the failure message is meaningful.
+      - Add the `:eager_load` tag when a test depends on all application code being loaded.
+
+      ### `subject` and `let` Variables
+
+      - Prefer `let_it_be` over `let` or `let!` for database-persisted objects that do not change between examples.
+      - Use `let_it_be_with_reload` when the test modifies the object and needs the database state rolled back between examples; use `let_it_be_with_refind` only when `reload` is insufficient.
+      - Use `let` to reduce duplication across an entire spec file; use local variables inside `it` blocks for variables used by only one test.
+      - DO NOT define a `let` variable inside the top-level `describe` block that is only used in a nested `context` — keep the definition as close as possible to where it is used.
+      - DO NOT define a `let` variable that's only used by the definition of another — use a helper method instead.
+      - Use `let!` only when strict evaluation with defined order is required.
+      - DO NOT reference `subject` directly in examples — use a named subject `subject(:name)` or a `let` variable instead.
+      - Treat objects inside `let_it_be` as immutable; `freeze: true` is the project default. When an example must modify one, use `let_it_be_with_reload` or `let_it_be_with_refind` so it is restored between examples.
+      - DO NOT use `let_it_be` when the factory uses stubs (`allow`); use `let` instead, or change the factory to avoid stubs.
+      - Ensure `let_it_be` blocks do not depend on a `before` block — `let_it_be` executes in `before(:all)` before per-example `before` hooks run.
+
+      ### Common Test Setup
+
+      - Use `let_it_be` and `before_all` (from `test-prof`) instead of `before(:all)` / `before(:context)` to share objects across examples without manual cleanup.
+      - DO NOT use `let_it_be` or `before_all` in migration specs, Rake task specs, or specs tagged `:delete` — they do not work with DatabaseCleaner's deletion strategy; use `let` / `let!` and `before` instead.
+      - Use `before_all` (not `before`) to assign roles to `let_it_be` objects shared across examples in a context (enforced by the `RSpec/BeforeAllRoleAssignment` RuboCop rule); alternatively, pass membership directly to the factory via transient attributes such as `developers:`, `maintainers:`, or `owner_of:`.
+
+      ### Table-Based / Parameterized Tests
+
+      - Include `using RSpec::Parameterized::TableSyntax` when using table syntax
+      - DO NOT use procs, stateful objects, or FactoryBot-created objects directly in `where` blocks — use `ref(:symbol)` instead
+
+      ### Factories
+
+      - Place factory definitions in `spec/factories/`, named using the pluralization of their corresponding model
+      - Define only one top-level factory per file
+      - DO NOT define attributes in a factory that are not required for the record to pass validation
+      - Use traits to clean up factory definitions and usages
+      - Use implicit, explicit, or inline associations instead of `create`/`build` in callbacks for association setup
+      - When creating factories with `has_many` and `belongs_to` associations, use the `instance` method to refer to the object being built (prevents unnecessary record creation via interconnected associations).
+      - DO NOT use `skip_callback` in factories
+      - DO NOT use `allow(object).to receive(:method)` in factories (incompatible with `let_it_be`); use `stub_method` instead, and restore with `restore_original_method` / `restore_original_methods` in `after(:create)`.
+      - Use `stub_member_access_level` to stub member access levels for `build_stubbed` factory stubs; DO NOT use it when the test relies on persisted `project_authorizations` or `Member` records.
+      - Consider writing specs for factories that contain custom logic (for example, `after(:build)` hooks); place factory specs in `spec/factories_specs/`.
+
+      ### Fixtures and Repositories
+
+      - Place all fixtures under `spec/fixtures/`.
+      - Pick the repository trait that matches what the test actually needs: omit any repository trait when the test does not touch Git; use `:small_repo` when the test only needs a non-empty repository (one commit, valid default branch); use `:custom_repo` when the test needs specific file paths or contents; use `:repository` only when the test depends on the full `gitlab-test` history (branches, tags, merge conflicts); use `:empty_repo` only when the test must distinguish a repository that exists but has no commits.
+
+      ### Test Performance
+
+      - Prefer `build_stubbed` > `build` > `create`; DO NOT `create` an object when `build`, `build_stubbed`, `attributes_for`, `spy`, or `instance_double` suffices — database persistence is slow.
+      - Use `instance_double` and `spy` instead of `FactoryBot.build(...)` when no real object behavior is needed.
+      - Use `FactoryDefault` (`create_default`) with `factory_default: :keep` to reuse a single object for all calls to a named factory in implicit parent associations across a suite.
+      - Run `FDOC=1 bin/rspec` (Factory Doctor) to find unnecessary database persistence; run `FPROF=1 bin/rspec` (Factory Profiler) to identify repetitive factory creation and cascades.
+      - Use `bin/rspec-stackprof --speedscope=true <spec>` to generate a flamegraph and identify where a slow test spends its time.
+      - Combine multiple assertions on an expensive action into a single example rather than repeating the action; use `:aggregate_failures` when combining.
+      - Mock expensive external operations (shell-outs, Git commands, network calls, binary compilation) in feature and integration specs using `allow` / `expect(...).to receive(...)` stubs or RSpec doubles; if a unit test already verifies the output, stub it in higher-level specs.
+      - Profile slow specs with `bundle exec rspec --profile -- path/to/spec.rb` to identify the most expensive examples.
+      - DO NOT request capabilities you don't need (`:js`, `:clean_gitlab_redis_cache`, `:request_store`, etc.) — each adds setup overhead.
+      - Use `fast_spec_helper` instead of `spec_helper` for classes well-isolated from Rails (skips gem loading, Rails boot, Gitaly/Shell setup); use `rubocop_spec_helper` for RuboCop-related specs.
+      - Add `require_dependency '<gem>'` (preferably in the library file that needs it, otherwise in the spec) when a `fast_spec_helper` spec exercises code that depends on a gem not located in `lib/` (for example `re2` via `Gitlab::UntrustedRegexp`).
+      - Profile and optimize a slow shared example as a local spec before extracting it into a shared context; prefer `build_stubbed` or `build` over `create` in shared examples.
+
+      ### System / Feature Tests
+
+      - Name feature spec files `ROLE_ACTION_spec.rb`; use scenario titles that describe success and failure paths.
+      - DO NOT use scenario titles that add no information (such as "successfully") or repeat the feature title.
+      - Test a happy path and one less-happy path — test all other paths with unit or integration tests.
+      - Test what is displayed on the page, not the internals of ActiveRecord models (for example, assert attributes appear on the page rather than checking `Model.count`).
+      - When a test must assert backend or model state after a UI action, first wait for a visible success indicator (`have_content`, `have_current_path`, `have_css`) and only then call `model.reload` — reading model state immediately after a Capybara action races the request.
+      - Confirm the page has reached the expected state with a positive matcher before the next interaction, assertion, database read, or navigation.
+      - NEVER use `wait_for_requests` or `wait_for_all_requests` in feature specs — the `RSpec/AvoidWaitForRequests` cop prohibits both; they wait only until no tracked request is in flight (a request can trigger another and the poll can run between the two) and they do not wait for Vue re-renders, redirects, async follow-up writes, or browser-initiated downloads.
+      - DO NOT add exclusions to `.rubocop_todo/rspec/avoid_wait_for_requests.yml` or disable the `RSpec/AvoidWaitForRequests` cop inline; replace the helper with a page-specific waiting matcher, or a narrowly targeted `wait_for` condition when no visible outcome exists.
+      - Use `have_no_link` / `have_no_*` (negative Capybara matchers) for absence checks — they return immediately when the element is absent; DO NOT use `expect(page.has_link?(...)).to be(false)` which waits the full timeout.
+      - Use `have_no_testid('<id>')` (not `not_to have_testid`) to assert a `data-testid` element is absent.
+      - Always confirm the page is loaded with a positive matcher before checking for absence.
+      - Use `wait: 0` only in conditional logic inside a region you have already confirmed is loaded; DO NOT use it for regular absence assertions.
+      - Query by element text label rather than by ID, class name, or `data-testid` where possible; use `within` with `data-testid` only for scoping to a container.
+      - Use specific Capybara actions (`click_button`, `click_link`, `fill_in`, `select`, `check`, `choose`, `attach_file`) rather than `find(...).click`.
+      - Use specific Capybara finders (`find_button`, `find_link`, `find_field`) rather than generic `find`; use `find_by_testid` only when no semantic finder applies.
+      - DO NOT use `all()` with `.first` or block iteration to filter elements — use `find()` or a CSS child selector with `.ancestor()` instead.
+      - Use specific Capybara matchers (`have_button`, `have_link`, `have_field`, `have_select`, `have_text`, `have_current_path`, `have_title`) rather than generic `have_css` where possible.
+      - Use `within_modal` helper to interact with GitLab UI modals; use `accept_gl_confirm` for confirmation modals that only need to be accepted.
+      - Wait for a modal or other animated container to finish its open transition (for example `expect(page).to have_css('.modal.show')`) before interacting with controls inside it — components can disable their controls while transitioning.
+      - Use `be_axe_clean` matcher to run automated accessibility testing in feature tests.
+      - Call the same externalizing method (for example, `_('...')`) in RSpec expectations against externalized content
+      - Assert on a stable end-state (such as a status text or alert message) after an asynchronous mutation — DO NOT assert on a button's label or `disabled` state to synchronize, as controls pass through transient loading states before settling.
+      - Use the `wait_for` helper (from `spec/support/helpers/wait_helpers.rb`) only as a last resort when there is no visible UI outcome to assert on (for example, browser-initiated downloads or interactions that must be retried).
+      - Pass a longer `polling_interval` to `wait_for` for database-backed conditions (it polls every 0.01 seconds by default) and raise `max_wait_time` only when the operation genuinely needs more time.
+      - Assert with a waiting Capybara matcher (`have_field`, `have_selector`, `have_content`) rather than reading a value directly from an element (`find(...).value`, `find(...).text`, `all(...).count`) or from the session (`page.current_url`) — direct reads capture state at that exact moment and race asynchronous updates; assert a page-specific element before reading `page.current_url`.
+      - DO NOT assert `expect(find(selector).visible?).to be(true)` — `find` already waits for a visible element, so the assertion cannot verify a later update; use a waiting matcher such as `have_selector(..., exact_text: ...)` for the state you need.
+      - Use the `:enable_admin_mode` RSpec metadata tag to activate admin mode in specs; DO NOT use `enable_admin_mode!(admin, use_ui: true)` — it is slow and race-prone.
+      - Wrap both the triggering UI action and the assertion on its visible outcome inside `perform_enqueued_jobs` when testing delayed mail delivery — wrapping only the click can end the block before the AJAX request enqueues the job.
+      - Put a page or component readiness assertion in the shared example rather than repeating it in every caller, so it becomes the synchronization contract for all consumers.
+      - In nested `:js` feature spec contexts that need different setup before a page visit, keep a single `sign_in` and a single `visit` in the outermost `before` block and override only the relevant `let` in nested contexts — DO NOT call `sign_in` after a page has already been visited (the `Warden.on_next_request` injection can be consumed by a background request) and DO NOT call `visit` a second time on the same URL (it reloads the page and slows the spec).
+
+      ### View Specs
+
+      - Scope view specs to rendered HTML output using matchers such as `have_content`, `have_css`, `have_selector`, and `have_link`; DO NOT assert on internal Ruby state or return values of view helper methods.
+      - Use `build_stubbed` instead of `create` in view spec setup unless the spec genuinely requires persisted state; use `assign` for instance variables and `allow(view).to receive(...)` to stub helper methods.
+      - DO NOT include `ActiveRecord::QueryRecorder` or `exceed_query_limit` assertions in view specs — query performance belongs in request or controller specs.
+      - DO NOT use deep service-object mocking chains such as `receive_message_chain` in view specs.
+
+      ### Rake Task Tests
+
+      - Use RSpec metadata tag `type: :task` or place specs in `spec/tasks/` to automatically include `RakeHelpers`.
+      - Use the `run_rake_task('<namespace>:<task>')` helper (from `RakeHelpers`) to execute the task under test.
+      - Use `:silence_stdout` to redirect `$stdout`; use `:silence_output` to silence both `$stdout` and `$stderr`.
+
+      ### Time-Sensitive Tests
+
+      - Use `ActiveSupport::Testing::TimeHelpers` (`travel_to`, `freeze_time`) for any test that exercises time-sensitive behavior
+      - Give records distinct timestamps when a test orders by a timestamp column (use `travel_to` with explicit offsets) — equal timestamps produce non-deterministic ordering.
+      - DO NOT hardcode future-date constants in specs that gate behavior on "today" — use `travel_to` or compute the date relative to `Time.current`.
+      - Use `:freeze_time` or `time_travel_to:` RSpec metadata tags to reduce boilerplate for time-frozen specs
+      - Call `.reload` on objects after database writes when comparing timestamps — Active Record timestamps may have higher precision than PostgreSQL's microsecond resolution, causing equality checks to fail.
+
+      ### Pristine Test Environments
+
+      - DO NOT rely on the value of an ID or any other sequence-generated column across specs
+      - Mark specs that make direct Redis calls with `:clean_gitlab_redis_cache`, `:clean_gitlab_redis_shared_state`, or `:clean_gitlab_redis_queues` as appropriate.
+      - Use the `:sidekiq_inline` trait when a test requires Sidekiq to actually process jobs.
+      - Use `stub_const` to modify constants in specs (ensures the change is rolled back); use `stub_env` to modify `ENV`.
+      - Use `:permit_dns` to bypass universal DNS stubbing when a test genuinely requires DNS resolution.
+      - Mark Elasticsearch specs with `:elastic` or `:elastic_delete_by_query` metadata; use `:elastic_clean` only when the other traits cause issues (it is significantly slower)
+      - Use `stub_ee_application_setting(elasticsearch_search: true, elasticsearch_indexing: true)` to enable Elasticsearch in specs; call `ensure_elasticsearch_index!` after loading data to make it searchable.
+      - Add the `:prometheus` tag to RSpec tests that exercise Prometheus metrics to ensure metrics are reset before each example.
+      - Use `stub_file_read` / `expect_file_read` helpers to stub `File.read`; DO NOT stub `File.read` globally without also calling the original for other paths.
+      - DO NOT specify a `path` override on `:legacy_storage` projects — the default path includes the project ID and avoids repository conflicts between specs.
+      - Use `:disable_rate_limit` when a single test triggers rate limiting; use `:clean_gitlab_redis_rate_limiting` when rate limiting is triggered across multiple examples in a feature spec using `:js`.
+      - Tag an example or context with `:verify_workhorse_jwt` only when the test asserts the Workhorse JWT enforcement boundary itself (for example, a `403 Forbidden` response when the header is absent); DO NOT apply it to ordinary tests — auto-injection covers them.
+
+      ### Matchers and Assertions
+
+      - Use `have_gitlab_http_status` (with named status symbols like `:ok`, `:no_content`) instead of `have_http_status` or `expect(response.status).to` — it shows the response body on mismatch.
+      - Use `be_like_time` or `be_within` when comparing timestamps from the database to Ruby `Time` objects (precision differs between OS and PostgreSQL).
+      - Use `match_schema` / `match_response_schema` to validate JSON responses against a JSON schema.
+      - Use `be_valid_json` to validate that a string parses as JSON; combine with `match_schema` using `.and`.
+      - Use `expect_snowplow_event` to assert legacy Snowplow tracking calls (catches runtime type-check errors); use `expect_no_snowplow_event` with at least a `category` argument to avoid flakiness.
+      - Use `match_snowplow_context_schema` to validate Snowplow context against a JSON schema in `spec/fixtures/product_intelligence/`.
+      - DO NOT assert N+1 or query counts in feature (`:js`) specs — put `QueryRecorder` and `exceed_query_limit` assertions in request or controller specs; prime the baseline with a warmup request when the first call lazily loads caches.
+      - Use `Gitlab::GitalyClient.get_request_count` to assert the number of Gitaly requests made by a block of code.
+
+      ### Shared Examples and Helpers
+
+      - Declare shared contexts or shared examples used by only one spec file inline in that file.
+      - Place shared examples used within a single bounded context in that context's directory structure; place shared examples used across multiple bounded contexts under `spec/support/shared_*`.
+      - DO NOT change RSpec configuration inside helpers modules — add `config.include` calls in `spec/spec_helper.rb` or scope them with type modifiers.
+      - Place helper modules under `spec/support/helpers/`, following Rails naming conventions (`spec/support/helpers/` is the root).
+      - Place RSpec configuration files under `spec/support/`, one file per domain.
+
+      ### Test Order and Flakiness
+
+      - Ensure new spec files can run in random order; check order dependency with `scripts/rspec_check_order_dependence spec/path/to/spec.rb` and remove the file from `rspec_order_todo.yml` once it passes.
+      - DO NOT make specs depend on test execution order — use `rspec --bisect` to identify order-dependent failures.
+
+      ### Ruby Constants in Tests
+
+      - Test the behavior that depends on a constant rather than the value of the constant itself; DO NOT write tests that merely repeat the constant's values.
+
+      ### Branch Coverage
+
+      - For conditional logic (`||`, `&&`, `if/else`, `case`), verify each branch has test coverage
+      - For helper methods, ensure unit specs exist (not just integration coverage)
+      - For ActiveRecord callbacks (`before_validation`, `before_save`), ensure unit specs test the callback behavior specifically
+
+      ### Edge Case Coverage
+
+      - Flag missing edge case coverage for:
+        - Nil/empty values
+        - Boundary conditions
+        - Fallback logic (`||` operators)
+        - Error states
+
+      ### Feature Flags in Tests
+
+      - All feature flags are enabled by default in the test environment (regardless of the `default_enabled:` value in the YAML definition), so DO NOT stub a flag to `true` to reach its enabled path — the only exception is a flag explicitly disabled in `spec/spec_helper.rb`, where stubbing to `true` is warranted
+      - Use `stub_feature_flags(flag: false)` to test the disabled code path
+
+      ### Spec File Paths
+
+      - DO NOT create a new spec file in a subdirectory when a spec already exists at the canonical path (e.g., modify `spec/requests/api/pages_spec.rb`, DO NOT create `spec/requests/api/pages/pages_spec.rb`)
+      - DO NOT remove existing shared examples when adding or fixing coverage; extend them or add new examples alongside
+
+      ### Test Design
+
+      - Use shared examples to reduce duplication across specs
+      - Write error-handling tests for security-sensitive operations
+      - Write input-validation tests for user-facing endpoints
+      - Follow the testing pyramid: most tests at the unit level, fewer at the integration/system level
+
+      ### Deterministic Assertions
+
+      - When asserting on a collection where order does not matter, use `match_array` instead of `eq` or `match` to avoid dataset-specific flakiness
+      - DO NOT call `.first`, `.last`, or `.take` on an ActiveRecord relation without an explicit `.order(...)` — PostgreSQL does not guarantee row order without ORDER BY, which causes dataset-specific flaky tests
+      - When using `Faker` or random values, ensure the test handles any value the generator can produce; if the test depends on a specific format, use a hardcoded value instead
+      - Reference: doc/development/testing_guide/_index.md
+      - Reference: doc/development/testing_guide/best_practices.md
+      - Reference: doc/development/testing_guide/testing_levels.md
+      - Reference: doc/development/testing_guide/testing_rake_tasks.md
+      - Reference: doc/development/testing_guide/unhealthy_tests.md
+  # <<< end generated: testing-rspec
+
+  # >>> generated: testing-e2e — gitlab-ai-principles-distiller (from .ai/principles/manifest.yml; do not edit)
+  # distilled_at_sha: 3941b843c30927ec6cea3e9caa43c88e5f930cb6
+  # source_checksum: d7add367353684d2
+  - name: E2E Testing
+    fileFilters:
+      - "qa/**/*"
+    instructions: |
+      ### Test Structure and Naming
+
+      - Use `RSpec.describe` for the DevOps stage name, `describe` for the feature under test, `context` for conditions, and `it` for the expected result, so that the full test name reads as a sentence.
+      - Begin `context` block descriptions with `when`, `with`, `without`, `for`, `and`, `on`, `in`, `as`, or `if` (enforced by the `RuboCop/RSpec/ContextWording` cop).
+      - Split tests across separate files to maximize parallelization; Exception: when tests share expensive setup that would be wasteful to repeat per file.
+
+      ### Page Objects
+
+      - Implement all page interactions through page objects — DO NOT invoke Capybara methods directly in spec files.
+      - Define every element used by a page object with the `element` DSL method and a corresponding `data-testid` attribute in the view; DO NOT use string/regexp pattern matching in `element` declarations (forbidden by the `QA/ElementWithPattern` RuboCop cop).
+      - Name elements using the `<descriptor>-<type>` kebab-case formula (e.g., `username-field`, `edit-button`, `clone-dropdown`); use only the approved type suffixes (`-button`, `-checkbox`, `-container`, `-content`, `-dropdown`, `-field`, `-link`, `-modal`, `-placeholder`, `-radio`, `-tab`, `-menu_item`).
+      - Mark elements that always appear on a page unconditionally with `required: true` to enable dynamic element validation on navigation and click.
+      - DO NOT use `data-qa-selector` attributes in new page objects; use `data-testid` exclusively (`data-qa-selector` is deprecated).
+      - Use `data-qa-*` extensible attributes (e.g., `qa_issue_title: issue.title`) to select a specific item from a list rather than relying on text matching.
+      - Run `bin/qa Test::Sanity::Selectors` locally to validate page object selectors; the `qa:selectors` CI job enforces this on every push.
+      - Define EE-specific page concerns by extending `QA::Page::PageConcern`, overriding `self.prepended`, calling `super` first, and wrapping `include`/`prepend` and `view`/`element` definitions inside `base.class_eval`.
+      - Use `click_` prefix for page object methods that select a single link or button; use `go_to_` prefix for methods that interact with multiple elements to navigate to a page.
+      - Name `.perform` block arguments using the snake_case page object name (e.g., `members`, `merge_request`); DO NOT use `page` (shadows Capybara DSL) or overly long names; use `new_page` when `new` would be ambiguous.
+
+      ### Resources
+
+      - Inherit all resource classes from `Resource::Base` and implement `#fabricate!` using only page objects for browser UI interactions.
+      - Implement `#api_get_path`, `#api_post_path`, and `#api_post_body` to enable API fabrication.
+      - Prefer `fabricate_via_api!` (or the FactoryBot `create` helper) over `fabricate_via_browser_ui!` to save time and cost.
+      - Use the `attribute` method with a block to declare resource attributes that depend on other resources or must be populated from the page; remember that all attributes are lazily constructed — call an attribute method before navigating away from the page where it is populated.
+      - Use `populate(:attr)` inside `#fabricate!` to eagerly construct attributes that must be captured immediately after creation.
+      - Add any resource that cannot be deleted to the `IGNORED_RESOURCES` list in `qa/qa/tools/test_resources_handler.rb`.
+      - Use a `Commit` resource (HTTP API) instead of `ProjectPush` (Git CLI) for creating repository commits; Exception: when the test specifically covers SSH integration or Git CLI behavior.
+
+      ### Flows
+
+      - Use `Flow::Login.sign_in` (and `Flow::Login.while_signed_in`) for authentication steps rather than duplicating login page interactions across tests.
+      - Encapsulate frequently repeated multi-page sequences into flow classes under `QA::Flow` rather than repeating them inline.
+
+      ### Fabrication and Setup
+
+      - Fabricate resources via the API wherever possible; reserve browser UI fabrication for cases where no API exists.
+      - Use instance variables in `before(:all)` / `before(:context)` blocks (not `let`) for resources that can be shared across multiple examples, to avoid redundant creation; use `let` when the resource cannot be shared.
+      - Limit `before(:context)` hooks to API calls, non-UI operations, or basic UI operations such as login — complex UI setup in `before(:context)` prevents screenshot capture on failure.
+      - Use only non-UI operations in `after` hooks; UI operations in `after` move the browser state away from the failure point and prevent accurate screenshots.
+      - Ensure every test signs out (or does not leave the browser logged in) at the end of `after(:context)` / `before(:context)` blocks that perform UI actions, so subsequent tests can sign in cleanly.
+
+      ### Expectations and Assertions
+
+      - DO NOT add `expect()` statements unrelated to what the test is verifying — keep tests lean.
+      - Use `aggregate_failures` (inline block or `:aggregate_failures` metadata) when a test must contain multiple expectations, so all failures are reported together.
+      - DO NOT wrap multiple actions and assertions in a single `expect { ... }.not_to raise_error` block; keep actions and assertions separate for clearer failure logs.
+      - Create custom negatable matchers (using `match_when_negated` with `has_no_*` predicate methods) for page object predicates used with `not_to`; DO NOT rely on `not_to have_*` without a negatable matcher, as it waits the full timeout before failing.
+      - Use `eventually_` matchers (e.g., `expect { value }.to eventually_eq(x).within(max_duration: 120)`) for expectations that require waiting on asynchronous state.
+
+      ### Waits and Timing
+
+      - DO NOT use hard-coded `sleep` calls to wait for readiness; use framework helpers (`Support::Retrier`, `Support::Waiter`) or resource readiness checks (e.g., `runner.wait_until_online`) that poll for the correct signal.
+      - Wait for a signal that confirms backend work is complete (a visible element, a resource state, or an API response) before asserting or acting on a resource.
+      - When a wait times out, fix the signal being waited on rather than simply increasing the timeout.
+
+      ### Navigation
+
+      - Navigate to pages directly (e.g., `issue.visit!`) rather than using `page.go_back` or browser history, which can land on unexpected pages.
+      - Scroll elements into view with `scroll_to_element` before interacting with controls that may be below the fold, to avoid `element click intercepted` or stale element failures.
+      - Blur elements by clicking another element that does not alter test state; use `click_element_coordinates` when a mask or overlay blocks the page; DO NOT click `body` to blur, as it can unintentionally trigger other elements.
+
+      ### Execution Context Selection
+
+      - Use `only:` metadata to restrict a test to specific environments, pipelines, or jobs (e.g., `only: :production`, `only: { pipeline: :nightly }`, `only: { job: 'ee:instance' }`).
+      - Use `except:` metadata to exclude a test from specific environments, pipelines, or jobs.
+      - DO NOT combine `:production` and a `{ <switch>: 'value' }` hash in the same `only:`/`except:` — they are mutually exclusive; control production matching via `tld` and `domain` independently.
+      - When a test has `before` or `after` blocks, apply `only:`/`except:` metadata to the outer `RSpec.describe` block, not the `it` block.
+      - Use `quarantine: { only: { subdomain: :staging } }` syntax to quarantine a test only for a specific environment.
+
+      ### Feature Flags
+
+      - Apply the `feature_flag: { name: 'flag_name' }` RSpec tag to every test that enables a feature flag, so it is skipped on environments where it should not run.
+      - Set `scope: :global` in the `feature_flag` metadata when the flag is enabled instance-wide, to skip the test on all live `.com` environments; omit `scope` or use a scoped value (`:project`, `:group`, `:user`) to skip only on canary, production, and pre-production.
+      - Prefer enabling feature flags for a specific project, group, user, or feature group rather than globally (`Runtime::Feature.enable(:flag, project: project)`); DO NOT enable flags globally unless necessary.
+      - Still apply `:requires_admin` when the test performs other admin actions unrelated to the feature flag toggle.
+      - When a new feature replaces a component behind a feature flag, add the new selector to the page object with the same name as the old one and keep the old selector in place; add a comment to delete the old selector when the flag is removed.
+      - When a resource class must behave differently based on a feature flag, use an `activated` boolean variable (defaulting to `false` in `initialize`) toggled at fabrication time; clean up the variable and conditions after the flag is removed.
+      - Add a wait for elements that are only visible with an active feature flag on static environments, where caching is not disabled, to avoid flakiness.
+      - Confirm that E2E tests pass with a feature flag enabled before enabling it on staging or GitLab.com; when a feature flag definition file is added or edited in an MR, the `cng-instance` and `cng-instance-ff-inverse` `e2e:test-on-cng` jobs run automatically to verify both states.
+
+      ### Administrator Access
+
+      - Apply the `:requires_admin` RSpec metadata tag to every test that requires administrator access, to prevent it from running against production and other restricted environments.
+
+      ### Class and Module Naming
+
+      - Follow the default Zeitwerk snake_case-to-PascalCase inflection for QA class and module filenames; add custom inflections only in the `loader.inflector.inflect` block in `qa/qa.rb`.
+
+      ### Logging
+
+      - Use Rails `logger` instead of `puts` for all log output in QA code, to enable log-level control, tagging, and auto-formatting.
+      - Reference: doc/development/testing_guide/end_to_end/style_guide.md
+      - Reference: doc/development/testing_guide/end_to_end/beginners_guide/flows.md
+      - Reference: doc/development/testing_guide/end_to_end/beginners_guide/page_objects.md
+      - Reference: doc/development/testing_guide/end_to_end/beginners_guide/resources.md
+      - Reference: doc/development/testing_guide/end_to_end/best_practices/_index.md
+      - Reference: doc/development/testing_guide/end_to_end/best_practices/dynamic_element_validation.md
+      - Reference: doc/development/testing_guide/end_to_end/best_practices/execution_context_selection.md
+      - Reference: doc/development/testing_guide/end_to_end/best_practices/feature_flags.md
+      - Reference: doc/development/testing_guide/end_to_end/best_practices/waits.md
+  # <<< end generated: testing-e2e
+
+  # >>> generated: cicd-internals — gitlab-ai-principles-distiller (from .ai/principles/manifest.yml; do not edit)
+  # distilled_at_sha: 3941b843c30927ec6cea3e9caa43c88e5f930cb6
+  # source_checksum: aff32136b0f97801
+  - name: CI/CD Internals
+    fileFilters:
+      - "lib/gitlab/ci/**/*.rb"
+      - "ee/lib/gitlab/ci/**/*.rb"
+      - "app/models/ci/**/*.rb"
+      - "ee/app/models/ci/**/*.rb"
+    instructions: |
+      ### CI/CD Configuration Keywords
+
+      - Add new CI/CD configuration keywords in `lib/gitlab/ci/config/entry/`; for EE-specific changes, use `ee/lib/gitlab/ci/config/entry/` or `ee/lib/ee/gitlab/ci/config/entry/`.
+      - Guard every experimental CI keyword behind a feature flag; DO NOT add experimental keywords to the JSON schema (to prevent auto-suggestion to users).
+      - Update the JSON schema (`schema.md`) whenever a new keyword is added or modified.
+      - Inherit entry classes from the correct base: `Entry::Node` for simple keywords, `Entry::Simplifiable` for keywords with multiple structures, `Entry::ComposableArray` for lists of single-type sub-elements, and `Entry::ComposableHash` for single-type sub-elements with user-defined keys.
+      - Use `Entry::Validatable` to enable the `validations` block, `Entry::Attributable` to expose `xxx`/`has_xxx?`/`has_xxx_value?` helpers, and `Entry::Configurable` to expose `xxx_defined?`/`xxx_entry`/`xxx_value` helpers.
+      - Always use the `xxx_value` method (not direct attribute access) to retrieve the value of a nested entry inside the `value` method.
+      - Override the `value` method only when the default `Entry::Node` behaviour (returning the hash configuration) is insufficient; use `xxx_value` for nested entries and plain attribute accessors for simple attributes.
+
+      ### Feature Flags in Entry Classes
+
+      - Check feature flags inside `Entry::Node#value` (or a private helper) using `Gitlab::Ci::Config::FeatureFlags.enabled?(:flag, type: :beta)` rather than scattering flag checks across callers.
+      - DO NOT use feature flags in entry classes without an actor; prefer `Feature.enabled?(:flag, Feature.current_request)` or `Config::FeatureFlags.enabled?(:flag)`, or move the flag check outside the entry class entirely.
+      - Place CI YAML parsing changes behind a feature flag that is default-enabled for a full milestone before removal, so Self-Managed and Dedicated users can revert to the original behaviour if unexpected side effects arise.
+
+      ### Testing and Validation
+
+      - Add or update the corresponding spec file whenever an entry is added or modified.
+      - Add or update integration tests in `spec/lib/gitlab/ci/yaml_processor_spec.rb` or the files under `spec/lib/gitlab/ci/yaml_processor/test_cases/` for every new or changed keyword.
+
+      ### YAML Keyword Reviews
+
+      - For path-based keywords: document and test whether glob patterns (`*`, `**`, `?`), relative/absolute paths, symbolic links, and missing-path behaviour are supported; explicitly document and spec any intentionally unsupported behaviour so a future accidental enablement causes a test failure.
+      - For variable expansion: document the expansion type in the [variables usage table](https://docs.gitlab.com/ci/variables/where_variables_can_be_used/#variables-usage), test both positive and negative cases, and add a spec that prevents accidental future enablement of unsupported nested expansion (which would be a breaking change).
+      - For keyword reuse (adding an existing keyword as a subkeyword): document any unsupported sub-features, provide clear validation errors for unsupported syntax, and test scenarios where users assume the subkeyword behaves identically to the original.
+      - For composability: document and test `!reference` tag behaviour (a frequent source of unexpected behaviour), `include:` semantics, and `extends:` merge behaviour (deep-merges hashes but replaces arrays); add validation that rejects unwanted `!reference` or `include:` usage where applicable.
+      - Ensure every relevant usage dimension (string length, list/array size) has a documented limit with a note on the performance impact of raising it; DO NOT ship a keyword without limits on every dimension that could be exploited at scale.
+      - Ensure all implemented behaviour is documented, all documented behaviour is covered by specs, validation errors are specific and actionable, and JSON schema validation is consistent with backend validation; update the syntax reference page with the new or changed keyword and include examples covering common use cases with limitations and gotchas clearly called out.
+
+      ### CI Database Tables (Partitioning)
+
+      - Partition every new CI table that holds a `belongs_to` association to a partitionable table from the start, to reduce future migration work.
+      - Prefix routing table names with `p_` (e.g., `p_ci_examples`); DO NOT use the `p_` prefix for partition names.
+      - Include a `partition_id` column in every new CI routing table; its value must equal the `partition_id` of the related association (e.g., `p_ci_builds`).
+      - Order the composite primary key as `[:id, :partition_id]` to allow efficient lookup by `id` alone.
+      - Add the foreign key with `ON UPDATE CASCADE` using `add_concurrent_partitioned_foreign_key` so that `partition_id` can be updated during partition re-balancing.
+      - Create the first partition explicitly in a migration (using `with_lock_retries` and explicit `LOCK TABLE` statements) rather than relying on the application boot-time initializer, to prevent node startup failures under high traffic.
+      - Create partitions in the `gitlab_partitions_dynamic` schema; use `100` as the starting value for `partition_id`.
+      - Include `Ci::Partitionable` in the model, set `self.table_name` to the routing table, set `self.primary_key = :id`, and declare `partitionable scope: :<association>, partitioned: true`.
+      - Add every new partitionable model to the `PARTITIONABLE_MODELS` list in `app/models/concerns/ci/partitionable.rb` and register it in the `config/initializers/postgres_partitioning.rb` initializer.
+      - Reference: doc/development/cicd/configuration.md
+      - Reference: doc/development/cicd/cicd_tables.md
+      - Reference: doc/development/cicd/keyword_reviews.md
+  # <<< end generated: cicd-internals
+
+  # >>> generated: ai-instruction-files — gitlab-ai-principles-distiller (from .ai/principles/manifest.yml; do not edit)
+  # distilled_at_sha: 3941b843c30927ec6cea3e9caa43c88e5f930cb6
+  # source_checksum: c73cbb508b1f684b
+  - name: AI Instruction Files
+    fileFilters:
+      - ".ai/**/*"
+    instructions: |
+      ### General Review
+
+      - Treat instruction files as prompts consumed by language models, not as executable code; prefer clear, imperative, unambiguous rules and flag wording that an agent could misread or that contradicts another module.
+      - Ensure every agent session is affected immediately by any change — there is no gradual rollout and no feature flag, so a regression degrades every contributor's agent output at once.
+      - Keep instructions actionable: favor concrete `Do X` / `Don't do Y` rules over background prose.
+      - DO NOT add redundant or verbose content to instruction files; prefer concise rules and cross-references to avoid displacing useful context and increasing token cost.
+      - Keep `AGENTS.md` and `CLAUDE.md` identical; when a change references a new module, update both entry points together (`AGENTS.md` is the source of truth).
+      - DO NOT hand-author a rule that can instead be distilled from SSOT documentation; every hand-authored rule risks drifting from the docs it duplicates.
+      - Ensure changes to `.ai/` files are approved by the AI harness DRI named in the `Monolith AI harness files` block of `.gitlab/CODEOWNERS`.
+
+      ### Hand-Authored Modules
+
+      - Verify guidance in `.ai/README.md`, `.ai/ci-cd.md`, `.ai/git.md`, `.ai/merge-requests.md`, and `.ai/code-review.md` is correct and current against the practice it describes.
+      - Check for contradictions with other modules and with the distilled principles.
+      - Confirm any new module is referenced from both `AGENTS.md` and `CLAUDE.md`, and that the two entry points remain identical.
+      - Confirm a new shared module was force-added (`git add --force`), because the `.ai/*` pattern is gitignored.
+      - Prefer moving durable, broadly applicable guidance into SSOT documentation so it can be distilled, rather than growing hand-authored modules.
+
+      ### Distilled Principles
+
+      - DO NOT edit `.ai/principles/distilled/*.md` files by hand; they are regenerated from SSOT documentation and carry a generated marker. A deliberate hand-fix is acceptable only on a distiller service-account branch as a stopgap and must be called out explicitly in the merge request.
+      - To change a distilled principle's content, change its SSOT documentation (or the matching `baselines/<name>.md`) and re-run the sync instead of editing the distilled file directly.
+      - Verify the distilled changes faithfully reflect the source-doc updates and do not introduce, drop, or contradict rules that the source does not support.
+      - Confirm the distilled output contains no references to repository internals that make no sense to an agent (such as paths under `.ai/principles/baselines/` or links to other principle files); fix such leaks in the source baseline, not the distilled file.
+      - DO NOT hand-edit the front matter (`source_checksum`, `distilled_at_sha`); these drive drift detection and hand-editing them masks or forces re-distillation incorrectly.
+      - Confirm the change is routed to the correct SSOT-owning team through the generated CODEOWNERS block.
+
+      ### Baselines
+
+      - Require a justification for why a baseline rule has no SSOT home yet; baselines are an escape hatch, not the primary way to add agent instructions.
+      - Treat every baseline rule as temporary; prefer opening a follow-up to move the rule into `docs.gitlab.com`, after which it should be removed from the baseline.
+      - Watch for baseline rules that duplicate or contradict existing SSOT content, which creates a dual source of truth.
+      - Ensure baseline files do not reference the `baselines/` folder or other principle files; baseline content is merged into the distilled output verbatim, so such cross-references leak into agent-facing principles where they are meaningless.
+
+      ### Distillation Configuration
+
+      - For `manifest.yml`, validate the entry against the manifest schema: required `description`, `sources`, and `owner_team`; correct `file_filters`; and a `team_slug` that does not collide with another entry.
+      - Confirm `owner_team` routes approval to the team that actually owns the SSOT documentation.
+      - DO NOT hand-edit content inside a generated block; the sync delimits these blocks with `# BEGIN GENERATED` and `# END GENERATED` comments in `.gitlab/CODEOWNERS`, and with `# >>> generated: <name>` and `# <<< end generated: <name>` comments in `.gitlab/duo/mr-review-instructions.yaml` — regenerate them by running the sync instead.
+      - Treat changes to `distillation_prompt.md` as the highest-risk change in this directory; reason through the effect on the full set of principles (not just the one that motivated the change), and prefer distilling a sample of principles with `--force` on a branch to inspect the output before merging.
+      - Ensure `distillation_prompt.md` changes are followed by re-provisioning the catalog flow (`gitlab-ai-principles-distiller-provision-flow`); merging the file alone does not roll the new prompt out.
+
+      ### Reviewing Auto-Generated Sync Merge Requests
+
+      - Compare the distilled diff against the referenced SSOT documentation changes.
+      - Confirm no still-valid, SSOT-supported rule was dropped and no unsupported rule was added.
+      - Confirm the front matter checksums were updated by the tool, not by hand.
+      - Classify each Duo finding into exactly one of four outcomes before acting: Content defect (distilled text misstates the source — fix on the sync branch), Content gap (distillation dropped a supported rule — restore on the sync branch), Distiller defect (root cause is the tooling — fix the output and open an issue against the distiller), or Judgment call (output is correct but could be closer — record it, no required action).
+      - When fixing a finding, restore a baseline-derived rule verbatim (the sync tooling mechanically rejects any alteration); make a source-derived fix faithful and traceable but DO NOT copy source prose verbatim (distilled files hold concrete checkable rules, and a verbatim copy is rephrased on the next run).
+      - Batch all fixes on a sync branch into a single push; pushing a file revokes that file's code owner approval (selective code owner removals are enabled), so an unbatched sequence of pushes can repeatedly invalidate an in-progress review.
+      - When a finding's root cause is the tooling, open an issue against the distiller describing the mechanism (which component, for what input), and record each instance of dropped content on [issue 604659](https://gitlab.com/gitlab-org/gitlab/-/issues/604659).
+      - Prefer a targeted fix on the sync branch for localized findings; re-run distillation only when the output is broadly wrong (re-running is slow and non-deterministic and can regress unrelated rules).
+      - When reviewing a fence-reconcile MR (which changes only `.gitlab/duo/mr-review-instructions.yaml`), confirm the fence directives match the front matter of the distilled files on `master`; the reconcile job runs no distillation, so the fence body must never diverge from the committed distilled content.
+      - Treat a malformed or orphaned fence as always-blocking; the `ai-duo-review-instructions` guard fails on its own ref regardless of the reconcile state.
+      - Treat fence staleness as blocking only on the reconcile MR and on MRs that touch the fences' owned files. DO NOT treat staleness as blocking on a team's distilled MR or on unrelated `doc/**/*.md` edits — it is expected transient state until the daily reconcile catches up.
+      - Reference: doc/development/ai_instruction_files_review.md
+  # <<< end generated: ai-instruction-files
+
+  - name: Localization template files
+    fileFilters:
+      - "locale/gitlab.pot"
+    instructions: |
+      1. Flag any msgid entry that starts with a lowercase letter - this indicates a split sentence that will be hard to translate
+      2. Flag any msgid that reads like an unfinished sentence or a sentence fragment (for example, a string that begins or ends mid-clause, or that looks designed to be joined with another string) as a translatability risk. This usually means a sentence was split across several strings, which does not hold up across languages. See the "Splitting sentences" and "Avoid splitting sentences when adding links" guidance in https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/i18n/externalization.md.
+
+  - name: Translated documentation (doc-locale)
+    fileFilters:
+      - "doc-locale/**/*.md"
+    instructions: |
+      1. Write all review comments in English, even when the files under review are in another language.
+      2. Flag sentences in the target language that are grammatically incomplete or missing an expected word. A dangling particle or a missing noun usually means a word or phrase was dropped during translation. Check this against the translated file alone; the English source is not required. Point out that a word or phrase is missing; do not guess the specific missing word, since the source is not consulted here.
+
+  - name: Experiments
+    fileFilters:
+      - "**/*.rb"
+      - "**/*.js"
+      - "**/*.vue"
+    instructions: |
+      For experiment-related changes, verify:
+      1. Experiment uses an `experiment` type feature flag (not `development` or `ops`)
+      2. Context is appropriate and consistent (e.g., `actor:`, `project:`, `group:`)
+      3. Variants are clearly defined (control, candidate, or named variants)
+      4. If corresponding issue mentions tracking beyond default assignment tracking, there are tracking calls like `experiment(:name, actor: current_user).track(:event_name)`
+      5. Same context is used between experiment runs and tracking calls
+      6. If experiment uses only `experiment(:name, actor: current_user)` as context, but the corresponding issue mentions tracking of namespace based activation events, then assignment should happen based on namespace or actor + namespace
+      7. If experiment is first assigned during registration via `experiment(:name, actor: current_user)` before a namespace is created, there should be another assignment tracking event invoked like this `experiment(:name, actor: current_user).track(:assignment, namespace: group)` to enable tracking of activation events
+      8. Frontend or feature tests exist to prevent premature code removal (see [testing levels](https://docs.gitlab.com/development/testing_guide/testing_levels/#white-box-tests-at-the-system-level-formerly-known-as-system--feature-tests))
+      9. Tests cover experiment variants and tracking behavior
+      10. Temporary assets (icons/illustrations) are in `/ee/app/assets/images` or `/app/assets/images` not Pajamas library
+      11. When both control and variants are being toggled in Vue components layer, we prefer to use the `<gitlab-experiment>` component.
+
+  - name: Rendered HTML Field Safety
+    fileFilters:
+      - "**/*.vue"
+      - "**/*.js"
+      - "**/*.rb"
+      - "**/*.haml"
+      - "!spec/**/*"
+      - "!ee/spec/**/*"
+    instructions: |
+      Many models expose a pre-rendered, sanitized HTML variant of a field
+      (for example `titleHtml`/`title_html`, `descriptionHtml`/`description_html`,
+      `noteHtml`/`note_html`) alongside the raw text field (`title`, `description`,
+      `note`). The HTML variant has been run through the Markdown/Banzai pipeline
+      and sanitized; the raw text field has NOT been processed or sanitized and is
+      attacker-controlled.
+
+      This applies in two directions, and BOTH matter:
+
+      1. FLAG it when an author introduces it. When the diff adds a fallback that
+         renders the raw text field in a place that expects sanitized HTML, report
+         it as a security vulnerability (XSS) that must be changed before merge. Do
+         not treat it as a style nit or wait for a human to catch it — authors
+         routinely add this without realizing the risk, and it slips through. Call
+         it out every time it appears in the change, in either frontend or backend
+         code. Patterns to catch include:
+         - Frontend: `v-safe-html="foo.fooHtml || foo.foo"`, the equivalent with
+           `v-html`, `dangerouslySetInnerHTML`, `el.innerHTML = fooHtml || foo`, or
+           any expression that substitutes the raw text field into an HTML sink when
+           the HTML variant is null/undefined/empty.
+         - Backend: `raw(foo_html || foo)`, `(foo_html || foo).html_safe`, or a
+           resolver/serializer/presenter/helper that returns the raw text field as
+           the value of an `*_html`/`*Html` field.
+         For each occurrence, explain that the raw text field is unsanitized,
+         attacker-controlled input and that feeding it into an HTML sink is an XSS
+         vulnerability, then point to the correct resolution below.
+
+      2. NEVER suggest or introduce it yourself. Do not propose any of the patterns
+         above as a fix, and do not flag a MISSING fallback as an issue — the
+         absence of such a fallback is correct, not a defect.
+
+      Rendering unsanitized user input as HTML is always wrong. It has caused
+      multiple past security incidents. No current code should do this.
+
+      When the HTML variant might be missing, the correct guidance is one of:
+
+      1. The HTML variant is expected to always exist. Then NO fallback is
+         needed. If the field is ever absent, THAT is the bug — fix it at the
+         source. Do not mask it by rendering raw text through an HTML sink.
+
+      2. The HTML variant may legitimately be absent. Then the fallback must
+         preserve the text/HTML boundary: the backend must expose BOTH the raw
+         text field and the HTML field, and the frontend must render the HTML
+         variant as HTML only when it is present, and otherwise render the raw
+         text variant AS TEXT (for example plain interpolation `{{ foo.foo }}`),
+         never feeding the raw text field into an HTML sink.
+
+      In short: never default one field to the other within a single
+      HTML-rendering codepath. Pick the sink from the field you actually have —
+      HTML field to an HTML sink, text field to a text sink.
+
+  - name: Pajamas Design System Components
+    fileFilters:
+      - "**/*.vue"
+      - "app/assets/javascripts/**/*.js"
+      - "ee/app/assets/javascripts/**/*.js"
+    instructions: |
+      For GitLab UI (Pajamas) component usage, verify:
+      1. Component selection:
+         - Flag component usage that appears inconsistent with Pajamas "when to use" and "when not to use" guidelines
+         - Remind: "Each Pajamas component has specific usage guidelines. Review the component's guidelines at https://design.gitlab.com/components/"
+      2. Component overrides:
+         - Flag excessive CSS overrides on Pajamas components (multiple class overrides changing borders, backgrounds, padding, or other default styling)
+         - Ask: "Multiple style overrides on this component suggest it may not be the right fit. Would utility classes or a different component be more appropriate?"
+         - Reference: https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/development/fe_guide/style/scss.md#utility-classes
+      3. Utility classes vs components:
+         - Flag usage of container components purely for simple visual separation (borders, padding, rounded corners) without using the component's structural features (header, footer, etc.)
+         - Remind: "For simple visual separation without structured content, prefer utility classes (e.g., `gl-border gl-rounded-lg gl-p-5`) over container components. See https://design.gitlab.com/components/ for each component's intended use cases."
+      4. Design tokens and typography:
+         - Flag hardcoded color values, spacing values, or typography that should use design tokens
+         - Flag fixed type scales (e.g., `gl-text-700-fixed`) used outside of Markdown contexts
+         - Reference: https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/development/fe_guide/design_tokens.md
+      5. When uncertain about component choice:
+         - Ask: "Has a Product Designer reviewed this component usage?"
+         - Remind: "Check the Pajamas guidelines for this component's 'when to use' and 'when not to use' sections at https://design.gitlab.com/components/"
+         - Reference: https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/development/fe_guide/_index.md
+         - Reference: https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/development/contributing/design.md
+
+  - name: Feature Flag Removal Safety
+    fileFilters:
+      - "config/feature_flags/**/*.yml"
+      - "ee/config/feature_flags/**/*.yml"
+      - "**/*.rb"
+      - "**/*.vue"
+      - "**/*.js"
+      - "spec/**/*.rb"
+    instructions: |
+      When this MR touches a feature flag YAML definition file, Ruby code, frontend code,
+      or specs that reference a feature flag, check for the following unsafe removal patterns.
+
+      1. **Zero downtime upgrade safety check — flag removal**: For any MR that removes a
+         feature flag, check whether the flag guards a data write (for example,
+         writing to a new table or column, running a migration, or populating a new data
+         structure), cache key, cleanup path, or any state transition shared between components (Rails, Sidekiq) or API.
+         If yes, flag it for explicit human review — the agent cannot determine ZDU safety from
+         code structure alone.
+         Ask the author: "Does the code behind this flag produce or consume shared state
+         that old-version components must still handle correctly after this flag is removed?
+         If yes, describe how the expand phase was completed in a prior milestone.
+         See [Zero-downtime upgrade compatibility](https://docs.gitlab.com/development/feature_flags/controls/#zero-downtime-upgrade-compatibility)."
+         Note: neither enabling the flag in production nor setting `default_enabled: true`
+         in a prior milestone guarantees ZDU safety — old-version nodes still run with the
+         flag disabled during a rolling upgrade.
+         Also check `intended_to_rollout_by`: if set to a future date relative to this MR's target milestone,
+         flag the removal as premature — the team has explicitly declared it not ready.
+
+      2. **Incomplete reference removal**: When a flag is being removed, verify that ALL
+         reference patterns are cleaned up, not just Ruby backend guards. Check for:
+         - Ruby: `Feature.enabled?(:flag_name)`, `Feature.disabled?(:flag_name)`
+         - Ruby (push to frontend): `push_frontend_feature_flag :flag_name`
+         - Vue/JS: `glFeatures.flagName` (camelCase of the flag name)
+         - Vue/JS: `gon.features.flagName`
+         - Specs: `stub_feature_flags(flag_name: ...)` — these should be removed along with
+           the flag-specific test contexts (e.g., `context 'when flag is disabled'` blocks)
+         Flag any MR that removes the YAML and Ruby guards but leaves frontend or spec
+         references intact.
+
+      3. **Changelog trailer correctness**: When a flag is removed, verify that a `Changelog:`
+         trailer is present in the commit message and that its type matches the flag's final
+         state:
+         - `other` — flag was already `default_enabled: true` in a prior milestone, just
+           cleaning up dead code
+         - `added` or `fixed` — flag was enabled (new code path is now permanent); type should
+           match the rollout issue's `type::` label (`type::feature` → `added`,
+           `type::bug` → `fixed`)
+         - `removed` — flag was disabled or removed
+
+      Reference: https://gitlab.com/gitlab-org/gitlab/-/issues/564825
+
+  - name: Schema Migrations
+    fileFilters:
+      - "db/schema_migrations/**/*"
+    instructions: |
+      1. These files are auto-generated and do not require a newline at the end of the file - do not flag missing newlines
+
+  - name: Log Field Standards
+    fileFilters:
+      - "**/*.rb"
+    instructions: |
+      Backend engineers should be complying with the new field standardisation in observability best practices
+      1. For any log lines that have been altered:
+        - Ask: "If you are adding or modifying fields, please ensure that the field is defined within the LabKit Ruby Fields module engineers should follow Field Standardisation Guidelines - https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/observability_field_standardisation/
+        - Remind: "Common logging fields should be defined within the LabKit Ruby fields module - https://gitlab.com/gitlab-org/ruby/gems/labkit-ruby/-/blob/master/lib/labkit/fields.rb?ref_type=heads and imported from there."
+      2. For any new fields being added to log messages:
+        - Check to ensure that these fields are not dynamically generated
+        - Remind: "We're aiming to standardise the fields that we emit across all of our services at GitLab through this approach"
+
+  - name: Internal Analytics
+    fileFilters:
+      - "config/events/**/*.yml"
+      - "ee/config/events/**/*.yml"
+      - "config/metrics/**/*.yml"
+      - "ee/config/metrics/**/*.yml"
+    instructions: |
+      For internal event and metric definition changes, verify:
+      1. Event `action` follows naming convention: `<operation>_<target_of_operation>_<where/when>` (e.g., `create_ci_build`, `click_previous_blame_on_blob_page`)
+      2. For event definitions: required fields are present: `description`, `action`, `product_group`, `tiers`
+      3. For metric definitions: required fields are present: `key_path`, `description`, `product_group`, `data_source: internal_events`, `events`, `time_frame`
+      4. `identifiers` list matches what is passed in tracking calls (user, project, namespace)
+      5. All `additional_properties` used in tracking code are documented in the event definition
+      6. No sensitive information like full page url, page path, group name, project name, organization name and user inputs added in tracking parameters. (PII, secrets, credentials)
+      7. For metrics: `data_source: internal_events` is set for event-based metrics
+      8. For metrics: `events` section correctly references existing event names
+      9. For metrics: `unique` property (if present) references a valid identifier from the event definition
+      10. For metrics: `time_frame` is appropriate for the use case (7d, 28d, or all)
+      11. Make sure the milestone in event and metric definition files reflects the current milestone at time of merge, not the milestone when the file was originally created
+      12. introduced_by_url field in metric and event definition file should reference the correct merge request link
+      - Reference: https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/development/internal_analytics/review_guidelines.md
+      - Reference: https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/development/internal_analytics/internal_event_instrumentation/event_definition_guide.md
+      - Reference: https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/development/internal_analytics/internal_event_instrumentation/metric_definition_guide.md
+
+  - name: ViewComponent Best Practices
+    fileFilters:
+      - "app/components/**/*.rb"
+      - "ee/app/components/**/*.rb"
+      - "app/components/**/*.html.haml"
+      - "ee/app/components/**/*.html.haml"
+    instructions: |
+      For ViewComponent changes, verify:
+      1. Composition over inheritance:
+         - Flag ViewComponents that inherit from another ViewComponent (not ViewComponent::Base)
+         - Remind: "Prefer composition (wrapping one component with another) over inheritance between ViewComponents, as inheritance with separate templates leads to confusion"
+      2. Instance method visibility:
+         - Flag public instance methods that are only used in the component template
+         - Remind: "Most ViewComponent instance methods should be private, even `render?`. Private methods are still accessible from the component template"
+      3. Avoid global state:
+         - Flag components that access `params`, `request`, `session`, or `current_url` directly instead of receiving values through `initialize`
+         - Remind: "Avoid implicit coupling to global state. Pass values into the component explicitly through initialize arguments to keep it reusable and testable"
+      4. Avoid inline Ruby in templates:
+         - Flag logic, variable assignments, or string interpolation in ViewComponent templates (ERB/Haml)
+         - Remind: "Move inline Ruby logic from templates into instance methods on the ViewComponent class"
+      5. Prefer slots over markup arguments:
+         - Flag arguments that accept HTML strings (especially with `.html_safe`)
+         - Remind: "Prefer slots for providing markup to components. Passing markup as an argument bypasses Rails HTML sanitization and creates potential security issues"
+      6. Test against rendered content:
+         - In corresponding specs, flag tests that only assert on component instance methods without rendering
+         - Remind: "ViewComponent tests should use `render_inline` and assert against rendered output, not just instance method return values"
+      7. Naming convention:
+         - Flag ViewComponent classes that do not end with `Component`
+         - Remind: "Include the `Component` suffix in component class names (e.g., `UserAvatarComponent`) to make it clear the class is a component, following Rails naming conventions"
+      8. Reduce permutations:
+         - Flag new components that closely duplicate existing components in the same directory
+         - Remind: "Look for opportunities to consolidate similar patterns into a single component. Consider abstracting once there are three or more similar instances"
+
+  - name: Internal Events Tracking Code
+    fileFilters:
+      - "**/*.rb"
+      - "**/*.vue"
+      - "**/*.js"
+      - "**/*.haml"
+      - "!spec/**/*"
+      - "!ee/spec/**/*"
+    instructions: |
+      Only review these items if this MR adds or modifies internal event tracking (e.g., `track_internal_event`, `trackEvent`, `data-event-tracking` attributes).
+
+      For code that instruments internal events tracking, verify:
+      1. A corresponding event definition exists in `config/events/` or `ee/config/events/`
+      2. For backend `track_internal_event` calls:
+         - All required identifiers (user, project, namespace) are passed when the metric uses them
+         - If a metric has a unique property like `unique: project.id`, ensure the corresponding argument (e.g., `project`) is passed in the tracking call
+         - `additional_properties` match those documented in the event definition
+         - When the call is made from a service object (a class with an `execute` method, typically under `app/services/` or `ee/app/services/`), prefer the declarative `Gitlab::InternalEvents::ServiceTracking` DSL (`tracks_event 'event_name', on: :success`) over manual `track_internal_event` calls in `execute`. The DSL handles success/error detection, payload extraction, and conditions automatically.
+      3. For frontend `trackEvent` or `InternalEvents.trackEvent` calls:
+         - Event name matches an existing event definition
+         - Additional properties are documented in the event definition
+      4. For data attribute tracking (`data-event-tracking`, `event_tracking:`):
+         - Event name is valid and defined
+         - Labels/properties match event definition's `additional_properties`
+      5. Ensure test coverage exists using `trigger_internal_events` and `increment_usage_metrics` matchers for backend and `useMockInternalEventsTracking` helper for frontend
+      6. Ensure test matchers (trigger_internal_events, useMockInternalEventsTracking) also asserts all identifiers and additional_properties added in the tracking call.
+      7. When testing that an event was not triggered, ensure `not_trigger_internal_events` matcher or `not_to` syntax is used
+      8. For batch events:
+         - When multiple events are emitted at once, ensure `with_batched_redis_writes` is used to batch all of them into a single Redis call
+      - Reference: https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/development/internal_analytics/internal_event_instrumentation/quick_start.md
+      - Reference: https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/development/internal_analytics/review_guidelines.md
+
+  - name: View Templates
+    fileFilters:
+      - "app/views/**/*"
+      - "ee/app/views/**/*"
+    instructions: |
+      Views are responsible for presentation only. Flag any logic that belongs in a controller, service, or model:
+      1. No database queries in views.
+         Remind: "Move all data retrieval into the controller or a presenter and pass the result as an instance variable. Queries in views bypass caching layers, are invisible to query analysis tools, and make N+1 problems hard to detect."
+      2. No complex business logic — no conditionals that evaluate model state beyond simple `nil?` / `present?` / boolean attribute checks, no service object instantiation, and no multi-step computations.
+         Remind: "Extract this logic into a helper, presenter, or ViewComponent."
+      - Reference: https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/reusing_abstractions.md#views

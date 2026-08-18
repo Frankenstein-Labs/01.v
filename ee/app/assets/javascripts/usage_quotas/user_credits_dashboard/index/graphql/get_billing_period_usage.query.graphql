@@ -1,0 +1,19 @@
+# @feature_category: consumables_cost_management
+
+# Dashboard-level query. It is intentionally NOT parameterized by the
+# date-range/product filters: the billing-period total always reflects the
+# current billing period, and `enabled`/`isOutdatedClient` describe the
+# dashboard itself rather than a filter selection.
+#
+# NOTE: `selfCreditsUsage` is resolved by a local (client-side) resolver with
+# mocked data until the backend field lands (gitlab-org/gitlab#605987).
+query getUserBillingPeriodUsage($namespacePath: ID) {
+  selfCreditsUsage(namespacePath: $namespacePath) @client {
+    enabled
+    isOutdatedClient
+
+    startDate
+    endDate
+    creditsUsed
+  }
+}
